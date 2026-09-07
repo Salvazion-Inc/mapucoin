@@ -39,13 +39,19 @@ Ejecuta `supabase/schema.sql` en el SQL editor (tablas `partners` y `bookings`).
 
 Webhook: `https://mapucoin.com/api/stripe/webhook` → evento `checkout.session.completed`. Moneda CLP (sin decimales).
 
-## Dominio Canva → Vercel
+## Dominio mapucoin.com
 
-`mapucoin.com` está registrado (hoy apunta a un sitio Canva). Para servir esta app:
+El dominio ya está añadido al proyecto Vercel `mapucoin`. Hoy el DNS sigue en Canva (`ns*.systemdns.com` → `103.169.142.0`). Para que `https://mapucoin.com` sirva esta app, en el DNS del registrador (Canva / systemdns):
 
-1. En Vercel: Project → Settings → Domains → add `mapucoin.com` y `www.mapucoin.com`.
-2. En Canva (Domains) o el DNS del registrador, cambia el registro A/CNAME al que indique Vercel (`cname.vercel-dns.com`).
-3. Quita o pausa el sitio Canva para que no pelee el DNS.
+| Tipo | Nombre | Valor |
+| --- | --- | --- |
+| A | `@` | `216.198.79.1` |
+| A | `@` | `64.29.17.1` |
+| CNAME | `www` | `d73ca93feac97dc3.vercel-dns-017.com` |
+
+O cambia los nameservers a `ns1.vercel-dns.com` y `ns2.vercel-dns.com`.
+
+Hasta que el DNS propague, la app vive en [https://mapucoin.vercel.app](https://mapucoin.vercel.app).
 
 ## Local
 

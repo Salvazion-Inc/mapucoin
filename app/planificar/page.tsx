@@ -12,6 +12,7 @@ function PlannerInner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [source, setSource] = useState("");
+  const [grokHint, setGrokHint] = useState("");
   const [chat, setChat] = useState<string[]>([]);
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -44,6 +45,7 @@ function PlannerInner() {
         if (data.plan) {
           setPlan(data.plan);
           setSource(data.source || "");
+          setGrokHint(String(data.grok || ""));
         } else setError("No se pudo armar el itinerario.");
       })
       .catch(() => {
@@ -153,10 +155,17 @@ function PlannerInner() {
           {error && <p className="text-clay">{error}</p>}
           {plan && (
             <>
-              {source === "catalog" && (
+              {source === "catalog" && grokHint === "credits" && (
+                <p className="mb-4 text-xs text-clay">
+                  Grok está conectado, pero el equipo de xAI no tiene créditos.
+                  Recarga en console.x.ai; mientras tanto usamos el catálogo
+                  Mapucoin.
+                </p>
+              )}
+              {source === "catalog" && grokHint !== "credits" && (
                 <p className="mb-4 text-xs text-bark/60">
-                  Itinerario de catálogo (configura XAI_API_KEY para Grok en
-                  vivo).
+                  Itinerario de catálogo. Cuando Grok tenga créditos, el plan se
+                  arma en vivo.
                 </p>
               )}
               <ItineraryView plan={plan} />

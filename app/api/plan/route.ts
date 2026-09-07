@@ -181,6 +181,9 @@ ${catalogJson}`;
   });
 
   if (!res.ok) {
+    const errText = await res.text();
+    const credits =
+      /credits|spending limit|permission-denied/i.test(errText);
     return Response.json({
       plan: fallbackPlan({
         lugar,
@@ -190,6 +193,7 @@ ${catalogJson}`;
         intereses,
       }),
       source: "catalog",
+      grok: credits ? "credits" : "error",
     });
   }
 

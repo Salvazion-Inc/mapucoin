@@ -26,12 +26,10 @@ export default async function CapsulaPage({ params }: Props) {
     <article>
       <div className="relative h-[50vh] min-h-96">
         <Image src={c.image} alt={c.name} fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-gradient-to-t from-earth/75 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/35 to-transparent" />
         <div className="absolute bottom-8 left-0 right-0 mx-auto max-w-7xl px-4 text-sand">
-          <p className="text-xs uppercase tracking-[0.25em] text-gold">
-            {c.city}
-          </p>
-          <h1 className="font-display text-4xl md:text-5xl">{c.name}</h1>
+          <p className="kicker text-gold">{c.city}</p>
+          <h1 className="font-display mt-2 text-4xl md:text-6xl">{c.name}</h1>
         </div>
       </div>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.15fr_0.85fr]">
@@ -57,7 +55,7 @@ export default async function CapsulaPage({ params }: Props) {
             </div>
           </div>
         </div>
-        <aside className="h-fit rounded-3xl border border-earth/10 bg-white p-6">
+        <aside className="h-fit rounded-[1.75rem] border border-earth/8 bg-white p-7 shadow-[0_18px_50px_rgba(12,9,7,0.06)]">
           <p className="text-sm text-bark/70">Por noche</p>
           <p className="font-display text-4xl text-earth">
             {formatCLP(c.priceFromCLP)}
@@ -67,7 +65,7 @@ export default async function CapsulaPage({ params }: Props) {
           </p>
           <Link
             href={`/reserva?capsula=${c.slug}&noches=2&viajeros=2`}
-            className="mt-6 block rounded-full bg-clay py-3 text-center text-cream"
+            className="mt-6 block rounded-full bg-earth py-3.5 text-center text-sand hover:bg-bark"
           >
             Reservar con Stripe
           </Link>

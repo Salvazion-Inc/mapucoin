@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Cápsulas tecnológicas" };
 export default function CapsulasPage() {
   return (
     <div>
-      <div className="relative h-72">
+      <div className="relative h-80 md:h-96">
         <Image
           src="/images/capsula-atacama.jpg"
           alt="Cápsula Atacama Star"
@@ -16,19 +16,17 @@ export default function CapsulasPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-earth/50" />
-        <div className="absolute inset-0 mx-auto flex max-w-7xl items-end px-4 pb-10">
+        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-night/10" />
+        <div className="absolute inset-0 mx-auto flex max-w-7xl items-end px-4 pb-12">
           <div className="text-sand">
-            <p className="text-xs uppercase tracking-[0.25em] text-gold">
-              Dormir
-            </p>
-            <h1 className="font-display text-4xl md:text-5xl">
+            <p className="kicker text-gold">Dormir</p>
+            <h1 className="font-display mt-2 text-4xl md:text-6xl">
               Casas cápsula tecnológicas
             </h1>
           </div>
         </div>
       </div>
-      <div className="mx-auto max-w-7xl px-4 py-12">
+      <div className="mx-auto max-w-7xl px-4 py-14">
         <p className="max-w-2xl text-bark/75">
           Módulos de cobre, madera y vidrio: techo estelar en el desierto,
           tinaja frente al volcán, palafito sobre el canal chilote. Reserva con

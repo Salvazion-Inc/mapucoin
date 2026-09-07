@@ -1,5 +1,7 @@
 import MapLoader from "@/components/MapLoader";
+import PhotoStrip from "@/components/PhotoStrip";
 import PlaceCard from "@/components/PlaceCard";
+import PlaceVideo from "@/components/PlaceVideo";
 import {
   capsulesForPlace,
   destinations,
@@ -28,54 +30,87 @@ export default async function DestinoPage({ params }: Props) {
   if (!d) notFound();
   const related = itemsForPlace(d.slug).filter((i) => i.slug !== d.slug);
   const stay = capsulesForPlace(d.slug)[0];
+  const extras = (d.gallery || []).filter((src) => src !== d.image).slice(0, 3);
 
   return (
     <article>
-      <div className="relative h-[46vh] min-h-80">
-        <Image src={d.image} alt={d.name} fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-gradient-to-t from-earth/80 to-earth/10" />
-        <div className="absolute bottom-8 left-0 right-0 mx-auto max-w-7xl px-4 text-sand">
-          <p className="text-xs uppercase tracking-[0.25em] text-gold">
-            {d.region}
-          </p>
-          <h1 className="font-display text-4xl md:text-6xl">{d.name}</h1>
+      <div className="relative h-[58vh] min-h-96">
+        <Image
+          src={d.image}
+          alt={d.name}
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/30 to-transparent" />
+        <div className="absolute bottom-10 left-0 right-0 mx-auto max-w-7xl px-4 text-sand">
+          <p className="kicker text-gold">{d.region}</p>
+          <h1 className="font-display mt-2 text-4xl md:text-7xl">{d.name}</h1>
+          <p className="mt-3 max-w-2xl text-lg text-sand/80">{d.tagline}</p>
         </div>
       </div>
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.2fr_0.8fr]">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-14 lg:grid-cols-[1.2fr_0.8fr]">
         <div>
-          <p className="text-lg text-bark/80">{d.description}</p>
-          <ul className="mt-6 flex flex-wrap gap-2">
+          <p className="text-lg leading-relaxed text-bark/80">{d.description}</p>
+          <ul className="mt-7 flex flex-wrap gap-2">
             {d.highlights.map((h) => (
               <li
                 key={h}
-                className="rounded-full bg-sand px-3 py-1 text-sm text-earth"
+                className="rounded-full bg-sand px-3.5 py-1.5 text-sm text-earth"
               >
                 {h}
               </li>
             ))}
           </ul>
-          <div className="mt-10">
+
+          {d.youtube && (
+            <div className="mt-12">
+              <p className="kicker text-clay">Video del territorio</p>
+              <h2 className="font-display mt-2 text-2xl text-earth">
+                {d.name} en movimiento
+              </h2>
+              <div className="mt-5">
+                <PlaceVideo
+                  id={d.youtube}
+                  start={d.youtubeStart}
+                  title={`Video de ${d.name}`}
+                />
+              </div>
+            </div>
+          )}
+
+          {extras.length > 0 && (
+            <div className="mt-10">
+              <p className="kicker text-clay">Galería</p>
+              <div className="mt-4">
+                <PhotoStrip images={extras} alt={d.name} />
+              </div>
+            </div>
+          )}
+
+          <div className="mt-12">
             <h2 className="font-display text-2xl text-earth">En el mapa</h2>
-            <div className="mt-4">
+            <div className="mt-4 overflow-hidden rounded-[1.75rem]">
               <MapLoader focusSlug={d.slug} height="420px" />
             </div>
           </div>
         </div>
-        <aside className="h-fit rounded-3xl border border-earth/10 bg-white p-6">
-          <p className="text-sm text-bark/70">Experiencias desde</p>
-          <p className="font-display text-3xl text-earth">
+        <aside className="h-fit rounded-[1.75rem] border border-earth/8 bg-white p-7 shadow-[0_18px_50px_rgba(12,9,7,0.06)]">
+          <p className="kicker text-clay">Experiencias desde</p>
+          <p className="font-display mt-2 text-4xl text-earth">
             {formatCLP(d.priceFromCLP)}
           </p>
           <Link
             href={`/planificar?lugar=${d.slug}&presupuesto=800000&noches=4&viajeros=2&intereses=naturaleza,gastronomia`}
-            className="mt-6 block rounded-full bg-clay py-3 text-center text-cream"
+            className="mt-7 block rounded-full bg-earth py-3.5 text-center text-sand transition hover:bg-bark"
           >
             Planificar este destino
           </Link>
           {stay && (
             <Link
               href={`/capsulas/${stay.slug}`}
-              className="mt-3 block rounded-full border border-earth/15 py-3 text-center text-earth"
+              className="mt-3 block rounded-full border border-earth/12 py-3.5 text-center text-earth hover:border-gold"
             >
               Ver cápsula {stay.name}
             </Link>
@@ -83,11 +118,11 @@ export default async function DestinoPage({ params }: Props) {
         </aside>
       </div>
       {related.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pb-16">
+        <section className="mx-auto max-w-7xl px-4 pb-20">
           <h2 className="font-display text-2xl text-earth">
             Dormir, comer y hacer
           </h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
+          <div className="mt-7 grid gap-6 md:grid-cols-3">
             {related.map((i) => (
               <PlaceCard key={i.slug} item={i} />
             ))}

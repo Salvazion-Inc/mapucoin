@@ -49,10 +49,8 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
 
   return (
     <div className="space-y-8">
-      <header className="rounded-3xl bg-earth px-6 py-8 text-sand md:px-10">
-        <p className="text-xs uppercase tracking-[0.25em] text-gold">
-          Itinerario Grok
-        </p>
+      <header className="rounded-[1.75rem] bg-night px-6 py-8 text-sand md:px-10">
+        <p className="kicker text-gold">Itinerario Grok</p>
         <h2 className="font-display mt-2 text-3xl md:text-4xl">{plan.title}</h2>
         <p className="mt-3 max-w-2xl text-sand/80">{plan.summary}</p>
         <dl className="mt-6 grid grid-cols-2 gap-4 text-sm md:grid-cols-4">

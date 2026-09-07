@@ -103,14 +103,12 @@ function PlannerInner() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
-      <p className="text-xs uppercase tracking-[0.25em] text-clay">
-        Planificador
-      </p>
-      <h1 className="font-display mt-2 text-4xl text-earth">
+    <div className="mx-auto max-w-7xl px-4 py-14">
+      <p className="kicker text-clay">Planificador</p>
+      <h1 className="font-display mt-3 text-4xl text-earth md:text-5xl">
         Tu viaje, armado por Grok
       </h1>
-      <p className="mt-2 max-w-2xl text-bark/75">
+      <p className="mt-3 max-w-2xl text-bark/75">
         Ajusta presupuesto y destino. Si Grok no está configurado, Mapucoin
         arma un itinerario con el catálogo local.
       </p>

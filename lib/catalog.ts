@@ -19,6 +19,9 @@ export type CatalogItem = {
   lat: number;
   lng: number;
   image: string;
+  gallery?: string[];
+  youtube?: string;
+  youtubeStart?: number;
   tagline: string;
   description: string;
   highlights: string[];
@@ -30,8 +33,10 @@ export type CatalogItem = {
   placeSlug?: string;
 };
 
-const u = (id: string, extra = "") =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80${extra}`;
+const p = (file: string) => `/images/places/${file}`;
+
+/** 4K travel film of Chile with chapters per territory. */
+export const CHILE_FILM = "uHcjT4GfPNA";
 
 export const destinations: CatalogItem[] = [
   {
@@ -42,7 +47,10 @@ export const destinations: CatalogItem[] = [
     city: "San Pedro de Atacama",
     lat: -22.9087,
     lng: -68.1997,
-    image: u("photo-1478827536266-a1b426a9183c"),
+    image: p("atacama-luna.jpg"),
+    gallery: [p("atacama-pueblo.jpg"), p("atacama-dunas.jpg"), p("atacama-luna.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 263,
     tagline: "El desierto más árido y el cielo más limpio del planeta.",
     description:
       "Pueblo de adobe en el altiplano. Valle de la Luna, géiseres del Tatio, lagunas altiplánicas y astronomía de nivel mundial.",
@@ -58,7 +66,10 @@ export const destinations: CatalogItem[] = [
     city: "Pisco Elqui",
     lat: -30.1272,
     lng: -70.4931,
-    image: u("photo-1506905925346-21bda4d32df4"),
+    image: p("elqui.jpg"),
+    gallery: [p("elqui-agua.jpg"), p("mamalluca.jpg"), p("pisco-elqui.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 1223,
     tagline: "Viñedos, pisco y observatorios bajo un cielo declarado santuario.",
     description:
       "Terrazas de uva moscatel, destilerías de pisco y observatorios abiertos al público. Ideal para descanso y astronomía.",
@@ -74,7 +85,10 @@ export const destinations: CatalogItem[] = [
     city: "Valparaíso",
     lat: -33.0472,
     lng: -71.6127,
-    image: u("photo-1518509562904-e7ef99cdcc86"),
+    image: p("valparaiso.jpg"),
+    gallery: [p("valparaiso.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 1061,
     tagline: "Cerros, ascensores y murales frente al Pacífico.",
     description:
       "Patrimonio de la Humanidad. Cerros pintados, ascensores históricos, marisquerías y vida portuaria.",
@@ -90,7 +104,10 @@ export const destinations: CatalogItem[] = [
     city: "Santiago",
     lat: -33.4489,
     lng: -70.6693,
-    image: u("photo-1483728642387-6c3bdd6c93e5"),
+    image: p("santiago.jpg"),
+    gallery: [p("cajon.jpg"), p("mercado.jpg"), p("santiago.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 2936,
     tagline: "Capital andina: museos, viñas y montaña a una hora.",
     description:
       "Barrio Lastarria, Mercado Central, viñas del Maipo y el Cajón con glaciares, termas y trekking.",
@@ -106,7 +123,10 @@ export const destinations: CatalogItem[] = [
     city: "Pucón",
     lat: -39.2823,
     lng: -71.9545,
-    image: u("photo-1464822759023-fed622ff2c3b"),
+    image: p("villarrica.jpg"),
+    gallery: [p("pucon.jpg"), p("termas.jpg"), p("villarrica.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 2309,
     tagline: "Volcán Villarrica, termas y bosque de araucarias.",
     description:
       "Capital de la aventura en el sur: trekking al volcán, hidrospeed, termas geometric y cultura mapuche.",
@@ -122,7 +142,10 @@ export const destinations: CatalogItem[] = [
     city: "Puerto Varas",
     lat: -41.3195,
     lng: -72.9854,
-    image: u("photo-1476514525535-07fb3b4ae5f0"),
+    image: p("osorno.jpg"),
+    gallery: [p("puerto-varas.jpg"), p("osorno.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 733,
     tagline: "Lago Llanquihue y los volcanes Osorno y Calbuco.",
     description:
       "Arquitectura alemana, kuchen, kayak al atardecer y salto Petrohué a los pies del Osorno.",
@@ -138,7 +161,10 @@ export const destinations: CatalogItem[] = [
     city: "Castro",
     lat: -42.4825,
     lng: -73.764,
-    image: u("photo-1507525428034-b723cf961d3e"),
+    image: p("palafitos.jpg"),
+    gallery: [p("castro.jpg"), p("iglesia-castro.jpg"), p("palafitos.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 890,
     tagline: "Iglesias de madera, palafitos y mitología del archipiélago.",
     description:
       "Curanto en hoyo, iglesias UNESCO, pingüinos de Puñihuil y la niebla que cubre los palafitos de Castro.",
@@ -154,7 +180,10 @@ export const destinations: CatalogItem[] = [
     city: "Puerto Natales",
     lat: -51.2538,
     lng: -72.3445,
-    image: u("photo-1544735716-392fe2489ffa"),
+    image: p("paine.jpg"),
+    gallery: [p("paine-unsplash.jpg"), p("paine.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 64,
     tagline: "Granito, vientos y el parque más icónico de Sudamérica.",
     description:
       "Torres, Cuernos, Grey y el W. Base en Puerto Natales, glamping de lujo y trekking de clase mundial.",
@@ -170,7 +199,10 @@ export const destinations: CatalogItem[] = [
     city: "Hanga Roa",
     lat: -27.1127,
     lng: -109.3497,
-    image: u("photo-1544966503-7cc5ac882d5f"),
+    image: p("tongariki.jpg"),
+    gallery: [p("rano-raraku.jpg"), p("easter.jpg"), p("tongariki.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 1384,
     tagline: "Moai, cráteres y el ombligo del mundo en el Pacífico.",
     description:
       "Parque Nacional Rapa Nui, ahu Tongariki al amanecer, Rano Kau y cultura ancestral polinésica.",
@@ -186,7 +218,10 @@ export const destinations: CatalogItem[] = [
     city: "Futaleufú",
     lat: -43.1856,
     lng: -71.8664,
-    image: u("photo-1432405972618-c60b0225b8c9"),
+    image: p("marmol.jpg"),
+    gallery: [p("marmol.jpg"), p("paine.jpg")],
+    youtube: CHILE_FILM,
+    youtubeStart: 1693,
     tagline: "Ríos turquesa, hanging glaciers y el sur más salvaje.",
     description:
       "De Puerto Montt a Villa O'Higgins: Marble Caves, Queulat, Futaleufú y bosques siempreverdes.",
@@ -303,7 +338,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Castro",
     lat: -42.48,
     lng: -73.76,
-    image: u("photo-1555939594-58d7cb561ad1"),
+    image: p("curanto.jpg"),
     tagline: "Mariscos, carne y milcao cocidos bajo tierra con nalca.",
     description:
       "Ritual chilote: hoyo, piedras calientes, chapaleles y mariscos del canal. Experiencia con familia local.",
@@ -321,7 +356,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Puerto Natales",
     lat: -51.73,
     lng: -72.5,
-    image: u("photo-1529193591184-b1d58069ecdd"),
+    image: p("asado.jpg"),
     tagline: "Cordero magallánico a fuego lento, con calafate.",
     description:
       "Cordero de estancia, chimichurri de merken y vino del Maule. Cena a la luz del atardecer austral.",
@@ -339,7 +374,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Pucón",
     lat: -39.29,
     lng: -71.94,
-    image: u("photo-1504674900247-0877df9cc836"),
+    image: p("pucon.jpg"),
     tagline: "Merkén, catuto, yuyo y muday en ruka.",
     description:
       "Almuerzo en ruka con productoras locales. Relato de territorio, hierbas del volcán y pan de trigo candeal.",
@@ -357,7 +392,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Valparaíso",
     lat: -33.036,
     lng: -71.628,
-    image: u("photo-1559339352-11d035aa8da4"),
+    image: p("machas.jpg"),
     tagline: "Locos, machas y erizos recién desembarcados.",
     description:
       "Caleta con vista a los cerros. Machas a la parmesana, ceviche de reineta y vino del Casablanca.",
@@ -375,7 +410,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Pisco Elqui",
     lat: -30.126,
     lng: -70.495,
-    image: u("photo-1510812431401-41d2bd2722f3"),
+    image: p("pisco.jpg"),
     tagline: "Destilerías de moscatel y viñas de altura.",
     description:
       "Tres paradas: destilería familiar, viña de altura y pisco sour con limón de pica.",
@@ -393,7 +428,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Santiago",
     lat: -33.437,
     lng: -70.651,
-    image: u("photo-1551218808-94e220e084d2"),
+    image: p("mercado.jpg"),
     tagline: "Paila marina, empanadas de horno y bar de vinos.",
     description:
       "Recorrido entre pescaderías, pastel de choclo y un cierre en Lastarria con carmenère.",
@@ -414,7 +449,7 @@ export const activities: CatalogItem[] = [
     city: "San Pedro de Atacama",
     lat: -22.9147,
     lng: -68.2874,
-    image: u("photo-1509316785289-025f5b846b35"),
+    image: p("atacama-luna.jpg"),
     tagline: "Dunas, salar y el sol cayendo sobre el Licancabur.",
     description:
       "Caminata guiada por formaciones de sal y yeso. Cupo reducido, hidratación y traslado.",
@@ -432,7 +467,7 @@ export const activities: CatalogItem[] = [
     city: "San Pedro de Atacama",
     lat: -22.95,
     lng: -68.18,
-    image: u("photo-1419242902214-272b3f66ee7a"),
+    image: p("mamalluca.jpg"),
     tagline: "Telescopios, Vía Láctea y relato andino del cielo.",
     description:
       "Observatorio de campo. Saturno, cúmulos y un mate bajo las estrellas.",
@@ -450,7 +485,7 @@ export const activities: CatalogItem[] = [
     city: "Pucón",
     lat: -39.4208,
     lng: -71.9397,
-    image: u("photo-1464822759023-fed622ff2c3b"),
+    image: p("villarrica.jpg"),
     tagline: "Cráter activo, crampones y vista a los lagos.",
     description:
       "Salida de madrugada con guía UIAGM, equipo técnico y descenso en nieve.",
@@ -468,7 +503,7 @@ export const activities: CatalogItem[] = [
     city: "Coñaripe",
     lat: -39.507,
     lng: -71.888,
-    image: u("photo-1540555700478-4be289fbecef"),
+    image: p("termas.jpg"),
     tagline: "Pasarelas rojas, pozones de agua volcánica y bosque.",
     description:
       "Día de termas en quebrada nativa. Traslado desde Pucón y almuerzo ligero.",
@@ -486,7 +521,7 @@ export const activities: CatalogItem[] = [
     city: "Puerto Natales",
     lat: -50.942,
     lng: -72.959,
-    image: u("photo-1544735716-392fe2489ffa"),
+    image: p("paine.jpg"),
     tagline: "El trekking clásico hasta las tres torres de granito.",
     description:
       "Sendero de 22 km con guía, picnic y entrada al parque. Condición media-alta.",
@@ -504,7 +539,7 @@ export const activities: CatalogItem[] = [
     city: "Puerto Varas",
     lat: -41.31,
     lng: -72.98,
-    image: u("photo-1544551763-46a013bb70d5"),
+    image: p("osorno.jpg"),
     tagline: "Osorno reflejado en el lago, en kayak silencioso.",
     description:
       "Salida de 2 horas con chaleco, guía y chocolate caliente al volver.",
@@ -522,7 +557,7 @@ export const activities: CatalogItem[] = [
     city: "Valparaíso",
     lat: -33.045,
     lng: -71.622,
-    image: u("photo-1518509562904-e7ef99cdcc86"),
+    image: p("valparaiso.jpg"),
     tagline: "Alegre, Concepción y el puerto con guía local.",
     description:
       "Caminata urbana de 3 horas: street art, miradores y una copa en café de cerro.",
@@ -540,7 +575,7 @@ export const activities: CatalogItem[] = [
     city: "Hanga Roa",
     lat: -27.125,
     lng: -109.277,
-    image: u("photo-1544966503-7cc5ac882d5f"),
+    image: p("tongariki.jpg"),
     tagline: "Quince moai contra el sol del Pacífico.",
     description:
       "Salida de madrugada con guía rapanui, desayuno y visita a Rano Raraku.",

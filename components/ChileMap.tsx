@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 type Filter = "all" | "place" | "capsule";
 
 function pinHtml(kind: "place" | "capsule") {
-  const color = kind === "capsule" ? "#c9a227" : "#c45c26";
+  const color = kind === "capsule" ? "#d4af37" : "#c45c26";
   return `<div style="width:28px;height:28px;border-radius:999px;background:${color};border:3px solid #f4e8d0;box-shadow:0 4px 12px rgba(44,24,16,.35)"></div>`;
 }
 

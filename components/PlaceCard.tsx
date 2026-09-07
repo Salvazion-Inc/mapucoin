@@ -20,30 +20,33 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
   return (
     <Link
       href={hrefFor(item)}
-      className="group overflow-hidden rounded-3xl border border-earth/10 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+      className="group relative block overflow-hidden rounded-[1.75rem] bg-night shadow-[0_18px_50px_rgba(12,9,7,0.12)]"
     >
-      <div className="relative h-52">
+      <div className="relative h-72">
         <Image
           src={item.image}
           alt={item.name}
           fill
-          className="object-cover transition duration-500 group-hover:scale-105"
+          className="object-cover transition duration-700 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        <span className="absolute left-3 top-3 rounded-full bg-earth/80 px-3 py-1 text-xs text-sand">
+        <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/25 to-transparent" />
+        <span className="absolute left-4 top-4 rounded-full bg-black/55 px-3 py-1 text-[11px] tracking-wide text-sand backdrop-blur-sm">
           {kindLabel[item.kind]}
         </span>
-      </div>
-      <div className="p-5">
-        <p className="text-xs uppercase tracking-widest text-clay">
-          {item.city} · {item.region}
-        </p>
-        <h3 className="font-display mt-1 text-xl text-earth">{item.name}</h3>
-        <p className="mt-2 line-clamp-2 text-sm text-bark/75">{item.tagline}</p>
-        <p className="mt-3 text-sm font-medium text-clay">
-          desde {formatCLP(item.priceFromCLP)}
-          {item.kind === "capsule" ? " / noche" : ""}
-        </p>
+        <div className="absolute inset-x-0 bottom-0 p-5 text-sand">
+          <p className="kicker text-gold/90">
+            {item.city} · {item.region}
+          </p>
+          <h3 className="font-display mt-1.5 text-2xl leading-tight">
+            {item.name}
+          </h3>
+          <p className="mt-2 line-clamp-2 text-sm text-sand/75">{item.tagline}</p>
+          <p className="mt-3 text-sm font-medium text-gold">
+            desde {formatCLP(item.priceFromCLP)}
+            {item.kind === "capsule" ? " / noche" : ""}
+          </p>
+        </div>
       </div>
     </Link>
   );

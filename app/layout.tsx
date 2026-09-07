@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s · Mapucoin",
   },
   description:
-    "Plataforma turística de Chile: indica presupuesto y destino. Grok arma tu viaje con cápsulas tecnológicas, gastronomía local, actividades y mapa interactivo.",
+    "Plataforma turística de Chile: indica presupuesto y destino. Grok arma tu viaje con cápsulas tecnológicas, gastronomía local, actividades y mapa interactivo. Fotos y videos reales del territorio.",
   openGraph: {
     title: "Mapucoin — Viaja Chile con IA",
     description:

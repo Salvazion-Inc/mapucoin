@@ -38,13 +38,11 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
   return (
     <form
       onSubmit={onSubmit}
-      className={`rounded-3xl border border-earth/10 bg-cream/95 shadow-xl shadow-earth/10 ${
+      className={`rounded-[1.75rem] border border-white/40 bg-cream/92 shadow-[0_30px_80px_rgba(7,5,4,0.28)] backdrop-blur-md ${
         compact ? "p-5" : "p-6 md:p-8"
       }`}
     >
-      <p className="text-xs uppercase tracking-[0.25em] text-clay">
-        Planificador Grok
-      </p>
+      <p className="kicker text-clay">Planificador Grok</p>
       <h2 className="font-display mt-2 text-2xl text-earth md:text-3xl">
         ¿Cuánto y a dónde?
       </h2>
@@ -56,7 +54,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
       <label className="mt-6 block text-sm font-medium text-earth">
         Lugar a conocer
         <select
-          className="mt-1 w-full rounded-xl border border-earth/15 bg-white px-3 py-2.5"
+          className="mt-1 w-full rounded-xl border border-earth/12 bg-white px-3 py-2.5"
           value={place}
           onChange={(e) => setPlace(e.target.value)}
         >
@@ -94,7 +92,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
             max={21}
             value={nights}
             onChange={(e) => setNights(Number(e.target.value))}
-            className="mt-1 w-full rounded-xl border border-earth/15 bg-white px-3 py-2.5"
+            className="mt-1 w-full rounded-xl border border-earth/12 bg-white px-3 py-2.5"
           />
         </label>
         <label className="text-sm font-medium text-earth">
@@ -105,7 +103,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
             max={8}
             value={guests}
             onChange={(e) => setGuests(Number(e.target.value))}
-            className="mt-1 w-full rounded-xl border border-earth/15 bg-white px-3 py-2.5"
+            className="mt-1 w-full rounded-xl border border-earth/12 bg-white px-3 py-2.5"
           />
         </label>
       </div>
@@ -139,7 +137,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
 
       <button
         type="submit"
-        className="mt-6 w-full rounded-full bg-clay py-3 font-medium text-cream hover:bg-ember"
+        className="mt-6 w-full rounded-full bg-earth py-3.5 font-medium text-sand transition hover:bg-bark"
       >
         Armar viaje con Grok
       </button>

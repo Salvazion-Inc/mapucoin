@@ -48,8 +48,8 @@ function ReservaInner() {
   return (
     <div className="mx-auto grid max-w-5xl gap-10 px-4 py-12 lg:grid-cols-2">
       <div>
-        <p className="text-xs uppercase tracking-[0.25em] text-clay">Reserva</p>
-        <h1 className="font-display mt-2 text-4xl text-earth">
+        <p className="kicker text-clay">Reserva</p>
+        <h1 className="font-display mt-3 text-4xl text-earth">
           Pagar con Stripe
         </h1>
         {params.get("cancel") && (
@@ -67,7 +67,7 @@ function ReservaInner() {
       </div>
       <form
         onSubmit={onSubmit}
-        className="space-y-4 rounded-3xl border border-earth/10 bg-white p-6"
+        className="space-y-4 rounded-[1.75rem] border border-earth/8 bg-white p-7 shadow-[0_18px_50px_rgba(12,9,7,0.06)]"
       >
         <label className="block text-sm font-medium text-earth">
           Cápsula
@@ -131,7 +131,7 @@ function ReservaInner() {
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <button className="w-full rounded-full bg-clay py-3 text-cream">
+        <button className="w-full rounded-full bg-earth py-3.5 text-sand hover:bg-bark">
           Ir a Stripe · {formatCLP(total)}
         </button>
         {status && <p className="text-sm text-bark/70">{status}</p>}

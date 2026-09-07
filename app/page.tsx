@@ -1,45 +1,33 @@
+import HeroVideo from "@/components/HeroVideo";
 import PlaceCard from "@/components/PlaceCard";
+import PlaceVideo from "@/components/PlaceVideo";
 import PlannerForm from "@/components/PlannerForm";
-import { capsules, destinations, gastronomy } from "@/lib/catalog";
+import { CHILE_FILM, capsules, destinations, gastronomy } from "@/lib/catalog";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
   return (
     <>
-      <section className="relative min-h-[88vh] overflow-hidden">
-        <Image
-          src="/images/hero-paine.jpg"
-          alt="Cápsula Mapucoin en Torres del Paine"
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-earth/80 via-earth/45 to-transparent" />
+      <section className="relative min-h-[92vh] overflow-hidden">
+        <HeroVideo />
+        <div className="absolute inset-0 bg-gradient-to-r from-night/85 via-night/45 to-night/20" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 lg:grid-cols-2 lg:py-24">
           <div className="text-sand">
-            <p className="text-xs uppercase tracking-[0.3em] text-gold">
-              Chile · territorio · IA
-            </p>
-            <h1 className="font-display mt-3 text-4xl leading-tight md:text-6xl">
+            <p className="kicker text-gold">Chile · territorio · IA</p>
+            <h1 className="font-display mt-4 text-4xl leading-[1.08] md:text-6xl lg:text-[4.4rem]">
               Viaja Chile con presupuesto, cápsulas y Grok.
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-sand/85">
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-sand/80">
               Indica cuánto quieres gastar y el lugar a conocer. Mapucoin arma
               noches en casas cápsula tecnológicas, mesa local y actividades
               sobre un mapa vivo del país.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/mapa"
-                className="rounded-full border border-sand/40 px-5 py-2.5 text-sand"
-              >
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link href="/mapa" className="btn-ghost px-6 py-2.5">
                 Mapa interactivo
               </Link>
-              <Link
-                href="/partners"
-                className="rounded-full bg-gold px-5 py-2.5 text-earth"
-              >
+              <Link href="/partners" className="btn-gold px-6 py-2.5">
                 Ser partner
               </Link>
             </div>
@@ -48,14 +36,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20">
-        <p className="text-xs uppercase tracking-[0.25em] text-clay">
-          Cómo funciona
-        </p>
-        <h2 className="font-display mt-2 text-3xl text-earth md:text-4xl">
+      <section className="mx-auto max-w-7xl px-4 py-24">
+        <p className="kicker text-clay">Cómo funciona</p>
+        <h2 className="font-display mt-3 max-w-xl text-3xl text-earth md:text-5xl">
           Presupuesto in, itinerario out.
         </h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {[
             [
               "01",
@@ -75,32 +61,56 @@ export default function HomePage() {
           ].map(([n, t, d]) => (
             <article
               key={n}
-              className="rounded-3xl border border-earth/10 bg-white p-6"
+              className="rounded-[1.75rem] border border-earth/8 bg-white/70 p-7 shadow-[0_10px_40px_rgba(26,16,12,0.04)]"
             >
               <p className="font-display text-gold">{n}</p>
-              <h3 className="font-display mt-2 text-2xl text-earth">{t}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-bark/75">{d}</p>
+              <h3 className="font-display mt-3 text-2xl text-earth">{t}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-bark/70">{d}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="bg-sand/60 py-20">
+      <section className="bg-night py-20 text-sand">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="kicker text-gold">En movimiento</p>
+              <h2 className="font-display mt-3 text-3xl md:text-4xl">
+                Chile real: desierto, volcán, granito y Pacífico.
+              </h2>
+            </div>
+            <p className="max-w-sm text-sm text-sand/60">
+              Filmación 4K de Torres del Paine, Atacama, Chiloé, Valparaíso,
+              Rapa Nui y más.
+            </p>
+          </div>
+          <div className="mt-10">
+            <PlaceVideo
+              id={CHILE_FILM}
+              title="Maravillas de Chile en 4K"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-clay">
-                Destinos
-              </p>
-              <h2 className="font-display mt-2 text-3xl text-earth">
+              <p className="kicker text-clay">Destinos</p>
+              <h2 className="font-display mt-3 text-3xl text-earth md:text-4xl">
                 Principales lugares de Chile
               </h2>
             </div>
-            <Link href="/destinos" className="text-sm text-clay">
+            <Link
+              href="/destinos"
+              className="text-sm tracking-wide text-clay hover:text-earth"
+            >
               Ver todos →
             </Link>
           </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {destinations.slice(0, 6).map((d) => (
               <PlaceCard key={d.slug} item={d} />
             ))}
@@ -108,9 +118,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20">
-        <div className="grid items-center gap-10 lg:grid-cols-2">
-          <div className="relative h-80 overflow-hidden rounded-3xl lg:h-[28rem]">
+      <section className="mx-auto max-w-7xl px-4 pb-24">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          <div className="relative h-80 overflow-hidden rounded-[1.75rem] lg:h-[32rem]">
             <Image
               src="/images/capsula-interior.jpg"
               alt="Interior de cápsula Mapucoin"
@@ -119,32 +129,30 @@ export default function HomePage() {
             />
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-clay">
-              Cápsulas
-            </p>
-            <h2 className="font-display mt-2 text-3xl text-earth md:text-4xl">
+            <p className="kicker text-clay">Cápsulas</p>
+            <h2 className="font-display mt-3 text-3xl text-earth md:text-5xl">
               Dormir en tecnología, despertar en el paisaje.
             </h2>
-            <p className="mt-4 text-bark/80">
+            <p className="mt-5 text-bark/75">
               Casas cápsula de cobre, madera y vidrio. Climatización,
               aislamiento acústico y vistas al volcán, al salar o a las Torres.
               Operadas por partners locales.
             </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {capsules.slice(0, 4).map((c) => (
                 <Link
                   key={c.slug}
                   href={`/capsulas/${c.slug}`}
-                  className="rounded-2xl border border-earth/10 bg-white p-4 hover:border-clay"
+                  className="rounded-2xl border border-earth/8 bg-white p-4 transition hover:border-gold/50"
                 >
-                  <p className="text-xs text-clay">{c.city}</p>
-                  <p className="font-medium text-earth">{c.name}</p>
+                  <p className="kicker text-clay">{c.city}</p>
+                  <p className="mt-1 font-medium text-earth">{c.name}</p>
                 </Link>
               ))}
             </div>
             <Link
               href="/capsulas"
-              className="mt-6 inline-block rounded-full bg-earth px-5 py-2.5 text-sand"
+              className="mt-8 inline-block rounded-full bg-earth px-6 py-2.5 text-sand"
             >
               Ver cápsulas
             </Link>
@@ -152,32 +160,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-earth py-20 text-sand">
+      <section className="bg-earth py-24 text-sand">
         <div className="mx-auto max-w-7xl px-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-gold">
-            Gastronomía
-          </p>
-          <h2 className="font-display mt-2 text-3xl md:text-4xl">
+          <p className="kicker text-gold">Gastronomía</p>
+          <h2 className="font-display mt-3 text-3xl md:text-4xl">
             La mesa del territorio
           </h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
             {gastronomy.slice(0, 3).map((g) => (
               <Link
                 key={g.slug}
                 href={`/gastronomia#${g.slug}`}
-                className="overflow-hidden rounded-3xl bg-bark/40"
+                className="group overflow-hidden rounded-[1.75rem] bg-night/40"
               >
-                <div className="relative h-44">
+                <div className="relative h-52">
                   <Image
                     src={g.image}
                     alt={g.name}
                     fill
-                    className="object-cover"
+                    className="object-cover transition duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-5">
-                  <h3 className="font-display text-xl">{g.name}</h3>
-                  <p className="mt-1 text-sm text-sand/75">{g.tagline}</p>
+                <div className="p-6">
+                  <h3 className="font-display text-2xl">{g.name}</h3>
+                  <p className="mt-2 text-sm text-sand/70">{g.tagline}</p>
                 </div>
               </Link>
             ))}

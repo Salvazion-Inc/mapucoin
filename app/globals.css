@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-earth: #2c1810;
-  --color-bark: #4a2c1a;
+  --color-earth: #1a100c;
+  --color-bark: #3d2418;
   --color-clay: #c45c26;
   --color-ember: #e07a3d;
-  --color-gold: #c9a227;
-  --color-sand: #f4e8d0;
-  --color-cream: #fbf6ec;
+  --color-gold: #d4af37;
+  --color-sand: #f3e6cc;
+  --color-cream: #f7f1e6;
   --color-moss: #3d5a3a;
-  --color-ink: #1a120c;
+  --color-ink: #0c0907;
+  --color-night: #070504;
   --font-display: "Fraunces", serif;
   --font-sans: "Outfit", system-ui, sans-serif;
 }
@@ -21,25 +22,75 @@ body {
   font-family: var(--font-sans);
 }
 
+::selection {
+  background: var(--color-gold);
+  color: var(--color-night);
+}
+
 .font-display {
   font-family: var(--font-display);
   font-optical-sizing: auto;
 }
 
+.kicker {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.btn-gold {
+  border-radius: 999px;
+  background: var(--color-gold);
+  color: var(--color-night);
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-gold:hover {
+  background: #e3c25a;
+}
+
+.btn-ghost {
+  border-radius: 999px;
+  border: 1px solid rgb(243 230 204 / 0.35);
+  color: var(--color-sand);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background: rgb(243 230 204 / 0.1);
+  border-color: rgb(243 230 204 / 0.6);
+}
+
+input,
+select,
+textarea {
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgb(212 175 55 / 0.28);
+  border-color: rgb(212 175 55 / 0.7);
+}
+
 .kultrun-ring {
   background:
-    radial-gradient(circle at 50% 50%, transparent 58%, #c9a22733 59%, transparent 62%),
+    radial-gradient(circle at 50% 50%, transparent 58%, #d4af3733 59%, transparent 62%),
     radial-gradient(circle at 50% 50%, transparent 70%, #c45c2633 71%, transparent 76%);
 }
 
 .leaflet-container {
   background: #d9cbb3;
   font-family: var(--font-sans);
+  border-radius: 1.5rem;
 }
 
 .leaflet-popup-content-wrapper {
   border-radius: 16px;
-  box-shadow: 0 12px 40px rgba(44, 24, 16, 0.2);
+  box-shadow: 0 12px 40px rgba(12, 9, 7, 0.22);
 }
 
 .leaflet-popup-content {

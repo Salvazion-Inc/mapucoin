@@ -9,17 +9,23 @@ export const metadata: Metadata = {
 
 export default function MapaPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
-      <p className="text-xs uppercase tracking-[0.25em] text-clay">Mapa vivo</p>
-      <h1 className="font-display mt-2 text-4xl text-earth">
-        Principales lugares turísticos de Chile
-      </h1>
-      <p className="mt-3 max-w-2xl text-bark/75">
-        Desde el salar hasta el granito de Paine — y Rapa Nui en el Pacífico.
-        Puntos terracota son destinos; puntos oro son cápsulas.
-      </p>
-      <div className="mt-8">
-        <MapLoader height="72vh" />
+    <div>
+      <div className="bg-night px-4 py-16 text-sand md:py-20">
+        <div className="mx-auto max-w-7xl">
+          <p className="kicker text-gold">Mapa vivo</p>
+          <h1 className="font-display mt-3 text-4xl md:text-6xl">
+            Principales lugares turísticos de Chile
+          </h1>
+          <p className="mt-4 max-w-2xl text-sand/70">
+            Desde el salar hasta el granito de Paine — y Rapa Nui en el Pacífico.
+            Puntos terracota son destinos; puntos oro son cápsulas.
+          </p>
+        </div>
+      </div>
+      <div className="mx-auto max-w-7xl px-4 py-10">
+        <div className="overflow-hidden rounded-[1.75rem] shadow-[0_24px_70px_rgba(12,9,7,0.12)]">
+          <MapLoader height="72vh" />
+        </div>
       </div>
     </div>
   );

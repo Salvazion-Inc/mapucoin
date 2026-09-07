@@ -48,9 +48,9 @@ export default function PartnersPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <p className="text-xs uppercase tracking-[0.25em] text-clay">Red</p>
-      <h1 className="font-display mt-2 text-4xl text-earth">
+    <div className="mx-auto max-w-3xl px-4 py-14">
+      <p className="kicker text-clay">Red</p>
+      <h1 className="font-display mt-3 text-4xl text-earth md:text-5xl">
         Ingresa como partner
       </h1>
       <p className="mt-3 text-bark/75">
@@ -60,7 +60,7 @@ export default function PartnersPage() {
 
       <form
         onSubmit={onSubmit}
-        className="mt-10 space-y-4 rounded-3xl border border-earth/10 bg-white p-6 md:p-8"
+        className="mt-10 space-y-4 rounded-[1.75rem] border border-earth/8 bg-white p-6 shadow-[0_18px_50px_rgba(12,9,7,0.06)] md:p-8"
       >
         <label className="block text-sm font-medium text-earth">
           Nombre
@@ -131,7 +131,7 @@ export default function PartnersPage() {
         </label>
         <button
           disabled={status === "loading"}
-          className="w-full rounded-full bg-clay py-3 text-cream disabled:opacity-60"
+          className="w-full rounded-full bg-earth py-3.5 text-sand disabled:opacity-60 hover:bg-bark"
         >
           {status === "loading" ? "Enviando…" : "Postular"}
         </button>

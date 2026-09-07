@@ -40,12 +40,27 @@ export async function POST(req: Request) {
   };
 
   const db = getSupabase();
+  let stored = false;
   if (db) {
-    const { error } = await db.from("partners").insert(row);
-    if (error) {
-      return Response.json({ error: error.message }, { status: 500 });
+    const { error: partnerErr } = await db.from("partners").insert(row);
+    if (!partnerErr) {
+      stored = true;
+    } else {
+      const { error: appErr } = await db.from("applications").insert({
+        full_name,
+        email,
+        phone,
+        role,
+        yacht_name: business,
+        notes: `[mapucoin] ${city}${notes ? ` · ${notes}` : ""}`,
+        status: "pending",
+      });
+      if (appErr) {
+        return Response.json({ error: appErr.message }, { status: 500 });
+      }
+      stored = true;
     }
   }
 
-  return Response.json({ ok: true, stored: Boolean(db) });
+  return Response.json({ ok: true, stored });
 }

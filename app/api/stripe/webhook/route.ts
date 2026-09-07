@@ -21,8 +21,14 @@ export async function POST(req: Request) {
     return Response.json({ error: "signature" }, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
+  if (
+    event.type === "checkout.session.completed" ||
+    event.type === "checkout.session.async_payment_succeeded"
+  ) {
     const session = event.data.object as Stripe.Checkout.Session;
+    if (session.payment_status !== "paid") {
+      return Response.json({ received: true, skipped: "unpaid" });
+    }
     const bookingId =
       session.client_reference_id || session.metadata?.booking_id;
     const db = getSupabase();
@@ -35,6 +41,7 @@ export async function POST(req: Request) {
             typeof session.payment_intent === "string"
               ? session.payment_intent
               : "",
+          stripe_session_id: session.id,
         })
         .eq("id", bookingId);
     }

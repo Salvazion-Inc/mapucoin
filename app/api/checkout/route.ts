@@ -31,17 +31,28 @@ export async function POST(req: Request) {
 
   const db = getSupabase();
   if (db) {
-    await db.from("bookings").insert({
+    const row = {
       id: bookingId,
       full_name: fullName,
       email,
       phone: String(body.phone || ""),
-      capsule_slug: item.slug,
-      nights,
+      yacht_slug: item.slug,
+      origin: "mapucoin",
+      destination: item.city,
       guests,
       amount,
       status: "checkout",
-    });
+      notes: JSON.stringify({
+        source: "mapucoin",
+        capsule: item.slug,
+        nights,
+        guests,
+      }),
+    };
+    const { error } = await db.from("bookings").insert(row);
+    if (error) {
+      console.error("booking_insert", error.message);
+    }
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -50,6 +61,7 @@ export async function POST(req: Request) {
     client_reference_id: bookingId,
     success_url: `${originUrl}/reserva/exito?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${originUrl}/reserva?capsula=${item.slug}&cancel=1`,
+    integration_identifier: `mapucoin_capsule_${crypto.randomUUID().slice(0, 8)}`,
     line_items: [
       {
         quantity: 1,

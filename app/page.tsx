@@ -100,7 +100,7 @@ export default function HomePage() {
             <div>
               <p className="kicker text-clay">Destinos</p>
               <h2 className="font-display mt-3 text-3xl text-earth md:text-4xl">
-                Principales lugares de Chile
+                31 territorios, del Altiplano a la Antártica
               </h2>
             </div>
             <Link
@@ -111,9 +111,12 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {destinations.slice(0, 6).map((d) => (
-              <PlaceCard key={d.slug} item={d} />
-            ))}
+            {["san-pedro-de-atacama", "pucon", "torres-del-paine", "rapa-nui", "valparaiso", "chiloe"]
+              .map((slug) => destinations.find((d) => d.slug === slug))
+              .filter(Boolean)
+              .map((d) => (
+                <PlaceCard key={d!.slug} item={d!} />
+              ))}
           </div>
         </div>
       </section>
@@ -134,9 +137,9 @@ export default function HomePage() {
               Dormir en tecnología, despertar en el paisaje.
             </h2>
             <p className="mt-5 text-bark/75">
-              Casas cápsula de cobre, madera y vidrio. Climatización,
-              aislamiento acústico y vistas al volcán, al salar o a las Torres.
-              Operadas por partners locales.
+              Casas cápsula de cobre, madera y vidrio. Una en cada paisaje:
+              volcán, lago, desierto, bosque nativo, viñedos, ríos, nieve y
+              playa. Operadas por partners locales.
             </p>
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {capsules.slice(0, 4).map((c) => (

@@ -1,4 +1,4 @@
-import { CatalogItem, formatCLP } from "@/lib/catalog";
+import { CatalogItem, formatCLP, landscapeLabel } from "@/lib/catalog";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,9 +31,16 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
           sizes="(max-width: 768px) 100vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/25 to-transparent" />
-        <span className="absolute left-4 top-4 rounded-full bg-black/55 px-3 py-1 text-[11px] tracking-wide text-sand backdrop-blur-sm">
-          {kindLabel[item.kind]}
-        </span>
+        <div className="absolute left-4 top-4 flex flex-wrap gap-1.5">
+          <span className="rounded-full bg-black/55 px-3 py-1 text-[11px] tracking-wide text-sand backdrop-blur-sm">
+            {kindLabel[item.kind]}
+          </span>
+          {item.landscapes?.[0] && (
+            <span className="rounded-full bg-gold/90 px-3 py-1 text-[11px] tracking-wide text-night">
+              {landscapeLabel(item.landscapes[0])}
+            </span>
+          )}
+        </div>
         <div className="absolute inset-x-0 bottom-0 p-5 text-sand">
           <p className="kicker text-gold/90">
             {item.city} · {item.region}

@@ -17,8 +17,10 @@ export default function MapaPage() {
             Principales lugares turísticos de Chile
           </h1>
           <p className="mt-4 max-w-2xl text-sand/70">
-            Desde el salar hasta el granito de Paine — y Rapa Nui en el Pacífico.
-            Puntos terracota son destinos; puntos oro son cápsulas.
+            Treinta y un destinos y una cápsula en cada uno. Filtra por volcán,
+            lago, desierto, bosque, viñedos, ríos, nieve o playa. Terracota:
+            destinos. Oro: cápsulas. Rapa Nui, Juan Fernández y Antártica están
+            en el mapa; el encuadre inicial cubre Chile continental.
           </p>
         </div>
       </div>

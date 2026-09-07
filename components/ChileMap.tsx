@@ -1,6 +1,12 @@
 "use client";
 
-import { formatCLP, mapPoints } from "@/lib/catalog";
+import {
+  formatCLP,
+  landscapeLabel,
+  landscapes,
+  mapPoints,
+  type Landscape,
+} from "@/lib/catalog";
 import { mapTiles } from "@/lib/map-tiles";
 import type { LatLngExpression } from "leaflet";
 import L from "leaflet";
@@ -8,7 +14,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useMemo, useState } from "react";
 
 
-type Filter = "all" | "place" | "capsule";
+type KindFilter = "all" | "place" | "capsule";
 
 function pinHtml(kind: "place" | "capsule") {
   const color = kind === "capsule" ? "#d4af37" : "#c45c26";
@@ -22,11 +28,16 @@ export default function ChileMap({
   focusSlug?: string;
   height?: string;
 }) {
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<KindFilter>("all");
+  const [land, setLand] = useState<Landscape | "all">("all");
   const points = useMemo(() => {
-    const all = mapPoints();
-    return filter === "all" ? all : all.filter((p) => p.group === filter);
-  }, [filter]);
+    let all = mapPoints();
+    if (filter !== "all") all = all.filter((p) => p.group === filter);
+    if (land !== "all") {
+      all = all.filter((p) => p.landscapes?.includes(land));
+    }
+    return all;
+  }, [filter, land]);
 
   useEffect(() => {
     const el = document.getElementById("mapucoin-map");
@@ -75,10 +86,16 @@ export default function ChileMap({
       }
     }
 
-    map.fitBounds(
-      L.latLngBounds(points.map((p) => [p.lat, p.lng] as [number, number])),
-      { padding: [40, 40], maxZoom: focusSlug ? 9 : 6 },
+    const mainland = points.filter(
+      (p) => p.lng > -78.5 && p.lat > -56 && p.lat < -17,
     );
+    const fit = mainland.length ? mainland : points;
+    if (fit.length) {
+      map.fitBounds(
+        L.latLngBounds(fit.map((p) => [p.lat, p.lng] as [number, number])),
+        { padding: [40, 40], maxZoom: focusSlug ? 9 : 6 },
+      );
+    }
 
     return () => {
       map.remove();
@@ -93,7 +110,7 @@ export default function ChileMap({
             ["all", "Todo"],
             ["place", "Destinos"],
             ["capsule", "Cápsulas"],
-          ] as [Filter, string][]
+          ] as [KindFilter, string][]
         ).map(([id, label]) => (
           <button
             key={id}
@@ -106,8 +123,21 @@ export default function ChileMap({
             {label}
           </button>
         ))}
+        {landscapes.map((l) => (
+          <button
+            key={l.id}
+            type="button"
+            onClick={() => setLand((v) => (v === l.id ? "all" : l.id))}
+            className={`rounded-full px-4 py-1.5 text-sm ${
+              land === l.id ? "bg-gold text-night" : "bg-sand text-bark"
+            }`}
+          >
+            {l.label}
+          </button>
+        ))}
         <span className="self-center text-xs text-bark/60">
           Terracota: destinos · Oro: cápsulas
+          {land !== "all" ? ` · ${landscapeLabel(land)}` : ""}
         </span>
       </div>
       <div

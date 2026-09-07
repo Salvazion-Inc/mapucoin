@@ -1,6 +1,6 @@
 "use client";
 
-import { destinations, formatCLP, interests } from "@/lib/catalog";
+import { destinations, formatCLP, interests, landscapes } from "@/lib/catalog";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 
@@ -58,11 +58,19 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
           value={place}
           onChange={(e) => setPlace(e.target.value)}
         >
-          {destinations.map((d) => (
-            <option key={d.slug} value={d.slug}>
-              {d.name} · {d.region}
-            </option>
-          ))}
+          {landscapes.map((ls) => {
+            const group = destinations.filter((d) => d.landscapes?.[0] === ls.id);
+            if (!group.length) return null;
+            return (
+              <optgroup key={ls.id} label={ls.label}>
+                {group.map((d) => (
+                  <option key={d.slug} value={d.slug}>
+                    {d.name}
+                  </option>
+                ))}
+              </optgroup>
+            );
+          })}
         </select>
       </label>
 

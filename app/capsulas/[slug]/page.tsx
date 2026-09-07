@@ -1,5 +1,5 @@
 import MapLoader from "@/components/MapLoader";
-import { capsules, formatCLP, getBySlug } from "@/lib/catalog";
+import { capsules, formatCLP, getBySlug, landscapeLabel } from "@/lib/catalog";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -28,7 +28,12 @@ export default async function CapsulaPage({ params }: Props) {
         <Image src={c.image} alt={c.name} fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-night via-night/35 to-transparent" />
         <div className="absolute bottom-8 left-0 right-0 mx-auto max-w-7xl px-4 text-sand">
-          <p className="kicker text-gold">{c.city}</p>
+          <p className="kicker text-gold">
+            {c.city}
+            {c.landscapes?.length
+              ? ` · ${c.landscapes.map(landscapeLabel).join(" · ")}`
+              : ""}
+          </p>
           <h1 className="font-display mt-2 text-4xl md:text-6xl">{c.name}</h1>
         </div>
       </div>
@@ -43,7 +48,7 @@ export default async function CapsulaPage({ params }: Props) {
           <div className="relative mt-8 h-64 overflow-hidden rounded-3xl">
             <Image
               src="/images/capsula-interior.jpg"
-              alt="Interior de cápsula"
+              alt="Interior de cobre, madera y vidrio"
               fill
               className="object-cover"
             />

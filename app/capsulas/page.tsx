@@ -1,4 +1,4 @@
-import PlaceCard from "@/components/PlaceCard";
+import CatalogBrowser from "@/components/CatalogBrowser";
 import { capsules } from "@/lib/catalog";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -10,8 +10,8 @@ export default function CapsulasPage() {
     <div>
       <div className="relative h-80 md:h-96">
         <Image
-          src="/images/capsula-atacama.jpg"
-          alt="Cápsula Atacama Star"
+          src="/images/capsula-paine.jpg"
+          alt="Cápsula Mapucoin de cobre, vidrio y madera"
           fill
           className="object-cover"
           priority
@@ -23,20 +23,15 @@ export default function CapsulasPage() {
             <h1 className="font-display mt-2 text-4xl md:text-6xl">
               Casas cápsula tecnológicas
             </h1>
+            <p className="mt-3 max-w-xl text-sand/75">
+              Cobre, vidrio y madera. Una cápsula en cada territorio, del
+              Altiplano a Rapa Nui y la Antártica.
+            </p>
           </div>
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-4 py-14">
-        <p className="max-w-2xl text-bark/75">
-          Módulos de cobre, madera y vidrio: techo estelar en el desierto,
-          tinaja frente al volcán, palafito sobre el canal chilote. Reserva con
-          Stripe.
-        </p>
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {capsules.map((c) => (
-            <PlaceCard key={c.slug} item={c} />
-          ))}
-        </div>
+        <CatalogBrowser items={capsules} />
       </div>
     </div>
   );

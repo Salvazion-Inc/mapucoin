@@ -6,7 +6,18 @@ export type Region =
   | "Araucanía y Lagos"
   | "Patagonia"
   | "Rapa Nui"
-  | "Pacífico";
+  | "Pacífico"
+  | "Antártica";
+
+export type Landscape =
+  | "volcan"
+  | "lago"
+  | "desierto"
+  | "bosque-nativo"
+  | "vinedos"
+  | "rios"
+  | "nieve"
+  | "playa";
 
 export type PlaceKind = "place" | "capsule" | "food" | "activity";
 
@@ -30,18 +41,107 @@ export type CatalogItem = {
   durationHours?: number;
   capacity?: number;
   tags: string[];
+  landscapes?: Landscape[];
   placeSlug?: string;
 };
 
 const p = (file: string) => `/images/places/${file}`;
+const cap = (file: string) => `/images/${file}`;
 
 /** 4K travel film of Chile with chapters per territory. */
 export const CHILE_FILM = "uHcjT4GfPNA";
 
-export const destinations: CatalogItem[] = [
+export const landscapes: { id: Landscape; label: string }[] = [
+  { id: "volcan", label: "Volcán" },
+  { id: "lago", label: "Lago" },
+  { id: "desierto", label: "Desierto" },
+  { id: "bosque-nativo", label: "Bosque nativo" },
+  { id: "vinedos", label: "Viñedos" },
+  { id: "rios", label: "Ríos" },
+  { id: "nieve", label: "Nieve" },
+  { id: "playa", label: "Playa" },
+];
+
+export const landscapeLabel = (id: Landscape) =>
+  landscapes.find((l) => l.id === id)?.label || id;
+
+type Seed = {
+  slug: string;
+  name: string;
+  region: Region;
+  city: string;
+  lat: number;
+  lng: number;
+  image: string;
+  gallery?: string[];
+  youtubeStart?: number;
+  tagline: string;
+  description: string;
+  highlights: string[];
+  priceFromCLP: number;
+  tags: string[];
+  landscapes: Landscape[];
+  capsuleSlug?: string;
+  capsuleName: string;
+  capsuleImage: string;
+  capsuleTagline: string;
+  capsuleDescription: string;
+  capsuleHighlights: string[];
+  capsulePrice: number;
+  capacity?: number;
+};
+
+const seeds: Seed[] = [
+  {
+    slug: "altiplano",
+    name: "Altiplano",
+    region: "Norte Grande",
+    city: "Putre",
+    lat: -18.196,
+    lng: -69.559,
+    image: p("parinacota.jpg"),
+    gallery: [p("parinacota.jpg")],
+    tagline: "Parinacota, bofedales y el techo del desierto andino.",
+    description:
+      "Pueblo de adobe a más de 3.500 m. Lagunas altiplánicas, vicuñas y volcanes gemelos en el parque Lauca.",
+    highlights: ["Volcán Parinacota", "Parque Lauca", "Pueblo de Putre"],
+    priceFromCLP: 170000,
+    tags: ["desierto", "volcán", "altura", "cultura"],
+    landscapes: ["desierto", "volcan"],
+    capsuleName: "Cápsula Altiplano",
+    capsuleImage: cap("capsula-altiplano.jpg"),
+    capsuleTagline: "Cúpula de cobre y vidrio frente al Parinacota.",
+    capsuleDescription:
+      "Módulo climatizado para altura, con oxígeno de apoyo, techo estelar y vista a los bofedales.",
+    capsuleHighlights: ["Altura 3.500 m", "Techo estelar", "Vista Parinacota"],
+    capsulePrice: 175000,
+  },
+  {
+    slug: "morro-de-arica",
+    name: "Morro de Arica",
+    region: "Norte Grande",
+    city: "Arica",
+    lat: -18.481,
+    lng: -70.323,
+    image: p("arica.jpg"),
+    gallery: [p("arica.jpg"), p("arica-morro.jpg")],
+    tagline: "El morro, el Pacífico y la ciudad más septentrional.",
+    description:
+      "Playa, historia del Pacífico y atardeceres sobre el morro. Puerta norte de Chile, con cultura chinchorro.",
+    highlights: ["Morro", "Playa El Laucho", "Cultura Chinchorro"],
+    priceFromCLP: 130000,
+    tags: ["playa", "historia", "mar"],
+    landscapes: ["playa"],
+    capsuleName: "Cápsula Morro",
+    capsuleImage: cap("capsula-playa.jpg"),
+    capsuleTagline: "Cobre y vidrio sobre la playa, con el morro al fondo.",
+    capsuleDescription:
+      "Cápsula frente al Pacífico, deck de madera y climatización para la costa desértica.",
+    capsuleHighlights: ["Vista al morro", "Deck oceánico", "Atardecer norte"],
+    capsulePrice: 142000,
+  },
   {
     slug: "san-pedro-de-atacama",
-    kind: "place",
     name: "San Pedro de Atacama",
     region: "Norte Grande",
     city: "San Pedro de Atacama",
@@ -49,7 +149,6 @@ export const destinations: CatalogItem[] = [
     lng: -68.1997,
     image: p("atacama-luna.jpg"),
     gallery: [p("atacama-pueblo.jpg"), p("atacama-dunas.jpg"), p("atacama-luna.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 263,
     tagline: "El desierto más árido y el cielo más limpio del planeta.",
     description:
@@ -57,10 +156,92 @@ export const destinations: CatalogItem[] = [
     highlights: ["Valle de la Luna", "El Tatio", "Lagunas Miscanti y Miñiques"],
     priceFromCLP: 180000,
     tags: ["desierto", "estrellas", "cultura atacameña", "aventura"],
+    landscapes: ["desierto"],
+    capsuleSlug: "capsula-atacama-star",
+    capsuleName: "Cápsula Atacama Star",
+    capsuleImage: cap("capsula-atacama.jpg"),
+    capsuleTagline: "Techo de vidrio para la Vía Láctea. Climatización y Starlink.",
+    capsuleDescription:
+      "Cápsula de aluminio y cobre con cúpula acristalada, cama king, ducha de lluvia y climatización de desierto. A 12 minutos de San Pedro.",
+    capsuleHighlights: ["Techo estelar", "Aire acondicionado", "Desayuno atacameño"],
+    capsulePrice: 165000,
+  },
+  {
+    slug: "iquique-humberstone",
+    name: "Iquique y Humberstone",
+    region: "Norte Grande",
+    city: "Iquique",
+    lat: -20.214,
+    lng: -70.152,
+    image: p("humberstone.jpg"),
+    gallery: [p("humberstone.jpg")],
+    tagline: "Oficina salitrera UNESCO y el Pacífico de Tarapacá.",
+    description:
+      "Humberstone y Santa Laura, desierto de pampa y playa de Cavancha. Memoria del salitre y surf del norte.",
+    highlights: ["Humberstone", "Playa Cavancha", "Pampa del Tamarugal"],
+    priceFromCLP: 135000,
+    tags: ["desierto", "patrimonio", "playa"],
+    landscapes: ["desierto", "playa"],
+    capsuleName: "Cápsula Humberstone",
+    capsuleImage: cap("capsula-atacama.jpg"),
+    capsuleTagline: "Pampa salitrera de noche, cobre y vidrio bajo las estrellas.",
+    capsuleDescription:
+      "Módulo junto a la pampa, con aislamiento térmico y traslado a la oficina salitrera.",
+    capsuleHighlights: ["Pampa", "Estrellas", "Patrimonio UNESCO"],
+    capsulePrice: 138000,
+  },
+  {
+    slug: "bahia-inglesa",
+    name: "Bahía Inglesa",
+    region: "Norte Grande",
+    city: "Caldera",
+    lat: -27.105,
+    lng: -70.858,
+    image: p("bahia-inglesa.jpg"),
+    gallery: [p("bahia-inglesa.jpg"), p("la-serena.jpg")],
+    youtubeStart: 1550,
+    tagline: "Agua turquesa en el desierto costero de Atacama.",
+    description:
+      "Caleta de arena blanca y mar Caribe en el norte chileno. Kayak, atardeceres y el desierto pegado a la playa.",
+    highlights: ["Agua turquesa", "Kayak", "Desierto costero"],
+    priceFromCLP: 150000,
+    tags: ["playa", "desierto", "descanso"],
+    landscapes: ["playa", "desierto"],
+    capsuleName: "Cápsula Bahía Inglesa",
+    capsuleImage: cap("capsula-playa.jpg"),
+    capsuleTagline: "Deck de cobre sobre arena blanca y Pacífico turquesa.",
+    capsuleDescription:
+      "Cápsula frente a la bahía, vidrio panorámico y ducha de agua desalinizada.",
+    capsuleHighlights: ["Frente al mar", "Arena blanca", "Atardecer"],
+    capsulePrice: 158000,
+  },
+  {
+    slug: "la-serena",
+    name: "La Serena",
+    region: "Norte Chico",
+    city: "La Serena",
+    lat: -29.9027,
+    lng: -71.252,
+    image: p("la-serena.jpg"),
+    gallery: [p("la-serena.jpg")],
+    youtubeStart: 1223,
+    tagline: "Faro, Avenida del Mar y puerta al Elqui.",
+    description:
+      "Ciudad colonial, playa larga y observatorios a una hora. Base para el valle y la costa de Coquimbo.",
+    highlights: ["Faro Monumental", "Avenida del Mar", "Arquitectura colonial"],
+    priceFromCLP: 140000,
+    tags: ["playa", "ciudad", "estrellas"],
+    landscapes: ["playa"],
+    capsuleName: "Cápsula Faro",
+    capsuleImage: cap("capsula-playa.jpg"),
+    capsuleTagline: "Cobre y vidrio frente a la Avenida del Mar.",
+    capsuleDescription:
+      "Módulo costero con vista al faro, climatización y desayuno de mar.",
+    capsuleHighlights: ["Vista al faro", "Playa", "Base al Elqui"],
+    capsulePrice: 145000,
   },
   {
     slug: "valle-del-elqui",
-    kind: "place",
     name: "Valle del Elqui",
     region: "Norte Chico",
     city: "Pisco Elqui",
@@ -68,7 +249,6 @@ export const destinations: CatalogItem[] = [
     lng: -70.4931,
     image: p("elqui.jpg"),
     gallery: [p("elqui-agua.jpg"), p("mamalluca.jpg"), p("pisco-elqui.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 1223,
     tagline: "Viñedos, pisco y observatorios bajo un cielo declarado santuario.",
     description:
@@ -76,10 +256,18 @@ export const destinations: CatalogItem[] = [
     highlights: ["Observatorio Mamalluca", "Pisco artesanal", "Pueblos de montaña"],
     priceFromCLP: 140000,
     tags: ["estrellas", "vino", "descanso", "gastronomía"],
+    landscapes: ["vinedos"],
+    capsuleSlug: "capsula-elqui-observatorio",
+    capsuleName: "Cápsula Elqui Observatorio",
+    capsuleImage: cap("capsula-elqui.jpg"),
+    capsuleTagline: "Viñedo, telescopio y atardecer violeta sobre el valle.",
+    capsuleDescription:
+      "Módulo inteligente en terraza de viña. Incluye sesión con telescopio, cata de pisco y deck con hamacas.",
+    capsuleHighlights: ["Telescopio", "Cata de pisco", "Viñedo privado"],
+    capsulePrice: 148000,
   },
   {
     slug: "valparaiso",
-    kind: "place",
     name: "Valparaíso",
     region: "Centro",
     city: "Valparaíso",
@@ -87,7 +275,6 @@ export const destinations: CatalogItem[] = [
     lng: -71.6127,
     image: p("valparaiso.jpg"),
     gallery: [p("valparaiso.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 1061,
     tagline: "Cerros, ascensores y murales frente al Pacífico.",
     description:
@@ -95,56 +282,318 @@ export const destinations: CatalogItem[] = [
     highlights: ["Cerro Alegre", "Caleta Portales", "Street art"],
     priceFromCLP: 120000,
     tags: ["cultura", "ciudad", "mar", "gastronomía"],
+    landscapes: ["playa"],
+    capsuleName: "Cápsula Cerro Alegre",
+    capsuleImage: cap("capsula-valparaiso.jpg"),
+    capsuleTagline: "Cobre y vidrio sobre los cerros, con la bahía a los pies.",
+    capsuleDescription:
+      "Cápsula en terraza de cerro. Vista al puerto, aislamiento acústico y desayuno porteño.",
+    capsuleHighlights: ["Vista bahía", "Cerro pintado", "Ascensores"],
+    capsulePrice: 155000,
   },
   {
-    slug: "santiago-and-maipo",
-    kind: "place",
-    name: "Santiago y Cajón del Maipo",
+    slug: "vina-del-mar",
+    name: "Viña del Mar",
+    region: "Centro",
+    city: "Viña del Mar",
+    lat: -33.0153,
+    lng: -71.5505,
+    image: p("vina.jpg"),
+    gallery: [p("vina.jpg"), p("valparaiso.jpg")],
+    youtubeStart: 3379,
+    tagline: "Reloj de flores, Reñaca y el balneario del Pacífico.",
+    description:
+      "Jardín del Pacífico: playa, casino, dunas de Reñaca y caleta de Concón a minutos.",
+    highlights: ["Reloj de Flores", "Reñaca", "Caleta Concón"],
+    priceFromCLP: 155000,
+    tags: ["playa", "ciudad", "descanso"],
+    landscapes: ["playa"],
+    capsuleName: "Cápsula Reñaca",
+    capsuleImage: cap("capsula-playa.jpg"),
+    capsuleTagline: "Módulo de cobre sobre las dunas, con el Pacífico abierto.",
+    capsuleDescription:
+      "Cápsula frente a Reñaca, deck al atardecer y cama king con ventanal al oleaje.",
+    capsuleHighlights: ["Dunas", "Vista océano", "Concón a 15 min"],
+    capsulePrice: 168000,
+  },
+  {
+    slug: "litoral-de-los-poetas",
+    name: "Litoral de los Poetas",
+    region: "Centro",
+    city: "Isla Negra",
+    lat: -33.399,
+    lng: -71.694,
+    image: p("isla-negra.jpg"),
+    gallery: [p("isla-negra.jpg")],
+    tagline: "Isla Negra, Neruda y los acantilados de Zapallar a San Antonio.",
+    description:
+      "Costa de escritores: casa de Neruda, caletas de piedra y bosques que bajan al mar.",
+    highlights: ["Casa de Neruda", "Acantilados", "Caletas"],
+    priceFromCLP: 140000,
+    tags: ["playa", "cultura", "descanso"],
+    landscapes: ["playa", "bosque-nativo"],
+    capsuleName: "Cápsula Isla Negra",
+    capsuleImage: cap("capsula-playa.jpg"),
+    capsuleTagline: "Cobre y vidrio sobre el acantilado que miraba Neruda.",
+    capsuleDescription:
+      "Cápsula frente al oleaje de Isla Negra, madera nativa y biblioteca de bordo.",
+    capsuleHighlights: ["Acantilado", "Casa Neruda", "Bosque costero"],
+    capsulePrice: 148000,
+  },
+  {
+    slug: "olmue",
+    name: "Olmué",
+    region: "Centro",
+    city: "Olmué",
+    lat: -32.995,
+    lng: -71.186,
+    image: p("olmue.jpg"),
+    gallery: [p("olmue.jpg")],
+    tagline: "Parque La Campana, palma chilena y el cerro de Darwin.",
+    description:
+      "Bosque esclerófilo y palma chilena. Trekking al cerro La Campana, el que subió Darwin en 1834.",
+    highlights: ["Cerro La Campana", "Palma chilena", "Bosque esclerófilo"],
+    priceFromCLP: 125000,
+    tags: ["bosque", "trekking", "naturaleza"],
+    landscapes: ["bosque-nativo"],
+    capsuleName: "Cápsula La Campana",
+    capsuleImage: cap("capsula-chiloe.jpg"),
+    capsuleTagline: "Madera y cobre en el bosque de palma chilena.",
+    capsuleDescription:
+      "Cápsula entre palmares, con sendero privado al parque y tinaja de noche.",
+    capsuleHighlights: ["Palma chilena", "Tinaja", "Parque nacional"],
+    capsulePrice: 132000,
+  },
+  {
+    slug: "santiago",
+    name: "Santiago",
     region: "Centro",
     city: "Santiago",
     lat: -33.4489,
     lng: -70.6693,
     image: p("santiago.jpg"),
-    gallery: [p("cajon.jpg"), p("mercado.jpg"), p("santiago.jpg")],
-    youtube: CHILE_FILM,
+    gallery: [p("santiago.jpg"), p("mercado.jpg"), p("cajon.jpg")],
     youtubeStart: 2936,
-    tagline: "Capital andina: museos, viñas y montaña a una hora.",
+    tagline: "Capital andina: museos, viñas del Maipo y cordillera a la vista.",
     description:
-      "Barrio Lastarria, Mercado Central, viñas del Maipo y el Cajón con glaciares, termas y trekking.",
-    highlights: ["Cajón del Maipo", "Viña Concha y Toro", "Cerro San Cristóbal"],
+      "Barrio Lastarria, Mercado Central, cerro San Cristóbal y las viñas del Maipo a media hora.",
+    highlights: ["Cerro San Cristóbal", "Lastarria", "Viña Concha y Toro"],
     priceFromCLP: 110000,
-    tags: ["ciudad", "vino", "montaña", "cultura"],
+    tags: ["ciudad", "vino", "cultura"],
+    landscapes: ["vinedos"],
+    capsuleName: "Cápsula Maipo",
+    capsuleImage: cap("capsula-interior.jpg"),
+    capsuleTagline: "Interior de cobre y madera, con los Andes en el ventanal.",
+    capsuleDescription:
+      "Cápsula en el piedemonte santiaguino. Starlink, cocina smart y traslado a viñas.",
+    capsuleHighlights: ["Vista Andes", "Viñas del Maipo", "Starlink"],
+    capsulePrice: 162000,
+  },
+  {
+    slug: "cajon-del-maipo",
+    name: "Cajón del Maipo",
+    region: "Centro",
+    city: "San José de Maipo",
+    lat: -33.642,
+    lng: -70.354,
+    image: p("cajon.jpg"),
+    gallery: [p("cajon.jpg"), p("santiago.jpg")],
+    tagline: "Río Maipo, glaciares y termas a una hora de Santiago.",
+    description:
+      "Quebrada andina con el Yeso, Embalse El Yeso, trekking y aguas termales. La montaña de la capital.",
+    highlights: ["Embalse El Yeso", "Río Maipo", "Termas"],
+    priceFromCLP: 145000,
+    tags: ["montaña", "ríos", "aventura"],
+    landscapes: ["rios", "nieve"],
+    capsuleName: "Cápsula Yeso",
+    capsuleImage: cap("capsula-interior.jpg"),
+    capsuleTagline: "Cobre, madera y el ventanal abierto al Cajón.",
+    capsuleDescription:
+      "Cápsula de montaña con calefacción de alta cota, tinaja y vista al río.",
+    capsuleHighlights: ["Vista Cajón", "Tinaja", "Glaciar cercano"],
+    capsulePrice: 155000,
+  },
+  {
+    slug: "farellones-valle-nevado",
+    name: "Farellones y Valle Nevado",
+    region: "Centro",
+    city: "Lo Barnechea",
+    lat: -33.354,
+    lng: -70.297,
+    image: p("valle-nevado.jpg"),
+    gallery: [p("valle-nevado.jpg")],
+    youtubeStart: 4156,
+    tagline: "Nieve andina a 50 minutos de Santiago.",
+    description:
+      "Tres centros de ski en la misma cordillera: Valle Nevado, La Parva y El Colorado. Temporada de junio a octubre.",
+    highlights: ["Valle Nevado", "Farellones", "Andes centrales"],
+    priceFromCLP: 210000,
+    tags: ["nieve", "ski", "montaña"],
+    landscapes: ["nieve"],
+    capsuleName: "Cápsula Valle Nevado",
+    capsuleImage: cap("capsula-nieve.jpg"),
+    capsuleTagline: "Cobre y vidrio sobre la terraza de nieve.",
+    capsuleDescription:
+      "Cápsula aislada para -15 °C, cama king y vista a las pistas. Ski-in cercano.",
+    capsuleHighlights: ["Pistas", "Aislación polar", "Vista Andes"],
+    capsulePrice: 225000,
+  },
+  {
+    slug: "colchagua",
+    name: "Colchagua",
+    region: "Valle Central",
+    city: "Santa Cruz",
+    lat: -34.639,
+    lng: -71.366,
+    image: p("colchagua.jpg"),
+    gallery: [p("colchagua.jpg")],
+    tagline: "Carmenère, haciendas y el valle del vino chileno.",
+    description:
+      "Ruta del vino de Santa Cruz a Lolol. Viñas boutique, caballos y gastronomía de fundo.",
+    highlights: ["Ruta del vino", "Santa Cruz", "Carmenère"],
+    priceFromCLP: 145000,
+    tags: ["vino", "campo", "gastronomía"],
+    landscapes: ["vinedos"],
+    capsuleName: "Cápsula Colchagua",
+    capsuleImage: cap("capsula-colchagua.jpg"),
+    capsuleTagline: "Esfera de cobre en medio de las hileras de carmenère.",
+    capsuleDescription:
+      "Cápsula en viña, cata incluida, deck al atardecer y desayuno de fundo.",
+    capsuleHighlights: ["Viña privada", "Cata", "Atardecer"],
+    capsulePrice: 152000,
+  },
+  {
+    slug: "siete-tazas",
+    name: "Siete Tazas",
+    region: "Valle Central",
+    city: "Molina",
+    lat: -35.421,
+    lng: -70.996,
+    image: p("siete-tazas.jpg"),
+    gallery: [p("siete-tazas.jpg")],
+    tagline: "Pozones de basalto, saltos y bosque de robles.",
+    description:
+      "Parque Radal Siete Tazas: cascadas escalonadas, Velo de la Novia y senderos de bosque nativo.",
+    highlights: ["Siete Tazas", "Velo de la Novia", "Bosque de roble"],
+    priceFromCLP: 130000,
+    tags: ["ríos", "bosque", "trekking"],
+    landscapes: ["rios", "bosque-nativo"],
+    capsuleName: "Cápsula Radal",
+    capsuleImage: cap("capsula-rio.jpg"),
+    capsuleTagline: "Cobre y madera junto al río de las tazas.",
+    capsuleDescription:
+      "Cápsula junto al bosque, con acceso a senderos y el sonido del río.",
+    capsuleHighlights: ["Río", "Bosque nativo", "Cascadas"],
+    capsulePrice: 140000,
+  },
+  {
+    slug: "termas-de-chillan",
+    name: "Termas de Chillán",
+    region: "Valle Central",
+    city: "Pinto",
+    lat: -36.908,
+    lng: -71.409,
+    image: p("chillan.jpg"),
+    gallery: [p("chillan.jpg")],
+    tagline: "Volcán, nieve y pozones de agua termal.",
+    description:
+      "Centro de montaña al pie del Chillán: ski, termas y bosque. Invierno de nieve, verano de trekking.",
+    highlights: ["Volcán Chillán", "Termas", "Ski"],
+    priceFromCLP: 175000,
+    tags: ["nieve", "volcán", "termas"],
+    landscapes: ["nieve", "volcan"],
+    capsuleName: "Cápsula Chillán",
+    capsuleImage: cap("capsula-nieve.jpg"),
+    capsuleTagline: "Cápsula de cobre en la nieve, con tinaja termal.",
+    capsuleDescription:
+      "Módulo de alta montaña, tinaja de agua volcánica y vista al cráter.",
+    capsuleHighlights: ["Tinaja termal", "Nieve", "Volcán"],
+    capsulePrice: 185000,
+  },
+  {
+    slug: "saltos-del-laja",
+    name: "Saltos del Laja",
+    region: "Valle Central",
+    city: "Cabrero",
+    lat: -37.217,
+    lng: -72.38,
+    image: p("laja.jpg"),
+    gallery: [p("laja.jpg")],
+    tagline: "La cascada clásica del sur, a orilla de carretera.",
+    description:
+      "Cuatro saltos del río Laja. Parada icónica entre Santiago y el sur, con senderos y miradores.",
+    highlights: ["Salto principal", "Río Laja", "Miradores"],
+    priceFromCLP: 120000,
+    tags: ["ríos", "naturaleza"],
+    landscapes: ["rios"],
+    capsuleName: "Cápsula Laja",
+    capsuleImage: cap("capsula-rio.jpg"),
+    capsuleTagline: "El rumor de la cascada desde la cama de cobre y vidrio.",
+    capsuleDescription:
+      "Cápsula junto al bosque del Laja, con deck hacia los saltos.",
+    capsuleHighlights: ["Cascada", "Bosque", "Deck"],
+    capsulePrice: 128000,
+  },
+  {
+    slug: "concepcion",
+    name: "Concepción",
+    region: "Valle Central",
+    city: "Concepción",
+    lat: -36.827,
+    lng: -73.05,
+    image: p("concepcion.jpg"),
+    gallery: [p("concepcion.jpg")],
+    tagline: "Biobío, universidad y la puerta del sur húmedo.",
+    description:
+      "Capital del Biobío: río, costa de Tomé y Lota, bosque de la cordillera de Nahuelbuta a un rato.",
+    highlights: ["Río Biobío", "Barrio universitario", "Costa del golfo"],
+    priceFromCLP: 125000,
+    tags: ["ciudad", "ríos", "cultura"],
+    landscapes: ["rios"],
+    capsuleName: "Cápsula Biobío",
+    capsuleImage: cap("capsula-rio.jpg"),
+    capsuleTagline: "Cobre y vidrio sobre la ribera del Biobío.",
+    capsuleDescription:
+      "Cápsula urbana-ribereña, con deck al río y acceso a la costa de Tomé.",
+    capsuleHighlights: ["Río Biobío", "Ciudad", "Costa"],
+    capsulePrice: 135000,
   },
   {
     slug: "pucon",
-    kind: "place",
-    name: "Pucón",
+    name: "Pucón y Villarrica",
     region: "Araucanía y Lagos",
     city: "Pucón",
     lat: -39.2823,
     lng: -71.9545,
     image: p("villarrica.jpg"),
     gallery: [p("pucon.jpg"), p("termas.jpg"), p("villarrica.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 2309,
     tagline: "Volcán Villarrica, termas y bosque de araucarias.",
     description:
-      "Capital de la aventura en el sur: trekking al volcán, hidrospeed, termas geometric y cultura mapuche.",
+      "Capital de la aventura en el sur: trekking al volcán, hidrospeed, termas geométricas y cultura mapuche.",
     highlights: ["Volcán Villarrica", "Termas Geométricas", "Lago Villarrica"],
     priceFromCLP: 160000,
     tags: ["aventura", "termas", "mapuche", "naturaleza"],
+    landscapes: ["volcan", "lago", "bosque-nativo"],
+    capsuleSlug: "capsula-araucaria",
+    capsuleName: "Cápsula Araucaria",
+    capsuleImage: cap("capsula-pucon.jpg"),
+    capsuleTagline: "Frente al Villarrica, con tinaja de cedro y bosque nativo.",
+    capsuleDescription:
+      "Madera, cobre y ventanal panorámico. Tinaja climatizada, cocina smart y acceso a senderos de araucarias.",
+    capsuleHighlights: ["Tinaja", "Vista al volcán", "Bosque nativo"],
+    capsulePrice: 172000,
+    capacity: 3,
   },
   {
     slug: "puerto-varas",
-    kind: "place",
-    name: "Puerto Varas",
+    name: "Puerto Varas y Lago Llanquihue",
     region: "Araucanía y Lagos",
     city: "Puerto Varas",
     lat: -41.3195,
     lng: -72.9854,
     image: p("osorno.jpg"),
     gallery: [p("puerto-varas.jpg"), p("osorno.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 733,
     tagline: "Lago Llanquihue y los volcanes Osorno y Calbuco.",
     description:
@@ -152,10 +601,65 @@ export const destinations: CatalogItem[] = [
     highlights: ["Volcán Osorno", "Saltos del Petrohué", "Frutillar"],
     priceFromCLP: 150000,
     tags: ["lagos", "naturaleza", "gastronomía", "descanso"],
+    landscapes: ["lago", "volcan"],
+    capsuleName: "Cápsula Llanquihue",
+    capsuleImage: cap("capsula-pucon.jpg"),
+    capsuleTagline: "Cobre sobre el lago, con el Osorno reflejado al amanecer.",
+    capsuleDescription:
+      "Cápsula en orilla de Llanquihue, kayak incluido y kuchen de bienvenida.",
+    capsuleHighlights: ["Orilla del lago", "Osorno", "Kayak"],
+    capsulePrice: 168000,
+  },
+  {
+    slug: "osorno",
+    name: "Osorno",
+    region: "Araucanía y Lagos",
+    city: "Osorno",
+    lat: -40.574,
+    lng: -73.135,
+    image: p("osorno.jpg"),
+    gallery: [p("osorno.jpg"), p("puerto-varas.jpg")],
+    tagline: "Volcanes, campo huaso y puerta a los lagos.",
+    description:
+      "Ciudad ganadera con vista a volcanes. Base para Puntiagudo, Puyehue y el lago Rupanco.",
+    highlights: ["Volcán Puntiagudo", "Campo", "Puyehue"],
+    priceFromCLP: 140000,
+    tags: ["volcán", "campo", "lagos"],
+    landscapes: ["volcan"],
+    capsuleName: "Cápsula Puntiagudo",
+    capsuleImage: cap("capsula-pucon.jpg"),
+    capsuleTagline: "Madera y cobre con el perfil del Puntiagudo.",
+    capsuleDescription:
+      "Cápsula de campo, tinaja y cabalgata opcional hacia Puyehue.",
+    capsuleHighlights: ["Volcán", "Campo", "Tinaja"],
+    capsulePrice: 150000,
+  },
+  {
+    slug: "lago-rupanco",
+    name: "Lago Rupanco",
+    region: "Araucanía y Lagos",
+    city: "Puerto Octay",
+    lat: -40.822,
+    lng: -72.5,
+    image: p("rupanco.jpg"),
+    gallery: [p("rupanco.jpg")],
+    tagline: "El lago quieto, entre volcanes y bosque siempreverde.",
+    description:
+      "Orilla menos transitada que Llanquihue. Pesca, kayak y termas de Puyehue a un rato.",
+    highlights: ["Orilla silvestre", "Pesca", "Bosque"],
+    priceFromCLP: 148000,
+    tags: ["lagos", "descanso", "naturaleza"],
+    landscapes: ["lago", "bosque-nativo"],
+    capsuleName: "Cápsula Rupanco",
+    capsuleImage: cap("capsula-pucon.jpg"),
+    capsuleTagline: "Cápsula sobre el agua quieta del Rupanco.",
+    capsuleDescription:
+      "Módulo en bahía privada, bosque a la espalda y volcán al frente.",
+    capsuleHighlights: ["Bahía privada", "Bosque", "Kayak"],
+    capsulePrice: 158000,
   },
   {
     slug: "chiloe",
-    kind: "place",
     name: "Chiloé",
     region: "Araucanía y Lagos",
     city: "Castro",
@@ -163,7 +667,6 @@ export const destinations: CatalogItem[] = [
     lng: -73.764,
     image: p("palafitos.jpg"),
     gallery: [p("castro.jpg"), p("iglesia-castro.jpg"), p("palafitos.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 890,
     tagline: "Iglesias de madera, palafitos y mitología del archipiélago.",
     description:
@@ -171,10 +674,92 @@ export const destinations: CatalogItem[] = [
     highlights: ["Palafitos de Castro", "Curanto", "Pingüineras de Puñihuil"],
     priceFromCLP: 145000,
     tags: ["cultura", "gastronomía", "isla", "naturaleza"],
+    landscapes: ["bosque-nativo", "playa"],
+    capsuleSlug: "capsula-palafito",
+    capsuleName: "Cápsula Palafito",
+    capsuleImage: cap("capsula-chiloe.jpg"),
+    capsuleTagline: "Sobre el fiordo, inspirada en los palafitos chilotes.",
+    capsuleDescription:
+      "Cápsula sobre pilotes con vista al canal. Calefacción por bomba de calor, lana chilota y desayuno de mar.",
+    capsuleHighlights: ["Sobre el agua", "Lana chilota", "Amanecer en el canal"],
+    capsulePrice: 138000,
+  },
+  {
+    slug: "capillas-de-marmol",
+    name: "Capillas de Mármol",
+    region: "Patagonia",
+    city: "Puerto Río Tranquilo",
+    lat: -46.605,
+    lng: -72.641,
+    image: p("marmol.jpg"),
+    gallery: [p("marmol.jpg")],
+    youtubeStart: 1693,
+    tagline: "Catedrales de mármol sobre el lago General Carrera.",
+    description:
+      "Cavernas azules en el lago más grande de Chile. Kayak al amanecer y la Carretera Austral como umbral.",
+    highlights: ["Capilla de Mármol", "Lago General Carrera", "Kayak"],
+    priceFromCLP: 200000,
+    tags: ["lagos", "patagonia", "aventura"],
+    landscapes: ["lago"],
+    capsuleName: "Cápsula Mármol",
+    capsuleImage: cap("capsula-paine.jpg"),
+    capsuleTagline: "Cobre y vidrio frente al mármol turquesa.",
+    capsuleDescription:
+      "Cápsula en orilla del General Carrera, kayak a las capillas al amanecer.",
+    capsuleHighlights: ["Lago turquesa", "Kayak", "Mármol"],
+    capsulePrice: 210000,
+  },
+  {
+    slug: "futaleufu",
+    name: "Futaleufú",
+    region: "Patagonia",
+    city: "Futaleufú",
+    lat: -43.1856,
+    lng: -71.8664,
+    image: p("futaleufu.jpg"),
+    gallery: [p("futaleufu.jpg"), p("coyhaique.jpg")],
+    tagline: "El río de aguas blancas más famoso del hemisferio sur.",
+    description:
+      "Rafting clase V, bosque siempreverde y pueblo de montaña en la frontera. El corazón líquido de la Austral.",
+    highlights: ["Río Futaleufú", "Rafting", "Bosque"],
+    priceFromCLP: 185000,
+    tags: ["ríos", "aventura", "patagonia"],
+    landscapes: ["rios", "bosque-nativo"],
+    capsuleName: "Cápsula Futaleufú",
+    capsuleImage: cap("capsula-rio.jpg"),
+    capsuleTagline: "Cobre junto al turquesa del Fu.",
+    capsuleDescription:
+      "Cápsula sobre el valle, con el sonido del río y salida de rafting al amanecer.",
+    capsuleHighlights: ["Río clase V", "Bosque", "Rafting"],
+    capsulePrice: 195000,
+  },
+  {
+    slug: "carretera-austral",
+    name: "Carretera Austral",
+    region: "Patagonia",
+    city: "Coyhaique",
+    lat: -45.575,
+    lng: -72.066,
+    image: p("coyhaique.jpg"),
+    gallery: [p("coyhaique.jpg"), p("marmol.jpg")],
+    youtubeStart: 1693,
+    tagline: "La ruta más salvaje de Chile, de bosque a glaciar.",
+    description:
+      "De Puerto Montt a Villa O'Higgins: hanging glaciers, Queulat, caletas y el sur sin prisa.",
+    highlights: ["Parque Queulat", "Coyhaique", "Glaciares colgantes"],
+    priceFromCLP: 190000,
+    tags: ["ruta", "bosque", "patagonia"],
+    landscapes: ["bosque-nativo", "rios"],
+    capsuleName: "Cápsula Austral",
+    capsuleImage: cap("capsula-rio.jpg"),
+    capsuleTagline: "Madera y cobre en un claro de la ruta 7.",
+    capsuleDescription:
+      "Cápsula de paso largo, con calefacción patagónica y deck al bosque.",
+    capsuleHighlights: ["Ruta 7", "Bosque", "Queulat"],
+    capsulePrice: 188000,
   },
   {
     slug: "torres-del-paine",
-    kind: "place",
     name: "Torres del Paine",
     region: "Patagonia",
     city: "Puerto Natales",
@@ -182,7 +767,6 @@ export const destinations: CatalogItem[] = [
     lng: -72.3445,
     image: p("paine.jpg"),
     gallery: [p("paine-unsplash.jpg"), p("paine.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 64,
     tagline: "Granito, vientos y el parque más icónico de Sudamérica.",
     description:
@@ -190,10 +774,18 @@ export const destinations: CatalogItem[] = [
     highlights: ["Base Torres", "Glaciar Grey", "Laguna Azul"],
     priceFromCLP: 280000,
     tags: ["patagonia", "trekking", "naturaleza", "aventura"],
+    landscapes: ["lago", "nieve"],
+    capsuleSlug: "capsula-paine",
+    capsuleName: "Cápsula Paine",
+    capsuleImage: cap("capsula-paine.jpg"),
+    capsuleTagline: "Granito de las Torres desde la cama, con calefacción de alta cota.",
+    capsuleDescription:
+      "Cápsula de lujo aislada para viento patagónico. Panorámica a las Torres, ducha de presión y transferencia al parque.",
+    capsuleHighlights: ["Vista Torres", "Aislación térmica", "Transfer al parque"],
+    capsulePrice: 248000,
   },
   {
     slug: "rapa-nui",
-    kind: "place",
     name: "Rapa Nui",
     region: "Rapa Nui",
     city: "Hanga Roa",
@@ -201,7 +793,6 @@ export const destinations: CatalogItem[] = [
     lng: -109.3497,
     image: p("tongariki.jpg"),
     gallery: [p("rano-raraku.jpg"), p("easter.jpg"), p("tongariki.jpg")],
-    youtube: CHILE_FILM,
     youtubeStart: 1384,
     tagline: "Moai, cráteres y el ombligo del mundo en el Pacífico.",
     description:
@@ -209,125 +800,104 @@ export const destinations: CatalogItem[] = [
     highlights: ["Tongariki", "Rano Raraku", "Orongo"],
     priceFromCLP: 320000,
     tags: ["cultura", "isla", "patrimonio", "descanso"],
+    landscapes: ["playa"],
+    capsuleName: "Cápsula Tongariki",
+    capsuleImage: cap("capsula-playa.jpg"),
+    capsuleTagline: "Cobre y vidrio en el Pacífico, lejos de todo.",
+    capsuleDescription:
+      "Cápsula cerca de Hanga Roa, con amanecer en Tongariki y guía rapanui.",
+    capsuleHighlights: ["Isla", "Amanecer moai", "Pacífico"],
+    capsulePrice: 285000,
   },
   {
-    slug: "carretera-austral",
-    kind: "place",
-    name: "Carretera Austral",
-    region: "Patagonia",
-    city: "Futaleufú",
-    lat: -43.1856,
-    lng: -71.8664,
-    image: p("marmol.jpg"),
-    gallery: [p("marmol.jpg"), p("paine.jpg")],
-    youtube: CHILE_FILM,
-    youtubeStart: 1693,
-    tagline: "Ríos turquesa, hanging glaciers y el sur más salvaje.",
+    slug: "juan-fernandez",
+    name: "Archipiélago de Juan Fernández",
+    region: "Pacífico",
+    city: "San Juan Bautista",
+    lat: -33.636,
+    lng: -78.838,
+    image: p("juan-fernandez.jpg"),
+    gallery: [p("juan-fernandez.jpg")],
+    tagline: "Robinson Crusoe, bosque endémico y el Pacífico vacío.",
     description:
-      "De Puerto Montt a Villa O'Higgins: Marble Caves, Queulat, Futaleufú y bosques siempreverdes.",
-    highlights: ["Capillas de Mármol", "Futaleufú", "Parque Queulat"],
-    priceFromCLP: 220000,
-    tags: ["aventura", "naturaleza", "ruta", "patagonia"],
+      "Isla de endemismo extremo, langosta y bahías verdes. Un archipiélago chileno a 670 km del continente.",
+    highlights: ["Robinson Crusoe", "Bosque endémico", "Bahía Cumberland"],
+    priceFromCLP: 300000,
+    tags: ["isla", "bosque", "playa"],
+    landscapes: ["bosque-nativo", "playa"],
+    capsuleName: "Cápsula Robinson",
+    capsuleImage: cap("capsula-juan-fernandez.jpg"),
+    capsuleTagline: "Palafito de cobre en una caleta del archipiélago.",
+    capsuleDescription:
+      "Cápsula sobre pilotes, bosque de luma y el Pacífico de Juan Fernández.",
+    capsuleHighlights: ["Isla", "Bosque endémico", "Caleta"],
+    capsulePrice: 320000,
+  },
+  {
+    slug: "antartica",
+    name: "Antártica",
+    region: "Antártica",
+    city: "Villa Las Estrellas",
+    lat: -62.201,
+    lng: -58.964,
+    image: p("antartica.jpg"),
+    gallery: [p("antartica.jpg")],
+    tagline: "Hielo, bases chilenas y el fin del mapa.",
+    description:
+      "Peninsula Antártica e isla Rey Jorge. Villa Las Estrellas, glaciares y la logística más remota de Mapucoin.",
+    highlights: ["Villa Las Estrellas", "Glaciares", "Canal de Drake"],
+    priceFromCLP: 780000,
+    tags: ["nieve", "expedición", "remoto"],
+    landscapes: ["nieve"],
+    capsuleName: "Cápsula Polar",
+    capsuleImage: cap("capsula-antartica.jpg"),
+    capsuleTagline: "Cobre y vidrio en la orilla de hielo.",
+    capsuleDescription:
+      "Cápsula polar con aislación extrema, climatización y vista a glaciares. Operación estacional.",
+    capsuleHighlights: ["Hielo", "Aislación polar", "Base chilena"],
+    capsulePrice: 890000,
   },
 ];
 
-export const capsules: CatalogItem[] = [
-  {
-    slug: "capsula-atacama-star",
-    kind: "capsule",
-    name: "Cápsula Atacama Star",
-    region: "Norte Grande",
-    city: "San Pedro de Atacama",
-    lat: -22.921,
-    lng: -68.241,
-    image: "/images/capsula-atacama.jpg",
-    tagline: "Techo de vidrio para la Vía Láctea. Climatización y Starlink.",
-    description:
-      "Cápsula de aluminio y cobre con cúpula acristalada, cama king, ducha de lluvia y climatización de desierto. A 12 minutos de San Pedro.",
-    highlights: ["Techo estelar", "Aire acondicionado", "Desayuno atacameño"],
-    priceFromCLP: 165000,
-    nightsHint: 1,
-    capacity: 2,
-    tags: ["estrellas", "lujo", "tecnología"],
-    placeSlug: "san-pedro-de-atacama",
-  },
-  {
-    slug: "capsula-elqui-observatorio",
-    kind: "capsule",
-    name: "Cápsula Elqui Observatorio",
-    region: "Norte Chico",
-    city: "Pisco Elqui",
-    lat: -30.141,
-    lng: -70.501,
-    image: "/images/capsula-elqui.jpg",
-    tagline: "Viñedo, telescopio y atardecer violeta sobre el valle.",
-    description:
-      "Módulo inteligente en terraza de viña. Incluye sesión con telescopio, cata de pisco y deck con hamacas.",
-    highlights: ["Telescopio", "Cata de pisco", "Viñedo privado"],
-    priceFromCLP: 148000,
-    nightsHint: 1,
-    capacity: 2,
-    tags: ["estrellas", "vino", "descanso"],
-    placeSlug: "valle-del-elqui",
-  },
-  {
-    slug: "capsula-araucaria",
-    kind: "capsule",
-    name: "Cápsula Araucaria",
-    region: "Araucanía y Lagos",
-    city: "Pucón",
-    lat: -39.268,
-    lng: -71.932,
-    image: "/images/capsula-pucon.jpg",
-    tagline: "Frente al Villarrica, con tinaja de cedro y bosque nativo.",
-    description:
-      "Madera, cobre y ventanal panorámico. Tinaja climatizada, cocina smart y acceso a senderos de araucarias.",
-    highlights: ["Tinaja", "Vista al volcán", "Bosque nativo"],
-    priceFromCLP: 172000,
-    nightsHint: 1,
-    capacity: 3,
-    tags: ["termas", "naturaleza", "aventura"],
-    placeSlug: "pucon",
-  },
-  {
-    slug: "capsula-palafito",
-    kind: "capsule",
-    name: "Cápsula Palafito",
-    region: "Araucanía y Lagos",
-    city: "Castro",
-    lat: -42.479,
-    lng: -73.771,
-    image: "/images/capsula-chiloe.jpg",
-    tagline: "Sobre el fiordo, inspirada en los palafitos chilotes.",
-    description:
-      "Cápsula sobre pilotes con vista al canal. Calefacción por bomba de calor, lana chilota y desayuno de mar.",
-    highlights: ["Sobre el agua", "Lana chilota", "Amanecer en el canal"],
-    priceFromCLP: 138000,
-    nightsHint: 1,
-    capacity: 2,
-    tags: ["isla", "cultura", "descanso"],
-    placeSlug: "chiloe",
-  },
-  {
-    slug: "capsula-paine",
-    kind: "capsule",
-    name: "Cápsula Paine",
-    region: "Patagonia",
-    city: "Puerto Natales",
-    lat: -51.21,
-    lng: -72.41,
-    image: "/images/capsula-paine.jpg",
-    tagline: "Granito de las Torres desde la cama, con calefacción de alta cota.",
-    description:
-      "Cápsula de lujo aislada para viento patagónico. Panorámica a las Torres, ducha de presión y transferencia al parque.",
-    highlights: ["Vista Torres", "Aislación térmica", "Transfer al parque"],
-    priceFromCLP: 248000,
-    nightsHint: 1,
-    capacity: 2,
-    tags: ["patagonia", "lujo", "trekking"],
-    placeSlug: "torres-del-paine",
-  },
-];
+export const destinations: CatalogItem[] = seeds.map((s) => ({
+  slug: s.slug,
+  kind: "place",
+  name: s.name,
+  region: s.region,
+  city: s.city,
+  lat: s.lat,
+  lng: s.lng,
+  image: s.image,
+  gallery: s.gallery,
+  youtube: s.youtubeStart != null ? CHILE_FILM : undefined,
+  youtubeStart: s.youtubeStart,
+  tagline: s.tagline,
+  description: s.description,
+  highlights: s.highlights,
+  priceFromCLP: s.priceFromCLP,
+  tags: s.tags,
+  landscapes: s.landscapes,
+}));
+
+export const capsules: CatalogItem[] = seeds.map((s) => ({
+  slug: s.capsuleSlug || `capsula-${s.slug}`,
+  kind: "capsule",
+  name: s.capsuleName,
+  region: s.region,
+  city: s.city,
+  lat: Number((s.lat + 0.018).toFixed(4)),
+  lng: Number((s.lng - 0.022).toFixed(4)),
+  image: s.capsuleImage,
+  tagline: s.capsuleTagline,
+  description: s.capsuleDescription,
+  highlights: s.capsuleHighlights,
+  priceFromCLP: s.capsulePrice,
+  nightsHint: 1,
+  capacity: s.capacity || 2,
+  tags: ["tecnología", "cobre", "vidrio", ...s.landscapes],
+  landscapes: s.landscapes,
+  placeSlug: s.slug,
+}));
 
 export const gastronomy: CatalogItem[] = [
   {
@@ -346,6 +916,7 @@ export const gastronomy: CatalogItem[] = [
     priceFromCLP: 28000,
     durationHours: 3,
     tags: ["chilote", "mariscos", "ancestral"],
+    landscapes: ["bosque-nativo"],
     placeSlug: "chiloe",
   },
   {
@@ -364,6 +935,7 @@ export const gastronomy: CatalogItem[] = [
     priceFromCLP: 42000,
     durationHours: 3,
     tags: ["patagonia", "carne", "vino"],
+    landscapes: ["lago"],
     placeSlug: "torres-del-paine",
   },
   {
@@ -382,6 +954,7 @@ export const gastronomy: CatalogItem[] = [
     priceFromCLP: 24000,
     durationHours: 2,
     tags: ["mapuche", "ancestral", "vegetal"],
+    landscapes: ["volcan", "bosque-nativo"],
     placeSlug: "pucon",
   },
   {
@@ -400,6 +973,7 @@ export const gastronomy: CatalogItem[] = [
     priceFromCLP: 22000,
     durationHours: 2,
     tags: ["mariscos", "puerto", "vino"],
+    landscapes: ["playa"],
     placeSlug: "valparaiso",
   },
   {
@@ -418,6 +992,7 @@ export const gastronomy: CatalogItem[] = [
     priceFromCLP: 32000,
     durationHours: 4,
     tags: ["pisco", "vino", "cata"],
+    landscapes: ["vinedos"],
     placeSlug: "valle-del-elqui",
   },
   {
@@ -436,7 +1011,8 @@ export const gastronomy: CatalogItem[] = [
     priceFromCLP: 18000,
     durationHours: 3,
     tags: ["ciudad", "mercado", "vino"],
-    placeSlug: "santiago-and-maipo",
+    landscapes: ["vinedos"],
+    placeSlug: "santiago",
   },
 ];
 
@@ -457,6 +1033,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 35000,
     durationHours: 4,
     tags: ["desierto", "atardecer", "fotografía"],
+    landscapes: ["desierto"],
     placeSlug: "san-pedro-de-atacama",
   },
   {
@@ -475,6 +1052,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 42000,
     durationHours: 3,
     tags: ["estrellas", "ciencia", "noche"],
+    landscapes: ["desierto"],
     placeSlug: "san-pedro-de-atacama",
   },
   {
@@ -493,6 +1071,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 145000,
     durationHours: 10,
     tags: ["aventura", "volcán", "trekking"],
+    landscapes: ["volcan", "nieve"],
     placeSlug: "pucon",
   },
   {
@@ -511,6 +1090,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 48000,
     durationHours: 7,
     tags: ["termas", "descanso", "bosque"],
+    landscapes: ["bosque-nativo", "volcan"],
     placeSlug: "pucon",
   },
   {
@@ -529,6 +1109,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 98000,
     durationHours: 11,
     tags: ["trekking", "patagonia", "aventura"],
+    landscapes: ["lago", "nieve"],
     placeSlug: "torres-del-paine",
   },
   {
@@ -547,6 +1128,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 32000,
     durationHours: 2,
     tags: ["lagos", "kayak", "atardecer"],
+    landscapes: ["lago", "volcan"],
     placeSlug: "puerto-varas",
   },
   {
@@ -565,6 +1147,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 18000,
     durationHours: 3,
     tags: ["cultura", "ciudad", "arte"],
+    landscapes: ["playa"],
     placeSlug: "valparaiso",
   },
   {
@@ -583,6 +1166,7 @@ export const activities: CatalogItem[] = [
     priceFromCLP: 65000,
     durationHours: 5,
     tags: ["cultura", "amanecer", "patrimonio"],
+    landscapes: ["playa"],
     placeSlug: "rapa-nui",
   },
 ];
@@ -603,6 +1187,7 @@ export const regions: Region[] = [
   "Patagonia",
   "Rapa Nui",
   "Pacífico",
+  "Antártica",
 ];
 
 export const interests = [
@@ -614,6 +1199,10 @@ export const interests = [
   { id: "estrellas", label: "Astronomía" },
 ] as const;
 
+export const destinationAliases: Record<string, string> = {
+  "santiago-and-maipo": "santiago",
+};
+
 export function formatCLP(n: number) {
   return new Intl.NumberFormat("es-CL", {
     style: "currency",
@@ -623,17 +1212,20 @@ export function formatCLP(n: number) {
 }
 
 export function getBySlug(slug: string) {
-  return allItems.find((i) => i.slug === slug);
+  const resolved = destinationAliases[slug] || slug;
+  return allItems.find((i) => i.slug === resolved);
 }
 
 export function itemsForPlace(placeSlug: string) {
+  const resolved = destinationAliases[placeSlug] || placeSlug;
   return allItems.filter(
-    (i) => i.slug === placeSlug || i.placeSlug === placeSlug,
+    (i) => i.slug === resolved || i.placeSlug === resolved,
   );
 }
 
 export function capsulesForPlace(placeSlug: string) {
-  return capsules.filter((c) => c.placeSlug === placeSlug);
+  const resolved = destinationAliases[placeSlug] || placeSlug;
+  return capsules.filter((c) => c.placeSlug === resolved);
 }
 
 export function mapPoints() {

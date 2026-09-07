@@ -4,13 +4,15 @@ import PlaceCard from "@/components/PlaceCard";
 import PlaceVideo from "@/components/PlaceVideo";
 import {
   capsulesForPlace,
+  destinationAliases,
   destinations,
   formatCLP,
   itemsForPlace,
+  landscapeLabel,
 } from "@/lib/catalog";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -26,6 +28,9 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function DestinoPage({ params }: Props) {
   const { slug } = await params;
+  if (destinationAliases[slug]) {
+    permanentRedirect(`/destinos/${destinationAliases[slug]}`);
+  }
   const d = destinations.find((x) => x.slug === slug);
   if (!d) notFound();
   const related = itemsForPlace(d.slug).filter((i) => i.slug !== d.slug);
@@ -45,7 +50,12 @@ export default async function DestinoPage({ params }: Props) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-night via-night/30 to-transparent" />
         <div className="absolute bottom-10 left-0 right-0 mx-auto max-w-7xl px-4 text-sand">
-          <p className="kicker text-gold">{d.region}</p>
+          <p className="kicker text-gold">
+            {d.region}
+            {d.landscapes?.length
+              ? ` · ${d.landscapes.map(landscapeLabel).join(" · ")}`
+              : ""}
+          </p>
           <h1 className="font-display mt-2 text-4xl md:text-7xl">{d.name}</h1>
           <p className="mt-3 max-w-2xl text-lg text-sand/80">{d.tagline}</p>
         </div>

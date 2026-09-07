@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const ChileMap = dynamic(() => import("./ChileMap"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[70vh] items-center justify-center rounded-3xl bg-sand text-bark/70">
+    <div className="flex h-[70vh] items-center justify-center rounded-3xl border border-gold/20 bg-black text-sand/70">
       Cargando mapa de Chile…
     </div>
   ),

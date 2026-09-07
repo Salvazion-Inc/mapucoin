@@ -39,8 +39,8 @@ export default async function CapsulaPage({ params }: Props) {
       </div>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
-          <p className="text-lg text-bark/80">{c.description}</p>
-          <ul className="mt-6 space-y-2 text-earth">
+          <p className="text-lg text-sand/80">{c.description}</p>
+          <ul className="mt-6 space-y-2 text-sand">
             {c.highlights.map((h) => (
               <li key={h}>· {h}</li>
             ))}
@@ -54,30 +54,30 @@ export default async function CapsulaPage({ params }: Props) {
             />
           </div>
           <div className="mt-8">
-            <h2 className="font-display text-2xl text-earth">Ubicación</h2>
+            <h2 className="font-display text-2xl text-sand">Ubicación</h2>
             <div className="mt-4">
               <MapLoader focusSlug={c.slug} height="380px" />
             </div>
           </div>
         </div>
-        <aside className="h-fit rounded-[1.75rem] border border-earth/8 bg-white p-7 shadow-[0_18px_50px_rgba(12,9,7,0.06)]">
-          <p className="text-sm text-bark/70">Por noche</p>
-          <p className="font-display text-4xl text-earth">
+        <aside className="h-fit rounded-[1.75rem] border border-gold/20 bg-black p-7">
+          <p className="text-sm text-sand/70">Por noche</p>
+          <p className="font-display text-4xl text-sand">
             {formatCLP(c.priceFromCLP)}
           </p>
-          <p className="mt-1 text-sm text-bark/60">
+          <p className="mt-1 text-sm text-sand/50">
             Hasta {c.capacity} viajeros · {c.region}
           </p>
           <Link
             href={`/reserva?capsula=${c.slug}&noches=2&viajeros=2`}
-            className="mt-6 block rounded-full bg-earth py-3.5 text-center text-sand hover:bg-bark"
+            className="mt-6 block rounded-full bg-gold py-3.5 text-center text-black hover:bg-[#e3c25a]"
           >
-            Reservar con Stripe
+            Reservar
           </Link>
           {place && (
             <Link
               href={`/destinos/${place.slug}`}
-              className="mt-3 block text-center text-sm text-clay"
+              className="mt-3 block text-center text-sm text-gold"
             >
               Explorar {place.name} →
             </Link>

@@ -31,7 +31,9 @@ export default function CatalogBrowser({
           type="button"
           onClick={() => setLand("all")}
           className={`rounded-full px-4 py-1.5 text-sm transition ${
-            land === "all" ? "bg-earth text-sand" : "bg-sand text-bark hover:bg-sand/80"
+            land === "all"
+              ? "bg-gold text-black"
+              : "border border-gold/30 text-sand hover:border-gold"
           }`}
         >
           Todos
@@ -42,7 +44,9 @@ export default function CatalogBrowser({
             type="button"
             onClick={() => setLand(l.id)}
             className={`rounded-full px-4 py-1.5 text-sm transition ${
-              land === l.id ? "bg-earth text-sand" : "bg-sand text-bark hover:bg-sand/80"
+              land === l.id
+                ? "bg-gold text-black"
+                : "border border-gold/30 text-sand hover:border-gold"
             }`}
           >
             {l.label}
@@ -50,7 +54,7 @@ export default function CatalogBrowser({
         ))}
       </div>
       {shown.length === 0 ? (
-        <p className="mt-10 text-bark/60">{empty}</p>
+        <p className="mt-10 text-sand/60">{empty}</p>
       ) : (
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {shown.map((item) => (

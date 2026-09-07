@@ -19,15 +19,15 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   metadataBase: new URL("https://mapucoin.com"),
   title: {
-    default: "Mapucoin — Chile con IA, cápsulas y territorio",
+    default: "Mapucoin — Chile, cápsulas y territorio",
     template: "%s · Mapucoin",
   },
   description:
-    "Plataforma turística de Chile: indica presupuesto y destino. Grok arma tu viaje con cápsulas tecnológicas, gastronomía local, actividades y mapa interactivo. Fotos y videos reales del territorio.",
+    "Plataforma turística de Chile: indica presupuesto y destino. Mapucoin arma tu viaje con cápsulas tecnológicas, gastronomía local, actividades y mapa interactivo.",
   openGraph: {
-    title: "Mapucoin — Viaja Chile con IA",
+    title: "Mapucoin — Viaja Chile",
     description:
-      "Cápsulas tecnológicas, gastronomía, actividades y un mapa vivo de Chile. Planifica con presupuesto y Grok.",
+      "Cápsulas tecnológicas, gastronomía, actividades y un mapa vivo de Chile. Planifica con presupuesto.",
     url: "https://mapucoin.com",
     siteName: "Mapucoin",
     locale: "es_CL",

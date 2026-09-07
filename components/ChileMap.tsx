@@ -69,11 +69,11 @@ export default function ChileMap({
         .addTo(map)
         .bindPopup(
           `<div style="min-width:180px">
-            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c45c26;margin:0">${p.group === "capsule" ? "Cápsula" : "Destino"}</p>
-            <strong style="font-size:15px">${p.name}</strong>
-            <p style="margin:6px 0 8px;color:#4a2c1a;font-size:13px">${p.tagline}</p>
-            <p style="margin:0;font-size:13px;color:#c45c26">desde ${formatCLP(p.priceFromCLP)}</p>
-            <a href="${href}" style="display:inline-block;margin-top:8px;color:#2c1810;font-weight:600">Ver ficha →</a>
+            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#d4af37;margin:0">${p.group === "capsule" ? "Cápsula" : "Destino"}</p>
+            <strong style="font-size:15px;color:#f3e6cc">${p.name}</strong>
+            <p style="margin:6px 0 8px;color:#f3e6cc;font-size:13px;opacity:.8">${p.tagline}</p>
+            <p style="margin:0;font-size:13px;color:#d4af37">desde ${formatCLP(p.priceFromCLP)}</p>
+            <a href="${href}" style="display:inline-block;margin-top:8px;color:#d4af37;font-weight:600">Ver ficha →</a>
           </div>`,
         );
       marker.on("click", () => {
@@ -117,7 +117,9 @@ export default function ChileMap({
             type="button"
             onClick={() => setFilter(id)}
             className={`rounded-full px-4 py-1.5 text-sm ${
-              filter === id ? "bg-earth text-sand" : "bg-sand text-bark"
+              filter === id
+                ? "bg-gold text-black"
+                : "border border-gold/30 text-sand"
             }`}
           >
             {label}
@@ -129,13 +131,15 @@ export default function ChileMap({
             type="button"
             onClick={() => setLand((v) => (v === l.id ? "all" : l.id))}
             className={`rounded-full px-4 py-1.5 text-sm ${
-              land === l.id ? "bg-gold text-night" : "bg-sand text-bark"
+              land === l.id
+                ? "bg-gold text-black"
+                : "border border-gold/30 text-sand"
             }`}
           >
             {l.label}
           </button>
         ))}
-        <span className="self-center text-xs text-bark/60">
+        <span className="self-center text-xs text-sand/50">
           Terracota: destinos · Oro: cápsulas
           {land !== "all" ? ` · ${landscapeLabel(land)}` : ""}
         </span>

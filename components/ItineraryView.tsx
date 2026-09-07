@@ -50,7 +50,7 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
   return (
     <div className="space-y-8">
       <header className="rounded-[1.75rem] bg-night px-6 py-8 text-sand md:px-10">
-        <p className="kicker text-gold">Itinerario Grok</p>
+        <p className="kicker text-gold">Itinerario</p>
         <h2 className="font-display mt-2 text-3xl md:text-4xl">{plan.title}</h2>
         <p className="mt-3 max-w-2xl text-sand/80">{plan.summary}</p>
         <dl className="mt-6 grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
@@ -83,12 +83,12 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
         ].map(([label, n]) => (
           <div
             key={String(label)}
-            className="rounded-2xl border border-earth/10 bg-white p-4"
+            className="rounded-2xl border border-gold/20 bg-black p-4"
           >
-            <p className="text-xs uppercase tracking-widest text-clay">
+            <p className="text-xs uppercase tracking-widest text-gold">
               {label}
             </p>
-            <p className="font-display mt-1 text-2xl text-earth">
+            <p className="font-display mt-1 text-2xl text-sand">
               {formatCLP(Number(n))}
             </p>
           </div>
@@ -99,33 +99,33 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
         {plan.days.map((day) => (
           <li
             key={day.day}
-            className="rounded-3xl border border-earth/10 bg-white p-6"
+            className="rounded-3xl border border-gold/20 bg-black p-6"
           >
             <p className="text-xs uppercase tracking-[0.2em] text-gold">
               Día {day.day}
             </p>
-            <h3 className="font-display text-2xl text-earth">{day.title}</h3>
+            <h3 className="font-display text-2xl text-sand">{day.title}</h3>
             <ul className="mt-4 space-y-3">
               {day.items.map((item, i) => {
                 const href = typeHref(item);
                 return (
                   <li
                     key={`${item.name}-${i}`}
-                    className="flex flex-col gap-1 border-t border-sand pt-3 md:flex-row md:items-baseline md:justify-between"
+                    className="flex flex-col gap-1 border-t border-gold/15 pt-3 md:flex-row md:items-baseline md:justify-between"
                   >
                     <div>
-                      <p className="font-medium text-earth">
+                      <p className="font-medium text-sand">
                         {href ? (
-                          <Link href={href} className="hover:text-clay">
+                          <Link href={href} className="hover:text-gold">
                             {item.name}
                           </Link>
                         ) : (
                           item.name
                         )}
                       </p>
-                      <p className="text-sm text-bark/70">{item.note}</p>
+                      <p className="text-sm text-sand/70">{item.note}</p>
                     </div>
-                    <p className="text-sm text-clay">
+                    <p className="text-sm text-gold">
                       {item.costCLP ? formatCLP(item.costCLP) : "incluido"}
                     </p>
                   </li>
@@ -140,14 +140,14 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
         {stay?.slug && (
           <Link
             href={`/reserva?capsula=${stay.slug}&noches=${plan.nights}&viajeros=${plan.guests}`}
-            className="rounded-full bg-clay px-6 py-3 text-cream hover:bg-ember"
+            className="rounded-full bg-gold px-6 py-3 text-black hover:bg-[#e3c25a]"
           >
-            Reservar cápsula con Stripe
+            Reservar cápsula
           </Link>
         )}
         <Link
           href="/mapa"
-          className="rounded-full border border-earth/20 px-6 py-3 text-earth"
+          className="rounded-full border border-gold/35 px-6 py-3 text-gold"
         >
           Ver en el mapa
         </Link>

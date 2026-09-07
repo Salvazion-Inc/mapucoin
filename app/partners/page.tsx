@@ -49,20 +49,20 @@ export default function PartnersPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-14">
-      <p className="kicker text-clay">Red</p>
-      <h1 className="font-display mt-3 text-4xl text-earth md:text-5xl">
+      <p className="kicker text-gold">Red</p>
+      <h1 className="font-display mt-3 text-4xl text-sand md:text-5xl">
         Ingresa como partner
       </h1>
-      <p className="mt-3 text-bark/75">
+      <p className="mt-3 text-sand/75">
         Operas una cápsula, una ruka, una caleta, un tour o una viña. Mapucoin
-        te muestra en el mapa, entra al itinerario de Grok y cobra con Stripe.
+        te muestra en el mapa, entra al itinerario y cobra con Stripe.
       </p>
 
       <form
         onSubmit={onSubmit}
-        className="mt-10 space-y-4 rounded-[1.75rem] border border-earth/8 bg-white p-6 shadow-[0_18px_50px_rgba(12,9,7,0.06)] md:p-8"
+        className="mt-10 space-y-4 rounded-[1.75rem] border border-gold/20 bg-black p-6 md:p-8"
       >
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Nombre
           <input
             name="full_name"
@@ -70,7 +70,7 @@ export default function PartnersPage() {
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Correo
           <input
             name="email"
@@ -79,14 +79,14 @@ export default function PartnersPage() {
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Teléfono
           <input
             name="phone"
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Tipo de partner
           <select
             name="role"
@@ -100,7 +100,7 @@ export default function PartnersPage() {
             ))}
           </select>
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Nombre del negocio
           <input
             name="business"
@@ -108,7 +108,7 @@ export default function PartnersPage() {
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Ciudad / territorio
           <select
             name="city"
@@ -121,7 +121,7 @@ export default function PartnersPage() {
             ))}
           </select>
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Cuéntanos tu oferta
           <textarea
             name="notes"
@@ -131,7 +131,7 @@ export default function PartnersPage() {
         </label>
         <button
           disabled={status === "loading"}
-          className="w-full rounded-full bg-earth py-3.5 text-sand disabled:opacity-60 hover:bg-bark"
+          className="w-full rounded-full bg-gold py-3.5 text-black disabled:opacity-60 hover:bg-[#e3c25a]"
         >
           {status === "loading" ? "Enviando…" : "Postular"}
         </button>

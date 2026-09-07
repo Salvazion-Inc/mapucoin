@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function DestinosPage() {
   return (
     <div>
-      <div className="bg-night px-4 py-16 text-sand md:py-20">
+      <div className="bg-black px-4 py-16 text-sand md:py-20">
         <div className="mx-auto max-w-7xl">
           <p className="kicker text-gold">Chile</p>
           <h1 className="font-display mt-3 text-4xl md:text-6xl">Destinos</h1>

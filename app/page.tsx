@@ -14,9 +14,9 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-night/85 via-night/45 to-night/20" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 lg:grid-cols-2 lg:py-24">
           <div className="text-sand">
-            <p className="kicker text-gold">Chile · territorio · IA</p>
+            <p className="kicker text-gold">Chile · territorio</p>
             <h1 className="font-display mt-4 text-4xl leading-[1.08] md:text-6xl lg:text-[4.4rem]">
-              Viaja Chile con presupuesto, cápsulas y Grok.
+              Viaja Chile con presupuesto y cápsulas.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-sand/80">
               Indica cuánto quieres gastar y el lugar a conocer. Mapucoin arma
@@ -37,8 +37,8 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-24">
-        <p className="kicker text-clay">Cómo funciona</p>
-        <h2 className="font-display mt-3 max-w-xl text-3xl text-earth md:text-5xl">
+        <p className="kicker text-gold">Cómo funciona</p>
+        <h2 className="font-display mt-3 max-w-xl text-3xl text-sand md:text-5xl">
           Presupuesto in, itinerario out.
         </h2>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -46,7 +46,7 @@ export default function HomePage() {
             [
               "01",
               "Dices el lugar y el monto",
-              "Pucón, Atacama, Paine o Rapa Nui. Grok respeta tu techo en pesos chilenos.",
+              "Pucón, Atacama, Paine o Rapa Nui. Mapucoin respeta tu techo en pesos chilenos.",
             ],
             [
               "02",
@@ -61,11 +61,11 @@ export default function HomePage() {
           ].map(([n, t, d]) => (
             <article
               key={n}
-              className="rounded-[1.75rem] border border-earth/8 bg-white/70 p-7 shadow-[0_10px_40px_rgba(26,16,12,0.04)]"
+              className="rounded-[1.75rem] border border-gold/20 bg-black p-7"
             >
               <p className="font-display text-gold">{n}</p>
-              <h3 className="font-display mt-3 text-2xl text-earth">{t}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-bark/70">{d}</p>
+              <h3 className="font-display mt-3 text-2xl text-sand">{t}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-sand/70">{d}</p>
             </article>
           ))}
         </div>
@@ -98,14 +98,14 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="kicker text-clay">Destinos</p>
-              <h2 className="font-display mt-3 text-3xl text-earth md:text-4xl">
+              <p className="kicker text-gold">Destinos</p>
+              <h2 className="font-display mt-3 text-3xl text-sand md:text-4xl">
                 31 territorios, del Altiplano a la Antártica
               </h2>
             </div>
             <Link
               href="/destinos"
-              className="text-sm tracking-wide text-clay hover:text-earth"
+              className="text-sm tracking-wide text-gold hover:text-sand"
             >
               Ver todos →
             </Link>
@@ -132,11 +132,11 @@ export default function HomePage() {
             />
           </div>
           <div>
-            <p className="kicker text-clay">Cápsulas</p>
-            <h2 className="font-display mt-3 text-3xl text-earth md:text-5xl">
+            <p className="kicker text-gold">Cápsulas</p>
+            <h2 className="font-display mt-3 text-3xl text-sand md:text-5xl">
               Dormir en tecnología, despertar en el paisaje.
             </h2>
-            <p className="mt-5 text-bark/75">
+            <p className="mt-5 text-sand/75">
               Casas cápsula de cobre, madera y vidrio. Una en cada paisaje:
               volcán, lago, desierto, bosque nativo, viñedos, ríos, nieve y
               playa. Operadas por partners locales.
@@ -146,16 +146,16 @@ export default function HomePage() {
                 <Link
                   key={c.slug}
                   href={`/capsulas/${c.slug}`}
-                  className="rounded-2xl border border-earth/8 bg-white p-4 transition hover:border-gold/50"
+                  className="rounded-2xl border border-gold/20 bg-black p-4 transition hover:border-gold"
                 >
-                  <p className="kicker text-clay">{c.city}</p>
-                  <p className="mt-1 font-medium text-earth">{c.name}</p>
+                  <p className="kicker text-gold">{c.city}</p>
+                  <p className="mt-1 font-medium text-sand">{c.name}</p>
                 </Link>
               ))}
             </div>
             <Link
               href="/capsulas"
-              className="mt-8 inline-block rounded-full bg-earth px-6 py-2.5 text-sand"
+              className="mt-8 inline-block rounded-full bg-gold px-6 py-2.5 text-black"
             >
               Ver cápsulas
             </Link>
@@ -163,7 +163,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-earth py-24 text-sand">
+      <section className="border-t border-gold/15 bg-black py-24 text-sand">
         <div className="mx-auto max-w-7xl px-4">
           <p className="kicker text-gold">Gastronomía</p>
           <h2 className="font-display mt-3 text-3xl md:text-4xl">

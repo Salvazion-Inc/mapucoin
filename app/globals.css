@@ -17,9 +17,10 @@
 
 html,
 body {
-  background: var(--color-cream);
-  color: var(--color-ink);
+  background: #000;
+  color: var(--color-sand);
   font-family: var(--font-sans);
+  color-scheme: dark;
 }
 
 ::selection {
@@ -67,6 +68,9 @@ input,
 select,
 textarea {
   outline: none;
+  background: #111;
+  color: var(--color-sand);
+  border-color: rgb(212 175 55 / 0.28);
 }
 
 input:focus,
@@ -76,6 +80,12 @@ textarea:focus {
   border-color: rgb(212 175 55 / 0.7);
 }
 
+option,
+optgroup {
+  background: #111;
+  color: var(--color-sand);
+}
+
 .kultrun-ring {
   background:
     radial-gradient(circle at 50% 50%, transparent 58%, #d4af3733 59%, transparent 62%),
@@ -83,14 +93,20 @@ textarea:focus {
 }
 
 .leaflet-container {
-  background: #d9cbb3;
+  background: #0a0a0a;
   font-family: var(--font-sans);
   border-radius: 1.5rem;
 }
 
 .leaflet-popup-content-wrapper {
+  background: #111;
+  color: #f3e6cc;
   border-radius: 16px;
-  box-shadow: 0 12px 40px rgba(12, 9, 7, 0.22);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.leaflet-popup-tip {
+  background: #111;
 }
 
 .leaflet-popup-content {

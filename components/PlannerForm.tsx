@@ -38,23 +38,23 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
   return (
     <form
       onSubmit={onSubmit}
-      className={`rounded-[1.75rem] border border-white/40 bg-cream/92 shadow-[0_30px_80px_rgba(7,5,4,0.28)] backdrop-blur-md ${
+      className={`rounded-[1.75rem] border border-gold/30 bg-black/80 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-md ${
         compact ? "p-5" : "p-6 md:p-8"
       }`}
     >
-      <p className="kicker text-clay">Planificador Grok</p>
-      <h2 className="font-display mt-2 text-2xl text-earth md:text-3xl">
+      <p className="kicker text-gold">Planificador</p>
+      <h2 className="font-display mt-2 text-2xl text-sand md:text-3xl">
         ¿Cuánto y a dónde?
       </h2>
-      <p className="mt-1 text-sm text-bark/70">
-        Indica presupuesto en pesos chilenos y el territorio. Grok arma cápsula,
-        mesa y actividades.
+      <p className="mt-1 text-sm text-sand/70">
+        Indica presupuesto en pesos chilenos y el territorio. Mapucoin arma
+        cápsula, mesa y actividades.
       </p>
 
-      <label className="mt-6 block text-sm font-medium text-earth">
+      <label className="mt-6 block text-sm font-medium text-sand">
         Lugar a conocer
         <select
-          className="mt-1 w-full rounded-xl border border-earth/12 bg-white px-3 py-2.5"
+          className="mt-1 w-full rounded-xl border border-gold/25 bg-black px-3 py-2.5"
           value={place}
           onChange={(e) => setPlace(e.target.value)}
         >
@@ -74,7 +74,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
         </select>
       </label>
 
-      <label className="mt-4 block text-sm font-medium text-earth">
+      <label className="mt-4 block text-sm font-medium text-sand">
         Presupuesto total · {formatCLP(budget)}
         <input
           type="range"
@@ -83,16 +83,16 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
           step={50000}
           value={budget}
           onChange={(e) => setBudget(Number(e.target.value))}
-          className="mt-2 w-full accent-clay"
+          className="mt-2 w-full accent-gold"
         />
-        <span className="flex justify-between text-xs text-bark/60">
+        <span className="flex justify-between text-xs text-sand/50">
           <span>250 mil</span>
           <span>3,5 millones</span>
         </span>
       </label>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <label className="text-sm font-medium text-earth">
+        <label className="text-sm font-medium text-sand">
           Noches
           <input
             type="number"
@@ -100,10 +100,10 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
             max={21}
             value={nights}
             onChange={(e) => setNights(Number(e.target.value))}
-            className="mt-1 w-full rounded-xl border border-earth/12 bg-white px-3 py-2.5"
+            className="mt-1 w-full rounded-xl border border-gold/25 bg-black px-3 py-2.5"
           />
         </label>
-        <label className="text-sm font-medium text-earth">
+        <label className="text-sm font-medium text-sand">
           Viajeros
           <input
             type="number"
@@ -111,13 +111,13 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
             max={8}
             value={guests}
             onChange={(e) => setGuests(Number(e.target.value))}
-            className="mt-1 w-full rounded-xl border border-earth/12 bg-white px-3 py-2.5"
+            className="mt-1 w-full rounded-xl border border-gold/25 bg-black px-3 py-2.5"
           />
         </label>
       </div>
 
       <div className="mt-4">
-        <p className="text-sm font-medium text-earth">Intereses</p>
+        <p className="text-sm font-medium text-sand">Intereses</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {interests.map((i) => (
             <button
@@ -126,8 +126,8 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
               onClick={() => toggle(i.id)}
               className={`rounded-full px-3 py-1.5 text-sm ${
                 picked.includes(i.id)
-                  ? "bg-earth text-sand"
-                  : "bg-sand text-bark"
+                  ? "bg-gold text-black"
+                  : "border border-gold/30 text-sand"
               }`}
             >
               {i.label}
@@ -137,7 +137,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
       </div>
 
       {dest && (
-        <p className="mt-4 text-xs text-bark/60">
+        <p className="mt-4 text-xs text-sand/50">
           Desde {formatCLP(dest.priceFromCLP)} por día de experiencia en{" "}
           {dest.city}.
         </p>
@@ -145,9 +145,9 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
 
       <button
         type="submit"
-        className="mt-6 w-full rounded-full bg-earth py-3.5 font-medium text-sand transition hover:bg-bark"
+        className="mt-6 w-full rounded-full bg-gold py-3.5 font-medium text-black transition hover:bg-[#e3c25a]"
       >
-        Armar viaje con Grok
+        Armar viaje
       </button>
     </form>
   );

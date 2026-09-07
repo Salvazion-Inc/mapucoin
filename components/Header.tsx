@@ -20,11 +20,11 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-earth/8 bg-cream/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-gold/30 bg-black">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
         <Link href="/" className="flex items-center gap-3">
           <BrandMark size={46} priority />
-          <span className="font-display text-xl tracking-[0.18em] text-earth">
+          <span className="font-display text-xl tracking-[0.18em] text-gold">
             MAPUCOIN
           </span>
         </Link>
@@ -37,9 +37,7 @@ export default function Header() {
                 key={l.href}
                 href={l.href}
                 className={`text-[13px] tracking-wide transition ${
-                  active
-                    ? "text-clay"
-                    : "text-bark/70 hover:text-earth"
+                  active ? "text-gold" : "text-sand/70 hover:text-gold"
                 }`}
               >
                 {l.label}
@@ -48,33 +46,33 @@ export default function Header() {
           })}
           <Link
             href="/planificar"
-            className="rounded-full bg-earth px-4 py-2 text-[13px] font-medium text-sand transition hover:bg-bark"
+            className="rounded-full bg-gold px-4 py-2 text-[13px] font-medium text-black transition hover:bg-[#e3c25a]"
           >
-            Viajar con IA
+            Planificar
           </Link>
         </nav>
 
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-earth/10 lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/40 lg:hidden"
           aria-label="Menú"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
           <span className="flex flex-col gap-1.5">
-            <span className="block h-px w-4 bg-earth" />
-            <span className="block h-px w-4 bg-earth" />
+            <span className="block h-px w-4 bg-gold" />
+            <span className="block h-px w-4 bg-gold" />
           </span>
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-earth/10 bg-cream px-4 py-4 lg:hidden">
+        <div className="border-t border-gold/20 bg-black px-4 py-4 lg:hidden">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="block py-2.5 text-bark"
+              className="block py-2.5 text-gold"
               onClick={() => setOpen(false)}
             >
               {l.label}
@@ -82,10 +80,10 @@ export default function Header() {
           ))}
           <Link
             href="/planificar"
-            className="mt-2 block rounded-full bg-earth py-2.5 text-center text-sm text-sand"
+            className="mt-2 block rounded-full bg-gold py-2.5 text-center text-sm font-medium text-black"
             onClick={() => setOpen(false)}
           >
-            Viajar con IA
+            Planificar
           </Link>
         </div>
       )}

@@ -3,17 +3,19 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-24 bg-night text-sand">
+    <footer className="mt-24 border-t border-gold/20 bg-black text-sand">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-3">
             <BrandMark size={52} />
-            <p className="font-display text-2xl tracking-[0.2em]">MAPUCOIN</p>
+            <p className="font-display text-2xl tracking-[0.2em] text-gold">
+              MAPUCOIN
+            </p>
           </div>
           <p className="mt-5 max-w-md text-sm leading-relaxed text-sand/70">
-            Mapu es tierra. Coin es encuentro. Plataforma turística de Chile
-            impulsada por Grok: presupuesto, destino, cápsulas tecnológicas,
-            gastronomía local y un mapa vivo del territorio.
+            Mapu es tierra. Coin es encuentro. Plataforma turística de Chile:
+            presupuesto, destino, cápsulas tecnológicas, gastronomía local y un
+            mapa vivo del territorio.
           </p>
         </div>
         <div>
@@ -21,7 +23,7 @@ export default function Footer() {
           <ul className="mt-4 space-y-2.5 text-sm text-sand/80">
             <li>
               <Link href="/planificar" className="hover:text-gold">
-                Planificar con IA
+                Planificar
               </Link>
             </li>
             <li>

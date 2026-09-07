@@ -11,8 +11,6 @@ function PlannerInner() {
   const [plan, setPlan] = useState<TravelPlan | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [source, setSource] = useState("");
-  const [grokHint, setGrokHint] = useState("");
   const [chat, setChat] = useState<string[]>([]);
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -44,12 +42,10 @@ function PlannerInner() {
         if (cancelled) return;
         if (data.plan) {
           setPlan(data.plan);
-          setSource(data.source || "");
-          setGrokHint(String(data.grok || ""));
         } else setError("No se pudo armar el itinerario.");
       })
       .catch(() => {
-        if (!cancelled) setError("Error de red al consultar Grok.");
+        if (!cancelled) setError("Error de red al armar el itinerario.");
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -71,7 +67,7 @@ function PlannerInner() {
       const user = line.startsWith("Tú: ");
       return {
         role: user ? "user" : "assistant",
-        content: user ? line.slice(4) : line.replace(/^Grok: /, ""),
+        content: user ? line.slice(4) : line.replace(/^Mapucoin: /, ""),
       };
     });
     const res = await fetch("/api/chat", {
@@ -80,14 +76,14 @@ function PlannerInner() {
       body: JSON.stringify({ messages }),
     });
     if (!res.ok || !res.body) {
-      setChat((c) => [...c, "Grok: no pude responder ahora."]);
+      setChat((c) => [...c, "Mapucoin: no pude responder ahora."]);
       setStreaming(false);
       return;
     }
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let acc = "";
-    setChat((c) => [...c, "Grok: "]);
+    setChat((c) => [...c, "Mapucoin: "]);
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -95,7 +91,7 @@ function PlannerInner() {
       const snapshot = acc;
       setChat((c) => {
         const next = [...c];
-        next[next.length - 1] = `Grok: ${snapshot}`;
+        next[next.length - 1] = `Mapucoin: ${snapshot}`;
         return next;
       });
     }
@@ -104,23 +100,23 @@ function PlannerInner() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-14">
-      <p className="kicker text-clay">Planificador</p>
-      <h1 className="font-display mt-3 text-4xl text-earth md:text-5xl">
-        Tu viaje, armado por Grok
+      <p className="kicker text-gold">Planificador</p>
+      <h1 className="font-display mt-3 text-4xl text-sand md:text-5xl">
+        Tu viaje, a tu presupuesto
       </h1>
-      <p className="mt-3 max-w-2xl text-bark/75">
-        Ajusta presupuesto y destino. Si Grok no está configurado, Mapucoin
-        arma un itinerario con el catálogo local.
+      <p className="mt-3 max-w-2xl text-sand/75">
+        Ajusta presupuesto y destino. Mapucoin arma el itinerario con cápsulas,
+        mesa y actividades del territorio.
       </p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[340px_1fr]">
         <div className="space-y-6">
           <PlannerForm compact />
-          <div className="rounded-3xl border border-earth/10 bg-white p-5">
-            <p className="text-sm font-medium text-earth">Preguntar a Grok</p>
-            <div className="mt-3 max-h-56 space-y-2 overflow-y-auto text-sm text-bark/80">
+          <div className="rounded-3xl border border-gold/20 bg-black p-5">
+            <p className="text-sm font-medium text-sand">Preguntar</p>
+            <div className="mt-3 max-h-56 space-y-2 overflow-y-auto text-sm text-sand/80">
               {chat.length === 0 && (
-                <p className="text-bark/50">
+                <p className="text-sand/45">
                   Ej: ¿conviene más Pucón o Puerto Varas con 600 mil?
                 </p>
               )}
@@ -132,12 +128,12 @@ function PlannerInner() {
               <input
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder="Escribe al concierge…"
-                className="flex-1 rounded-xl border border-earth/15 px-3 py-2 text-sm"
+                placeholder="Escribe tu consulta…"
+                className="flex-1 rounded-xl border border-gold/25 bg-black px-3 py-2 text-sm"
               />
               <button
                 disabled={streaming}
-                className="rounded-xl bg-clay px-3 py-2 text-sm text-cream"
+                className="rounded-xl bg-gold px-3 py-2 text-sm text-black"
               >
                 Enviar
               </button>
@@ -146,31 +142,14 @@ function PlannerInner() {
         </div>
         <div>
           {loading && (
-            <p className="rounded-3xl bg-sand p-10 text-bark/70">
-              Grok está leyendo el territorio y tu presupuesto…
+            <p className="rounded-3xl border border-gold/20 bg-black p-10 text-sand/70">
+              Armando el itinerario con tu presupuesto…
             </p>
           )}
-          {error && <p className="text-clay">{error}</p>}
-          {plan && (
-            <>
-              {source === "catalog" && grokHint === "credits" && (
-                <p className="mb-4 text-xs text-clay">
-                  Grok está conectado, pero el equipo de xAI no tiene créditos.
-                  Recarga en console.x.ai; mientras tanto usamos el catálogo
-                  Mapucoin.
-                </p>
-              )}
-              {source === "catalog" && grokHint !== "credits" && (
-                <p className="mb-4 text-xs text-bark/60">
-                  Itinerario de catálogo. Cuando Grok tenga créditos, el plan se
-                  arma en vivo.
-                </p>
-              )}
-              <ItineraryView plan={plan} />
-            </>
-          )}
+          {error && <p className="text-gold">{error}</p>}
+          {plan && <ItineraryView plan={plan} />}
           {!loading && !plan && !params.get("lugar") && (
-            <div className="rounded-3xl border border-dashed border-earth/20 p-10 text-bark/70">
+            <div className="rounded-3xl border border-dashed border-gold/25 p-10 text-sand/70">
               Completa el formulario para generar el itinerario.
             </div>
           )}
@@ -184,7 +163,7 @@ export default function PlanificarPage() {
   return (
     <Suspense
       fallback={
-        <div className="mx-auto max-w-7xl px-4 py-20 text-bark/70">
+        <div className="mx-auto max-w-7xl px-4 py-20 text-sand/70">
           Cargando planificador…
         </div>
       }

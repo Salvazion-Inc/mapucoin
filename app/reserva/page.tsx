@@ -48,9 +48,9 @@ function ReservaInner() {
   return (
     <div className="mx-auto grid max-w-5xl gap-10 px-4 py-12 lg:grid-cols-2">
       <div>
-        <p className="kicker text-clay">Reserva</p>
-        <h1 className="font-display mt-3 text-4xl text-earth">
-          Pagar con Stripe
+        <p className="kicker text-gold">Reserva</p>
+        <h1 className="font-display mt-3 text-4xl text-sand">
+          Confirmar reserva
         </h1>
         {params.get("cancel") && (
           <p className="mt-3 text-sm text-clay">Pago cancelado. Puedes reintentar.</p>
@@ -60,16 +60,16 @@ function ReservaInner() {
             <Image src={item.image} alt={item.name} fill className="object-cover" />
           </div>
         )}
-        <p className="mt-4 text-bark/75">
+        <p className="mt-4 text-sand/75">
           {item?.name} · {item?.city}. {nights} noche{nights > 1 ? "s" : ""} ·{" "}
           {guests} viajero{guests > 1 ? "s" : ""}. Total {formatCLP(total)}.
         </p>
       </div>
       <form
         onSubmit={onSubmit}
-        className="space-y-4 rounded-[1.75rem] border border-earth/8 bg-white p-7 shadow-[0_18px_50px_rgba(12,9,7,0.06)]"
+        className="space-y-4 rounded-[1.75rem] border border-gold/20 bg-black p-7"
       >
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Cápsula
           <select
             value={slug}
@@ -84,7 +84,7 @@ function ReservaInner() {
           </select>
         </label>
         <div className="grid grid-cols-2 gap-3">
-          <label className="text-sm font-medium text-earth">
+          <label className="text-sm font-medium text-sand">
             Noches
             <input
               type="number"
@@ -95,7 +95,7 @@ function ReservaInner() {
               className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
             />
           </label>
-          <label className="text-sm font-medium text-earth">
+          <label className="text-sm font-medium text-sand">
             Viajeros
             <input
               type="number"
@@ -107,7 +107,7 @@ function ReservaInner() {
             />
           </label>
         </div>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Nombre
           <input
             name="full_name"
@@ -115,7 +115,7 @@ function ReservaInner() {
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Correo
           <input
             name="email"
@@ -124,17 +124,17 @@ function ReservaInner() {
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <label className="block text-sm font-medium text-earth">
+        <label className="block text-sm font-medium text-sand">
           Teléfono
           <input
             name="phone"
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>
-        <button className="w-full rounded-full bg-earth py-3.5 text-sand hover:bg-bark">
-          Ir a Stripe · {formatCLP(total)}
+        <button className="w-full rounded-full bg-gold py-3.5 text-black hover:bg-[#e3c25a]">
+          Pagar · {formatCLP(total)}
         </button>
-        {status && <p className="text-sm text-bark/70">{status}</p>}
+        {status && <p className="text-sm text-sand/70">{status}</p>}
       </form>
     </div>
   );

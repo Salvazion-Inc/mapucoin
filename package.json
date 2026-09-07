@@ -1,0 +1,28 @@
+{
+  "name": "mapucoin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mapucoin — plataforma turística de Chile con IA: cápsulas, gastronomía, mapa y partners.",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "leaflet": "^1.9.4",
+    "next": "^15.5.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "stripe": "^22.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.8.3"
+  }
+}

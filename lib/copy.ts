@@ -13,6 +13,8 @@ const es = {
     awards: "Premios",
     plan: "Planificar",
     menu: "Menú",
+    prev: "Anterior",
+    next: "Siguiente",
   },
   hero: {
     title: "Chile, de norte a sur.",
@@ -277,6 +279,8 @@ const en: typeof es = {
     awards: "Awards",
     plan: "Plan",
     menu: "Menu",
+    prev: "Previous",
+    next: "Next",
   },
   hero: {
     title: "Chile, north to south.",
@@ -541,6 +545,8 @@ const pt: typeof es = {
     awards: "Prêmios",
     plan: "Planejar",
     menu: "Menu",
+    prev: "Anterior",
+    next: "Seguinte",
   },
   hero: {
     title: "Chile, do norte ao sul.",
@@ -805,6 +811,8 @@ const fr: typeof es = {
     awards: "Prix",
     plan: "Planifier",
     menu: "Menu",
+    prev: "Précédent",
+    next: "Suivant",
   },
   hero: {
     title: "Le Chili, du nord au sud.",
@@ -1069,6 +1077,8 @@ const it: typeof es = {
     awards: "Premi",
     plan: "Pianifica",
     menu: "Menu",
+    prev: "Precedente",
+    next: "Successivo",
   },
   hero: {
     title: "Il Cile, da nord a sud.",

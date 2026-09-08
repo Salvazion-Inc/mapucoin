@@ -174,6 +174,92 @@ a.mapu-card:hover,
   box-shadow: 0 22px 50px rgba(7, 5, 4, 0.35);
 }
 
+.rail-wrap {
+  position: relative;
+}
+
+.rail {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-x;
+  cursor: grab;
+  padding-bottom: 0.35rem;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.rail.is-dragging a,
+.rail.is-dragging button {
+  pointer-events: none;
+}
+
+.rail > * {
+  flex: 0 0 min(78vw, 20.5rem);
+  scroll-snap-align: start;
+}
+
+.rail-gastro .rail > * {
+  flex: 0 0 min(84vw, 23.5rem);
+}
+
+.rail-acts .rail > * {
+  flex: 0 0 min(78vw, 24.5rem);
+}
+
+.rail-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: -1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: rgba(7, 5, 4, 0.72);
+  color: var(--color-gold);
+  font-size: 1.55rem;
+  line-height: 1;
+  backdrop-filter: blur(12px);
+}
+
+.rail-nav:hover {
+  background: var(--color-gold);
+  color: var(--color-night);
+}
+
+.rail-nav-prev {
+  left: 0.15rem;
+}
+
+.rail-nav-next {
+  right: 0.15rem;
+}
+
+@media (min-width: 768px) {
+  .rail-nav-prev {
+    left: -0.55rem;
+  }
+  .rail-nav-next {
+    right: -0.55rem;
+  }
+}
+
 .page-pad {
   padding-top: calc(5rem + env(safe-area-inset-top, 0px));
 }

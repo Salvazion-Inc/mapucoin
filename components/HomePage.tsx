@@ -2,6 +2,7 @@
 
 import AwardsCarousel from "@/components/AwardsCarousel";
 import HeroVideo from "@/components/HeroVideo";
+import HScroll from "@/components/HScroll";
 import MapLoader from "@/components/MapLoader";
 import PartnersForm from "@/components/PartnersForm";
 import PlaceCard from "@/components/PlaceCard";
@@ -99,45 +100,44 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {featured.map(({ item: cap, land }) => {
-                return (
-                  <Link
-                    key={`${land}-${cap.slug}`}
-                    href={`/capsulas/${cap.slug}`}
-                    className="mapu-card mapu-card-hover group overflow-hidden"
-                  >
-                    <div className="relative h-56">
-                      <Image
-                        src={
-                          land === "parques"
-                            ? "/images/places/paine.jpg"
-                            : cap.image
-                        }
-                        alt={cap.name}
-                        fill
-                        className="object-cover transition duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/20 to-transparent" />
-                      <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[11px] font-semibold tracking-wide text-night">
-                        {c.landscapes[land]}
-                      </span>
-                      <div className="absolute inset-x-0 bottom-0 p-5 text-sand">
-                        <p className="kicker text-gold/90">{cap.city}</p>
-                        <h3 className="font-display mt-1 text-xl leading-tight">
-                          {cap.name}
-                        </h3>
-                        <p className="mt-2 text-sm font-semibold text-gold">
-                          {tr(c.capsules.fromNight, {
-                            price: formatCLP(cap.priceFromCLP),
-                          })}
-                        </p>
+            <div className="mt-12">
+              <HScroll labelPrev={c.nav.prev} labelNext={c.nav.next}>
+                {featured.map(({ item: cap, land }) => {
+                  return (
+                    <Link
+                      key={`${land}-${cap.slug}`}
+                      href={`/capsulas/${cap.slug}`}
+                      className="mapu-card mapu-card-hover group overflow-hidden"
+                    >
+                      <div className="relative h-56 md:h-64">
+                        <Image
+                          src={cap.image}
+                          alt={cap.name}
+                          fill
+                          className="object-cover transition duration-700 group-hover:scale-105"
+                          sizes="(max-width: 768px) 80vw, 21rem"
+                          draggable={false}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/20 to-transparent" />
+                        <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[11px] font-semibold tracking-wide text-night">
+                          {c.landscapes[land]}
+                        </span>
+                        <div className="absolute inset-x-0 bottom-0 p-5 text-sand">
+                          <p className="kicker text-gold/90">{cap.city}</p>
+                          <h3 className="font-display mt-1 text-xl leading-tight">
+                            {cap.name}
+                          </h3>
+                          <p className="mt-2 text-sm font-semibold text-gold">
+                            {tr(c.capsules.fromNight, {
+                              price: formatCLP(cap.priceFromCLP),
+                            })}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                );
-              })}
+                    </Link>
+                  );
+                })}
+              </HScroll>
             </div>
           </div>
         </section>
@@ -152,42 +152,49 @@ export default function HomePage() {
               {c.food.title}
             </h2>
             <p className="mt-4 max-w-2xl text-sand/70">{c.food.lead}</p>
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
-              {gastronomy.map((g) => {
-                const dish = localizeItem(g, locale);
-                return (
-                  <article
-                    key={dish.slug}
-                    id={dish.slug}
-                    className="mapu-card scroll-mt-28 overflow-hidden"
-                  >
-                    <div className="relative h-56">
-                      <Image
-                        src={dish.image}
-                        alt={dish.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <p className="kicker">{dish.city}</p>
-                      <h3 className="font-display mt-2 text-2xl text-sand">
-                        {dish.name}
-                      </h3>
-                      <p className="mt-3 text-sm leading-relaxed text-sand/75">
-                        {dish.description}
-                      </p>
-                      <p className="mt-4 text-sm font-semibold text-gold">
-                        {tr(c.food.hours, {
-                          price: formatCLP(dish.priceFromCLP),
-                          hours: dish.durationHours || 1,
-                        })}
-                      </p>
-                    </div>
-                  </article>
-                );
-              })}
+            <div className="mt-10">
+              <HScroll
+                labelPrev={c.nav.prev}
+                labelNext={c.nav.next}
+                className="rail-gastro"
+              >
+                {gastronomy.map((g) => {
+                  const dish = localizeItem(g, locale);
+                  return (
+                    <article
+                      key={dish.slug}
+                      id={dish.slug}
+                      className="mapu-card scroll-mt-28 flex h-full flex-col overflow-hidden"
+                    >
+                      <div className="relative h-52">
+                        <Image
+                          src={dish.image}
+                          alt={dish.name}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 84vw, 24rem"
+                          draggable={false}
+                        />
+                      </div>
+                      <div className="p-6">
+                        <p className="kicker">{dish.city}</p>
+                        <h3 className="font-display mt-2 text-2xl text-sand">
+                          {dish.name}
+                        </h3>
+                        <p className="mt-3 text-sm leading-relaxed text-sand/75">
+                          {dish.description}
+                        </p>
+                        <p className="mt-4 text-sm font-semibold text-gold">
+                          {tr(c.food.hours, {
+                            price: formatCLP(dish.priceFromCLP),
+                            hours: dish.durationHours || 1,
+                          })}
+                        </p>
+                      </div>
+                    </article>
+                  );
+                })}
+              </HScroll>
             </div>
           </div>
         </section>
@@ -211,12 +218,18 @@ export default function HomePage() {
                     ? c.activities.other
                     : c.landscapes[group.id]}
                 </h3>
-                <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {group.items.map((a) => (
-                    <div key={a.slug} id={a.slug} className="scroll-mt-28">
-                      <PlaceCard item={a} />
-                    </div>
-                  ))}
+                <div className="mt-6">
+                  <HScroll
+                    labelPrev={c.nav.prev}
+                    labelNext={c.nav.next}
+                    className="rail-acts"
+                  >
+                    {group.items.map((a) => (
+                      <div key={a.slug} id={a.slug} className="scroll-mt-28">
+                        <PlaceCard item={a} />
+                      </div>
+                    ))}
+                  </HScroll>
                 </div>
               </div>
             ))}

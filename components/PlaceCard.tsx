@@ -24,7 +24,7 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
   return (
     <Link
       href={hrefFor(shown)}
-      className="mapu-card mapu-card-hover group relative block overflow-hidden"
+      className="mapu-card mapu-card-hover group relative block h-full overflow-hidden"
     >
       <div className="relative h-72">
         <Image
@@ -32,7 +32,8 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
           alt={shown.name}
           fill
           className="object-cover transition duration-700 group-hover:scale-110"
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes="(max-width: 768px) 80vw, 21rem"
+          draggable={false}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/25 to-transparent" />
         <div className="absolute left-4 top-4 flex flex-wrap gap-1.5">

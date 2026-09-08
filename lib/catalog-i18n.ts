@@ -148,6 +148,38 @@ const en: Record<string, ItemText> = {
     name: "Snowboard in Chillán",
     tagline: "Volcanic snow, forest and the runs of Nevados de Chillán.",
   },
+  "geiseres-el-tatio": {
+    name: "El Tatio geysers",
+    tagline: "Sunrise at 4,300 m, steam columns and the altiplano.",
+  },
+  "kayak-bahia-inglesa": {
+    name: "Kayak in Bahía Inglesa",
+    tagline: "Turquoise water, coastal desert and a white-sand cove.",
+  },
+  "cata-maipo": {
+    name: "Wine tasting in the Maipo",
+    tagline: "Carmenère and cabernet half an hour from the capital.",
+  },
+  "cata-elqui": {
+    name: "Pisco and vineyards in Elqui",
+    tagline: "Muscat, a family distillery and the valley in a glass.",
+  },
+  "kayak-laja": {
+    name: "Kayak on the Laja",
+    tagline: "Laja waters, forest and the classic waterfall of the south.",
+  },
+  "navegacion-marmol": {
+    name: "Sailing to the Marble Chapels",
+    tagline: "Blue caverns on General Carrera Lake.",
+  },
+  "sendero-alerce-chiloe": {
+    name: "Alerce trail in Chiloé",
+    tagline: "Alerce, tepú and the evergreen forest of the archipelago.",
+  },
+  "ski-la-parva": {
+    name: "Ski at La Parva",
+    tagline: "Family runs and off-piste a step from Farellones.",
+  },
   "valle-de-la-luna": {
     name: "Sunset in Valle de la Luna",
     tagline: "Dunes, salt flat and the sun falling on Licancabur.",
@@ -305,6 +337,38 @@ const pt: Record<string, ItemText> = {
   "snowboard-chillan": {
     name: "Snowboard em Chillán",
     tagline: "Neve vulcânica, bosque e pistas do Nevados de Chillán.",
+  },
+  "geiseres-el-tatio": {
+    name: "Gêiseres do Tatio",
+    tagline: "Amanhecer a 4.300 m, colunas de vapor e altiplano.",
+  },
+  "kayak-bahia-inglesa": {
+    name: "Caiaque em Bahía Inglesa",
+    tagline: "Água turquesa, deserto costeiro e enseada de areia branca.",
+  },
+  "cata-maipo": {
+    name: "Degustação no Maipo",
+    tagline: "Carmenère e cabernet a meia hora da capital.",
+  },
+  "cata-elqui": {
+    name: "Pisco e vinhedos no Elqui",
+    tagline: "Moscatel, destilaria familiar e o vale na taça.",
+  },
+  "kayak-laja": {
+    name: "Caiaque no Laja",
+    tagline: "Águas do Laja, bosque e a cascata clássica do sul.",
+  },
+  "navegacion-marmol": {
+    name: "Navegação às Capelas de Mármore",
+    tagline: "Cavernas azuis no lago General Carrera.",
+  },
+  "sendero-alerce-chiloe": {
+    name: "Trilha de alerces em Chiloé",
+    tagline: "Alerce, tepú e a floresta sempre-verde do arquipélago.",
+  },
+  "ski-la-parva": {
+    name: "Ski em La Parva",
+    tagline: "Pistas familiares e fora de pista a um passo de Farellones.",
   },
   "valle-de-la-luna": {
     name: "Entardecer no Valle de la Luna",
@@ -464,6 +528,38 @@ const fr: Record<string, ItemText> = {
     name: "Snowboard à Chillán",
     tagline: "Neige volcanique, forêt et pistes du Nevados de Chillán.",
   },
+  "geiseres-el-tatio": {
+    name: "Geysers du Tatio",
+    tagline: "Aube à 4 300 m, colonnes de vapeur et altiplano.",
+  },
+  "kayak-bahia-inglesa": {
+    name: "Kayak à Bahía Inglesa",
+    tagline: "Eau turquoise, désert côtier et crique de sable blanc.",
+  },
+  "cata-maipo": {
+    name: "Dégustation dans le Maipo",
+    tagline: "Carmenère et cabernet à une demi-heure de la capitale.",
+  },
+  "cata-elqui": {
+    name: "Pisco et vignobles à Elqui",
+    tagline: "Muscat, distillerie familiale et la vallée dans le verre.",
+  },
+  "kayak-laja": {
+    name: "Kayak sur le Laja",
+    tagline: "Eaux du Laja, forêt et la cascade classique du sud.",
+  },
+  "navegacion-marmol": {
+    name: "Navigation vers les Chapelles de Marbre",
+    tagline: "Cavernes bleues sur le lac General Carrera.",
+  },
+  "sendero-alerce-chiloe": {
+    name: "Sentier d'alerce à Chiloé",
+    tagline: "Alerce, tepú et la forêt sempervirente de l'archipel.",
+  },
+  "ski-la-parva": {
+    name: "Ski à La Parva",
+    tagline: "Pistes familiales et hors-piste à un pas de Farellones.",
+  },
   "valle-de-la-luna": {
     name: "Coucher de soleil au Valle de la Luna",
     tagline: "Dunes, salar et le soleil qui tombe sur le Licancabur.",
@@ -621,6 +717,38 @@ const it: Record<string, ItemText> = {
   "snowboard-chillan": {
     name: "Snowboard a Chillán",
     tagline: "Neve vulcanica, bosco e piste del Nevados de Chillán.",
+  },
+  "geiseres-el-tatio": {
+    name: "Geyser del Tatio",
+    tagline: "Alba a 4.300 m, colonne di vapore e altopiano.",
+  },
+  "kayak-bahia-inglesa": {
+    name: "Kayak a Bahía Inglesa",
+    tagline: "Acqua turchese, deserto costiero e caletta di sabbia bianca.",
+  },
+  "cata-maipo": {
+    name: "Degustazione nel Maipo",
+    tagline: "Carmenère e cabernet a mezz'ora dalla capitale.",
+  },
+  "cata-elqui": {
+    name: "Pisco e vigneti a Elqui",
+    tagline: "Moscato, distilleria familiare e la valle nel calice.",
+  },
+  "kayak-laja": {
+    name: "Kayak sul Laja",
+    tagline: "Acque del Laja, bosco e la cascata classica del sud.",
+  },
+  "navegacion-marmol": {
+    name: "Navigazione alle Cappelle di Marmo",
+    tagline: "Caverne azzurre sul lago General Carrera.",
+  },
+  "sendero-alerce-chiloe": {
+    name: "Sentiero di alerce a Chiloé",
+    tagline: "Alerce, tepú e la foresta sempreverde dell'arcipelago.",
+  },
+  "ski-la-parva": {
+    name: "Sci a La Parva",
+    tagline: "Piste familiari e fuoripista a un passo da Farellones.",
   },
   "valle-de-la-luna": {
     name: "Tramonto a Valle de la Luna",

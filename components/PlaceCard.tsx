@@ -5,8 +5,9 @@ import Link from "next/link";
 const hrefFor = (item: CatalogItem) => {
   if (item.kind === "place") return `/destinos/${item.slug}`;
   if (item.kind === "capsule") return `/capsulas/${item.slug}`;
-  if (item.kind === "food") return `/gastronomia#${item.slug}`;
-  return `/actividades#${item.slug}`;
+  if (item.kind === "food") return `/#${item.slug}`;
+  if (item.placeSlug) return `/destinos/${item.placeSlug}`;
+  return `/#actividades`;
 };
 
 const kindLabel: Record<CatalogItem["kind"], string> = {
@@ -20,7 +21,7 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
   return (
     <Link
       href={hrefFor(item)}
-      className="group relative block overflow-hidden rounded-[1.75rem] bg-night shadow-[0_18px_50px_rgba(12,9,7,0.12)]"
+      className="mapu-card mapu-card-hover group relative block overflow-hidden"
     >
       <div className="relative h-72">
         <Image

@@ -1,35 +1,46 @@
 "use client";
 
-import Image from "next/image";
-
-/** Chile cinematic 4K — footage of Patagonia, Atacama and the Andes. */
-export const HERO_YOUTUBE = "pQMIfx7hcTA";
+import { useRef, useState } from "react";
 
 export default function HeroVideo({
-  poster = "/images/hero-paine.jpg",
-  youtubeId = HERO_YOUTUBE,
+  poster = "/images/hero-chile.jpg",
 }: {
   poster?: string;
-  youtubeId?: string;
 }) {
-  const src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${youtubeId}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3`;
+  const ref = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+
+  function toggleSound() {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setMuted(v.muted);
+    if (!v.paused) return;
+    void v.play().catch(() => {});
+  }
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-night">
-      <Image
-        src={poster}
-        alt=""
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
-      />
-      <iframe
-        src={src}
-        title="Chile en movimiento"
-        allow="autoplay; encrypted-media; picture-in-picture"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 scale-110 border-0"
-      />
+      <video
+        ref={ref}
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden
+        poster={poster}
+      >
+        <source src="/videos/mapucoin-chile.mp4" type="video/mp4" />
+      </video>
+      <button
+        type="button"
+        onClick={toggleSound}
+        className="absolute bottom-6 right-6 z-20 rounded-full border border-gold/40 bg-black/55 px-4 py-2 text-[11px] tracking-[0.18em] uppercase text-sand backdrop-blur-sm transition hover:border-gold hover:text-gold"
+      >
+        {muted ? "Sonido" : "Silencio"}
+      </button>
     </div>
   );
 }

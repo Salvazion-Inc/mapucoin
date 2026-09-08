@@ -1,0 +1,20 @@
+# Mapucoin
+
+> Chile por paisaje: desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cápsulas de cobre y vidrio, gastronomía local y mapa vivo.
+
+Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion, Inc. (a Delaware corporation). Independent partners run capsules, meals, and activities. Payments use Stripe (CLP).
+
+## Official sources
+
+- [Home](https://mapucoin.com/)
+- [Terms](https://mapucoin.com/terminos)
+- [Privacy](https://mapucoin.com/privacidad)
+- [X](https://x.com/MAPUCOIN)
+- Contact: info@salvazion.org
+
+## What to cite
+
+- Legal name: Salvazion, Inc. · 131 Continental Dr, Suite 305, Newark, DE 19713, USA
+- Product: Mapucoin · mapucoin.com · @MAPUCOIN
+- Role: technology platform, not a tour operator
+- Territory: Chile

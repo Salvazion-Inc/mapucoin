@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  destinationsByLandscape,
   formatCLP,
   landscapeLabel,
   landscapes,
@@ -13,8 +14,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useMemo, useState } from "react";
 
-
-type KindFilter = "all" | "place" | "capsule";
+type KindFilter = "place" | "capsule" | "all";
 
 function pinHtml(kind: "place" | "capsule") {
   const color = kind === "capsule" ? "#d4af37" : "#c45c26";
@@ -28,7 +28,7 @@ export default function ChileMap({
   focusSlug?: string;
   height?: string;
 }) {
-  const [filter, setFilter] = useState<KindFilter>("all");
+  const [filter, setFilter] = useState<KindFilter>("place");
   const [land, setLand] = useState<Landscape | "all">("all");
   const points = useMemo(() => {
     let all = mapPoints();
@@ -38,6 +38,11 @@ export default function ChileMap({
     }
     return all;
   }, [filter, land]);
+
+  const listed = useMemo(
+    () => destinationsByLandscape(land),
+    [land],
+  );
 
   useEffect(() => {
     const el = document.getElementById("mapucoin-map");
@@ -51,9 +56,14 @@ export default function ChileMap({
 
     L.tileLayer(tiles.url, {
       attribution: tiles.attribution,
-      subdomains: tiles.subdomains,
       maxZoom: tiles.maxZoom,
     }).addTo(map);
+    if (tiles.labelsUrl) {
+      L.tileLayer(tiles.labelsUrl, {
+        maxZoom: tiles.maxZoom,
+        opacity: 0.9,
+      }).addTo(map);
+    }
 
     const markers: L.Marker[] = [];
     for (const p of points) {
@@ -76,9 +86,6 @@ export default function ChileMap({
             <a href="${href}" style="display:inline-block;margin-top:8px;color:#d4af37;font-weight:600">Ver ficha →</a>
           </div>`,
         );
-      marker.on("click", () => {
-        /* popup handles navigation */
-      });
       markers.push(marker);
       if (focusSlug && p.slug === focusSlug) {
         map.setView([p.lat, p.lng], 9);
@@ -105,26 +112,6 @@ export default function ChileMap({
   return (
     <div>
       <div className="mb-3 flex flex-wrap gap-2">
-        {(
-          [
-            ["all", "Todo"],
-            ["place", "Destinos"],
-            ["capsule", "Cápsulas"],
-          ] as [KindFilter, string][]
-        ).map(([id, label]) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setFilter(id)}
-            className={`rounded-full px-4 py-1.5 text-sm ${
-              filter === id
-                ? "bg-gold text-black"
-                : "border border-gold/30 text-sand"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
         {landscapes.map((l) => (
           <button
             key={l.id}
@@ -139,16 +126,64 @@ export default function ChileMap({
             {l.label}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={() => setLand("all")}
+          className={`rounded-full px-4 py-1.5 text-sm ${
+            land === "all"
+              ? "bg-gold text-black"
+              : "border border-gold/30 text-sand"
+          }`}
+        >
+          Todos
+        </button>
+      </div>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        {(
+          [
+            ["place", "Lugares"],
+            ["capsule", "Cápsulas"],
+            ["all", "Ambos"],
+          ] as [KindFilter, string][]
+        ).map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setFilter(id)}
+            className={`rounded-full px-3 py-1 text-xs ${
+              filter === id
+                ? "bg-sand text-night"
+                : "border border-gold/20 text-sand/70"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
         <span className="self-center text-xs text-sand/50">
           Terracota: destinos · Oro: cápsulas
           {land !== "all" ? ` · ${landscapeLabel(land)}` : ""}
+          {` · ${points.length}`}
         </span>
       </div>
       <div
         id="mapucoin-map"
-        className="overflow-hidden rounded-3xl border border-earth/10"
+        className="overflow-hidden rounded-3xl border border-gold/15"
         style={{ height }}
       />
+      {land !== "all" && (
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {listed.map((d) => (
+            <li key={d.slug}>
+              <a
+                href={`/destinos/${d.slug}`}
+                className="inline-block rounded-full border border-gold/25 px-3 py-1 text-xs text-sand/80 hover:border-gold hover:text-gold"
+              >
+                {d.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

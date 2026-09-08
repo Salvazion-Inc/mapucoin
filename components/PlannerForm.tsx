@@ -32,7 +32,12 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
       viajeros: String(guests),
       intereses: picked.join(","),
     });
-    router.push(`/planificar?${q.toString()}`);
+    router.push(`/?${q.toString()}#planificar`);
+    requestAnimationFrame(() => {
+      document.getElementById("planificar")?.scrollIntoView({
+        behavior: "smooth",
+      });
+    });
   }
 
   return (

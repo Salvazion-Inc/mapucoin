@@ -1,11 +1,11 @@
+/** Esri World Imagery — real satellite of the terrain. */
 export function mapTiles() {
-  const key = (process.env.NEXT_PUBLIC_MAP_API_KEY || "").trim();
-  const url = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
   return {
-    url: key ? `${url}?key=${encodeURIComponent(key)}` : url,
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    labelsUrl:
+      "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
     attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: "abcd",
-    maxZoom: 20,
+      "Tiles &copy; Esri — Earthstar Geographics, Maxar",
+    maxZoom: 19,
   };
 }

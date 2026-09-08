@@ -15,7 +15,7 @@ export default function BrandMark({
       style={{ width: size, height: size }}
     >
       <Image
-        src="/logo.png"
+        src="/logo-mark.png"
         alt="Mapucoin"
         width={size}
         height={size}

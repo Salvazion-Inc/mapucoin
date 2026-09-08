@@ -52,15 +52,38 @@ const cap = (file: string) => `/images/${file}`;
 export const CHILE_FILM = "uHcjT4GfPNA";
 
 export const landscapes: { id: Landscape; label: string }[] = [
-  { id: "volcan", label: "Volcán" },
-  { id: "lago", label: "Lago" },
-  { id: "desierto", label: "Desierto" },
-  { id: "bosque-nativo", label: "Bosque nativo" },
+  { id: "desierto", label: "Desiertos" },
+  { id: "playa", label: "Playas" },
   { id: "vinedos", label: "Viñedos" },
+  { id: "volcan", label: "Volcanes" },
   { id: "rios", label: "Ríos" },
+  { id: "lago", label: "Lagos" },
+  { id: "bosque-nativo", label: "Bosques" },
   { id: "nieve", label: "Nieve" },
-  { id: "playa", label: "Playa" },
 ];
+
+/** Official Drive renders of the copper capsule, one per landscape. */
+export const landscapeHero: Record<Landscape, string> = {
+  desierto: "/images/capsulas/desierto.jpg",
+  playa: "/images/capsulas/playa.jpg",
+  vinedos: "/images/capsulas/vinedos.jpg",
+  volcan: "/images/capsulas/volcan.jpg",
+  rios: "/images/capsulas/rios.jpg",
+  lago: "/images/capsulas/lago.jpg",
+  "bosque-nativo": "/images/capsulas/bosque.jpg",
+  nieve: "/images/capsulas/nieve.jpg",
+};
+
+export const landscapePlaceSlug: Record<Landscape, string> = {
+  desierto: "san-pedro-de-atacama",
+  playa: "bahia-inglesa",
+  vinedos: "colchagua",
+  volcan: "pucon",
+  rios: "futaleufu",
+  lago: "puerto-varas",
+  "bosque-nativo": "chiloe",
+  nieve: "farellones-valle-nevado",
+};
 
 export const landscapeLabel = (id: Landscape) =>
   landscapes.find((l) => l.id === id)?.label || id;
@@ -887,7 +910,7 @@ export const capsules: CatalogItem[] = seeds.map((s) => ({
   city: s.city,
   lat: Number((s.lat + 0.018).toFixed(4)),
   lng: Number((s.lng - 0.022).toFixed(4)),
-  image: s.capsuleImage,
+  image: landscapeHero[s.landscapes[0]] || s.capsuleImage,
   tagline: s.capsuleTagline,
   description: s.capsuleDescription,
   highlights: s.capsuleHighlights,
@@ -1239,4 +1262,15 @@ export function mapPoints() {
       group: "capsule" as const,
     })),
   ];
+}
+
+export function featuredCapsules() {
+  return landscapes
+    .map((l) => capsules.find((c) => c.placeSlug === landscapePlaceSlug[l.id]))
+    .filter((c): c is CatalogItem => Boolean(c));
+}
+
+export function destinationsByLandscape(id: Landscape | "all") {
+  if (id === "all") return destinations;
+  return destinations.filter((d) => d.landscapes?.includes(id));
 }

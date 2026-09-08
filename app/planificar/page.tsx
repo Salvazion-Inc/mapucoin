@@ -1,174 +1,34 @@
 "use client";
 
-import ItineraryView, { type TravelPlan } from "@/components/ItineraryView";
-import PlannerForm from "@/components/PlannerForm";
-import { destinations } from "@/lib/catalog";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
-function PlannerInner() {
+function RedirectInner() {
+  const router = useRouter();
   const params = useSearchParams();
-  const [plan, setPlan] = useState<TravelPlan | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [chat, setChat] = useState<string[]>([]);
-  const [draft, setDraft] = useState("");
-  const [streaming, setStreaming] = useState(false);
-
-  const lugar = params.get("lugar") || destinations[0].slug;
-  const presupuesto = params.get("presupuesto") || "800000";
-  const noches = params.get("noches") || "4";
-  const viajeros = params.get("viajeros") || "2";
-  const intereses = params.get("intereses") || "naturaleza,gastronomia";
 
   useEffect(() => {
-    if (!params.get("lugar")) return;
-    let cancelled = false;
-    setLoading(true);
-    setError("");
-    fetch("/api/plan", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        lugar,
-        presupuesto,
-        noches,
-        viajeros,
-        intereses,
-      }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (cancelled) return;
-        if (data.plan) {
-          setPlan(data.plan);
-        } else setError("No se pudo armar el itinerario.");
-      })
-      .catch(() => {
-        if (!cancelled) setError("Error de red al armar el itinerario.");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [lugar, presupuesto, noches, viajeros, intereses, params]);
-
-  async function sendChat(e: React.FormEvent) {
-    e.preventDefault();
-    const text = draft.trim();
-    if (!text) return;
-    setDraft("");
-    const history = [...chat, `Tú: ${text}`];
-    setChat(history);
-    setStreaming(true);
-    const messages = history.map((line) => {
-      const user = line.startsWith("Tú: ");
-      return {
-        role: user ? "user" : "assistant",
-        content: user ? line.slice(4) : line.replace(/^Mapucoin: /, ""),
-      };
-    });
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages }),
-    });
-    if (!res.ok || !res.body) {
-      setChat((c) => [...c, "Mapucoin: no pude responder ahora."]);
-      setStreaming(false);
-      return;
-    }
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let acc = "";
-    setChat((c) => [...c, "Mapucoin: "]);
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      acc += decoder.decode(value, { stream: true });
-      const snapshot = acc;
-      setChat((c) => {
-        const next = [...c];
-        next[next.length - 1] = `Mapucoin: ${snapshot}`;
-        return next;
-      });
-    }
-    setStreaming(false);
-  }
+    const q = params.toString();
+    router.replace(q ? `/?${q}#planificar` : "/#planificar");
+  }, [params, router]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-14">
-      <p className="kicker text-gold">Planificador</p>
-      <h1 className="font-display mt-3 text-4xl text-sand md:text-5xl">
-        Tu viaje, a tu presupuesto
-      </h1>
-      <p className="mt-3 max-w-2xl text-sand/75">
-        Ajusta presupuesto y destino. Mapucoin arma el itinerario con cápsulas,
-        mesa y actividades del territorio.
-      </p>
-
-      <div className="mt-10 grid gap-10 lg:grid-cols-[340px_1fr]">
-        <div className="space-y-6">
-          <PlannerForm compact />
-          <div className="rounded-3xl border border-gold/20 bg-black p-5">
-            <p className="text-sm font-medium text-sand">Preguntar</p>
-            <div className="mt-3 max-h-56 space-y-2 overflow-y-auto text-sm text-sand/80">
-              {chat.length === 0 && (
-                <p className="text-sand/45">
-                  Ej: ¿conviene más Pucón o Puerto Varas con 600 mil?
-                </p>
-              )}
-              {chat.map((line, i) => (
-                <p key={i}>{line}</p>
-              ))}
-            </div>
-            <form onSubmit={sendChat} className="mt-3 flex gap-2">
-              <input
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                placeholder="Escribe tu consulta…"
-                className="flex-1 rounded-xl border border-gold/25 bg-black px-3 py-2 text-sm"
-              />
-              <button
-                disabled={streaming}
-                className="rounded-xl bg-gold px-3 py-2 text-sm text-black"
-              >
-                Enviar
-              </button>
-            </form>
-          </div>
-        </div>
-        <div>
-          {loading && (
-            <p className="rounded-3xl border border-gold/20 bg-black p-10 text-sand/70">
-              Armando el itinerario con tu presupuesto…
-            </p>
-          )}
-          {error && <p className="text-gold">{error}</p>}
-          {plan && <ItineraryView plan={plan} />}
-          {!loading && !plan && !params.get("lugar") && (
-            <div className="rounded-3xl border border-dashed border-gold/25 p-10 text-sand/70">
-              Completa el formulario para generar el itinerario.
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    <p className="mx-auto max-w-7xl px-4 py-20 text-sand/70">
+      Llevándote al planificador…
+    </p>
   );
 }
 
-export default function PlanificarPage() {
+export default function PlanificarRedirect() {
   return (
     <Suspense
       fallback={
-        <div className="mx-auto max-w-7xl px-4 py-20 text-sand/70">
-          Cargando planificador…
-        </div>
+        <p className="mx-auto max-w-7xl px-4 py-20 text-sand/70">
+          Llevándote al planificador…
+        </p>
       }
     >
-      <PlannerInner />
+      <RedirectInner />
     </Suspense>
   );
 }

@@ -5,13 +5,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://mapucoin.com";
   const staticPages = [
     "",
-    "/planificar",
-    "/mapa",
-    "/destinos",
-    "/capsulas",
-    "/gastronomia",
-    "/actividades",
-    "/partners",
     "/reserva",
     "/terminos",
     "/privacidad",

@@ -45,7 +45,7 @@ export async function POST(req: Request) {
           role: "system",
           content: `Eres el concierge de Mapucoin (mapucoin.com), plataforma turística de Chile.
 Ayudas a elegir destino, presupuesto, cápsula tecnológica, gastronomía y actividades.
-Pagos con Stripe. Partners se inscriben en /partners. Habla español de Chile, breve y concreto.
+Pagos con Stripe. Partners se inscriben en /#partners. Habla español de Chile, breve y concreto.
 Catálogo:
 ${catalog}`,
         },

@@ -47,7 +47,7 @@ export default async function CapsulaPage({ params }: Props) {
           </ul>
           <div className="relative mt-8 h-64 overflow-hidden rounded-3xl">
             <Image
-              src="/images/capsula-interior.jpg"
+              src="/images/capsulas/08.jpg"
               alt="Interior de cobre, madera y vidrio"
               fill
               className="object-cover"

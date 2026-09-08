@@ -46,7 +46,7 @@ function ReservaInner() {
   }
 
   return (
-    <div className="mx-auto grid max-w-5xl gap-10 px-4 py-12 lg:grid-cols-2">
+    <div className="page-pad mx-auto grid max-w-5xl gap-10 px-4 pb-16 lg:grid-cols-2">
       <div>
         <p className="kicker text-gold">Reserva</p>
         <h1 className="font-display mt-3 text-4xl text-sand">

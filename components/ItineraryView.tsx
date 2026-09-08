@@ -37,8 +37,8 @@ export type TravelPlan = {
 const typeHref = (item: PlanItem) => {
   if (!item.slug) return null;
   if (item.type === "stay") return `/capsulas/${item.slug}`;
-  if (item.type === "food") return `/gastronomia#${item.slug}`;
-  if (item.type === "activity") return `/actividades#${item.slug}`;
+  if (item.type === "food") return `/#${item.slug}`;
+  if (item.type === "activity") return `/#actividades`;
   return `/destinos/${item.slug}`;
 };
 
@@ -146,7 +146,7 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
           </Link>
         )}
         <Link
-          href="/mapa"
+          href="/#mapa"
           className="rounded-full border border-gold/35 px-6 py-3 text-gold"
         >
           Ver en el mapa

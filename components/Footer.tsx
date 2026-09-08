@@ -18,10 +18,12 @@ function XLogo({ className }: { className?: string }) {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gold/25 bg-black">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-8 text-[11px] text-sand/50 sm:flex-row">
+    <footer className="border-t border-gold/20 bg-night">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-[11px] text-sand/50 sm:flex-row">
         <p>
-          All Rights Reserved for Salvazion Inc. {new Date().getFullYear()}.
+          <a href="https://salvazion.org" className="hover:text-gold">
+            All Rights Reserved for Salvazion Inc. {new Date().getFullYear()}.
+          </a>
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link href="/terminos" className="hover:text-gold">
@@ -31,7 +33,7 @@ export default function Footer() {
             href={X_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/30 text-sand transition hover:border-gold hover:text-gold"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-sand transition hover:border-gold hover:text-gold"
             aria-label="@MAPUCOIN on X"
             title="@MAPUCOIN"
           >

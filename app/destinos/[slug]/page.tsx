@@ -112,7 +112,7 @@ export default async function DestinoPage({ params }: Props) {
             {formatCLP(d.priceFromCLP)}
           </p>
           <Link
-            href={`/planificar?lugar=${d.slug}&presupuesto=800000&noches=4&viajeros=2&intereses=naturaleza,gastronomia`}
+            href={`/?lugar=${d.slug}&presupuesto=800000&noches=4&viajeros=2&intereses=naturaleza,gastronomia#planificar`}
             className="mt-7 block rounded-full bg-gold py-3.5 text-center text-black transition hover:bg-[#e3c25a]"
           >
             Planificar este destino

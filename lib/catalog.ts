@@ -1792,7 +1792,13 @@ export function planCatalog(placeSlug: string) {
       (a) => land && (a.cluster ?? a.landscapes?.[0]) === land,
     ),
   ]);
-  return { place, stay, food, acts, land };
+  const table =
+    food.length > 0
+      ? food
+      : gastronomy.filter((g) =>
+          ["empanadas-de-pino", "sopaipillas", "cazuela"].includes(g.slug),
+        );
+  return { place, stay, food: table, acts, land };
 }
 
 export function mapPoints() {

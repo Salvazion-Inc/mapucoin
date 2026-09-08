@@ -146,17 +146,18 @@ export default function HomePage() {
               La mesa del territorio
             </h2>
             <p className="mt-4 max-w-2xl text-sand/70">
-              Curanto, fogón mapuche, mariscal porteño, pisco del Elqui y
-              cordero al palo. Con partners, no restaurantes genéricos.
+              Curanto, empanadas de pino, pastel de choclo, caldillo de congrio,
+              mote con huesillos y la mesa de cada territorio. Con partners
+              locales.
             </p>
-            <div className="mt-10 space-y-8">
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
               {gastronomy.map((g) => (
                 <article
                   key={g.slug}
                   id={g.slug}
-                  className="mapu-card grid scroll-mt-28 overflow-hidden md:grid-cols-2"
+                  className="mapu-card scroll-mt-28 overflow-hidden"
                 >
-                  <div className="relative min-h-72">
+                  <div className="relative h-56">
                     <Image
                       src={g.image}
                       alt={g.name}
@@ -165,13 +166,15 @@ export default function HomePage() {
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
-                  <div className="flex flex-col justify-center p-8 md:p-10">
+                  <div className="p-6">
                     <p className="kicker">{g.city}</p>
-                    <h3 className="font-display mt-2 text-3xl text-sand">
+                    <h3 className="font-display mt-2 text-2xl text-sand">
                       {g.name}
                     </h3>
-                    <p className="mt-4 text-sand/75">{g.description}</p>
-                    <p className="mt-5 font-semibold text-gold">
+                    <p className="mt-3 text-sm leading-relaxed text-sand/75">
+                      {g.description}
+                    </p>
+                    <p className="mt-4 text-sm font-semibold text-gold">
                       {formatCLP(g.priceFromCLP)} · {g.durationHours} h
                     </p>
                   </div>

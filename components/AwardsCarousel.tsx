@@ -14,36 +14,97 @@ const ORG_MARK: Record<AwardOrg, string> = {
   ALMA: "ALMA",
 };
 
+function WheatEar() {
+  return (
+    <g>
+      <path
+        d="M0 11 C0 4 0 -10 0 -18"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.55"
+      />
+      {Array.from({ length: 8 }, (_, i) => {
+        const y = 7 - i * 3.05;
+        const s = 1 - i * 0.07;
+        return (
+          <g key={i}>
+            <ellipse
+              cx={-2.15}
+              cy={y}
+              rx={1.45 * s}
+              ry={2.35 * s}
+              transform={`rotate(-32 ${-2.15} ${y})`}
+              fill="currentColor"
+            />
+            <ellipse
+              cx={2.15}
+              cy={y}
+              rx={1.45 * s}
+              ry={2.35 * s}
+              transform={`rotate(32 ${2.15} ${y})`}
+              fill="currentColor"
+            />
+          </g>
+        );
+      })}
+      <ellipse cx="0" cy="-18.6" rx="1.05" ry="1.7" fill="currentColor" />
+    </g>
+  );
+}
+
+function wheatArc(startDeg: number, stepDeg: number, count: number) {
+  const cx = 60;
+  const cy = 60;
+  const r = 49;
+  return Array.from({ length: count }, (_, i) => {
+    const deg = startDeg + i * stepDeg;
+    const rad = (deg * Math.PI) / 180;
+    return {
+      x: cx + r * Math.cos(rad),
+      y: cy + r * Math.sin(rad),
+      rot: deg + 90,
+    };
+  });
+}
+
 function Seal({ org }: { org: AwardOrg }) {
+  const left = wheatArc(112, 14.2, 11);
+  const right = wheatArc(68, -14.2, 11);
   return (
     <div className="award-seal" aria-hidden>
-      <svg viewBox="0 0 88 88" className="h-20 w-20 md:h-24 md:w-24">
+      <svg viewBox="0 0 120 120" className="h-28 w-28 md:h-32 md:w-32">
+        {left.map((e, i) => (
+          <g key={`l${i}`} transform={`translate(${e.x} ${e.y}) rotate(${e.rot})`}>
+            <WheatEar />
+          </g>
+        ))}
+        {right.map((e, i) => (
+          <g key={`r${i}`} transform={`translate(${e.x} ${e.y}) rotate(${e.rot})`}>
+            <WheatEar />
+          </g>
+        ))}
         <circle
-          cx="44"
-          cy="44"
-          r="40"
+          cx="60"
+          cy="60"
+          r="27"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.2"
+          strokeWidth="1.15"
         />
         <circle
-          cx="44"
-          cy="44"
-          r="33"
+          cx="60"
+          cy="60"
+          r="22.5"
           fill="none"
           stroke="currentColor"
-          strokeWidth="0.6"
-          strokeDasharray="2 3"
-        />
-        <path
-          d="M44 16 L47 28 L44 26 L41 28 Z M72 44 L60 47 L62 44 L60 41 Z M44 72 L41 60 L44 62 L47 60 Z M16 44 L28 41 L26 44 L28 47 Z"
-          fill="currentColor"
+          strokeWidth="0.5"
+          strokeDasharray="1.6 2.4"
         />
         <text
-          x="44"
-          y="48"
+          x="60"
+          y="64"
           textAnchor="middle"
-          fontSize={ORG_MARK[org].length > 3 ? 10 : 13}
+          fontSize={ORG_MARK[org].length > 3 ? 9 : 12}
           fontWeight="700"
           letterSpacing="0.08em"
           fill="currentColor"

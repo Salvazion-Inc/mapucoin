@@ -63,12 +63,21 @@ const es = {
   plan: {
     kicker: "Planificar",
     title: "Tu viaje, a tu presupuesto",
-    lead: "Indica cuánto quieres gastar y el lugar. Mapucoin arma noches en cápsula, mesa y actividades.",
+    lead: "Elige el paisaje, el presupuesto en CLP y Mapucoin arma noches en cápsula, mesa y actividades de ese territorio.",
     formKicker: "Planificador",
     formTitle: "¿Cuánto y a dónde?",
     formLead:
-      "Indica presupuesto en pesos chilenos y el territorio. Mapucoin arma cápsula, mesa y actividades.",
+      "Elige el paisaje y el presupuesto en pesos chilenos. Mapucoin arma cápsula, mesa y actividades de ese territorio.",
+    landscape: "Paisaje",
     place: "Lugar a conocer",
+    previewTitle: "En este territorio",
+    previewLead:
+      "Cápsula, mesa y lo que se hace en el paisaje. Arma el viaje para ver el itinerario día a día.",
+    previewStay: "Dormir",
+    previewTable: "Mesa",
+    previewActs: "Hacer",
+    more: "+{n}",
+    loadingHint: "Cápsula, mesa y actividades según tu presupuesto.",
     budget: "Presupuesto total · {price}",
     budgetMin: "250 mil",
     budgetMax: "3,5 millones",
@@ -86,7 +95,8 @@ const es = {
     loadPlanner: "Cargando planificador…",
     errorPlan: "No se pudo armar el itinerario.",
     errorNet: "Error de red al armar el itinerario.",
-    empty: "Completa el formulario para generar el itinerario.",
+    empty:
+      "Elige un paisaje y arma el viaje. El itinerario aparece aquí, con cápsula, mesa y actividades.",
     chatFail: "no pude responder ahora.",
   },
   itinerary: {
@@ -99,6 +109,9 @@ const es = {
     table: "Mesa",
     acts: "Actividades",
     day: "Día {n}",
+    included: "incluido",
+    bookStay: "Reservar cápsula",
+    seeMap: "Ver en el mapa",
   },
   partners: {
     kicker: "Partners",
@@ -309,12 +322,21 @@ const en: typeof es = {
   plan: {
     kicker: "Plan",
     title: "Your trip, at your budget",
-    lead: "Say how much you want to spend and the place. Mapucoin builds capsule nights, table and activities.",
+    lead: "Choose the landscape and a budget in CLP. Mapucoin builds capsule nights, table and activities of that territory.",
     formKicker: "Planner",
     formTitle: "How much and where?",
     formLead:
-      "Set a budget in Chilean pesos and the territory. Mapucoin builds capsule, table and activities.",
+      "Choose the landscape and a budget in Chilean pesos. Mapucoin builds capsule, table and activities of that territory.",
+    landscape: "Landscape",
     place: "Place to visit",
+    previewTitle: "In this territory",
+    previewLead:
+      "Capsule, table and what you do in the landscape. Build the trip to see the day-by-day itinerary.",
+    previewStay: "Stay",
+    previewTable: "Table",
+    previewActs: "Do",
+    more: "+{n}",
+    loadingHint: "Capsule, table and activities for your budget.",
     budget: "Total budget · {price}",
     budgetMin: "250 thousand",
     budgetMax: "3.5 million",
@@ -332,7 +354,8 @@ const en: typeof es = {
     loadPlanner: "Loading planner…",
     errorPlan: "Could not build the itinerary.",
     errorNet: "Network error while building the itinerary.",
-    empty: "Fill in the form to generate the itinerary.",
+    empty:
+      "Choose a landscape and build the trip. The itinerary appears here, with capsule, table and activities.",
     chatFail: "I could not reply right now.",
   },
   itinerary: {
@@ -345,6 +368,9 @@ const en: typeof es = {
     table: "Table",
     acts: "Activities",
     day: "Day {n}",
+    included: "included",
+    bookStay: "Book capsule",
+    seeMap: "See on the map",
   },
   partners: {
     kicker: "Partners",
@@ -555,12 +581,21 @@ const pt: typeof es = {
   plan: {
     kicker: "Planejar",
     title: "Sua viagem, no seu orçamento",
-    lead: "Diga quanto quer gastar e o lugar. A Mapucoin arma noites em cápsula, mesa e atividades.",
+    lead: "Escolha a paisagem e o orçamento em CLP. A Mapucoin arma noites em cápsula, mesa e atividades desse território.",
     formKicker: "Planejador",
     formTitle: "Quanto e para onde?",
     formLead:
-      "Indique o orçamento em pesos chilenos e o território. A Mapucoin arma cápsula, mesa e atividades.",
+      "Escolha a paisagem e o orçamento em pesos chilenos. A Mapucoin arma cápsula, mesa e atividades desse território.",
+    landscape: "Paisagem",
     place: "Lugar a conhecer",
+    previewTitle: "Neste território",
+    previewLead:
+      "Cápsula, mesa e o que se faz na paisagem. Arme a viagem para ver o itinerário dia a dia.",
+    previewStay: "Dormir",
+    previewTable: "Mesa",
+    previewActs: "Fazer",
+    more: "+{n}",
+    loadingHint: "Cápsula, mesa e atividades segundo o seu orçamento.",
     budget: "Orçamento total · {price}",
     budgetMin: "250 mil",
     budgetMax: "3,5 milhões",
@@ -578,7 +613,8 @@ const pt: typeof es = {
     loadPlanner: "Carregando o planejador…",
     errorPlan: "Não foi possível armar o itinerário.",
     errorNet: "Erro de rede ao armar o itinerário.",
-    empty: "Preencha o formulário para gerar o itinerário.",
+    empty:
+      "Escolha uma paisagem e arme a viagem. O itinerário aparece aqui, com cápsula, mesa e atividades.",
     chatFail: "não pude responder agora.",
   },
   itinerary: {
@@ -591,6 +627,9 @@ const pt: typeof es = {
     table: "Mesa",
     acts: "Atividades",
     day: "Dia {n}",
+    included: "incluído",
+    bookStay: "Reservar cápsula",
+    seeMap: "Ver no mapa",
   },
   partners: {
     kicker: "Partners",
@@ -801,12 +840,21 @@ const fr: typeof es = {
   plan: {
     kicker: "Planifier",
     title: "Votre voyage, à votre budget",
-    lead: "Indiquez combien vous voulez dépenser et le lieu. Mapucoin compose nuits en capsule, table et activités.",
+    lead: "Choisissez le paysage et un budget en CLP. Mapucoin compose nuits en capsule, table et activités de ce territoire.",
     formKicker: "Planificateur",
     formTitle: "Combien et où ?",
     formLead:
-      "Indiquez un budget en pesos chiliens et le territoire. Mapucoin compose capsule, table et activités.",
+      "Choisissez le paysage et un budget en pesos chiliens. Mapucoin compose capsule, table et activités de ce territoire.",
+    landscape: "Paysage",
     place: "Lieu à découvrir",
+    previewTitle: "Sur ce territoire",
+    previewLead:
+      "Capsule, table et ce que l'on fait dans le paysage. Composez le voyage pour voir l'itinéraire jour par jour.",
+    previewStay: "Dormir",
+    previewTable: "Table",
+    previewActs: "Faire",
+    more: "+{n}",
+    loadingHint: "Capsule, table et activités selon votre budget.",
     budget: "Budget total · {price}",
     budgetMin: "250 mille",
     budgetMax: "3,5 millions",
@@ -824,7 +872,8 @@ const fr: typeof es = {
     loadPlanner: "Chargement du planificateur…",
     errorPlan: "Impossible de composer l'itinéraire.",
     errorNet: "Erreur réseau lors de la composition de l'itinéraire.",
-    empty: "Remplissez le formulaire pour générer l'itinéraire.",
+    empty:
+      "Choisissez un paysage et composez le voyage. L'itinéraire apparaît ici, avec capsule, table et activités.",
     chatFail: "je n'ai pas pu répondre pour le moment.",
   },
   itinerary: {
@@ -837,6 +886,9 @@ const fr: typeof es = {
     table: "Table",
     acts: "Activités",
     day: "Jour {n}",
+    included: "inclus",
+    bookStay: "Réserver la capsule",
+    seeMap: "Voir sur la carte",
   },
   partners: {
     kicker: "Partenaires",
@@ -1047,12 +1099,21 @@ const it: typeof es = {
   plan: {
     kicker: "Pianifica",
     title: "Il tuo viaggio, al tuo budget",
-    lead: "Indica quanto vuoi spendere e il luogo. Mapucoin compone notti in capsula, tavola e attività.",
+    lead: "Scegli il paesaggio e il budget in CLP. Mapucoin compone notti in capsula, tavola e attività di quel territorio.",
     formKicker: "Pianificatore",
     formTitle: "Quanto e dove?",
     formLead:
-      "Indica il budget in pesos cileni e il territorio. Mapucoin compone capsula, tavola e attività.",
+      "Scegli il paesaggio e il budget in pesos cileni. Mapucoin compone capsula, tavola e attività di quel territorio.",
+    landscape: "Paesaggio",
     place: "Luogo da conoscere",
+    previewTitle: "In questo territorio",
+    previewLead:
+      "Capsula, tavola e ciò che si fa nel paesaggio. Componi il viaggio per vedere l'itinerario giorno per giorno.",
+    previewStay: "Dormire",
+    previewTable: "Tavola",
+    previewActs: "Fare",
+    more: "+{n}",
+    loadingHint: "Capsula, tavola e attività secondo il tuo budget.",
     budget: "Budget totale · {price}",
     budgetMin: "250 mila",
     budgetMax: "3,5 milioni",
@@ -1070,7 +1131,8 @@ const it: typeof es = {
     loadPlanner: "Caricamento del pianificatore…",
     errorPlan: "Impossibile comporre l'itinerario.",
     errorNet: "Errore di rete nella composizione dell'itinerario.",
-    empty: "Compila il modulo per generare l'itinerario.",
+    empty:
+      "Scegli un paesaggio e componi il viaggio. L'itinerario appare qui, con capsula, tavola e attività.",
     chatFail: "non ho potuto rispondere ora.",
   },
   itinerary: {
@@ -1083,6 +1145,9 @@ const it: typeof es = {
     table: "Tavola",
     acts: "Attività",
     day: "Giorno {n}",
+    included: "incluso",
+    bookStay: "Prenota la capsula",
+    seeMap: "Vedi sulla mappa",
   },
   partners: {
     kicker: "Partner",

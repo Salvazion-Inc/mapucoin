@@ -1,8 +1,10 @@
 "use client";
 
-import { formatCLP } from "@/lib/catalog";
+import { formatCLP, getBySlug } from "@/lib/catalog";
+import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import Image from "next/image";
 import Link from "next/link";
 
 export type PlanItem = {
@@ -112,26 +114,56 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
             <ul className="mt-4 space-y-3">
               {day.items.map((item, i) => {
                 const href = typeHref(item);
+                const raw = item.slug ? getBySlug(item.slug) : undefined;
+                const cat = raw ? localizeItem(raw, locale) : undefined;
+                const kind =
+                  item.type === "stay"
+                    ? c.itinerary.stay
+                    : item.type === "food"
+                      ? c.itinerary.table
+                      : item.type === "activity"
+                        ? c.itinerary.acts
+                        : c.kinds.place;
                 return (
                   <li
                     key={`${item.name}-${i}`}
-                    className="flex flex-col gap-1 border-t border-gold/15 pt-3 md:flex-row md:items-baseline md:justify-between"
+                    className="flex gap-3 border-t border-gold/15 pt-3"
                   >
-                    <div>
-                      <p className="font-medium text-sand">
-                        {href ? (
-                          <Link href={href} className="hover:text-gold">
-                            {item.name}
-                          </Link>
-                        ) : (
-                          item.name
-                        )}
+                    {cat?.image && (
+                      <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
+                        <Image
+                          src={cat.image}
+                          alt={cat.name}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1 md:flex md:items-baseline md:justify-between md:gap-4">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.16em] text-gold">
+                          {kind}
+                        </p>
+                        <p className="font-medium text-sand">
+                          {href ? (
+                            <Link href={href} className="hover:text-gold">
+                              {cat?.name || item.name}
+                            </Link>
+                          ) : (
+                            cat?.name || item.name
+                          )}
+                        </p>
+                        <p className="text-sm text-sand/70">
+                          {cat?.tagline || item.note}
+                        </p>
+                      </div>
+                      <p className="mt-1 shrink-0 text-sm text-gold md:mt-0">
+                        {item.costCLP
+                          ? formatCLP(item.costCLP)
+                          : c.itinerary.included}
                       </p>
-                      <p className="text-sm text-sand/70">{item.note}</p>
                     </div>
-                    <p className="text-sm text-gold">
-                      {item.costCLP ? formatCLP(item.costCLP) : "incluido"}
-                    </p>
                   </li>
                 );
               })}
@@ -146,14 +178,14 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
             href={`/reserva?capsula=${stay.slug}&noches=${plan.nights}&viajeros=${plan.guests}`}
             className="rounded-full bg-gold px-6 py-3 text-black hover:bg-[#e3c25a]"
           >
-            Reservar cápsula
+            {c.itinerary.bookStay}
           </Link>
         )}
         <Link
           href="/#mapa"
           className="rounded-full border border-gold/35 px-6 py-3 text-gold"
         >
-          Ver en el mapa
+          {c.itinerary.seeMap}
         </Link>
       </div>
     </div>

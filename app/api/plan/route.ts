@@ -1,23 +1,7 @@
-import {
-  activities,
-  capsules,
-  destinations,
-  gastronomy,
-  getBySlug,
-} from "@/lib/catalog";
+import { destinations, getBySlug, planCatalog } from "@/lib/catalog";
 import { localeMeta, parseLocale } from "@/lib/locale";
 
 export const runtime = "nodejs";
-
-function catalogFor(placeSlug: string) {
-  const place = destinations.find((d) => d.slug === placeSlug);
-  const caps = capsules.filter(
-    (c) => c.placeSlug === placeSlug || !placeSlug,
-  );
-  const food = gastronomy.filter((g) => g.placeSlug === placeSlug);
-  const acts = activities.filter((a) => a.placeSlug === placeSlug);
-  return { place, caps, food, acts };
-}
 
 function fallbackPlan(input: {
   lugar: string;
@@ -26,9 +10,8 @@ function fallbackPlan(input: {
   viajeros: number;
   intereses: string[];
 }) {
-  const { place, caps, food, acts } = catalogFor(input.lugar);
-  const dest = place || destinations[0];
-  const stay = caps[0] || capsules[0];
+  const { place, stay, food, acts } = planCatalog(input.lugar);
+  const dest = place;
   const stayTotal = stay.priceFromCLP * input.noches;
   const meals = food.slice(0, Math.min(3, input.noches));
   const chosenActs = acts.slice(0, Math.max(1, Math.min(3, input.noches)));
@@ -118,11 +101,15 @@ export async function POST(req: Request) {
     .filter(Boolean);
   const language = localeMeta[parseLocale(body.locale)].replyLanguage;
 
-  const { place, caps, food, acts } = catalogFor(lugar);
-  const dest = place || getBySlug(lugar) || destinations[0];
+  const packed = planCatalog(lugar);
+  const dest = packed.place || getBySlug(lugar) || destinations[0];
+  const caps = packed.stay ? [packed.stay] : [];
+  const food = packed.food;
+  const acts = packed.acts;
 
   const catalogJson = JSON.stringify({
     destino: dest,
+    paisaje: packed.land,
     capsulas: caps,
     gastronomia: food,
     actividades: acts,
@@ -156,7 +143,7 @@ Responde SOLO JSON válido con esta forma:
   "days": [{"day": number, "title": string, "items": [{"type": "stay"|"food"|"activity"|"place", "name": string, "slug": string, "costCLP": number, "note": string}]}],
   "totals": {"stay": number, "food": number, "activities": number, "total": number, "remaining": number}
 }
-El total no debe superar el presupuesto. Prefiere una cápsula todas las noches. Incluye al menos una experiencia gastronómica y una actividad. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
+El total no debe superar el presupuesto. Prefiere una cápsula todas las noches. Incluye al menos una experiencia gastronómica y una actividad del paisaje. Si el destino tiene pocas fichas, usa gastronomía y actividades del mismo paisaje. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
 
   const user = `Destino: ${dest.name} (${lugar})
 Presupuesto: ${presupuesto} CLP

@@ -933,7 +933,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Castro",
     lat: -42.48,
     lng: -73.76,
-    image: p("curanto.jpg"),
+    image: p("curanto-hoyo.jpg"),
     tagline: "Mariscos, carne y milcao cocidos bajo tierra con nalca.",
     description:
       "Ritual chilote: hoyo, piedras calientes, chapaleles y mariscos del canal. Experiencia con familia local.",
@@ -952,7 +952,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Puerto Natales",
     lat: -51.73,
     lng: -72.5,
-    image: p("asado.jpg"),
+    image: p("asado-patagonico.jpg"),
     tagline: "Cordero magallánico a fuego lento, con calafate.",
     description:
       "Cordero de estancia, chimichurri de merken y vino del Maule. Cena a la luz del atardecer austral.",
@@ -971,7 +971,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Pucón",
     lat: -39.29,
     lng: -71.94,
-    image: p("pucon.jpg"),
+    image: p("cocina-mapuche.jpg"),
     tagline: "Merkén, catuto, yuyo y muday en ruka.",
     description:
       "Almuerzo en ruka con productoras locales. Relato de territorio, hierbas del volcán y pan de trigo candeal.",
@@ -990,7 +990,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Valparaíso",
     lat: -33.036,
     lng: -71.628,
-    image: p("machas.jpg"),
+    image: p("mariscal-puerto.jpg"),
     tagline: "Locos, machas y erizos recién desembarcados.",
     description:
       "Caleta con vista a los cerros. Machas a la parmesana, ceviche de reineta y vino del Casablanca.",
@@ -1009,7 +1009,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Pisco Elqui",
     lat: -30.126,
     lng: -70.495,
-    image: p("pisco.jpg"),
+    image: p("pisco-sour.jpg"),
     tagline: "Destilerías de moscatel y viñas de altura.",
     description:
       "Tres paradas: destilería familiar, viña de altura y pisco sour con limón de pica.",
@@ -1028,7 +1028,7 @@ export const gastronomy: CatalogItem[] = [
     city: "Santiago",
     lat: -33.437,
     lng: -70.651,
-    image: p("mercado.jpg"),
+    image: p("paila-marina.jpg"),
     tagline: "Paila marina, empanadas de horno y bar de vinos.",
     description:
       "Recorrido entre pescaderías, pastel de choclo y un cierre en Lastarria con carmenère.",
@@ -1760,6 +1760,39 @@ export function itemsForPlace(placeSlug: string) {
 export function capsulesForPlace(placeSlug: string) {
   const resolved = destinationAliases[placeSlug] || placeSlug;
   return capsules.filter((c) => c.placeSlug === resolved);
+}
+
+export function planCatalog(placeSlug: string) {
+  const resolved = destinationAliases[placeSlug] || placeSlug;
+  const place =
+    destinations.find((d) => d.slug === resolved) ||
+    destinations.find((d) => d.slug === "san-pedro-de-atacama") ||
+    destinations[0];
+  const land = place.landscapes?.[0];
+  const featured = land ? landscapePlaceSlug[land] : place.slug;
+  const stay =
+    capsules.find((c) => c.placeSlug === place.slug) ||
+    capsules.find((c) => c.placeSlug === featured) ||
+    capsules[0];
+  const seen = new Set<string>();
+  const uniq = (items: CatalogItem[]) =>
+    items.filter((i) => {
+      if (seen.has(i.slug)) return false;
+      seen.add(i.slug);
+      return true;
+    });
+  const food = uniq([
+    ...gastronomy.filter((g) => g.placeSlug === place.slug),
+    ...gastronomy.filter((g) => land && g.landscapes?.includes(land)),
+  ]);
+  seen.clear();
+  const acts = uniq([
+    ...activities.filter((a) => a.placeSlug === place.slug),
+    ...activities.filter(
+      (a) => land && (a.cluster ?? a.landscapes?.[0]) === land,
+    ),
+  ]);
+  return { place, stay, food, acts, land };
 }
 
 export function mapPoints() {

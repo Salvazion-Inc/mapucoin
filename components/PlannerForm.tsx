@@ -1,25 +1,62 @@
 "use client";
 
-import { destinations, formatCLP, interests, landscapes } from "@/lib/catalog";
+import {
+  destinations,
+  formatCLP,
+  interests,
+  landscapePlaceSlug,
+  landscapes,
+  planCatalog,
+  type Landscape,
+} from "@/lib/catalog";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
 import { useRouter } from "next/navigation";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
-export default function PlannerForm({ compact = false }: { compact?: boolean }) {
+export default function PlannerForm({
+  compact = false,
+  initialPlace = "san-pedro-de-atacama",
+  onPlaceChange,
+}: {
+  compact?: boolean;
+  initialPlace?: string;
+  onPlaceChange?: (slug: string) => void;
+}) {
   const { locale } = useLocale();
   const c = t(locale);
   const router = useRouter();
-  const [place, setPlace] = useState(destinations[0].slug);
+  const seed = destinations.find((d) => d.slug === initialPlace) || destinations[0];
+  const [land, setLand] = useState<Landscape>(seed.landscapes?.[0] || "desierto");
+  const [place, setPlace] = useState(seed.slug);
   const [budget, setBudget] = useState(800000);
   const [nights, setNights] = useState(4);
   const [guests, setGuests] = useState(2);
   const [picked, setPicked] = useState<string[]>(["naturaleza", "gastronomia"]);
 
-  const dest = useMemo(
-    () => destinations.find((d) => d.slug === place),
-    [place],
+  const dests = useMemo(
+    () => destinations.filter((d) => d.landscapes?.includes(land)),
+    [land],
   );
+  const dest = useMemo(
+    () => destinations.find((d) => d.slug === place) || dests[0],
+    [place, dests],
+  );
+  const preview = planCatalog(place);
+
+  useEffect(() => {
+    onPlaceChange?.(place);
+  }, [place, onPlaceChange]);
+
+  function pickLandscape(id: Landscape) {
+    setLand(id);
+    const featured = landscapePlaceSlug[id];
+    const next =
+      destinations.find((d) => d.slug === featured) ||
+      destinations.find((d) => d.landscapes?.[0] === id) ||
+      destinations[0];
+    setPlace(next.slug);
+  }
 
   function toggle(id: string) {
     setPicked((prev) =>
@@ -57,28 +94,65 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
       </h2>
       <p className="mt-1 text-sm text-sand/70">{c.plan.formLead}</p>
 
-      <label className="mt-6 block text-sm font-medium text-sand">
+      <p className="mt-6 text-sm font-medium text-sand">{c.plan.landscape}</p>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {landscapes.map((ls) => (
+          <button
+            key={ls.id}
+            type="button"
+            onClick={() => pickLandscape(ls.id)}
+            className={`rounded-full px-3 py-1 text-xs ${
+              land === ls.id
+                ? "bg-gold text-night"
+                : "border border-gold/30 text-sand hover:border-gold"
+            }`}
+          >
+            {c.landscapes[ls.id]}
+          </button>
+        ))}
+      </div>
+
+      <label className="mt-4 block text-sm font-medium text-sand">
         {c.plan.place}
         <select
           className="mt-1 w-full rounded-xl border border-gold/25 bg-black px-3 py-2.5"
           value={place}
-          onChange={(e) => setPlace(e.target.value)}
+          onChange={(e) => {
+            const slug = e.target.value;
+            setPlace(slug);
+            const d = destinations.find((x) => x.slug === slug);
+            if (d?.landscapes?.[0]) setLand(d.landscapes[0]);
+          }}
         >
-          {landscapes.map((ls) => {
-            const group = destinations.filter((d) => d.landscapes?.[0] === ls.id);
-            if (!group.length) return null;
-            return (
-              <optgroup key={ls.id} label={c.landscapes[ls.id]}>
-                {group.map((d) => (
-                  <option key={d.slug} value={d.slug}>
-                    {d.name}
-                  </option>
-                ))}
-              </optgroup>
-            );
-          })}
+          {dests.map((d) => (
+            <option key={d.slug} value={d.slug}>
+              {d.name}
+            </option>
+          ))}
         </select>
       </label>
+
+      {preview.stay && (
+        <div className="mt-4 overflow-hidden rounded-2xl border border-gold/20">
+          <div className="relative h-28">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={preview.stay.image}
+              alt={preview.stay.name}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-night/90 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-3 text-sand">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-gold">
+                {c.capsules.kicker}
+              </p>
+              <p className="font-display text-sm leading-tight">
+                {preview.stay.name}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <label className="mt-4 block text-sm font-medium text-sand">
         {tr(c.plan.budget, { price: formatCLP(budget) })}

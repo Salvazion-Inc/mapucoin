@@ -7,7 +7,11 @@ const ORG_MARK: Record<AwardOrg, string> = {
   "World Travel Awards": "WTA",
   "Forbes Travel Awards": "FTA",
   "Tripadvisor Travelers' Choice Awards": "TC",
+  "The World's 50 Best Vineyards": "50B",
+  TIME: "TIME",
   UNESCO: "UN",
+  "DarkSky International": "SKY",
+  ALMA: "ALMA",
 };
 
 function Seal({ org }: { org: AwardOrg }) {
@@ -39,9 +43,9 @@ function Seal({ org }: { org: AwardOrg }) {
           x="44"
           y="48"
           textAnchor="middle"
-          fontSize="13"
+          fontSize={ORG_MARK[org].length > 3 ? 10 : 13}
           fontWeight="700"
-          letterSpacing="0.12em"
+          letterSpacing="0.08em"
           fill="currentColor"
         >
           {ORG_MARK[org]}
@@ -108,11 +112,15 @@ export default function AwardsCarousel() {
             {award.place}
           </p>
         )}
-        <p className="mt-5 font-display text-xl text-gold md:text-2xl">
-          {award.years}
-        </p>
+        {award.years && (
+          <p className="mt-5 font-display text-xl text-gold md:text-2xl">
+            {award.years}
+          </p>
+        )}
         {award.note && (
-          <p className="mt-2 text-sm text-sand/65">{award.note}</p>
+          <p className={`text-sm text-sand/65 ${award.years ? "mt-2" : "mt-5"}`}>
+            {award.note}
+          </p>
         )}
         <p className="mt-8 text-[11px] tracking-[0.22em] uppercase text-sand/40">
           {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
@@ -175,7 +183,9 @@ function SideCard({
       <p className="mt-3 font-display text-lg leading-snug text-sand/80">
         {award.title}
       </p>
-      <p className="mt-2 text-sm text-gold/80">{award.years}</p>
+      {award.years && (
+        <p className="mt-2 text-sm text-gold/80">{award.years}</p>
+      )}
     </button>
   );
 }

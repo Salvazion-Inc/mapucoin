@@ -245,8 +245,9 @@ export default function HomePage() {
               Premios y reconocimientos internacionales
             </h2>
             <p className="mt-4 max-w-2xl text-sand/70">
-              Chile, Atacama, Santiago y Torres del Paine, distinguidos por
-              World Travel Awards, Forbes, Tripadvisor y UNESCO.
+              Chile, Atacama, Santiago, Rapa Nui y Torres del Paine,
+              distinguidos por World Travel Awards, TIME, Forbes, Tripadvisor y
+              UNESCO.
             </p>
             <div className="mt-12 pb-10">
               <AwardsCarousel />

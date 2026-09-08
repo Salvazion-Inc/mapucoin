@@ -2,12 +2,16 @@ export type AwardOrg =
   | "World Travel Awards"
   | "Forbes Travel Awards"
   | "Tripadvisor Travelers' Choice Awards"
-  | "UNESCO";
+  | "The World's 50 Best Vineyards"
+  | "TIME"
+  | "UNESCO"
+  | "DarkSky International"
+  | "ALMA";
 
 export type Award = {
   title: string;
   place?: string;
-  years: string;
+  years?: string;
   org: AwardOrg;
   note?: string;
 };
@@ -93,5 +97,70 @@ export const awards: Award[] = [
     years: "2025",
     org: "UNESCO",
     note: "Postulación a premio de gobernanza",
+  },
+  {
+    title: "Mejor Viñedo del Mundo",
+    place: "Viña Vik",
+    years: "2025",
+    org: "The World's 50 Best Vineyards",
+  },
+  {
+    title: "World's Greatest Places",
+    years: "2026",
+    org: "TIME",
+    note: "Estancia Mercedes (Magallanes), Pared Sur Camp (Aysén) y Ephedra Restaurant (Antofagasta)",
+  },
+  {
+    title: "Patrimonio de la Humanidad",
+    place: "Parque Nacional Rapa Nui",
+    years: "1995",
+    org: "UNESCO",
+  },
+  {
+    title: "Patrimonio de la Humanidad",
+    place: "Iglesias de Chiloé",
+    years: "2000",
+    org: "UNESCO",
+  },
+  {
+    title: "Patrimonio de la Humanidad",
+    place: "Barrio histórico de Valparaíso",
+    years: "2003",
+    org: "UNESCO",
+  },
+  {
+    title: "Patrimonio de la Humanidad",
+    place: "Oficinas salitreras de Humberstone y Santa Laura",
+    years: "2005",
+    org: "UNESCO",
+  },
+  {
+    title: "Patrimonio de la Humanidad",
+    place: "Ciudad minera de Sewell",
+    years: "2006",
+    org: "UNESCO",
+  },
+  {
+    title: "Patrimonio de la Humanidad",
+    place: "Qhapaq Ñan – Sistema Vial Andino",
+    years: "2014",
+    org: "UNESCO",
+  },
+  {
+    title: "Patrimonio de la Humanidad",
+    place: "Asentamiento y momificación de la cultura Chinchorro",
+    years: "2021",
+    org: "UNESCO",
+  },
+  {
+    title: "Mejor lugar del mundo para observación de estrellas",
+    place: "San Pedro de Atacama",
+    org: "DarkSky International",
+    note: "Astroturismo",
+  },
+  {
+    title: "El radiotelescopio más grande del mundo",
+    place: "San Pedro de Atacama",
+    org: "ALMA",
   },
 ];

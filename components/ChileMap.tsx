@@ -18,9 +18,10 @@ import { useEffect, useMemo, useState } from "react";
 
 type KindFilter = "place" | "capsule" | "all";
 
-function pinHtml(kind: "place" | "capsule") {
-  const color = kind === "capsule" ? "#d4af37" : "#c45c26";
-  return `<div style="width:28px;height:28px;border-radius:999px;background:${color};border:3px solid #f4e8d0;box-shadow:0 4px 12px rgba(44,24,16,.35)"></div>`;
+const PIN_SIZE = 36;
+
+function pinHtml() {
+  return `<div class="map-pin-mark"><img src="/logo-mark.png" alt="Mapucoin" width="${PIN_SIZE}" height="${PIN_SIZE}" /></div>`;
 }
 
 export default function ChileMap({
@@ -73,9 +74,9 @@ export default function ChileMap({
     for (const p of points) {
       const icon = L.divIcon({
         className: "map-pin",
-        html: pinHtml(p.group),
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
+        html: pinHtml(),
+        iconSize: [PIN_SIZE, PIN_SIZE],
+        iconAnchor: [PIN_SIZE / 2, PIN_SIZE / 2],
       });
       const href =
         p.group === "capsule" ? `/capsulas/${p.slug}` : `/destinos/${p.slug}`;
@@ -90,6 +91,7 @@ export default function ChileMap({
             <p style="margin:0;font-size:13px;color:#d4af37">${c.from} ${formatCLP(p.priceFromCLP)}</p>
             <a href="${href}" style="display:inline-block;margin-top:8px;color:#d4af37;font-weight:600">${c.map.viewSheet}</a>
           </div>`,
+          { className: "mapucoin-popup" },
         );
       markers.push(marker);
       if (focusSlug && p.slug === focusSlug) {

@@ -1,3 +1,4 @@
+import AwardsCarousel from "@/components/AwardsCarousel";
 import HeroVideo from "@/components/HeroVideo";
 import MapLoader from "@/components/MapLoader";
 import PartnersForm from "@/components/PartnersForm";
@@ -231,6 +232,25 @@ export default function HomePage() {
               </p>
             </div>
             <PartnersForm />
+          </div>
+        </section>
+
+        <section
+          id="premios"
+          className="scroll-mt-24 border-t border-gold/15 bg-black/40 py-24"
+        >
+          <div className="mx-auto max-w-6xl px-5">
+            <p className="kicker">Premios</p>
+            <h2 className="font-display mt-3 max-w-3xl text-3xl font-bold tracking-tight text-sand md:text-5xl">
+              Premios y reconocimientos internacionales
+            </h2>
+            <p className="mt-4 max-w-2xl text-sand/70">
+              Chile, Atacama, Santiago y Torres del Paine, distinguidos por
+              World Travel Awards, Forbes, Tripadvisor y UNESCO.
+            </p>
+            <div className="mt-12 pb-10">
+              <AwardsCarousel />
+            </div>
           </div>
         </section>
       </main>

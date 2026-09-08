@@ -11,6 +11,7 @@ const links = [
   { href: "/#gastronomia", hash: "gastronomia", label: "Gastronomía" },
   { href: "/#actividades", hash: "actividades", label: "Actividades" },
   { href: "/#partners", hash: "partners", label: "Partners" },
+  { href: "/#premios", hash: "premios", label: "Premios" },
 ];
 
 export default function Header() {
@@ -74,7 +75,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-5 text-[13px] font-semibold text-sand/80 lg:flex">
+        <div className="hidden items-center gap-4 text-[13px] font-semibold text-sand/80 xl:flex">
           {links.map((l) => (
             <Link
               key={l.hash}
@@ -91,7 +92,7 @@ export default function Header() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 xl:hidden">
           <Link href="/#planificar" className="btn-gold !px-3.5 !py-1.5 text-xs">
             Planificar
           </Link>
@@ -111,7 +112,7 @@ export default function Header() {
       </nav>
 
       {open && (
-        <div className="border-t border-gold/20 bg-night px-4 py-4 lg:hidden">
+        <div className="border-t border-gold/20 bg-night px-4 py-4 xl:hidden">
           {links.map((l) => (
             <Link
               key={l.hash}

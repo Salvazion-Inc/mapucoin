@@ -236,13 +236,137 @@ optgroup {
   border: none;
 }
 
+.award-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 1.25rem;
+  min-height: 28rem;
+}
+
+@media (min-width: 1024px) {
+  .award-stage {
+    grid-template-columns: 0.72fr 1.35fr 0.72fr;
+    min-height: 32rem;
+  }
+}
+
+.award-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.75rem 2rem;
+  border-radius: 1.6rem;
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  background:
+    radial-gradient(80% 70% at 50% 0%, rgba(212, 175, 55, 0.16), transparent 58%),
+    linear-gradient(180deg, rgba(20, 14, 8, 0.96), rgba(7, 5, 4, 0.98));
+  box-shadow:
+    0 1px 0 rgba(243, 230, 204, 0.08) inset,
+    0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+.award-seal {
+  margin-top: 1.25rem;
+  color: var(--color-gold);
+  filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.28));
+}
+
+.award-side {
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  padding: 1.5rem 1.25rem;
+  border-radius: 1.35rem;
+  border: 1px solid rgba(212, 175, 55, 0.12);
+  background: rgba(243, 230, 204, 0.03);
+  opacity: 0.55;
+  transition:
+    opacity 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.award-side:hover {
+  opacity: 0.95;
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.award-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-top: -1.3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: rgba(7, 5, 4, 0.72);
+  color: var(--color-gold);
+  font-size: 1.6rem;
+  line-height: 1;
+  backdrop-filter: blur(12px);
+}
+
+.award-nav:hover {
+  background: var(--color-gold);
+  color: var(--color-night);
+}
+
+.award-nav-prev {
+  left: 0.4rem;
+}
+
+.award-nav-next {
+  right: 0.4rem;
+}
+
+@media (min-width: 1024px) {
+  .award-nav-prev {
+    left: 31%;
+  }
+  .award-nav-next {
+    right: 31%;
+  }
+}
+
+.award-dots {
+  position: absolute;
+  right: 0;
+  bottom: -2.2rem;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.award-dots button {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(243, 230, 204, 0.28);
+}
+
+.award-dots button.is-active {
+  width: 1.35rem;
+  background: var(--color-gold);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .btn-gold:hover,
   .btn-ghost:hover,
-  a.mapu-card:hover {
+  a.mapu-card:hover,
+  .award-side:hover {
     transform: none;
   }
 }

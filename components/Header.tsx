@@ -1,24 +1,29 @@
 "use client";
 
 import BrandMark from "@/components/BrandMark";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { t } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const links = [
-  { href: "/#mapa", hash: "mapa", label: "Mapa" },
-  { href: "/#capsulas", hash: "capsulas", label: "Cápsulas" },
-  { href: "/#gastronomia", hash: "gastronomia", label: "Gastronomía" },
-  { href: "/#actividades", hash: "actividades", label: "Actividades" },
-  { href: "/#partners", hash: "partners", label: "Partners" },
-  { href: "/#premios", hash: "premios", label: "Premios" },
-];
-
 export default function Header() {
   const path = usePathname();
+  const { locale } = useLocale();
+  const c = t(locale);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hash, setHash] = useState("home");
+
+  const links = [
+    { href: "/#mapa", hash: "mapa", label: c.nav.map },
+    { href: "/#capsulas", hash: "capsulas", label: c.nav.capsules },
+    { href: "/#gastronomia", hash: "gastronomia", label: c.nav.food },
+    { href: "/#actividades", hash: "actividades", label: c.nav.activities },
+    { href: "/#partners", hash: "partners", label: c.nav.partners },
+    { href: "/#premios", hash: "premios", label: c.nav.awards },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -55,6 +60,8 @@ export default function Header() {
       window.removeEventListener("hashchange", read);
       io.disconnect();
     };
+    // links labels change with locale; hashes are stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
 
   function isActive(link: (typeof links)[number]) {
@@ -87,19 +94,21 @@ export default function Header() {
               {l.label}
             </Link>
           ))}
+          <LanguageSwitcher />
           <Link href="/#planificar" className="btn-gold !px-4 !py-2 text-xs">
-            Planificar
+            {c.nav.plan}
           </Link>
         </div>
 
         <div className="flex items-center gap-2 xl:hidden">
+          <LanguageSwitcher compact />
           <Link href="/#planificar" className="btn-gold !px-3.5 !py-1.5 text-xs">
-            Planificar
+            {c.nav.plan}
           </Link>
           <button
             type="button"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/40"
-            aria-label="Menú"
+            aria-label={c.nav.menu}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >

@@ -3,11 +3,13 @@
 import {
   destinationsByLandscape,
   formatCLP,
-  landscapeLabel,
   landscapes,
   mapPoints,
   type Landscape,
 } from "@/lib/catalog";
+import { localizeItem } from "@/lib/catalog-i18n";
+import { t } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import { mapTiles } from "@/lib/map-tiles";
 import type { LatLngExpression } from "leaflet";
 import L from "leaflet";
@@ -28,6 +30,8 @@ export default function ChileMap({
   focusSlug?: string;
   height?: string;
 }) {
+  const { locale } = useLocale();
+  const c = t(locale);
   const [filter, setFilter] = useState<KindFilter>("place");
   const [land, setLand] = useState<Landscape | "all">("all");
   const points = useMemo(() => {
@@ -75,15 +79,16 @@ export default function ChileMap({
       });
       const href =
         p.group === "capsule" ? `/capsulas/${p.slug}` : `/destinos/${p.slug}`;
+      const shown = localizeItem(p, locale);
       const marker = L.marker([p.lat, p.lng], { icon })
         .addTo(map)
         .bindPopup(
           `<div style="min-width:180px">
-            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#d4af37;margin:0">${p.group === "capsule" ? "Cápsula" : "Destino"}</p>
-            <strong style="font-size:15px;color:#f3e6cc">${p.name}</strong>
-            <p style="margin:6px 0 8px;color:#f3e6cc;font-size:13px;opacity:.8">${p.tagline}</p>
-            <p style="margin:0;font-size:13px;color:#d4af37">desde ${formatCLP(p.priceFromCLP)}</p>
-            <a href="${href}" style="display:inline-block;margin-top:8px;color:#d4af37;font-weight:600">Ver ficha →</a>
+            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#d4af37;margin:0">${p.group === "capsule" ? c.map.capsule : c.map.destination}</p>
+            <strong style="font-size:15px;color:#f3e6cc">${shown.name}</strong>
+            <p style="margin:6px 0 8px;color:#f3e6cc;font-size:13px;opacity:.8">${shown.tagline}</p>
+            <p style="margin:0;font-size:13px;color:#d4af37">${c.from} ${formatCLP(p.priceFromCLP)}</p>
+            <a href="${href}" style="display:inline-block;margin-top:8px;color:#d4af37;font-weight:600">${c.map.viewSheet}</a>
           </div>`,
         );
       markers.push(marker);
@@ -107,7 +112,7 @@ export default function ChileMap({
     return () => {
       map.remove();
     };
-  }, [points, focusSlug]);
+  }, [points, focusSlug, locale, c.from, c.map.capsule, c.map.destination, c.map.viewSheet]);
 
   return (
     <div>
@@ -123,7 +128,7 @@ export default function ChileMap({
                 : "border border-gold/30 text-sand"
             }`}
           >
-            {l.label}
+            {c.landscapes[l.id]}
           </button>
         ))}
         <button
@@ -135,15 +140,15 @@ export default function ChileMap({
               : "border border-gold/30 text-sand"
           }`}
         >
-          Todos
+          {c.map.all}
         </button>
       </div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
         {(
           [
-            ["place", "Lugares"],
-            ["capsule", "Cápsulas"],
-            ["all", "Ambos"],
+            ["place", c.map.places],
+            ["capsule", c.map.capsules],
+            ["all", c.map.both],
           ] as [KindFilter, string][]
         ).map(([id, label]) => (
           <button
@@ -160,8 +165,8 @@ export default function ChileMap({
           </button>
         ))}
         <span className="self-center text-xs text-sand/50">
-          Terracota: destinos · Oro: cápsulas
-          {land !== "all" ? ` · ${landscapeLabel(land)}` : ""}
+          {c.map.legend}
+          {land !== "all" ? ` · ${c.landscapes[land]}` : ""}
           {` · ${points.length}`}
         </span>
       </div>

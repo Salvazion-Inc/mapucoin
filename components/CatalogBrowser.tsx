@@ -6,15 +6,19 @@ import {
   type CatalogItem,
   type Landscape,
 } from "@/lib/catalog";
+import { t } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import { useMemo, useState } from "react";
 
 export default function CatalogBrowser({
   items,
-  empty = "No hay fichas en este paisaje.",
+  empty,
 }: {
   items: CatalogItem[];
   empty?: string;
 }) {
+  const { locale } = useLocale();
+  const c = t(locale);
   const [land, setLand] = useState<Landscape | "all">("all");
   const shown = useMemo(
     () =>
@@ -36,7 +40,7 @@ export default function CatalogBrowser({
               : "border border-gold/30 text-sand hover:border-gold"
           }`}
         >
-          Todos
+          {c.map.all}
         </button>
         {landscapes.map((l) => (
           <button
@@ -49,12 +53,12 @@ export default function CatalogBrowser({
                 : "border border-gold/30 text-sand hover:border-gold"
             }`}
           >
-            {l.label}
+            {c.landscapes[l.id]}
           </button>
         ))}
       </div>
       {shown.length === 0 ? (
-        <p className="mt-10 text-sand/60">{empty}</p>
+        <p className="mt-10 text-sand/60">{empty || c.catalogEmpty}</p>
       ) : (
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {shown.map((item) => (

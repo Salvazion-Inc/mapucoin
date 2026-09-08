@@ -1,20 +1,26 @@
+"use client";
+
 import AwardsCarousel from "@/components/AwardsCarousel";
 import HeroVideo from "@/components/HeroVideo";
 import MapLoader from "@/components/MapLoader";
 import PartnersForm from "@/components/PartnersForm";
 import PlaceCard from "@/components/PlaceCard";
 import PlannerSection from "@/components/PlannerSection";
+import { localizeItem } from "@/lib/catalog-i18n";
 import {
   featuredCapsules,
   formatCLP,
   gastronomy,
   groupedActivities,
-  landscapeLabel,
 } from "@/lib/catalog";
+import { t, tr } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
+  const { locale } = useLocale();
+  const c = t(locale);
   const capsules = featuredCapsules();
   const activityGroups = groupedActivities();
 
@@ -24,7 +30,7 @@ export default function HomePage() {
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-night"
       >
-        Saltar al contenido
+        {c.skip}
       </a>
 
       <main id="main">
@@ -40,18 +46,17 @@ export default function HomePage() {
             id="hero-heading"
             className="hero-title font-display max-w-4xl text-4xl font-bold leading-[1.05] text-sand md:text-6xl lg:text-7xl"
           >
-            Chile, de norte a sur.
+            {c.hero.title}
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-sand/80 md:text-lg">
-            Cápsulas de cobre y vidrio en desiertos, playas, viñedos, volcanes,
-            ríos, lagos, bosques y nieve. Mesa local y presupuesto en CLP.
+            {c.hero.lead}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link href="#mapa" className="btn-gold text-base">
-              Mapa interactivo
+              {c.hero.mapCta}
             </Link>
             <Link href="#planificar" className="btn-ghost text-base">
-              Planificar
+              {c.hero.planCta}
             </Link>
           </div>
         </div>
@@ -59,13 +64,12 @@ export default function HomePage() {
 
         <section id="mapa" className="scroll-mt-24 py-24">
           <div className="mx-auto max-w-6xl px-5">
-            <p className="kicker">Mapa</p>
+            <p className="kicker">{c.map.kicker}</p>
             <h2 className="font-display mt-3 max-w-3xl text-3xl font-bold tracking-tight text-sand md:text-5xl">
-              Chile clasificado por paisaje
+              {c.map.title}
             </h2>
             <p className="mt-4 max-w-2xl text-sand/70">
-              Filtra desiertos, playas, viñedos, volcanes, ríos, lagos, bosques
-              y nieve. Cada pin es un territorio con su cápsula.
+              {c.map.lead}
             </p>
             <div className="mapu-card mt-10 overflow-hidden p-2">
               <MapLoader height="72vh" />
@@ -77,20 +81,18 @@ export default function HomePage() {
           <div className="mx-auto max-w-6xl px-5">
             <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
               <div>
-                <p className="kicker">Cápsulas</p>
+                <p className="kicker">{c.capsules.kicker}</p>
                 <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-sand md:text-5xl">
-                  Ocho paisajes, una casa cápsula
+                  {c.capsules.title}
                 </h2>
                 <p className="mt-5 max-w-xl text-sand/75">
-                  Cobre, vidrio y madera. Off-grid opcional, aislación de −40 °C
-                  a 40 °C. Una cápsula por paisaje, operada por partners
-                  locales.
+                  {c.capsules.lead}
                 </p>
               </div>
               <div className="relative h-64 overflow-hidden rounded-[1.35rem] lg:h-80">
                 <Image
                   src="/images/capsulas/intro.jpg"
-                  alt="Casa cápsula Mapucoin"
+                  alt={c.capsules.alt}
                   fill
                   className="object-cover object-left"
                   sizes="(max-width: 1024px) 100vw, 40vw"
@@ -98,18 +100,18 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {capsules.map((c) => {
-                const land = c.landscapes?.[0];
+              {capsules.map((cap) => {
+                const land = cap.landscapes?.[0];
                 return (
                   <Link
-                    key={c.slug}
-                    href={`/capsulas/${c.slug}`}
+                    key={cap.slug}
+                    href={`/capsulas/${cap.slug}`}
                     className="mapu-card mapu-card-hover group overflow-hidden"
                   >
                     <div className="relative h-56">
                       <Image
-                        src={c.image}
-                        alt={c.name}
+                        src={cap.image}
+                        alt={cap.name}
                         fill
                         className="object-cover transition duration-700 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 25vw"
@@ -117,16 +119,18 @@ export default function HomePage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/20 to-transparent" />
                       {land && (
                         <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[11px] font-semibold tracking-wide text-night">
-                          {landscapeLabel(land)}
+                          {c.landscapes[land]}
                         </span>
                       )}
                       <div className="absolute inset-x-0 bottom-0 p-5 text-sand">
-                        <p className="kicker text-gold/90">{c.city}</p>
+                        <p className="kicker text-gold/90">{cap.city}</p>
                         <h3 className="font-display mt-1 text-xl leading-tight">
-                          {c.name}
+                          {cap.name}
                         </h3>
                         <p className="mt-2 text-sm font-semibold text-gold">
-                          desde {formatCLP(c.priceFromCLP)} / noche
+                          {tr(c.capsules.fromNight, {
+                            price: formatCLP(cap.priceFromCLP),
+                          })}
                         </p>
                       </div>
                     </div>
@@ -142,66 +146,69 @@ export default function HomePage() {
           className="scroll-mt-24 border-t border-gold/15 bg-black/40 py-24"
         >
           <div className="mx-auto max-w-6xl px-5">
-            <p className="kicker">Gastronomía</p>
+            <p className="kicker">{c.food.kicker}</p>
             <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-sand md:text-5xl">
-              La mesa del territorio
+              {c.food.title}
             </h2>
-            <p className="mt-4 max-w-2xl text-sand/70">
-              Curanto, empanadas de pino, pastel de choclo, caldillo de congrio,
-              mote con huesillos y la mesa de cada territorio. Con partners
-              locales.
-            </p>
+            <p className="mt-4 max-w-2xl text-sand/70">{c.food.lead}</p>
             <div className="mt-10 grid gap-6 md:grid-cols-2">
-              {gastronomy.map((g) => (
-                <article
-                  key={g.slug}
-                  id={g.slug}
-                  className="mapu-card scroll-mt-28 overflow-hidden"
-                >
-                  <div className="relative h-56">
-                    <Image
-                      src={g.image}
-                      alt={g.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <p className="kicker">{g.city}</p>
-                    <h3 className="font-display mt-2 text-2xl text-sand">
-                      {g.name}
-                    </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-sand/75">
-                      {g.description}
-                    </p>
-                    <p className="mt-4 text-sm font-semibold text-gold">
-                      {formatCLP(g.priceFromCLP)} · {g.durationHours} h
-                    </p>
-                  </div>
-                </article>
-              ))}
+              {gastronomy.map((g) => {
+                const dish = localizeItem(g, locale);
+                return (
+                  <article
+                    key={dish.slug}
+                    id={dish.slug}
+                    className="mapu-card scroll-mt-28 overflow-hidden"
+                  >
+                    <div className="relative h-56">
+                      <Image
+                        src={dish.image}
+                        alt={dish.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <p className="kicker">{dish.city}</p>
+                      <h3 className="font-display mt-2 text-2xl text-sand">
+                        {dish.name}
+                      </h3>
+                      <p className="mt-3 text-sm leading-relaxed text-sand/75">
+                        {dish.description}
+                      </p>
+                      <p className="mt-4 text-sm font-semibold text-gold">
+                        {tr(c.food.hours, {
+                          price: formatCLP(dish.priceFromCLP),
+                          hours: dish.durationHours || 1,
+                        })}
+                      </p>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
 
         <section id="actividades" className="scroll-mt-24 py-24">
           <div className="mx-auto max-w-6xl px-5">
-            <p className="kicker">Actividades</p>
+            <p className="kicker">{c.activities.kicker}</p>
             <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-sand md:text-5xl">
-              Lo que se hace en el territorio
+              {c.activities.title}
             </h2>
-            <p className="mt-4 max-w-2xl text-sand/70">
-              Clasificadas por paisaje: astronomía y sandboard en el desierto,
-              buceo y surf en la playa, cata en los viñedos, trekking y termas
-              en los volcanes, kayak y rafting en los ríos, barcos en los lagos,
-              tours en el bosque, ski en la nieve.
-            </p>
+            <p className="mt-4 max-w-2xl text-sand/70">{c.activities.lead}</p>
             {activityGroups.map((group) => (
               <div key={group.id} className="mt-14">
-                <p className="kicker">{group.sports}</p>
+                <p className="kicker">
+                  {group.id === "otros"
+                    ? c.activities.otherSports
+                    : c.activitySports[group.id]}
+                </p>
                 <h3 className="font-display mt-2 text-2xl tracking-tight text-sand md:text-3xl">
-                  {group.label}
+                  {group.id === "otros"
+                    ? c.activities.other
+                    : c.landscapes[group.id]}
                 </h3>
                 <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {group.items.map((a) => (
@@ -220,14 +227,11 @@ export default function HomePage() {
           className="scroll-mt-24 border-t border-gold/15 bg-black/40 py-24"
         >
           <div className="mx-auto max-w-6xl px-5">
-            <p className="kicker">Planificar</p>
+            <p className="kicker">{c.plan.kicker}</p>
             <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-sand md:text-5xl">
-              Tu viaje, a tu presupuesto
+              {c.plan.title}
             </h2>
-            <p className="mt-4 max-w-2xl text-sand/70">
-              Indica cuánto quieres gastar y el lugar. Mapucoin arma noches en
-              cápsula, mesa y actividades.
-            </p>
+            <p className="mt-4 max-w-2xl text-sand/70">{c.plan.lead}</p>
             <PlannerSection />
           </div>
         </section>
@@ -235,15 +239,11 @@ export default function HomePage() {
         <section id="partners" className="scroll-mt-24 py-24">
           <div className="mx-auto grid max-w-6xl items-start gap-12 px-5 lg:grid-cols-[1fr_1.1fr]">
             <div>
-              <p className="kicker">Partners</p>
+              <p className="kicker">{c.partners.kicker}</p>
               <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-sand md:text-5xl">
-                Ingresa como partner
+                {c.partners.title}
               </h2>
-              <p className="mt-4 text-sand/75">
-                Operas una cápsula, una ruka, una caleta, un tour o una viña.
-                Mapucoin te muestra en el mapa, entra al itinerario y cobra con
-                Stripe.
-              </p>
+              <p className="mt-4 text-sand/75">{c.partners.lead}</p>
             </div>
             <PartnersForm />
           </div>
@@ -254,15 +254,11 @@ export default function HomePage() {
           className="scroll-mt-24 border-t border-gold/15 bg-black/40 py-24"
         >
           <div className="mx-auto max-w-6xl px-5">
-            <p className="kicker">Premios</p>
+            <p className="kicker">{c.awards.kicker}</p>
             <h2 className="font-display mt-3 max-w-3xl text-3xl font-bold tracking-tight text-sand md:text-5xl">
-              Premios y reconocimientos internacionales
+              {c.awards.title}
             </h2>
-            <p className="mt-4 max-w-2xl text-sand/70">
-              Chile, Atacama, Santiago, Rapa Nui y Torres del Paine,
-              distinguidos por World Travel Awards, TIME, Forbes, Tripadvisor y
-              UNESCO.
-            </p>
+            <p className="mt-4 max-w-2xl text-sand/70">{c.awards.lead}</p>
             <div className="mt-12 pb-10">
               <AwardsCarousel />
             </div>

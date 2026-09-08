@@ -1,8 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Outfit } from "next/font/google";
+import { cookies } from "next/headers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import HashScroll from "@/components/HashScroll";
+import HtmlLang from "@/components/HtmlLang";
+import { LocaleProvider } from "@/lib/locale-context";
+import { LOCALE_COOKIE, languageAlternates, localeMeta, parseLocale } from "@/lib/locale";
 import { SEO } from "@/lib/seo";
 import "./globals.css";
 
@@ -38,6 +42,7 @@ export const metadata: Metadata = {
   publisher: SEO.legalName,
   alternates: {
     canonical: "/",
+    languages: languageAlternates("/"),
     types: {
       "text/plain": [{ url: "/llms.txt", title: "LLM brief" }],
     },
@@ -97,18 +102,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const jar = await cookies();
+  const locale = parseLocale(jar.get(LOCALE_COOKIE)?.value);
   return (
-    <html lang="es" className={`${fraunces.variable} ${outfit.variable}`}>
+    <html
+      lang={localeMeta[locale].htmlLang}
+      className={`${fraunces.variable} ${outfit.variable}`}
+    >
       <body className={`${outfit.className} min-h-screen antialiased`}>
-        <Header />
-        <HashScroll />
-        {children}
-        <Footer />
+        <LocaleProvider initialLocale={locale}>
+          <HtmlLang />
+          <Header />
+          <HashScroll />
+          {children}
+          <Footer />
+        </LocaleProvider>
       </body>
     </html>
   );

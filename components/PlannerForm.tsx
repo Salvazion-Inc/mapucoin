@@ -1,10 +1,14 @@
 "use client";
 
 import { destinations, formatCLP, interests, landscapes } from "@/lib/catalog";
+import { t, tr } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 
 export default function PlannerForm({ compact = false }: { compact?: boolean }) {
+  const { locale } = useLocale();
+  const c = t(locale);
   const router = useRouter();
   const [place, setPlace] = useState(destinations[0].slug);
   const [budget, setBudget] = useState(800000);
@@ -47,17 +51,14 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
         compact ? "p-5" : "p-6 md:p-8"
       }`}
     >
-      <p className="kicker text-gold">Planificador</p>
+      <p className="kicker text-gold">{c.plan.formKicker}</p>
       <h2 className="font-display mt-2 text-2xl text-sand md:text-3xl">
-        ¿Cuánto y a dónde?
+        {c.plan.formTitle}
       </h2>
-      <p className="mt-1 text-sm text-sand/70">
-        Indica presupuesto en pesos chilenos y el territorio. Mapucoin arma
-        cápsula, mesa y actividades.
-      </p>
+      <p className="mt-1 text-sm text-sand/70">{c.plan.formLead}</p>
 
       <label className="mt-6 block text-sm font-medium text-sand">
-        Lugar a conocer
+        {c.plan.place}
         <select
           className="mt-1 w-full rounded-xl border border-gold/25 bg-black px-3 py-2.5"
           value={place}
@@ -67,7 +68,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
             const group = destinations.filter((d) => d.landscapes?.[0] === ls.id);
             if (!group.length) return null;
             return (
-              <optgroup key={ls.id} label={ls.label}>
+              <optgroup key={ls.id} label={c.landscapes[ls.id]}>
                 {group.map((d) => (
                   <option key={d.slug} value={d.slug}>
                     {d.name}
@@ -80,7 +81,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
       </label>
 
       <label className="mt-4 block text-sm font-medium text-sand">
-        Presupuesto total · {formatCLP(budget)}
+        {tr(c.plan.budget, { price: formatCLP(budget) })}
         <input
           type="range"
           min={250000}
@@ -91,14 +92,14 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
           className="mt-2 w-full accent-gold"
         />
         <span className="flex justify-between text-xs text-sand/50">
-          <span>250 mil</span>
-          <span>3,5 millones</span>
+          <span>{c.plan.budgetMin}</span>
+          <span>{c.plan.budgetMax}</span>
         </span>
       </label>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
         <label className="text-sm font-medium text-sand">
-          Noches
+          {c.plan.nights}
           <input
             type="number"
             min={1}
@@ -109,7 +110,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
           />
         </label>
         <label className="text-sm font-medium text-sand">
-          Viajeros
+          {c.plan.guests}
           <input
             type="number"
             min={1}
@@ -122,7 +123,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
       </div>
 
       <div className="mt-4">
-        <p className="text-sm font-medium text-sand">Intereses</p>
+        <p className="text-sm font-medium text-sand">{c.plan.interests}</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {interests.map((i) => (
             <button
@@ -135,7 +136,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
                   : "border border-gold/30 text-sand"
               }`}
             >
-              {i.label}
+              {c.interests[i.id as keyof typeof c.interests]}
             </button>
           ))}
         </div>
@@ -143,8 +144,10 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
 
       {dest && (
         <p className="mt-4 text-xs text-sand/50">
-          Desde {formatCLP(dest.priceFromCLP)} por día de experiencia en{" "}
-          {dest.city}.
+          {tr(c.plan.fromDay, {
+            price: formatCLP(dest.priceFromCLP),
+            city: dest.city,
+          })}
         </p>
       )}
 
@@ -152,7 +155,7 @@ export default function PlannerForm({ compact = false }: { compact?: boolean }) 
         type="submit"
         className="mt-6 w-full rounded-full bg-gold py-3.5 font-medium text-black transition hover:bg-[#e3c25a]"
       >
-        Armar viaje
+        {c.plan.submit}
       </button>
     </form>
   );

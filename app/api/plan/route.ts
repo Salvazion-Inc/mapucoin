@@ -5,6 +5,7 @@ import {
   gastronomy,
   getBySlug,
 } from "@/lib/catalog";
+import { localeMeta, parseLocale } from "@/lib/locale";
 
 export const runtime = "nodejs";
 
@@ -115,6 +116,7 @@ export async function POST(req: Request) {
     .split(",")
     .map((s: string) => s.trim())
     .filter(Boolean);
+  const language = localeMeta[parseLocale(body.locale)].replyLanguage;
 
   const { place, caps, food, acts } = catalogFor(lugar);
   const dest = place || getBySlug(lugar) || destinations[0];
@@ -154,7 +156,7 @@ Responde SOLO JSON válido con esta forma:
   "days": [{"day": number, "title": string, "items": [{"type": "stay"|"food"|"activity"|"place", "name": string, "slug": string, "costCLP": number, "note": string}]}],
   "totals": {"stay": number, "food": number, "activities": number, "total": number, "remaining": number}
 }
-El total no debe superar el presupuesto. Prefiere una cápsula todas las noches. Incluye al menos una experiencia gastronómica y una actividad. Español de Chile, tono cálido y concreto.`;
+El total no debe superar el presupuesto. Prefiere una cápsula todas las noches. Incluye al menos una experiencia gastronómica y una actividad. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
 
   const user = `Destino: ${dest.name} (${lugar})
 Presupuesto: ${presupuesto} CLP

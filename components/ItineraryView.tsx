@@ -1,6 +1,8 @@
 "use client";
 
 import { formatCLP } from "@/lib/catalog";
+import { t, tr } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import Link from "next/link";
 
 export type PlanItem = {
@@ -43,6 +45,8 @@ const typeHref = (item: PlanItem) => {
 };
 
 export default function ItineraryView({ plan }: { plan: TravelPlan }) {
+  const { locale } = useLocale();
+  const c = t(locale);
   const stay = plan.days
     .flatMap((d) => d.items)
     .find((i) => i.type === "stay");
@@ -50,24 +54,24 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
   return (
     <div className="space-y-8">
       <header className="rounded-[1.75rem] bg-night px-6 py-8 text-sand md:px-10">
-        <p className="kicker text-gold">Itinerario</p>
+        <p className="kicker text-gold">{c.itinerary.kicker}</p>
         <h2 className="font-display mt-2 text-3xl md:text-4xl">{plan.title}</h2>
         <p className="mt-3 max-w-2xl text-sand/80">{plan.summary}</p>
         <dl className="mt-6 grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
           <div>
-            <dt className="text-sand/50">Presupuesto</dt>
+            <dt className="text-sand/50">{c.itinerary.budget}</dt>
             <dd>{formatCLP(plan.budgetCLP)}</dd>
           </div>
           <div>
-            <dt className="text-sand/50">Total estimado</dt>
+            <dt className="text-sand/50">{c.itinerary.estimated}</dt>
             <dd>{formatCLP(plan.totals.total)}</dd>
           </div>
           <div>
-            <dt className="text-sand/50">Queda</dt>
+            <dt className="text-sand/50">{c.itinerary.remaining}</dt>
             <dd>{formatCLP(plan.totals.remaining)}</dd>
           </div>
           <div>
-            <dt className="text-sand/50">Noches · viajeros</dt>
+            <dt className="text-sand/50">{c.itinerary.nightsGuests}</dt>
             <dd>
               {plan.nights} · {plan.guests}
             </dd>
@@ -77,9 +81,9 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
 
       <div className="grid gap-3 md:grid-cols-3">
         {[
-          ["Cápsula", plan.totals.stay],
-          ["Mesa", plan.totals.food],
-          ["Actividades", plan.totals.activities],
+          [c.itinerary.stay, plan.totals.stay],
+          [c.itinerary.table, plan.totals.food],
+          [c.itinerary.acts, plan.totals.activities],
         ].map(([label, n]) => (
           <div
             key={String(label)}
@@ -102,7 +106,7 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
             className="rounded-3xl border border-gold/20 bg-black p-6"
           >
             <p className="text-xs uppercase tracking-[0.2em] text-gold">
-              Día {day.day}
+              {tr(c.itinerary.day, { n: day.day })}
             </p>
             <h3 className="font-display text-2xl text-sand">{day.title}</h3>
             <ul className="mt-4 space-y-3">

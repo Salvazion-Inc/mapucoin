@@ -1,5 +1,7 @@
 "use client";
 
+import { t } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import { useRef, useState } from "react";
 
 export default function HeroVideo({
@@ -9,6 +11,8 @@ export default function HeroVideo({
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const { locale } = useLocale();
+  const c = t(locale);
 
   function toggleSound() {
     const v = ref.current;
@@ -39,7 +43,7 @@ export default function HeroVideo({
         onClick={toggleSound}
         className="absolute bottom-6 right-6 z-20 rounded-full border border-gold/40 bg-black/55 px-4 py-2 text-[11px] tracking-[0.18em] uppercase text-sand backdrop-blur-sm transition hover:border-gold hover:text-gold"
       >
-        {muted ? "Sonido" : "Silencio"}
+        {muted ? c.sound : c.mute}
       </button>
     </div>
   );

@@ -1,4 +1,5 @@
 import { capsules, destinations, gastronomy, activities } from "@/lib/catalog";
+import { localeMeta, parseLocale } from "@/lib/locale";
 
 export const runtime = "nodejs";
 
@@ -19,6 +20,9 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json().catch(() => ({}));
+  const language =
+    localeMeta[parseLocale(body.locale)].replyLanguage ||
+    (typeof body.language === "string" ? body.language : "Spanish (Chile)");
   const incoming = Array.isArray(body.messages) ? body.messages : [];
   const messages = incoming
     .filter(
@@ -45,7 +49,7 @@ export async function POST(req: Request) {
           role: "system",
           content: `Eres el concierge de Mapucoin (mapucoin.com), plataforma turística de Chile.
 Ayudas a elegir destino, presupuesto, cápsula tecnológica, gastronomía y actividades.
-Pagos con Stripe. Partners se inscriben en /#partners. Habla español de Chile, breve y concreto.
+Pagos con Stripe. Partners se inscriben en /#partners. Reply in ${language}, brief and concrete. Keep place names in Spanish.
 Catálogo:
 ${catalog}`,
         },

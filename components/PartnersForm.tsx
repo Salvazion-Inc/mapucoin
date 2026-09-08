@@ -1,18 +1,22 @@
 "use client";
 
 import { destinations } from "@/lib/catalog";
+import { t } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import { FormEvent, useState } from "react";
 
-const roles = [
-  { id: "capsula", label: "Cápsula / alojamiento" },
-  { id: "gastronomia", label: "Gastronomía" },
-  { id: "actividad", label: "Actividad / tour" },
-  { id: "guia", label: "Guía" },
-  { id: "transporte", label: "Transporte" },
-  { id: "vina", label: "Viña / destilería" },
-];
+const roleIds = [
+  "capsula",
+  "gastronomia",
+  "actividad",
+  "guia",
+  "transporte",
+  "vina",
+] as const;
 
 export default function PartnersForm() {
+  const { locale } = useLocale();
+  const c = t(locale);
   const [status, setStatus] = useState<"idle" | "ok" | "err" | "loading">(
     "idle",
   );
@@ -32,18 +36,12 @@ export default function PartnersForm() {
     if (!res.ok) {
       setStatus("err");
       setMessage(
-        data.error === "incomplete"
-          ? "Completa nombre, correo y negocio."
-          : "No se pudo enviar. Inténtalo de nuevo.",
+        data.error === "incomplete" ? c.partners.incomplete : c.partners.error,
       );
       return;
     }
     setStatus("ok");
-    setMessage(
-      data.stored
-        ? "Solicitud recibida. Te contactamos para activar tu ficha y Stripe."
-        : "Solicitud recibida. Conecta Supabase para guardar partners en producción.",
-    );
+    setMessage(data.stored ? c.partners.ok : c.partners.okNoDb);
     e.currentTarget.reset();
   }
 
@@ -53,7 +51,7 @@ export default function PartnersForm() {
       className="space-y-4 rounded-[1.75rem] border border-gold/20 bg-black p-6 md:p-8"
     >
       <label className="block text-sm font-medium text-sand">
-        Nombre
+        {c.partners.name}
         <input
           name="full_name"
           required
@@ -61,7 +59,7 @@ export default function PartnersForm() {
         />
       </label>
       <label className="block text-sm font-medium text-sand">
-        Correo
+        {c.partners.email}
         <input
           name="email"
           type="email"
@@ -70,28 +68,28 @@ export default function PartnersForm() {
         />
       </label>
       <label className="block text-sm font-medium text-sand">
-        Teléfono
+        {c.partners.phone}
         <input
           name="phone"
           className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
         />
       </label>
       <label className="block text-sm font-medium text-sand">
-        Tipo de partner
+        {c.partners.role}
         <select
           name="role"
           required
           className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
         >
-          {roles.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.label}
+          {roleIds.map((id) => (
+            <option key={id} value={id}>
+              {c.partnerRoles[id]}
             </option>
           ))}
         </select>
       </label>
       <label className="block text-sm font-medium text-sand">
-        Nombre del negocio
+        {c.partners.business}
         <input
           name="business"
           required
@@ -99,7 +97,7 @@ export default function PartnersForm() {
         />
       </label>
       <label className="block text-sm font-medium text-sand">
-        Ciudad / territorio
+        {c.partners.city}
         <select
           name="city"
           className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
@@ -112,7 +110,7 @@ export default function PartnersForm() {
         </select>
       </label>
       <label className="block text-sm font-medium text-sand">
-        Cuéntanos tu oferta
+        {c.partners.notes}
         <textarea
           name="notes"
           rows={4}
@@ -123,7 +121,7 @@ export default function PartnersForm() {
         disabled={status === "loading"}
         className="w-full rounded-full bg-gold py-3.5 text-black disabled:opacity-60 hover:bg-[#e3c25a]"
       >
-        {status === "loading" ? "Enviando…" : "Postular"}
+        {status === "loading" ? c.partners.sending : c.partners.submit}
       </button>
       {status !== "idle" && status !== "loading" && (
         <p className={status === "ok" ? "text-moss" : "text-clay"}>{message}</p>

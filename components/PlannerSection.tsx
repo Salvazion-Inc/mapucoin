@@ -3,10 +3,15 @@
 import ItineraryView, { type TravelPlan } from "@/components/ItineraryView";
 import PlannerForm from "@/components/PlannerForm";
 import { destinations } from "@/lib/catalog";
+import { t } from "@/lib/copy";
+import { localeMeta } from "@/lib/locale";
+import { useLocale } from "@/lib/locale-context";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
 function PlannerInner() {
+  const { locale } = useLocale();
+  const c = t(locale);
   const params = useSearchParams();
   const [plan, setPlan] = useState<TravelPlan | null>(null);
   const [loading, setLoading] = useState(false);
@@ -35,6 +40,7 @@ function PlannerInner() {
         noches,
         viajeros,
         intereses,
+        locale,
       }),
     })
       .then((r) => r.json())
@@ -42,10 +48,10 @@ function PlannerInner() {
         if (cancelled) return;
         if (data.plan) {
           setPlan(data.plan);
-        } else setError("No se pudo armar el itinerario.");
+        } else setError(c.plan.errorPlan);
       })
       .catch(() => {
-        if (!cancelled) setError("Error de red al armar el itinerario.");
+        if (!cancelled) setError(c.plan.errorNet);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -53,30 +59,35 @@ function PlannerInner() {
     return () => {
       cancelled = true;
     };
-  }, [lugar, presupuesto, noches, viajeros, intereses, params]);
+  }, [lugar, presupuesto, noches, viajeros, intereses, params, locale, c.plan.errorPlan, c.plan.errorNet]);
 
   async function sendChat(e: React.FormEvent) {
     e.preventDefault();
     const text = draft.trim();
     if (!text) return;
     setDraft("");
-    const history = [...chat, `Tú: ${text}`];
+    const you = c.plan.you;
+    const history = [...chat, `${you}: ${text}`];
     setChat(history);
     setStreaming(true);
     const messages = history.map((line) => {
-      const user = line.startsWith("Tú: ");
+      const user = line.startsWith(`${you}: `);
       return {
         role: user ? "user" : "assistant",
-        content: user ? line.slice(4) : line.replace(/^Mapucoin: /, ""),
+        content: user ? line.slice(you.length + 2) : line.replace(/^Mapucoin: /, ""),
       };
     });
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({
+        messages,
+        locale,
+        language: localeMeta[locale].replyLanguage,
+      }),
     });
     if (!res.ok || !res.body) {
-      setChat((c) => [...c, "Mapucoin: no pude responder ahora."]);
+      setChat((rows) => [...rows, `Mapucoin: ${c.plan.chatFail}`]);
       setStreaming(false);
       return;
     }
@@ -103,12 +114,10 @@ function PlannerInner() {
       <div className="space-y-6">
         <PlannerForm compact />
         <div className="rounded-3xl border border-gold/20 bg-black p-5">
-          <p className="text-sm font-medium text-sand">Preguntar</p>
+          <p className="text-sm font-medium text-sand">{c.plan.ask}</p>
           <div className="mt-3 max-h-56 space-y-2 overflow-y-auto text-sm text-sand/80">
             {chat.length === 0 && (
-              <p className="text-sand/45">
-                Ej: ¿conviene más Pucón o Puerto Varas con 600 mil?
-              </p>
+              <p className="text-sand/45">{c.plan.askHint}</p>
             )}
             {chat.map((line, i) => (
               <p key={i}>{line}</p>
@@ -118,14 +127,14 @@ function PlannerInner() {
             <input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="Escribe tu consulta…"
+              placeholder={c.plan.askPlaceholder}
               className="flex-1 rounded-xl border border-gold/25 bg-black px-3 py-2 text-sm"
             />
             <button
               disabled={streaming}
               className="rounded-xl bg-gold px-3 py-2 text-sm text-black"
             >
-              Enviar
+              {c.plan.send}
             </button>
           </form>
         </div>
@@ -133,14 +142,14 @@ function PlannerInner() {
       <div>
         {loading && (
           <p className="rounded-3xl border border-gold/20 bg-black p-10 text-sand/70">
-            Armando el itinerario con tu presupuesto…
+            {c.plan.loadingPlan}
           </p>
         )}
         {error && <p className="text-gold">{error}</p>}
         {plan && <ItineraryView plan={plan} />}
         {!loading && !plan && !params.get("lugar") && (
           <div className="rounded-3xl border border-dashed border-gold/25 p-10 text-sand/70">
-            Completa el formulario para generar el itinerario.
+            {c.plan.empty}
           </div>
         )}
       </div>
@@ -148,15 +157,18 @@ function PlannerInner() {
   );
 }
 
+function PlannerFallback() {
+  const { locale } = useLocale();
+  return (
+    <p className="mt-10 rounded-3xl border border-gold/20 bg-black p-10 text-sand/70">
+      {t(locale).plan.loadPlanner}
+    </p>
+  );
+}
+
 export default function PlannerSection() {
   return (
-    <Suspense
-      fallback={
-        <p className="mt-10 rounded-3xl border border-gold/20 bg-black p-10 text-sand/70">
-          Cargando planificador…
-        </p>
-      }
-    >
+    <Suspense fallback={<PlannerFallback />}>
       <PlannerInner />
     </Suspense>
   );

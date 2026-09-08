@@ -1,3 +1,7 @@
+"use client";
+
+import { t } from "@/lib/copy";
+import { useLocale } from "@/lib/locale-context";
 import Link from "next/link";
 
 const X_URL = "https://x.com/MAPUCOIN";
@@ -17,6 +21,9 @@ function XLogo({ className }: { className?: string }) {
 }
 
 export default function Footer() {
+  const { locale } = useLocale();
+  const c = t(locale);
+
   return (
     <footer className="border-t border-gold/20 bg-night">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-[11px] text-sand/50 sm:flex-row">
@@ -27,7 +34,7 @@ export default function Footer() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link href="/terminos" className="hover:text-gold">
-            Terms
+            {c.footer.terms}
           </Link>
           <a
             href={X_URL}
@@ -40,7 +47,7 @@ export default function Footer() {
             <XLogo className="h-4 w-4" />
           </a>
           <Link href="/privacidad" className="hover:text-gold">
-            Privacy
+            {c.footer.privacy}
           </Link>
         </div>
       </div>

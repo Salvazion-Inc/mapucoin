@@ -1,7 +1,21 @@
 "use client";
 
-import { awards, type AwardOrg } from "@/lib/awards";
+import { awards, type Award, type AwardOrg } from "@/lib/awards";
+import { t, tr } from "@/lib/copy";
+import type { Locale } from "@/lib/locale";
+import { useLocale } from "@/lib/locale-context";
 import { useCallback, useEffect, useState } from "react";
+
+function awardTitle(award: Award, locale: Locale) {
+  const titles = t(locale).awardTitles as Record<string, string>;
+  return titles[award.title] || award.title;
+}
+
+function awardNote(award: Award, locale: Locale) {
+  if (!award.note) return undefined;
+  const notes = t(locale).awardNotes as Record<string, string>;
+  return notes[award.note] || award.note;
+}
 
 const ORG_MARK: Record<AwardOrg, string> = {
   "World Travel Awards": "WTA",
@@ -56,6 +70,8 @@ function Seal({ org }: { org: AwardOrg }) {
 }
 
 export default function AwardsCarousel() {
+  const { locale } = useLocale();
+  const c = t(locale);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const total = awards.length;
@@ -70,8 +86,8 @@ export default function AwardsCarousel() {
   useEffect(() => {
     if (paused) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = window.setInterval(() => go(1), 6500);
-    return () => window.clearInterval(t);
+    const timer = window.setInterval(() => go(1), 6500);
+    return () => window.clearInterval(timer);
   }, [go, paused]);
 
   useEffect(() => {
@@ -86,6 +102,8 @@ export default function AwardsCarousel() {
   const award = awards[index];
   const prev = awards[(index - 1 + total) % total];
   const next = awards[(index + 1) % total];
+  const title = awardTitle(award, locale);
+  const note = awardNote(award, locale);
 
   return (
     <div
@@ -94,18 +112,18 @@ export default function AwardsCarousel() {
       onMouseLeave={() => setPaused(false)}
     >
       <div className="hidden lg:block">
-        <SideCard award={prev} side="left" onClick={() => go(-1)} />
+        <SideCard award={prev} locale={locale} side="left" onClick={() => go(-1)} />
       </div>
 
       <article
         className="award-card"
         aria-live="polite"
-        aria-label={`${index + 1} de ${total}: ${award.title}`}
+        aria-label={tr(c.awards.of, { n: index + 1, total, title })}
       >
         <p className="kicker">{award.org}</p>
         <Seal org={award.org} />
         <h3 className="font-display mt-5 text-2xl leading-tight text-sand md:text-4xl">
-          {award.title}
+          {title}
         </h3>
         {award.place && (
           <p className="mt-3 text-sm font-semibold tracking-wide text-gold md:text-base">
@@ -117,9 +135,9 @@ export default function AwardsCarousel() {
             {award.years}
           </p>
         )}
-        {award.note && (
+        {note && (
           <p className={`text-sm text-sand/65 ${award.years ? "mt-2" : "mt-5"}`}>
-            {award.note}
+            {note}
           </p>
         )}
         <p className="mt-8 text-[11px] tracking-[0.22em] uppercase text-sand/40">
@@ -128,13 +146,13 @@ export default function AwardsCarousel() {
       </article>
 
       <div className="hidden lg:block">
-        <SideCard award={next} side="right" onClick={() => go(1)} />
+        <SideCard award={next} locale={locale} side="right" onClick={() => go(1)} />
       </div>
 
       <button
         type="button"
         className="award-nav award-nav-prev"
-        aria-label="Premio anterior"
+        aria-label={c.awards.prev}
         onClick={() => go(-1)}
       >
         ‹
@@ -142,7 +160,7 @@ export default function AwardsCarousel() {
       <button
         type="button"
         className="award-nav award-nav-next"
-        aria-label="Premio siguiente"
+        aria-label={c.awards.next}
         onClick={() => go(1)}
       >
         ›
@@ -153,7 +171,7 @@ export default function AwardsCarousel() {
           <button
             key={`${a.title}-${a.years}-${a.place || ""}`}
             type="button"
-            aria-label={`Ir al premio ${i + 1}`}
+            aria-label={tr(c.awards.goTo, { n: i + 1 })}
             aria-current={i === index}
             className={i === index ? "is-active" : ""}
             onClick={() => setIndex(i)}
@@ -166,10 +184,12 @@ export default function AwardsCarousel() {
 
 function SideCard({
   award,
+  locale,
   side,
   onClick,
 }: {
   award: (typeof awards)[number];
+  locale: Locale;
   side: "left" | "right";
   onClick: () => void;
 }) {
@@ -181,7 +201,7 @@ function SideCard({
     >
       <p className="kicker text-[10px]">{award.org}</p>
       <p className="mt-3 font-display text-lg leading-snug text-sand/80">
-        {award.title}
+        {awardTitle(award, locale)}
       </p>
       {award.years && (
         <p className="mt-2 text-sm text-gold/80">{award.years}</p>

@@ -1,14 +1,15 @@
-import { privacy } from "@/lib/legal";
-import type { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = { title: "Política de Privacidad" };
+import { t } from "@/lib/copy";
+import { privacy } from "@/lib/legal";
+import { useLocale } from "@/lib/locale-context";
 
 export default function PrivacidadPage() {
+  const { locale } = useLocale();
+  const title = t(locale).legalPrivacyTitle;
   return (
     <main className="page-pad mx-auto max-w-3xl px-5 pb-24">
-      <h1 className="font-display text-4xl font-bold text-sand">
-        {privacy.title}
-      </h1>
+      <h1 className="font-display text-4xl font-bold text-sand">{title}</h1>
       <p className="mt-6 text-sand/80">{privacy.intro}</p>
       {privacy.sections.map((s) => (
         <section key={s.heading} className="mt-10">

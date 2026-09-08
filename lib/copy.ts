@@ -33,6 +33,9 @@ const es = {
     viewSheet: "Ver ficha →",
     destination: "Destino",
     capsule: "Cápsula",
+    search: "Buscar destino o cápsula",
+    searchEmpty: "Sin coincidencias",
+    searchClear: "Limpiar búsqueda",
   },
   capsules: {
     kicker: "Cápsulas",
@@ -294,6 +297,9 @@ const en: typeof es = {
     viewSheet: "View sheet →",
     destination: "Destination",
     capsule: "Capsule",
+    search: "Search destination or capsule",
+    searchEmpty: "No matches",
+    searchClear: "Clear search",
   },
   capsules: {
     kicker: "Capsules",
@@ -555,6 +561,9 @@ const pt: typeof es = {
     viewSheet: "Ver ficha →",
     destination: "Destino",
     capsule: "Cápsula",
+    search: "Buscar destino ou cápsula",
+    searchEmpty: "Sem resultados",
+    searchClear: "Limpar busca",
   },
   capsules: {
     kicker: "Cápsulas",
@@ -816,6 +825,9 @@ const fr: typeof es = {
     viewSheet: "Voir la fiche →",
     destination: "Destination",
     capsule: "Capsule",
+    search: "Rechercher une destination ou une capsule",
+    searchEmpty: "Aucun résultat",
+    searchClear: "Effacer la recherche",
   },
   capsules: {
     kicker: "Capsules",
@@ -1077,6 +1089,9 @@ const it: typeof es = {
     viewSheet: "Vedi scheda →",
     destination: "Destinazione",
     capsule: "Capsula",
+    search: "Cerca destinazione o capsula",
+    searchEmpty: "Nessun risultato",
+    searchClear: "Cancella ricerca",
   },
   capsules: {
     kicker: "Capsule",

@@ -16,14 +16,14 @@ const es = {
   },
   hero: {
     title: "Chile, de norte a sur.",
-    lead: "Cápsulas de cobre y vidrio en desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Mesa local y presupuesto en CLP.",
+    lead: "Cápsulas de cobre y vidrio en desiertos, playas, viñedos, volcanes, ríos, lagos, bosques, nieve y parques nacionales. Mesa local y presupuesto en CLP.",
     mapCta: "Mapa interactivo",
     planCta: "Planificar",
   },
   map: {
     kicker: "Mapa",
     title: "Chile clasificado por paisaje",
-    lead: "Filtra desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cada pin es un territorio con su cápsula.",
+    lead: "Filtra desiertos, playas, viñedos, volcanes, ríos, lagos, bosques, nieve y los 48 parques nacionales con pase digital. Cada pin es un territorio con su cápsula.",
     all: "Todos",
     places: "Lugares",
     capsules: "Cápsulas",
@@ -36,8 +36,8 @@ const es = {
   },
   capsules: {
     kicker: "Cápsulas",
-    title: "Ocho paisajes, una casa cápsula",
-    lead: "Cobre, vidrio y madera. Off-grid opcional, aislación de −40 °C a 40 °C. Una cápsula por paisaje, operada por partners locales.",
+    title: "Cada paisaje, una casa cápsula",
+    lead: "Cobre, vidrio y madera. Off-grid opcional, aislación de −40 °C a 40 °C. Una cápsula por paisaje — también en parques nacionales — operada por partners locales.",
     alt: "Casa cápsula Mapucoin",
     fromNight: "desde {price} / noche",
     perNight: "Por noche",
@@ -164,6 +164,7 @@ const es = {
     lago: "Lagos",
     "bosque-nativo": "Bosques",
     nieve: "Nieve",
+    parques: "Parques Nacionales",
   } satisfies Record<Landscape, string>,
   activitySports: {
     desierto: "Astronomía y sandboard",
@@ -174,6 +175,7 @@ const es = {
     lago: "Barcos y deportes náuticos",
     "bosque-nativo": "Tours y trekking",
     nieve: "Ski y snowboard",
+    parques: "Trekking y naturaleza",
   } satisfies Record<Landscape, string>,
   interests: {
     naturaleza: "Naturaleza",
@@ -275,14 +277,14 @@ const en: typeof es = {
   },
   hero: {
     title: "Chile, north to south.",
-    lead: "Copper and glass capsules in deserts, beaches, vineyards, volcanoes, rivers, lakes, forests and snow. Local table and budget in CLP.",
+    lead: "Copper and glass capsules in deserts, beaches, vineyards, volcanoes, rivers, lakes, forests, snow and national parks. Local table and budget in CLP.",
     mapCta: "Interactive map",
     planCta: "Plan",
   },
   map: {
     kicker: "Map",
     title: "Chile classified by landscape",
-    lead: "Filter deserts, beaches, vineyards, volcanoes, rivers, lakes, forests and snow. Each pin is a territory with its capsule.",
+    lead: "Filter deserts, beaches, vineyards, volcanoes, rivers, lakes, forests, snow and the 48 national parks with a digital pass. Each pin is a territory with its capsule.",
     all: "All",
     places: "Places",
     capsules: "Capsules",
@@ -295,8 +297,8 @@ const en: typeof es = {
   },
   capsules: {
     kicker: "Capsules",
-    title: "Eight landscapes, one capsule home",
-    lead: "Copper, glass and wood. Optional off-grid, insulation from −40 °C to 40 °C. One capsule per landscape, run by local partners.",
+    title: "Each landscape, one capsule home",
+    lead: "Copper, glass and wood. Optional off-grid, insulation from −40 °C to 40 °C. One capsule per landscape — also in national parks — run by local partners.",
     alt: "Mapucoin capsule house",
     fromNight: "from {price} / night",
     perNight: "Per night",
@@ -423,6 +425,7 @@ const en: typeof es = {
     lago: "Lakes",
     "bosque-nativo": "Forests",
     nieve: "Snow",
+    parques: "National Parks",
   },
   activitySports: {
     desierto: "Astronomy and sandboarding",
@@ -433,6 +436,7 @@ const en: typeof es = {
     lago: "Boats and water sports",
     "bosque-nativo": "Tours and trekking",
     nieve: "Ski and snowboard",
+    parques: "Trekking and nature",
   },
   interests: {
     naturaleza: "Nature",
@@ -534,14 +538,14 @@ const pt: typeof es = {
   },
   hero: {
     title: "Chile, do norte ao sul.",
-    lead: "Cápsulas de cobre e vidro em desertos, praias, vinhedos, vulcões, rios, lagos, florestas e neve. Mesa local e orçamento em CLP.",
+    lead: "Cápsulas de cobre e vidro em desertos, praias, vinhedos, vulcões, rios, lagos, florestas, neve e parques nacionais. Mesa local e orçamento em CLP.",
     mapCta: "Mapa interativo",
     planCta: "Planejar",
   },
   map: {
     kicker: "Mapa",
     title: "Chile classificado por paisagem",
-    lead: "Filtre desertos, praias, vinhedos, vulcões, rios, lagos, florestas e neve. Cada pin é um território com a sua cápsula.",
+    lead: "Filtre desertos, praias, vinhedos, vulcões, rios, lagos, florestas, neve e os 48 parques nacionais com passe digital. Cada pin é um território com a sua cápsula.",
     all: "Todos",
     places: "Lugares",
     capsules: "Cápsulas",
@@ -554,8 +558,8 @@ const pt: typeof es = {
   },
   capsules: {
     kicker: "Cápsulas",
-    title: "Oito paisagens, uma casa cápsula",
-    lead: "Cobre, vidro e madeira. Off-grid opcional, isolamento de −40 °C a 40 °C. Uma cápsula por paisagem, operada por partners locais.",
+    title: "Cada paisagem, uma casa cápsula",
+    lead: "Cobre, vidro e madeira. Off-grid opcional, isolamento de −40 °C a 40 °C. Uma cápsula por paisagem — também em parques nacionais — operada por partners locais.",
     alt: "Casa cápsula Mapucoin",
     fromNight: "a partir de {price} / noite",
     perNight: "Por noite",
@@ -682,6 +686,7 @@ const pt: typeof es = {
     lago: "Lagos",
     "bosque-nativo": "Florestas",
     nieve: "Neve",
+    parques: "Parques Nacionais",
   },
   activitySports: {
     desierto: "Astronomia e sandboard",
@@ -692,6 +697,7 @@ const pt: typeof es = {
     lago: "Barcos e esportes náuticos",
     "bosque-nativo": "Tours e trekking",
     nieve: "Ski e snowboard",
+    parques: "Trekking e natureza",
   },
   interests: {
     naturaleza: "Natureza",
@@ -793,14 +799,14 @@ const fr: typeof es = {
   },
   hero: {
     title: "Le Chili, du nord au sud.",
-    lead: "Capsules de cuivre et de verre dans les déserts, plages, vignobles, volcans, rivières, lacs, forêts et neige. Table locale et budget en CLP.",
+    lead: "Capsules de cuivre et de verre dans les déserts, plages, vignobles, volcans, rivières, lacs, forêts, neige et parcs nationaux. Table locale et budget en CLP.",
     mapCta: "Carte interactive",
     planCta: "Planifier",
   },
   map: {
     kicker: "Carte",
     title: "Le Chili classé par paysage",
-    lead: "Filtrez déserts, plages, vignobles, volcans, rivières, lacs, forêts et neige. Chaque pin est un territoire avec sa capsule.",
+    lead: "Filtrez déserts, plages, vignobles, volcans, rivières, lacs, forêts, neige et les 48 parcs nationaux avec un pass numérique. Chaque pin est un territoire avec sa capsule.",
     all: "Tous",
     places: "Lieux",
     capsules: "Capsules",
@@ -813,8 +819,8 @@ const fr: typeof es = {
   },
   capsules: {
     kicker: "Capsules",
-    title: "Huit paysages, une maison capsule",
-    lead: "Cuivre, verre et bois. Hors réseau en option, isolation de −40 °C à 40 °C. Une capsule par paysage, gérée par des partenaires locaux.",
+    title: "Chaque paysage, une maison capsule",
+    lead: "Cuivre, verre et bois. Hors réseau en option, isolation de −40 °C à 40 °C. Une capsule par paysage — aussi dans les parcs nationaux — gérée par des partenaires locaux.",
     alt: "Maison capsule Mapucoin",
     fromNight: "à partir de {price} / nuit",
     perNight: "Par nuit",
@@ -941,6 +947,7 @@ const fr: typeof es = {
     lago: "Lacs",
     "bosque-nativo": "Forêts",
     nieve: "Neige",
+    parques: "Parcs nationaux",
   },
   activitySports: {
     desierto: "Astronomie et sandboard",
@@ -951,6 +958,7 @@ const fr: typeof es = {
     lago: "Bateaux et sports nautiques",
     "bosque-nativo": "Tours et trekking",
     nieve: "Ski et snowboard",
+    parques: "Trekking et nature",
   },
   interests: {
     naturaleza: "Nature",
@@ -1052,14 +1060,14 @@ const it: typeof es = {
   },
   hero: {
     title: "Il Cile, da nord a sud.",
-    lead: "Capsule di rame e vetro in deserti, spiagge, vigneti, vulcani, fiumi, laghi, boschi e neve. Tavola locale e budget in CLP.",
+    lead: "Capsule di rame e vetro in deserti, spiagge, vigneti, vulcani, fiumi, laghi, boschi, neve e parchi nazionali. Tavola locale e budget in CLP.",
     mapCta: "Mappa interattiva",
     planCta: "Pianifica",
   },
   map: {
     kicker: "Mappa",
     title: "Il Cile classificato per paesaggio",
-    lead: "Filtra deserti, spiagge, vigneti, vulcani, fiumi, laghi, boschi e neve. Ogni pin è un territorio con la sua capsula.",
+    lead: "Filtra deserti, spiagge, vigneti, vulcani, fiumi, laghi, boschi, neve e i 48 parchi nazionali con pass digitale. Ogni pin è un territorio con la sua capsula.",
     all: "Tutti",
     places: "Luoghi",
     capsules: "Capsule",
@@ -1072,8 +1080,8 @@ const it: typeof es = {
   },
   capsules: {
     kicker: "Capsule",
-    title: "Otto paesaggi, una casa capsula",
-    lead: "Rame, vetro e legno. Off-grid opzionale, isolamento da −40 °C a 40 °C. Una capsula per paesaggio, gestita da partner locali.",
+    title: "Ogni paesaggio, una casa capsula",
+    lead: "Rame, vetro e legno. Off-grid opzionale, isolamento da −40 °C a 40 °C. Una capsula per paesaggio — anche nei parchi nazionali — gestita da partner locali.",
     alt: "Casa capsula Mapucoin",
     fromNight: "da {price} / notte",
     perNight: "A notte",
@@ -1200,6 +1208,7 @@ const it: typeof es = {
     lago: "Laghi",
     "bosque-nativo": "Boschi",
     nieve: "Neve",
+    parques: "Parchi nazionali",
   },
   activitySports: {
     desierto: "Astronomia e sandboard",
@@ -1210,6 +1219,7 @@ const it: typeof es = {
     lago: "Barche e sport nautici",
     "bosque-nativo": "Tour e trekking",
     nieve: "Sci e snowboard",
+    parques: "Trekking e natura",
   },
   interests: {
     naturaleza: "Natura",

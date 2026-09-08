@@ -1,3 +1,5 @@
+import { nationalParks } from "./parks";
+
 export type Region =
   | "Norte Grande"
   | "Norte Chico"
@@ -17,7 +19,8 @@ export type Landscape =
   | "vinedos"
   | "rios"
   | "nieve"
-  | "playa";
+  | "playa"
+  | "parques";
 
 export type PlaceKind = "place" | "capsule" | "food" | "activity";
 
@@ -62,6 +65,7 @@ export const landscapes: { id: Landscape; label: string }[] = [
   { id: "lago", label: "Lagos" },
   { id: "bosque-nativo", label: "Bosques" },
   { id: "nieve", label: "Nieve" },
+  { id: "parques", label: "Parques Nacionales" },
 ];
 
 /** Official Drive renders of the copper capsule, one per landscape. */
@@ -74,6 +78,7 @@ export const landscapeHero: Record<Landscape, string> = {
   lago: "/images/capsulas/lago.jpg",
   "bosque-nativo": "/images/capsulas/bosque.jpg",
   nieve: "/images/capsulas/nieve.jpg",
+  parques: "/images/places/paine.jpg",
 };
 
 export const landscapePlaceSlug: Record<Landscape, string> = {
@@ -85,6 +90,7 @@ export const landscapePlaceSlug: Record<Landscape, string> = {
   lago: "puerto-varas",
   "bosque-nativo": "chiloe",
   nieve: "farellones-valle-nevado",
+  parques: "torres-del-paine",
 };
 
 export const landscapeLabel = (id: Landscape) =>
@@ -380,7 +386,7 @@ const seeds: Seed[] = [
     highlights: ["Cerro La Campana", "Palma chilena", "Bosque esclerófilo"],
     priceFromCLP: 125000,
     tags: ["bosque", "trekking", "naturaleza"],
-    landscapes: ["bosque-nativo"],
+    landscapes: ["bosque-nativo", "parques"],
     capsuleName: "Cápsula La Campana",
     capsuleImage: cap("capsula-chiloe.jpg"),
     capsuleTagline: "Madera y cobre en el bosque de palma chilena.",
@@ -502,7 +508,7 @@ const seeds: Seed[] = [
     highlights: ["Siete Tazas", "Velo de la Novia", "Bosque de roble"],
     priceFromCLP: 130000,
     tags: ["ríos", "bosque", "trekking"],
-    landscapes: ["rios", "bosque-nativo"],
+    landscapes: ["rios", "bosque-nativo", "parques"],
     capsuleName: "Cápsula Radal",
     capsuleImage: cap("capsula-rio.jpg"),
     capsuleTagline: "Cobre y madera junto al río de las tazas.",
@@ -799,7 +805,7 @@ const seeds: Seed[] = [
     highlights: ["Base Torres", "Glaciar Grey", "Laguna Azul"],
     priceFromCLP: 280000,
     tags: ["patagonia", "trekking", "naturaleza", "aventura"],
-    landscapes: ["lago", "nieve"],
+    landscapes: ["parques", "lago", "nieve"],
     capsuleSlug: "capsula-paine",
     capsuleName: "Cápsula Paine",
     capsuleImage: cap("capsula-paine.jpg"),
@@ -849,7 +855,7 @@ const seeds: Seed[] = [
     highlights: ["Robinson Crusoe", "Bosque endémico", "Bahía Cumberland"],
     priceFromCLP: 300000,
     tags: ["isla", "bosque", "playa"],
-    landscapes: ["bosque-nativo", "playa"],
+    landscapes: ["bosque-nativo", "playa", "parques"],
     capsuleName: "Cápsula Robinson",
     capsuleImage: cap("capsula-juan-fernandez.jpg"),
     capsuleTagline: "Palafito de cobre en una caleta del archipiélago.",
@@ -884,25 +890,28 @@ const seeds: Seed[] = [
   },
 ];
 
-export const destinations: CatalogItem[] = seeds.map((s) => ({
-  slug: s.slug,
-  kind: "place",
-  name: s.name,
-  region: s.region,
-  city: s.city,
-  lat: s.lat,
-  lng: s.lng,
-  image: s.image,
-  gallery: s.gallery,
-  youtube: s.youtubeStart != null ? CHILE_FILM : undefined,
-  youtubeStart: s.youtubeStart,
-  tagline: s.tagline,
-  description: s.description,
-  highlights: s.highlights,
-  priceFromCLP: s.priceFromCLP,
-  tags: s.tags,
-  landscapes: s.landscapes,
-}));
+export const destinations: CatalogItem[] = [
+  ...seeds.map((s) => ({
+    slug: s.slug,
+    kind: "place" as const,
+    name: s.name,
+    region: s.region,
+    city: s.city,
+    lat: s.lat,
+    lng: s.lng,
+    image: s.image,
+    gallery: s.gallery,
+    youtube: s.youtubeStart != null ? CHILE_FILM : undefined,
+    youtubeStart: s.youtubeStart,
+    tagline: s.tagline,
+    description: s.description,
+    highlights: s.highlights,
+    priceFromCLP: s.priceFromCLP,
+    tags: s.tags,
+    landscapes: s.landscapes,
+  })),
+  ...nationalParks,
+];
 
 export const capsules: CatalogItem[] = seeds.map((s) => ({
   slug: s.capsuleSlug || `capsula-${s.slug}`,
@@ -1297,6 +1306,7 @@ export const ACTIVITY_SPORTS: Record<Landscape, string> = {
   lago: "Barcos y deportes náuticos",
   "bosque-nativo": "Tours y trekking",
   nieve: "Ski y snowboard",
+  parques: "Trekking y naturaleza",
 };
 
 export const activities: CatalogItem[] = [
@@ -1605,6 +1615,63 @@ export const activities: CatalogItem[] = [
     placeSlug: "termas-de-chillan",
   },
   {
+    slug: "sendero-conguillio",
+    kind: "activity",
+    name: "Trekking en Conguillío",
+    region: "Araucanía y Lagos",
+    city: "Melipeuco",
+    lat: -38.65,
+    lng: -71.63,
+    image: p("villarrica.jpg"),
+    tagline: "Araucarias, lava del Llaima y la laguna verde.",
+    description:
+      "Sendero Sierra Nevada o Los Lagos. Guía, picnic y entrada al parque. Pase digital en pasesparques.cl.",
+    highlights: ["Araucarias", "Laguna", "Llaima"],
+    priceFromCLP: 38000,
+    durationHours: 7,
+    tags: ["trekking", "parque", "araucaria"],
+    landscapes: ["parques"],
+    placeSlug: "pn-conguillio",
+  },
+  {
+    slug: "sendero-huerquehue",
+    kind: "activity",
+    name: "Sendero Los Lagos en Huerquehue",
+    region: "Araucanía y Lagos",
+    city: "Pucón",
+    lat: -39.13,
+    lng: -71.73,
+    image: p("pucon.jpg"),
+    tagline: "Tres lagunas de altura y bosque de araucaria.",
+    description:
+      "Trekking clásico de Pucón. Guía, picnic y entrada. Pase digital en pasesparques.cl.",
+    highlights: ["Los Lagos", "Araucarias", "Tinquilco"],
+    priceFromCLP: 36000,
+    durationHours: 6,
+    tags: ["trekking", "parque", "lagunas"],
+    landscapes: ["parques"],
+    placeSlug: "pn-huerquehue",
+  },
+  {
+    slug: "cueva-del-milodon",
+    kind: "activity",
+    name: "Cueva del Milodón",
+    region: "Patagonia",
+    city: "Puerto Natales",
+    lat: -51.57,
+    lng: -72.62,
+    image: p("paine.jpg"),
+    tagline: "La caverna paleontológica a un paso de Natales.",
+    description:
+      "Visita guiada a la cueva, relato del milodón y vista al seno. Pase digital en pasesparques.cl.",
+    highlights: ["Cueva", "Milodón", "Natales"],
+    priceFromCLP: 18000,
+    durationHours: 3,
+    tags: ["parque", "cultura", "patagonia"],
+    landscapes: ["parques"],
+    placeSlug: "mn-cueva-del-milodon",
+  },
+  {
     slug: "valle-de-la-luna",
     kind: "activity",
     name: "Atardecer en Valle de la Luna",
@@ -1816,8 +1883,11 @@ export function mapPoints() {
 
 export function featuredCapsules() {
   return landscapes
-    .map((l) => capsules.find((c) => c.placeSlug === landscapePlaceSlug[l.id]))
-    .filter((c): c is CatalogItem => Boolean(c));
+    .map((l) => {
+      const item = capsules.find((c) => c.placeSlug === landscapePlaceSlug[l.id]);
+      return item ? { item, land: l.id } : null;
+    })
+    .filter((x): x is { item: CatalogItem; land: Landscape } => Boolean(x));
 }
 
 export function destinationsByLandscape(id: Landscape | "all") {

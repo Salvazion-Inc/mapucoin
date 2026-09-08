@@ -21,7 +21,7 @@ import Link from "next/link";
 export default function HomePage() {
   const { locale } = useLocale();
   const c = t(locale);
-  const capsules = featuredCapsules();
+  const featured = featuredCapsules();
   const activityGroups = groupedActivities();
 
   return (
@@ -99,29 +99,30 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {capsules.map((cap) => {
-                const land = cap.landscapes?.[0];
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map(({ item: cap, land }) => {
                 return (
                   <Link
-                    key={cap.slug}
+                    key={`${land}-${cap.slug}`}
                     href={`/capsulas/${cap.slug}`}
                     className="mapu-card mapu-card-hover group overflow-hidden"
                   >
                     <div className="relative h-56">
                       <Image
-                        src={cap.image}
+                        src={
+                          land === "parques"
+                            ? "/images/places/paine.jpg"
+                            : cap.image
+                        }
                         alt={cap.name}
                         fill
                         className="object-cover transition duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 25vw"
+                        sizes="(max-width: 768px) 100vw, 33vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/20 to-transparent" />
-                      {land && (
-                        <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[11px] font-semibold tracking-wide text-night">
-                          {c.landscapes[land]}
-                        </span>
-                      )}
+                      <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[11px] font-semibold tracking-wide text-night">
+                        {c.landscapes[land]}
+                      </span>
                       <div className="absolute inset-x-0 bottom-0 p-5 text-sand">
                         <p className="kicker text-gold/90">{cap.city}</p>
                         <h3 className="font-display mt-1 text-xl leading-tight">

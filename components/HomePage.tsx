@@ -5,10 +5,10 @@ import PartnersForm from "@/components/PartnersForm";
 import PlaceCard from "@/components/PlaceCard";
 import PlannerSection from "@/components/PlannerSection";
 import {
-  activities,
   featuredCapsules,
   formatCLP,
   gastronomy,
+  groupedActivities,
   landscapeLabel,
 } from "@/lib/catalog";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   const capsules = featuredCapsules();
+  const activityGroups = groupedActivities();
 
   return (
     <>
@@ -191,16 +192,26 @@ export default function HomePage() {
               Lo que se hace en el territorio
             </h2>
             <p className="mt-4 max-w-2xl text-sand/70">
-              Trekking, termas, astronomía, kayak, volcanes y amaneceres. Cada
-              una entra al itinerario según tu presupuesto.
+              Clasificadas por paisaje: astronomía y sandboard en el desierto,
+              buceo y surf en la playa, cata en los viñedos, trekking y termas
+              en los volcanes, kayak y rafting en los ríos, barcos en los lagos,
+              tours en el bosque, ski en la nieve.
             </p>
-            <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {activities.map((a) => (
-                <div key={a.slug} id={a.slug} className="scroll-mt-28">
-                  <PlaceCard item={a} />
+            {activityGroups.map((group) => (
+              <div key={group.id} className="mt-14">
+                <p className="kicker">{group.sports}</p>
+                <h3 className="font-display mt-2 text-2xl tracking-tight text-sand md:text-3xl">
+                  {group.label}
+                </h3>
+                <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {group.items.map((a) => (
+                    <div key={a.slug} id={a.slug} className="scroll-mt-28">
+                      <PlaceCard item={a} />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
 

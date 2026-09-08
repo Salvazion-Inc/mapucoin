@@ -14,105 +14,36 @@ const ORG_MARK: Record<AwardOrg, string> = {
   ALMA: "ALMA",
 };
 
-function LaurelLeaf({ flip, scale = 1 }: { flip: 1 | -1; scale?: number }) {
-  return (
-    <g transform={`scale(${flip * scale} ${scale})`}>
-      <path
-        d="M0 0 C 4.1 -1.6, 6.2 -6.4, 1.6 -13.2 C 0.5 -8.4, 0.15 -4.2, 0 0 Z"
-        fill="currentColor"
-      />
-      <path
-        d="M0.15 -1.2 C 1.1 -5.2, 1.35 -8.6, 1.15 -12.2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="0.28"
-        opacity="0.4"
-      />
-    </g>
-  );
-}
-
-function laurelArm(startDeg: number, endDeg: number, count: number) {
-  const cx = 60;
-  const cy = 62;
-  const r = 46;
-  return Array.from({ length: count }, (_, i) => {
-    const t = i / (count - 1);
-    const deg = startDeg + (endDeg - startDeg) * t;
-    const rad = (deg * Math.PI) / 180;
-    const s = 1.02 - t * 0.28;
-    return {
-      x: cx + r * Math.cos(rad),
-      y: cy + r * Math.sin(rad),
-      rot: deg + 90,
-      s,
-    };
-  });
-}
-
 function Seal({ org }: { org: AwardOrg }) {
-  const left = laurelArm(102, 208, 9);
-  const right = laurelArm(78, -28, 9);
   return (
     <div className="award-seal" aria-hidden>
-      <svg viewBox="0 0 120 124" className="h-28 w-28 md:h-32 md:w-32">
-        <path
-          d="M60 106 C 38 102, 22 86, 18 68"
+      <svg viewBox="0 0 88 88" className="h-20 w-20 md:h-24 md:w-24">
+        <circle
+          cx="44"
+          cy="44"
+          r="40"
           fill="none"
           stroke="currentColor"
-          strokeWidth="0.7"
-          opacity="0.55"
+          strokeWidth="1.2"
         />
-        <path
-          d="M60 106 C 82 102, 98 86, 102 68"
+        <circle
+          cx="44"
+          cy="44"
+          r="33"
           fill="none"
           stroke="currentColor"
-          strokeWidth="0.7"
-          opacity="0.55"
+          strokeWidth="0.6"
+          strokeDasharray="2 3"
         />
-        {left.map((e, i) => (
-          <g
-            key={`l${i}`}
-            transform={`translate(${e.x} ${e.y}) rotate(${e.rot})`}
-          >
-            <LaurelLeaf flip={-1} scale={e.s} />
-          </g>
-        ))}
-        {right.map((e, i) => (
-          <g
-            key={`r${i}`}
-            transform={`translate(${e.x} ${e.y}) rotate(${e.rot})`}
-          >
-            <LaurelLeaf flip={1} scale={e.s} />
-          </g>
-        ))}
         <path
-          d="M54 104 C 57 101, 63 101, 66 104 C 63 108, 57 108, 54 104 Z"
+          d="M44 16 L47 28 L44 26 L41 28 Z M72 44 L60 47 L62 44 L60 41 Z M44 72 L41 60 L44 62 L47 60 Z M16 44 L28 41 L26 44 L28 47 Z"
           fill="currentColor"
-          opacity="0.9"
-        />
-        <circle
-          cx="60"
-          cy="58"
-          r="24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.1"
-        />
-        <circle
-          cx="60"
-          cy="58"
-          r="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.45"
-          strokeDasharray="1.5 2.2"
         />
         <text
-          x="60"
-          y="62"
+          x="44"
+          y="48"
           textAnchor="middle"
-          fontSize={ORG_MARK[org].length > 3 ? 8.5 : 11.5}
+          fontSize={ORG_MARK[org].length > 3 ? 10 : 13}
           fontWeight="700"
           letterSpacing="0.08em"
           fill="currentColor"

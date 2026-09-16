@@ -4,6 +4,7 @@ import Link from "next/link";
 import BrandMark from "@/components/BrandMark";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { AccountChip } from "@/components/AccountChip";
+import { BiometricEnrollPrompt } from "@/components/auth/BiometricEnrollPrompt";
 import HtmlLang from "@/components/HtmlLang";
 import { at, type AppTab } from "@/lib/app-copy";
 import { useLocale } from "@/lib/locale-context";
@@ -41,6 +42,7 @@ export function AppShell({
 
   return (
     <div className="app-shell min-h-dvh bg-night text-sand">
+      <BiometricEnrollPrompt />
       <HtmlLang />
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[4.75rem] flex-col items-center border-r border-gold/15 bg-night/95 py-4 backdrop-blur-xl md:flex">
         <Link href="/app" className="mb-6">

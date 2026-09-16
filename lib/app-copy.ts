@@ -68,6 +68,24 @@ const es = {
     nameError: "Escribe tu nombre.",
     emailError: "Correo inválido.",
     instagramError: "Instagram inválido.",
+    biometricTitle: "Entrar con el pulgar",
+    biometricHint:
+      "Desbloquea Mapucoin con tu huella, Face ID o Windows Hello en este dispositivo.",
+    biometricOn: "Activado",
+    biometricOff: "Desactivado",
+    biometricEnableHint: "Activa el interruptor y confirma con tu huella.",
+    biometricEnabled: "Ya puedes entrar a la app con tu huella.",
+    biometricDisabled: "Entrada con huella desactivada.",
+    biometricNeedLogin: "Entra primero para activar la huella.",
+    biometricUnavailable:
+      "Este dispositivo no tiene huella, Face ID o Windows Hello disponible.",
+    biometricFailed: "No se pudo verificar la huella. Inténtalo de nuevo.",
+    biometricPromptTitle: "¿Entrar con tu pulgar?",
+    biometricPromptBody:
+      "La próxima vez entra a Mapucoin con tu huella en este dispositivo.",
+    biometricPromptLater: "Ahora no",
+    biometricPromptEnable: "Activar huella",
+    biometricProcessing: "Esperando tu huella…",
   },
   sessionNeeded: "Entra para abrir la App Mapucoin.",
   loginTitle: "Entrar",
@@ -89,6 +107,16 @@ const es = {
   passwordShort: "La contraseña debe tener al menos 8 caracteres.",
   passwordMismatch: "Las contraseñas no coinciden.",
   sending: "Enviando…",
+  biometricEnter: "Entrar con el pulgar",
+  biometricProcessing: "Esperando tu huella…",
+  biometricRetry: "Vuelve a colocar el pulgar",
+  biometricFailed: "No se pudo verificar la huella. Inténtalo de nuevo.",
+  biometricUnavailable:
+    "Este dispositivo no tiene huella, Face ID o Windows Hello disponible.",
+  biometricExpired: "La sesión con huella expiró. Entra con email o Google.",
+  biometricLockTitle: "Mapucoin",
+  biometricLockSubtitle: "Coloca tu pulgar en el sensor",
+  biometricUsePassword: "Usar contraseña",
 };
 
 const en: typeof es = {
@@ -157,6 +185,24 @@ const en: typeof es = {
     nameError: "Enter your name.",
     emailError: "Invalid email.",
     instagramError: "Invalid Instagram.",
+    biometricTitle: "Unlock with your thumb",
+    biometricHint:
+      "Unlock Mapucoin with your fingerprint, Face ID, or Windows Hello on this device.",
+    biometricOn: "On",
+    biometricOff: "Off",
+    biometricEnableHint: "Flip the switch and confirm with your fingerprint.",
+    biometricEnabled: "You can now enter the app with your fingerprint.",
+    biometricDisabled: "Fingerprint unlock turned off.",
+    biometricNeedLogin: "Sign in first to enable fingerprint.",
+    biometricUnavailable:
+      "This device has no fingerprint, Face ID, or Windows Hello available.",
+    biometricFailed: "Fingerprint could not be verified. Try again.",
+    biometricPromptTitle: "Unlock with your thumb?",
+    biometricPromptBody:
+      "Next time, enter Mapucoin with your fingerprint on this device.",
+    biometricPromptLater: "Not now",
+    biometricPromptEnable: "Enable fingerprint",
+    biometricProcessing: "Waiting for your fingerprint…",
   },
   sessionNeeded: "Sign in to open the Mapucoin App.",
   loginTitle: "Log in",
@@ -178,6 +224,16 @@ const en: typeof es = {
   passwordShort: "Password must be at least 8 characters.",
   passwordMismatch: "Passwords do not match.",
   sending: "Sending…",
+  biometricEnter: "Sign in with your thumb",
+  biometricProcessing: "Waiting for your fingerprint…",
+  biometricRetry: "Place your finger on the sensor again",
+  biometricFailed: "Fingerprint could not be verified. Try again.",
+  biometricUnavailable:
+    "This device has no fingerprint, Face ID, or Windows Hello available.",
+  biometricExpired: "Fingerprint session expired. Sign in with email or Google.",
+  biometricLockTitle: "Mapucoin",
+  biometricLockSubtitle: "Place your finger on the sensor",
+  biometricUsePassword: "Use password",
 };
 
 const pt: typeof es = {
@@ -246,6 +302,24 @@ const pt: typeof es = {
     nameError: "Escreva seu nome.",
     emailError: "E-mail inválido.",
     instagramError: "Instagram inválido.",
+    biometricTitle: "Entrar com o polegar",
+    biometricHint:
+      "Desbloqueie o Mapucoin com sua digital, Face ID ou Windows Hello neste dispositivo.",
+    biometricOn: "Ativado",
+    biometricOff: "Desativado",
+    biometricEnableHint: "Ative o interruptor e confirme com a digital.",
+    biometricEnabled: "Já pode entrar no app com a digital.",
+    biometricDisabled: "Entrada com digital desativada.",
+    biometricNeedLogin: "Entre primeiro para ativar a digital.",
+    biometricUnavailable:
+      "Este dispositivo não tem digital, Face ID ou Windows Hello disponível.",
+    biometricFailed: "Não foi possível verificar a digital. Tente de novo.",
+    biometricPromptTitle: "Entrar com o polegar?",
+    biometricPromptBody:
+      "Da próxima vez entre no Mapucoin com a digital neste dispositivo.",
+    biometricPromptLater: "Agora não",
+    biometricPromptEnable: "Ativar digital",
+    biometricProcessing: "Aguardando sua digital…",
   },
   sessionNeeded: "Entre para abrir o App Mapucoin.",
   loginTitle: "Entrar",
@@ -267,6 +341,16 @@ const pt: typeof es = {
   passwordShort: "A senha deve ter pelo menos 8 caracteres.",
   passwordMismatch: "As senhas não coincidem.",
   sending: "Enviando…",
+  biometricEnter: "Entrar com o polegar",
+  biometricProcessing: "Aguardando sua digital…",
+  biometricRetry: "Coloque o polegar no sensor de novo",
+  biometricFailed: "Não foi possível verificar a digital. Tente de novo.",
+  biometricUnavailable:
+    "Este dispositivo não tem digital, Face ID ou Windows Hello disponível.",
+  biometricExpired: "A sessão com digital expirou. Entre com email ou Google.",
+  biometricLockTitle: "Mapucoin",
+  biometricLockSubtitle: "Coloque o polegar no sensor",
+  biometricUsePassword: "Usar senha",
 };
 
 const fr: typeof es = {
@@ -335,6 +419,24 @@ const fr: typeof es = {
     nameError: "Écrivez votre nom.",
     emailError: "E-mail invalide.",
     instagramError: "Instagram invalide.",
+    biometricTitle: "Entrer avec le pouce",
+    biometricHint:
+      "Déverrouillez Mapucoin avec votre empreinte, Face ID ou Windows Hello sur cet appareil.",
+    biometricOn: "Activé",
+    biometricOff: "Désactivé",
+    biometricEnableHint: "Activez l’interrupteur et confirmez avec votre empreinte.",
+    biometricEnabled: "Vous pouvez maintenant entrer dans l’app avec votre empreinte.",
+    biometricDisabled: "Entrée par empreinte désactivée.",
+    biometricNeedLogin: "Connectez-vous d’abord pour activer l’empreinte.",
+    biometricUnavailable:
+      "Cet appareil n’a pas d’empreinte, Face ID ou Windows Hello disponible.",
+    biometricFailed: "Empreinte non vérifiée. Réessayez.",
+    biometricPromptTitle: "Entrer avec le pouce ?",
+    biometricPromptBody:
+      "La prochaine fois, entrez dans Mapucoin avec votre empreinte sur cet appareil.",
+    biometricPromptLater: "Pas maintenant",
+    biometricPromptEnable: "Activer l’empreinte",
+    biometricProcessing: "En attente de votre empreinte…",
   },
   sessionNeeded: "Connectez-vous pour ouvrir l’App Mapucoin.",
   loginTitle: "Connexion",
@@ -356,6 +458,16 @@ const fr: typeof es = {
   passwordShort: "Le mot de passe doit avoir au moins 8 caractères.",
   passwordMismatch: "Les mots de passe ne correspondent pas.",
   sending: "Envoi…",
+  biometricEnter: "Entrer avec le pouce",
+  biometricProcessing: "En attente de votre empreinte…",
+  biometricRetry: "Replacez le pouce sur le capteur",
+  biometricFailed: "Empreinte non vérifiée. Réessayez.",
+  biometricUnavailable:
+    "Cet appareil n’a pas d’empreinte, Face ID ou Windows Hello disponible.",
+  biometricExpired: "La session empreinte a expiré. Entrez avec e-mail ou Google.",
+  biometricLockTitle: "Mapucoin",
+  biometricLockSubtitle: "Placez le pouce sur le capteur",
+  biometricUsePassword: "Utiliser le mot de passe",
 };
 
 const it: typeof es = {
@@ -424,6 +536,24 @@ const it: typeof es = {
     nameError: "Scrivi il tuo nome.",
     emailError: "Email non valida.",
     instagramError: "Instagram non valido.",
+    biometricTitle: "Entra con il pollice",
+    biometricHint:
+      "Sblocca Mapucoin con l’impronta, Face ID o Windows Hello su questo dispositivo.",
+    biometricOn: "Attivo",
+    biometricOff: "Disattivo",
+    biometricEnableHint: "Attiva l’interruttore e conferma con l’impronta.",
+    biometricEnabled: "Ora puoi entrare nell’app con l’impronta.",
+    biometricDisabled: "Accesso con impronta disattivato.",
+    biometricNeedLogin: "Entra prima per attivare l’impronta.",
+    biometricUnavailable:
+      "Questo dispositivo non ha impronta, Face ID o Windows Hello disponibile.",
+    biometricFailed: "Impronta non verificata. Riprova.",
+    biometricPromptTitle: "Entra con il pollice?",
+    biometricPromptBody:
+      "La prossima volta entra in Mapucoin con l’impronta su questo dispositivo.",
+    biometricPromptLater: "Ora no",
+    biometricPromptEnable: "Attiva impronta",
+    biometricProcessing: "In attesa della tua impronta…",
   },
   sessionNeeded: "Accedi per aprire l’App Mapucoin.",
   loginTitle: "Accedi",
@@ -445,6 +575,16 @@ const it: typeof es = {
   passwordShort: "La password deve avere almeno 8 caratteri.",
   passwordMismatch: "Le password non coincidono.",
   sending: "Invio…",
+  biometricEnter: "Entra con il pollice",
+  biometricProcessing: "In attesa della tua impronta…",
+  biometricRetry: "Riposiziona il pollice sul sensore",
+  biometricFailed: "Impronta non verificata. Riprova.",
+  biometricUnavailable:
+    "Questo dispositivo non ha impronta, Face ID o Windows Hello disponibile.",
+  biometricExpired: "La sessione con impronta è scaduta. Entra con email o Google.",
+  biometricLockTitle: "Mapucoin",
+  biometricLockSubtitle: "Metti il pollice sul sensore",
+  biometricUsePassword: "Usa la password",
 };
 
 export const appCopy = { es, en, pt, fr, it } as const;

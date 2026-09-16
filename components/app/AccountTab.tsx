@@ -8,6 +8,8 @@ import { useLocale } from "@/lib/locale-context";
 import { useLocation } from "@/lib/location";
 import { PROFILE_ROLES, type ProfileRole } from "@/lib/profile";
 import { useProfile } from "@/lib/profile-store";
+import { disableBiometric } from "@/lib/auth/biometric";
+import { BiometricControl } from "@/components/auth/BiometricControl";
 import { ProfileAvatar } from "./ProfileAvatar";
 
 type BookingRow = {
@@ -79,6 +81,7 @@ export function AccountTab() {
   }
 
   async function logout() {
+    disableBiometric();
     await fetch("/api/auth/logout", { method: "POST" });
     window.location.href = "/login";
   }
@@ -202,6 +205,10 @@ export function AccountTab() {
           </ul>
         )}
       </section>
+
+      <div className="mt-8">
+        <BiometricControl />
+      </div>
 
       <section className="mt-8 rounded-2xl border border-gold/20 p-4">
         <p className="text-sm text-sand/70">{a.account.partnerLead}</p>

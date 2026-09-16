@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import BrandMark from "@/components/BrandMark";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { BiometricLogin } from "@/components/auth/BiometricLogin";
+import { useBiometricGate } from "@/components/auth/useBiometric";
 import { at } from "@/lib/app-copy";
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
@@ -24,6 +26,11 @@ export function AuthForm({
   const next = search.get("next") || "/app";
   const [status, setStatus] = useState<"idle" | "sending" | "err">("idle");
   const [message, setMessage] = useState("");
+  const [passwordFallback, setPasswordFallback] = useState(false);
+  const { ready: biometricReady, enabled: biometricEnabled } = useBiometricGate();
+  const thumbGate =
+    mode === "login" && biometricReady && biometricEnabled && !passwordFallback;
+  const waitingGate = mode === "login" && !biometricReady;
   const reason =
     googleReason ||
     (search.get("auth") === "google" ? search.get("reason") : null) ||
@@ -94,6 +101,16 @@ export function AuthForm({
         <LanguageSwitcher compact />
       </div>
       <section className="mx-auto mt-12 max-w-md">
+        {waitingGate ? (
+          <p className="text-sm text-sand/50">{a.biometricProcessing}</p>
+        ) : thumbGate ? (
+          <BiometricLogin
+            locale={locale}
+            next={next}
+            onUsePassword={() => setPasswordFallback(true)}
+          />
+        ) : (
+          <>
         <p className="text-sm text-gold">{a.sessionNeeded}</p>
         <h1 className="font-display mt-2 text-4xl font-bold">
           {mode === "login" ? a.loginTitle : a.signupTitle}
@@ -175,6 +192,8 @@ export function AuthForm({
             </Link>
           )}
         </p>
+          </>
+        )}
       </section>
     </div>
   );

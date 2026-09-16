@@ -33,6 +33,9 @@ export default function Footer() {
           </a>
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link href="/app" className="hover:text-gold">
+            {c.nav.app}
+          </Link>
           <Link href="/terminos" className="hover:text-gold">
             {c.footer.terms}
           </Link>

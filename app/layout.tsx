@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Outfit } from "next/font/google";
 import { cookies } from "next/headers";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import HashScroll from "@/components/HashScroll";
 import HtmlLang from "@/components/HtmlLang";
+import SiteFrame from "@/components/SiteFrame";
 import { LocaleProvider } from "@/lib/locale-context";
 import { LOCALE_COOKIE, languageAlternates, localeMeta, parseLocale } from "@/lib/locale";
 import { SEO } from "@/lib/seo";
@@ -117,10 +115,7 @@ export default async function RootLayout({
       <body className={`${outfit.className} min-h-screen antialiased`}>
         <LocaleProvider initialLocale={locale}>
           <HtmlLang />
-          <Header />
-          <HashScroll />
-          {children}
-          <Footer />
+          <SiteFrame>{children}</SiteFrame>
         </LocaleProvider>
       </body>
     </html>

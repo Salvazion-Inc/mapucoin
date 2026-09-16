@@ -53,7 +53,10 @@ export default function HomePage() {
             {c.hero.lead}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link href="#mapa" className="btn-gold text-base">
+            <Link href="/app" className="btn-gold text-base">
+              {c.hero.appCta}
+            </Link>
+            <Link href="#mapa" className="btn-ghost text-base">
               {c.hero.mapCta}
             </Link>
             <Link href="#planificar" className="btn-ghost text-base">

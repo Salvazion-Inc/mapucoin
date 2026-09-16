@@ -1,3 +1,4 @@
+import { googleConfigured } from "@/lib/google-oauth";
 import { getSupabase } from "@/lib/supabase";
 import { stripeConfigured } from "@/lib/stripe";
 
@@ -20,10 +21,12 @@ export async function GET() {
     }
   }
 
+  const google = googleConfigured();
   return Response.json({
     ok: grok && stripe && Boolean(db),
     grok,
     stripe,
+    google,
     supabase: Boolean(db),
     supabaseReachable: supabase,
     app: process.env.NEXT_PUBLIC_APP_URL || "",

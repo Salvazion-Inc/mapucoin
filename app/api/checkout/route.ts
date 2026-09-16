@@ -1,4 +1,5 @@
 import { getBySlug } from "@/lib/catalog";
+import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
 import { appOrigin, getStripe, stripeConfigured } from "@/lib/stripe";
 
@@ -28,6 +29,10 @@ export async function POST(req: Request) {
   const bookingId = crypto.randomUUID();
   const originUrl = appOrigin(req);
   const stripe = getStripe();
+  const fromApp = String(body.source || "") === "app";
+  const sessionUser = await readSession(
+    cookieValue(req.headers.get("cookie"), SESSION_COOKIE),
+  );
 
   const db = getSupabase();
   if (db) {
@@ -37,13 +42,16 @@ export async function POST(req: Request) {
       email,
       phone: String(body.phone || ""),
       yacht_slug: item.slug,
+      capsule_slug: item.slug,
+      user_id: sessionUser?.id || null,
       origin: "mapucoin",
       destination: item.city,
       guests,
+      nights,
       amount,
       status: "checkout",
       notes: JSON.stringify({
-        source: "mapucoin",
+        source: fromApp ? "mapucoin-app" : "mapucoin",
         capsule: item.slug,
         nights,
         guests,
@@ -51,7 +59,18 @@ export async function POST(req: Request) {
     };
     const { error } = await db.from("bookings").insert(row);
     if (error) {
-      console.error("booking_insert", error.message);
+      const { error: fallback } = await db.from("bookings").insert({
+        id: bookingId,
+        full_name: fullName,
+        email,
+        phone: String(body.phone || ""),
+        capsule_slug: item.slug,
+        nights,
+        guests,
+        amount,
+        status: "checkout",
+      });
+      if (fallback) console.error("booking_insert", error.message, fallback.message);
     }
   }
 
@@ -59,8 +78,12 @@ export async function POST(req: Request) {
     mode: "payment",
     customer_email: email,
     client_reference_id: bookingId,
-    success_url: `${originUrl}/reserva/exito?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${originUrl}/reserva?capsula=${item.slug}&cancel=1`,
+    success_url: fromApp
+      ? `${originUrl}/app/viaje?paid=1&session_id={CHECKOUT_SESSION_ID}`
+      : `${originUrl}/reserva/exito?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: fromApp
+      ? `${originUrl}/app/capsulas?cancel=1`
+      : `${originUrl}/reserva?capsula=${item.slug}&cancel=1`,
     integration_identifier: `mapucoin_capsule_${crypto.randomUUID().slice(0, 8)}`,
     line_items: [
       {
@@ -80,6 +103,8 @@ export async function POST(req: Request) {
       capsule: item.slug,
       nights: String(nights),
       guests: String(guests),
+      user_id: sessionUser?.id || "",
+      source: fromApp ? "app" : "web",
     },
   });
 

@@ -50,9 +50,9 @@ export async function POST(req: Request) {
         full_name,
         email,
         phone,
-        role,
+        role: "owner",
         yacht_name: business,
-        notes: `[mapucoin] ${city}${notes ? ` · ${notes}` : ""}`,
+        notes: `[mapucoin:${role}] ${city}${notes ? ` · ${notes}` : ""}`,
         status: "pending",
       });
       if (appErr) {

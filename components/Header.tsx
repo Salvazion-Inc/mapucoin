@@ -8,6 +8,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+type Me = { id: string; email: string; name: string } | null;
+
 export default function Header() {
   const path = usePathname();
   const { locale } = useLocale();
@@ -15,6 +17,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hash, setHash] = useState("home");
+  const [me, setMe] = useState<Me>(null);
 
   const links = [
     { href: "/#mapa", hash: "mapa", label: c.nav.map },
@@ -24,6 +27,13 @@ export default function Header() {
     { href: "/#partners", hash: "partners", label: c.nav.partners },
     { href: "/#premios", hash: "premios", label: c.nav.awards },
   ];
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((data) => setMe(data.user ?? null))
+      .catch(() => setMe(null));
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -95,6 +105,18 @@ export default function Header() {
             </Link>
           ))}
           <LanguageSwitcher />
+          <Link href="/app" className="text-sand/80 hover:text-gold">
+            {c.nav.app}
+          </Link>
+          {me ? (
+            <Link href="/app/cuenta" className="text-gold">
+              {me.name.split(" ")[0]}
+            </Link>
+          ) : (
+            <Link href="/login?next=/app" className="text-sand/80 hover:text-gold">
+              {c.nav.login}
+            </Link>
+          )}
           <Link href="/#planificar" className="btn-gold !px-4 !py-2 text-xs">
             {c.nav.plan}
           </Link>
@@ -102,6 +124,9 @@ export default function Header() {
 
         <div className="flex items-center gap-2 xl:hidden">
           <LanguageSwitcher compact />
+          <Link href="/app" className="btn-ghost !px-3 !py-1.5 text-xs">
+            {c.nav.app}
+          </Link>
           <Link href="/#planificar" className="btn-gold !px-3.5 !py-1.5 text-xs">
             {c.nav.plan}
           </Link>
@@ -132,6 +157,16 @@ export default function Header() {
               {l.label}
             </Link>
           ))}
+          <Link href="/app" className="block py-2.5 text-gold" onClick={() => setOpen(false)}>
+            {c.nav.app}
+          </Link>
+          <Link
+            href={me ? "/app/cuenta" : "/login?next=/app"}
+            className="block py-2.5 text-gold"
+            onClick={() => setOpen(false)}
+          >
+            {me ? me.name.split(" ")[0] : c.nav.login}
+          </Link>
         </div>
       )}
     </header>

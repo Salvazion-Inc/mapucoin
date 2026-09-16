@@ -6,9 +6,28 @@ import {
   localeFromPath,
   stripLocalePrefix,
 } from "@/lib/locale";
+import { SESSION_COOKIE, readSession } from "@/lib/session";
 
-export function middleware(request: NextRequest) {
+const APP_HOSTS = new Set(["app.mapucoin.com", "www.app.mapucoin.com"]);
+const SITE = "https://mapucoin.com";
+
+export async function middleware(request: NextRequest) {
+  const host = request.headers.get("host")?.split(":")[0] ?? "";
   const { pathname, search } = request.nextUrl;
+
+  if (host === "www.mapucoin.com") {
+    const url = request.nextUrl.clone();
+    url.host = "mapucoin.com";
+    url.protocol = "https:";
+    return NextResponse.redirect(url, 308);
+  }
+
+  if (APP_HOSTS.has(host)) {
+    const dest = pathname.startsWith("/app")
+      ? `${SITE}${pathname}${search}`
+      : `${SITE}/app${pathname === "/" ? "" : pathname}${search}`;
+    return NextResponse.redirect(dest, 308);
+  }
 
   const prefixed = localeFromPath(pathname);
   if (prefixed) {
@@ -16,6 +35,16 @@ export function middleware(request: NextRequest) {
     const res = NextResponse.redirect(dest, 308);
     res.headers.append("Set-Cookie", localeCookieHeader(prefixed));
     return res;
+  }
+
+  if (pathname.startsWith("/app")) {
+    const user = await readSession(request.cookies.get(SESSION_COOKIE)?.value);
+    if (!user) {
+      const login = request.nextUrl.clone();
+      login.pathname = "/login";
+      login.search = `?next=${encodeURIComponent(pathname + search)}`;
+      return NextResponse.redirect(login);
+    }
   }
 
   const locale = request.cookies.get(LOCALE_COOKIE)?.value;

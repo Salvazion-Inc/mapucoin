@@ -2,7 +2,7 @@
   "name": "mapucoin",
   "version": "1.0.0",
   "private": true,
-  "description": "Mapucoin — plataforma turística de Chile con IA: cápsulas, gastronomía, mapa y partners.",
+  "description": "Mapucoin — plataforma y App de Chile: cápsulas, gastronomía, mapa, itinerario Grok y partners.",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

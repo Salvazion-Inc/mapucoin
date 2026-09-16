@@ -11,7 +11,7 @@ import {
 } from "@/lib/catalog";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 export default function PlannerForm({
@@ -26,6 +26,8 @@ export default function PlannerForm({
   const { locale } = useLocale();
   const c = t(locale);
   const router = useRouter();
+  const pathname = usePathname();
+  const inApp = pathname.startsWith("/app");
   const seed = destinations.find((d) => d.slug === initialPlace) || destinations[0];
   const [land, setLand] = useState<Landscape>(seed.landscapes?.[0] || "desierto");
   const [place, setPlace] = useState(seed.slug);
@@ -73,6 +75,10 @@ export default function PlannerForm({
       viajeros: String(guests),
       intereses: picked.join(","),
     });
+    if (inApp) {
+      router.push(`/app/viaje?${q.toString()}`);
+      return;
+    }
     router.push(`/?${q.toString()}#planificar`);
     requestAnimationFrame(() => {
       document.getElementById("planificar")?.scrollIntoView({

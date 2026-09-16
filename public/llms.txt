@@ -2,7 +2,7 @@
 
 > Chile por paisaje: desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cápsulas de cobre y vidrio, gastronomía local y mapa vivo.
 
-Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion, Inc. (a Delaware corporation). Independent partners run capsules, meals, and activities. Payments use Stripe (CLP).
+Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion, Inc. (a Delaware corporation). Independent partners run capsules, meals, and activities. Payments use Stripe (CLP). The installable App lives at https://mapucoin.com/app.
 
 ## Official sources
 

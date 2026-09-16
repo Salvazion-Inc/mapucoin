@@ -2,6 +2,8 @@
 
 Plataforma turística de Chile: el viajero indica **presupuesto** y **lugar**, Grok arma un itinerario con **cápsulas tecnológicas**, **gastronomía local** y **actividades**, sobre un **mapa interactivo**. Partners se inscriben y Stripe cobra.
 
+La **App** (PWA instalable, misma infraestructura que Kaenz / Salvazion) vive en `/app`: cuenta, mapa, cápsulas, viaje con Grok y mesa. Entrar en `/login`.
+
 - Dominio: [mapucoin.com](https://mapucoin.com)
 - Marca: logo kultrún en Canva (`Logo Mapucoin`)
 - Stack: Next.js 15 · Grok (xAI) · Supabase · Stripe · Leaflet · Vercel · GitHub
@@ -16,6 +18,12 @@ Plataforma turística de Chile: el viajero indica **presupuesto** y **lugar**, G
 | `/destinos` `/capsulas` `/gastronomia` `/actividades` | Catálogo |
 | `/partners` | Alta de partners |
 | `/reserva` | Checkout Stripe (CLP) |
+| `/login` `/signup` | Cuenta (correo, Google) |
+| `/app` | App PWA — Explorar |
+| `/app/capsulas` | Cápsulas y reserva Stripe |
+| `/app/viaje` | Itinerario Grok |
+| `/app/mesa` | Gastronomía y actividades |
+| `/app/cuenta` | Perfil y reservas |
 
 ## Variables
 
@@ -29,11 +37,28 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+AUTH_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 ```
 
 ## Supabase
 
-Ejecuta `supabase/schema.sql` en el SQL editor (tablas `partners` y `bookings`).
+Mapucoin comparte el proyecto Supabase de Kaenz (`mqkyzkrpoinbvclxurfg`). Las reservas van a `bookings`, el perfil a `profiles` (roles `client` / `owner`) y los partners a `applications`. `supabase/schema.sql` documenta el modelo propio si se separa el proyecto.
+
+Google: mismas keys que Kaenz. En Google Cloud añade el redirect `https://mapucoin.com/api/auth/google/callback`. Guía: `docs/auth-google.md`.
+
+En Vercel (proyecto `mapucoin`) añade, si aún no están:
+
+```
+AUTH_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+```
+
+Sin Supabase, login/signup siguen funcionando en local (cookie de sesión). Sin `XAI_API_KEY`, el planificador usa el itinerario de catálogo. Sin Stripe, la reserva muestra error hasta configurar la clave.
+
+`app.mapucoin.com` redirige a `mapucoin.com/app`. La App exige sesión.
 
 ## Stripe
 

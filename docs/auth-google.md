@@ -1,43 +1,31 @@
 # Login con Google — Mapucoin
 
-Mapucoin usa el mismo flujo OAuth web que Kaenz (`/api/auth/google` → callback).
-
-## Redirect URIs
-
-En [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials → el cliente OAuth web de Kaenz/Salvazion:
-
-**Authorized JavaScript origins**
+Google ya está encendido en el proyecto Supabase compartido con Kaenz (`mqkyzkrpoinbvclxurfg`). El cliente de Google Cloud redirige a:
 
 ```
-https://mapucoin.com
-https://www.mapucoin.com
-http://localhost:3000
+https://mqkyzkrpoinbvclxurfg.supabase.co/auth/v1/callback
 ```
 
-**Authorized redirect URIs**
+Mapucoin no necesita Client ID/Secret en Vercel. El botón **Continuar con Google** llama a `/api/auth/google`, que usa `signInWithOAuth({ provider: "google" })`, y vuelve a `/auth/callback`.
+
+## Redirects en Supabase
+
+Authentication → URL Configuration → Redirect URLs, si aún no están:
 
 ```
-https://mapucoin.com/api/auth/google/callback
-https://www.mapucoin.com/api/auth/google/callback
-http://localhost:3000/api/auth/google/callback
+https://mapucoin.com/auth/callback
+https://mapucoin.com/**
+https://www.mapucoin.com/auth/callback
+http://localhost:3000/auth/callback
+http://localhost:3000/**
 ```
 
-Local ya coincide con Kaenz (`http://localhost:3000/api/auth/google/callback`), así que el mismo Client ID funciona en desarrollo.
+Site URL puede seguir en Kaenz; Mapucoin pasa `redirectTo` explícito.
 
 ## Vercel
 
-Variables en el proyecto `mapucoin` (Production + Preview + Development):
+Ya están `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Opcional:
 
 ```
 AUTH_SECRET=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
 ```
-
-Las de Supabase, Stripe y xAI ya estaban en el proyecto.
-
-## Supabase
-
-Proyecto: `mqkyzkrpoinbvclxurfg`
-
-Ejecuta `supabase/schema.sql` (tablas `partners`, `profiles`, `bookings`). El script `node scripts/apply-schema.mjs` lo intenta con la service role.

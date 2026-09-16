@@ -46,15 +46,7 @@ GOOGLE_CLIENT_SECRET=
 
 Mapucoin comparte el proyecto Supabase de Kaenz (`mqkyzkrpoinbvclxurfg`). Las reservas van a `bookings`, el perfil a `profiles` (roles `client` / `owner`) y los partners a `applications`. `supabase/schema.sql` documenta el modelo propio si se separa el proyecto.
 
-Google: mismas keys que Kaenz. En Google Cloud añade el redirect `https://mapucoin.com/api/auth/google/callback`. Guía: `docs/auth-google.md`.
-
-En Vercel (proyecto `mapucoin`) añade, si aún no están:
-
-```
-AUTH_SECRET=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-```
+Google entra por el provider ya activo en ese proyecto Supabase (mismo cliente Cloud que Kaenz). Guía: `docs/auth-google.md`.
 
 Sin Supabase, login/signup siguen funcionando en local (cookie de sesión). Sin `XAI_API_KEY`, el planificador usa el itinerario de catálogo. Sin Stripe, la reserva muestra error hasta configurar la clave.
 

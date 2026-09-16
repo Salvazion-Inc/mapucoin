@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
+import { applyCookies, createRouteSupabase } from "@/lib/supabase-route";
 import {
-  createOauthStart,
-  googleAuthUrl,
-  googleCallbackUrl,
-  googleConfigured,
   googleFailUrl,
-  oauthStateCookie,
   parseAuthFrom,
+  publicOrigin,
   safeNext,
 } from "@/lib/google-oauth";
 
@@ -16,20 +13,34 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const next = safeNext(url.searchParams.get("next"));
   const from = parseAuthFrom(url.searchParams.get("from"));
+  const origin = publicOrigin(req);
+  const pending: Parameters<typeof applyCookies>[1] = [];
+  const supabase = createRouteSupabase(req, pending);
 
-  if (!googleConfigured()) {
+  if (!supabase) {
     return NextResponse.redirect(
       googleFailUrl(req, { next, from, reason: "unconfigured" }),
     );
   }
 
-  const start = await createOauthStart(next, from);
-  const dest = googleAuthUrl({
-    nonce: start.nonce,
-    challenge: start.challenge,
-    callback: googleCallbackUrl(req),
+  const redirectTo = new URL("/auth/callback", origin);
+  redirectTo.searchParams.set("next", next);
+  redirectTo.searchParams.set("from", from);
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: redirectTo.toString(),
+      skipBrowserRedirect: true,
+      queryParams: { prompt: "select_account" },
+    },
   });
-  const res = NextResponse.redirect(dest);
-  res.headers.append("Set-Cookie", oauthStateCookie(start.token));
-  return res;
+
+  if (error || !data.url) {
+    return NextResponse.redirect(
+      googleFailUrl(req, { next, from, reason: "failed" }),
+    );
+  }
+
+  return applyCookies(NextResponse.redirect(data.url), pending);
 }

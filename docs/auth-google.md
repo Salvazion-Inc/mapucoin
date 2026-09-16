@@ -8,19 +8,18 @@ https://mqkyzkrpoinbvclxurfg.supabase.co/auth/v1/callback
 
 Mapucoin no necesita Client ID/Secret en Vercel. El botón **Continuar con Google** llama a `/api/auth/google`, que usa `signInWithOAuth({ provider: "google" })`, y vuelve a `/auth/callback`.
 
-## Redirects en Supabase
+Mapucoin y Kaenz **comparten el mismo proyecto** (plan free: máximo 2). No hace falta un tercero.
 
-Authentication → URL Configuration → Redirect URLs, si aún no están:
+Site URL sigue en `https://kaenz.com`. El login de Gmail de Mapucoin usa `redirectTo=https://kaenz.com/mapucoin-auth`; Kaenz reenvía el `code` a `https://mapucoin.com/auth/callback`.
+
+Opcional, para ir directo sin el puente:
 
 ```
 https://mapucoin.com/auth/callback
 https://mapucoin.com/**
-https://www.mapucoin.com/auth/callback
+https://kaenz.com/mapucoin-auth
 http://localhost:3000/auth/callback
-http://localhost:3000/**
 ```
-
-Site URL puede seguir en Kaenz; Mapucoin pasa `redirectTo` explícito.
 
 ## Vercel
 

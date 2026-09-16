@@ -23,9 +23,14 @@ export async function GET(req: Request) {
     );
   }
 
-  const redirectTo = new URL("/auth/callback", origin);
+  const local = origin.includes("localhost") || origin.includes("127.0.0.1");
+  const redirectTo = new URL(
+    local ? "/auth/callback" : "https://kaenz.com/mapucoin-auth",
+    local ? origin : "https://kaenz.com",
+  );
   redirectTo.searchParams.set("next", next);
   redirectTo.searchParams.set("from", from);
+  if (!local) redirectTo.searchParams.set("return", origin);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",

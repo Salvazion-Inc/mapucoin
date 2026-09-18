@@ -45,6 +45,9 @@ const es = {
     search: "Buscar destino, cápsula o partner",
     searchEmpty: "Sin coincidencias",
     searchClear: "Limpiar búsqueda",
+    emptyPartners: "Aún no hay partners aprobados en el mapa.",
+    emptyPartnersHint:
+      "Cuando un partner local se apruebe, su pin aparece aquí.",
   },
   capsules: {
     kicker: "Cápsulas",
@@ -55,6 +58,7 @@ const es = {
     perNight: "Por noche",
     upTo: "Hasta {n} viajeros · {region}",
     book: "Reservar",
+    canceled: "Pago cancelado. Puedes reservar de nuevo cuando quieras.",
     explore: "Explorar {name} →",
     location: "Ubicación",
     interiorAlt: "Interior de cobre, madera y vidrio",
@@ -140,9 +144,15 @@ const es = {
     sending: "Enviando…",
     incomplete: "Completa nombre, correo y negocio.",
     error: "No se pudo enviar. Inténtalo de nuevo.",
-    ok: "Solicitud recibida. Te contactamos para activar tu ficha y Stripe.",
+    ok: "Recibimos tu postulación",
+    okLead:
+      "Revisamos tu oferta y te escribimos para activar la ficha y Stripe. No publicamos tus datos hasta aprobarte.",
+    invalidEmail: "Ingresa un correo válido.",
+    privacy:
+      "Tus datos no se muestran a otros postulantes ni en el mapa público.",
+    another: "Enviar otra postulación",
     okNoDb:
-      "Solicitud recibida. Conecta Supabase para guardar partners en producción.",
+      "Recibimos tu postulación. Conecta Supabase para guardar partners en producción.",
     onboardTitle: "Activar Stripe Connect",
     onboardLead:
       "Usa el mismo correo de tu postulación. Stripe abre una cuenta Express en Chile (CL).",
@@ -240,7 +250,20 @@ const es = {
     name: "Nombre",
     email: "Correo",
     phone: "Teléfono",
-    pay: "Pagar con Stripe",
+    pay: "Reservar / Pagar",
+    included: "Incluye",
+    perNight: "por noche",
+    totalLabel: "Total",
+    backMap: "Volver al mapa",
+    backCapsule: "Volver a la cápsula",
+    invalidName: "Escribe tu nombre (mínimo 2 letras).",
+    invalidEmail: "Ingresa un correo válido.",
+    rateLimited: "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
+    secure: "Pago seguro con Stripe",
+    platformNote:
+      "Cobro en CLP sobre Mapucoin. Si el partner aún no tiene Stripe Connect, el pago queda en la plataforma.",
+    fromPrice: "Desde {price} / noche",
+    paying: "Redirigiendo a Stripe…",
     creating: "Creando sesión de Stripe…",
     noStripe: "Stripe no está configurado. Añade STRIPE_SECRET_KEY en Vercel.",
     fail: "No se pudo iniciar el pago. Revisa los datos.",
@@ -249,6 +272,15 @@ const es = {
     okLead:
       "Stripe registró el pago. Te escribimos con el check-in de la cápsula y el resto del itinerario.",
     okCta: "Volver al mapa",
+    okAmount: "Monto",
+    okCapsule: "Cápsula",
+    okNights: "Noches",
+    okGuests: "Viajeros",
+    okEmail: "Correo",
+    okPending: "Confirmando el pago…",
+    okMissing:
+      "No encontramos la sesión. Si el cargo se hizo, el comprobante llega a tu correo.",
+    okPaid: "Pagado",
   },
   catalogEmpty: "No hay fichas en este paisaje.",
   awardTitles: {
@@ -328,6 +360,8 @@ const en: typeof es = {
     search: "Search destination, capsule or partner",
     searchEmpty: "No matches",
     searchClear: "Clear search",
+    emptyPartners: "No approved partners on the map yet.",
+    emptyPartnersHint: "When a local partner is approved, their pin appears here.",
   },
   capsules: {
     kicker: "Capsules",
@@ -338,6 +372,7 @@ const en: typeof es = {
     perNight: "Per night",
     upTo: "Up to {n} guests · {region}",
     book: "Book",
+    canceled: "Payment canceled. You can book again whenever you like.",
     explore: "Explore {name} →",
     location: "Location",
     interiorAlt: "Copper, wood and glass interior",
@@ -423,9 +458,15 @@ const en: typeof es = {
     sending: "Sending…",
     incomplete: "Fill in name, email and business.",
     error: "Could not send. Try again.",
-    ok: "Request received. We will contact you to activate your listing and Stripe.",
+    ok: "We received your application",
+    okLead:
+      "We review your offer and write to activate your listing and Stripe. We do not publish your details until you are approved.",
+    invalidEmail: "Enter a valid email.",
+    privacy:
+      "Your details are not shown to other applicants or on the public map.",
+    another: "Send another application",
     okNoDb:
-      "Request received. Connect Supabase to store partners in production.",
+      "We received your application. Connect Supabase to store partners in production.",
     onboardTitle: "Activate Stripe Connect",
     onboardLead:
       "Use the same email from your application. Stripe opens an Express account in Chile (CL).",
@@ -523,7 +564,20 @@ const en: typeof es = {
     name: "Name",
     email: "Email",
     phone: "Phone",
-    pay: "Pay with Stripe",
+    pay: "Book / Pay",
+    included: "Includes",
+    perNight: "per night",
+    totalLabel: "Total",
+    backMap: "Back to the map",
+    backCapsule: "Back to the capsule",
+    invalidName: "Enter your name (at least 2 letters).",
+    invalidEmail: "Enter a valid email.",
+    rateLimited: "Too many attempts. Wait a moment and try again.",
+    secure: "Secure payment with Stripe",
+    platformNote:
+      "Charged in CLP on Mapucoin. If the partner is not Connect-ready yet, payment stays on the platform.",
+    fromPrice: "From {price} / night",
+    paying: "Redirecting to Stripe…",
     creating: "Creating Stripe session…",
     noStripe: "Stripe is not configured. Add STRIPE_SECRET_KEY in Vercel.",
     fail: "Could not start payment. Check the details.",
@@ -532,6 +586,15 @@ const en: typeof es = {
     okLead:
       "Stripe recorded the payment. We will write with capsule check-in and the rest of the itinerary.",
     okCta: "Back to the map",
+    okAmount: "Amount",
+    okCapsule: "Capsule",
+    okNights: "Nights",
+    okGuests: "Travelers",
+    okEmail: "Email",
+    okPending: "Confirming the payment…",
+    okMissing:
+      "We could not find the session. If you were charged, the receipt arrives by email.",
+    okPaid: "Paid",
   },
   catalogEmpty: "No listings in this landscape.",
   awardTitles: {
@@ -611,6 +674,9 @@ const pt: typeof es = {
     search: "Buscar destino, cápsula ou partner",
     searchEmpty: "Sem resultados",
     searchClear: "Limpar busca",
+    emptyPartners: "Ainda não há partners aprovados no mapa.",
+    emptyPartnersHint:
+      "Quando um partner local for aprovado, o pin aparece aqui.",
   },
   capsules: {
     kicker: "Cápsulas",
@@ -621,6 +687,7 @@ const pt: typeof es = {
     perNight: "Por noite",
     upTo: "Até {n} viajantes · {region}",
     book: "Reservar",
+    canceled: "Pagamento cancelado. Você pode reservar de novo quando quiser.",
     explore: "Explorar {name} →",
     location: "Localização",
     interiorAlt: "Interior de cobre, madeira e vidro",
@@ -706,9 +773,15 @@ const pt: typeof es = {
     sending: "Enviando…",
     incomplete: "Preencha nome, e-mail e negócio.",
     error: "Não foi possível enviar. Tente de novo.",
-    ok: "Pedido recebido. Entramos em contato para ativar sua ficha e o Stripe.",
+    ok: "Recebemos a sua candidatura",
+    okLead:
+      "Revisamos a oferta e escrevemos para ativar a ficha e o Stripe. Não publicamos os seus dados até aprovar.",
+    invalidEmail: "Informe um e-mail válido.",
+    privacy:
+      "Os seus dados não aparecem para outros candidatos nem no mapa público.",
+    another: "Enviar outra candidatura",
     okNoDb:
-      "Pedido recebido. Conecte o Supabase para guardar partners em produção.",
+      "Recebemos a sua candidatura. Conecte o Supabase para guardar partners em produção.",
     onboardTitle: "Ativar Stripe Connect",
     onboardLead:
       "Use o mesmo e-mail da candidatura. A Stripe abre uma conta Express no Chile (CL).",
@@ -806,7 +879,20 @@ const pt: typeof es = {
     name: "Nome",
     email: "E-mail",
     phone: "Telefone",
-    pay: "Pagar com Stripe",
+    pay: "Reservar / Pagar",
+    included: "Inclui",
+    perNight: "por noite",
+    totalLabel: "Total",
+    backMap: "Voltar ao mapa",
+    backCapsule: "Voltar à cápsula",
+    invalidName: "Escreva o seu nome (mínimo 2 letras).",
+    invalidEmail: "Informe um e-mail válido.",
+    rateLimited: "Demasiadas tentativas. Espere um momento e tente de novo.",
+    secure: "Pagamento seguro com Stripe",
+    platformNote:
+      "Cobrança em CLP na Mapucoin. Se o partner ainda não tem Stripe Connect, o pagamento fica na plataforma.",
+    fromPrice: "A partir de {price} / noite",
+    paying: "A redirecionar para o Stripe…",
     creating: "Criando sessão Stripe…",
     noStripe: "O Stripe não está configurado. Adicione STRIPE_SECRET_KEY na Vercel.",
     fail: "Não foi possível iniciar o pagamento. Revise os dados.",
@@ -815,6 +901,15 @@ const pt: typeof es = {
     okLead:
       "O Stripe registrou o pagamento. Escrevemos com o check-in da cápsula e o resto do itinerário.",
     okCta: "Voltar ao mapa",
+    okAmount: "Montante",
+    okCapsule: "Cápsula",
+    okNights: "Noites",
+    okGuests: "Viajantes",
+    okEmail: "E-mail",
+    okPending: "A confirmar o pagamento…",
+    okMissing:
+      "Não encontramos a sessão. Se o cargo foi feito, o comprovante chega ao e-mail.",
+    okPaid: "Pago",
   },
   catalogEmpty: "Não há fichas nesta paisagem.",
   awardTitles: {
@@ -894,6 +989,9 @@ const fr: typeof es = {
     search: "Rechercher une destination, une capsule ou un partenaire",
     searchEmpty: "Aucun résultat",
     searchClear: "Effacer la recherche",
+    emptyPartners: "Aucun partenaire approuvé sur la carte pour l’instant.",
+    emptyPartnersHint:
+      "Lorsqu’un partenaire local est approuvé, son pin apparaît ici.",
   },
   capsules: {
     kicker: "Capsules",
@@ -904,6 +1002,7 @@ const fr: typeof es = {
     perNight: "Par nuit",
     upTo: "Jusqu'à {n} voyageurs · {region}",
     book: "Réserver",
+    canceled: "Paiement annulé. Vous pouvez réserver à nouveau quand vous voulez.",
     explore: "Explorer {name} →",
     location: "Emplacement",
     interiorAlt: "Intérieur cuivre, bois et verre",
@@ -989,9 +1088,15 @@ const fr: typeof es = {
     sending: "Envoi…",
     incomplete: "Complétez nom, e-mail et activité.",
     error: "Envoi impossible. Réessayez.",
-    ok: "Demande reçue. Nous vous contactons pour activer votre fiche et Stripe.",
+    ok: "Nous avons reçu votre candidature",
+    okLead:
+      "Nous examinons l’offre et vous écrivons pour activer la fiche et Stripe. Vos données ne sont pas publiées avant l’approbation.",
+    invalidEmail: "Saisissez un e-mail valide.",
+    privacy:
+      "Vos données ne sont pas montrées aux autres candidats ni sur la carte publique.",
+    another: "Envoyer une autre candidature",
     okNoDb:
-      "Demande reçue. Connectez Supabase pour enregistrer les partenaires en production.",
+      "Nous avons reçu votre candidature. Connectez Supabase pour enregistrer les partenaires en production.",
     onboardTitle: "Activer Stripe Connect",
     onboardLead:
       "Utilisez le même e-mail que votre candidature. Stripe ouvre un compte Express au Chili (CL).",
@@ -1089,7 +1194,20 @@ const fr: typeof es = {
     name: "Nom",
     email: "E-mail",
     phone: "Téléphone",
-    pay: "Payer avec Stripe",
+    pay: "Réserver / Payer",
+    included: "Inclus",
+    perNight: "par nuit",
+    totalLabel: "Total",
+    backMap: "Retour à la carte",
+    backCapsule: "Retour à la capsule",
+    invalidName: "Indiquez votre nom (2 lettres minimum).",
+    invalidEmail: "Saisissez un e-mail valide.",
+    rateLimited: "Trop de tentatives. Patientez un moment et réessayez.",
+    secure: "Paiement sécurisé avec Stripe",
+    platformNote:
+      "Paiement en CLP sur Mapucoin. Si le partenaire n’a pas encore Stripe Connect, le paiement reste sur la plateforme.",
+    fromPrice: "À partir de {price} / nuit",
+    paying: "Redirection vers Stripe…",
     creating: "Création de la session Stripe…",
     noStripe: "Stripe n'est pas configuré. Ajoutez STRIPE_SECRET_KEY dans Vercel.",
     fail: "Impossible de lancer le paiement. Vérifiez les données.",
@@ -1098,6 +1216,15 @@ const fr: typeof es = {
     okLead:
       "Stripe a enregistré le paiement. Nous écrivons avec le check-in de la capsule et le reste de l'itinéraire.",
     okCta: "Retour à la carte",
+    okAmount: "Montant",
+    okCapsule: "Capsule",
+    okNights: "Nuits",
+    okGuests: "Voyageurs",
+    okEmail: "E-mail",
+    okPending: "Confirmation du paiement…",
+    okMissing:
+      "Session introuvable. Si le paiement a été débité, le reçu arrive par e-mail.",
+    okPaid: "Payé",
   },
   catalogEmpty: "Aucune fiche dans ce paysage.",
   awardTitles: {
@@ -1177,6 +1304,9 @@ const it: typeof es = {
     search: "Cerca destinazione, capsula o partner",
     searchEmpty: "Nessun risultato",
     searchClear: "Cancella ricerca",
+    emptyPartners: "Non ci sono ancora partner approvati sulla mappa.",
+    emptyPartnersHint:
+      "Quando un partner locale viene approvato, il pin appare qui.",
   },
   capsules: {
     kicker: "Capsule",
@@ -1187,6 +1317,7 @@ const it: typeof es = {
     perNight: "A notte",
     upTo: "Fino a {n} viaggiatori · {region}",
     book: "Prenota",
+    canceled: "Pagamento annullato. Puoi prenotare di nuovo quando vuoi.",
     explore: "Esplora {name} →",
     location: "Posizione",
     interiorAlt: "Interno in rame, legno e vetro",
@@ -1272,9 +1403,15 @@ const it: typeof es = {
     sending: "Invio…",
     incomplete: "Compila nome, email e attività.",
     error: "Invio non riuscito. Riprova.",
-    ok: "Richiesta ricevuta. Ti contattiamo per attivare la scheda e Stripe.",
+    ok: "Abbiamo ricevuto la tua candidatura",
+    okLead:
+      "Esaminiamo l’offerta e ti scriviamo per attivare la scheda e Stripe. I tuoi dati non sono pubblici fino all’approvazione.",
+    invalidEmail: "Inserisci un’email valida.",
+    privacy:
+      "I tuoi dati non sono mostrati ad altri candidati né sulla mappa pubblica.",
+    another: "Invia un’altra candidatura",
     okNoDb:
-      "Richiesta ricevuta. Collega Supabase per salvare i partner in produzione.",
+      "Abbiamo ricevuto la tua candidatura. Collega Supabase per salvare i partner in produzione.",
     onboardTitle: "Attiva Stripe Connect",
     onboardLead:
       "Usa la stessa email della candidatura. Stripe apre un account Express in Cile (CL).",
@@ -1372,7 +1509,20 @@ const it: typeof es = {
     name: "Nome",
     email: "Email",
     phone: "Telefono",
-    pay: "Paga con Stripe",
+    pay: "Prenota / Paga",
+    included: "Include",
+    perNight: "a notte",
+    totalLabel: "Totale",
+    backMap: "Torna alla mappa",
+    backCapsule: "Torna alla capsula",
+    invalidName: "Scrivi il tuo nome (minimo 2 lettere).",
+    invalidEmail: "Inserisci un’email valida.",
+    rateLimited: "Troppi tentativi. Attendi un momento e riprova.",
+    secure: "Pagamento sicuro con Stripe",
+    platformNote:
+      "Addebito in CLP su Mapucoin. Se il partner non ha ancora Stripe Connect, il pagamento resta sulla piattaforma.",
+    fromPrice: "Da {price} / notte",
+    paying: "Reindirizzamento a Stripe…",
     creating: "Creazione della sessione Stripe…",
     noStripe: "Stripe non è configurato. Aggiungi STRIPE_SECRET_KEY in Vercel.",
     fail: "Impossibile avviare il pagamento. Controlla i dati.",
@@ -1381,6 +1531,15 @@ const it: typeof es = {
     okLead:
       "Stripe ha registrato il pagamento. Scriviamo con il check-in della capsula e il resto dell'itinerario.",
     okCta: "Torna alla mappa",
+    okAmount: "Importo",
+    okCapsule: "Capsula",
+    okNights: "Notti",
+    okGuests: "Viaggiatori",
+    okEmail: "Email",
+    okPending: "Conferma del pagamento…",
+    okMissing:
+      "Sessione non trovata. Se l’addebito è andato a buon fine, la ricevuta arriva via email.",
+    okPaid: "Pagato",
   },
   catalogEmpty: "Nessuna scheda in questo paesaggio.",
   awardTitles: {

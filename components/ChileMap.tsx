@@ -115,7 +115,7 @@ export default function ChileMap({
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState(0);
-  const [partners, setPartners] = useState<PublicPartner[]>([]);
+  const [partners, setPartners] = useState<PublicPartner[] | null>(null);
   const mapEl = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -124,7 +124,7 @@ export default function ChileMap({
   const catalog = useMemo(() => mapPoints(), []);
   const merged = useMemo(() => {
     const taken = new Set(catalog.map((p) => p.slug));
-    const extra = partners
+    const extra = (partners || [])
       .filter((p) => !taken.has(p.slug))
       .map((p) => toPartnerPoint(p, catalog));
     return [...catalog, ...extra] as MapPoint[];
@@ -494,6 +494,19 @@ export default function ChileMap({
           ) : null}
         </div>
         <div ref={mapEl} className="relative z-0" style={{ height }} />
+        {filter === "partner" && partners !== null && partners.length === 0 && (
+          <div className="absolute inset-0 z-[1050] flex items-center justify-center bg-night/70 p-6 text-center backdrop-blur-[2px]">
+            <div className="reserva-glass max-w-sm rounded-3xl px-6 py-7">
+              <p className="font-display text-xl text-sand">
+                {c.map.emptyPartners}
+              </p>
+              <p className="mt-2 text-sm text-sand/70">{c.map.emptyPartnersHint}</p>
+              <a href="/#partners" className="btn-gold mt-5 text-sm">
+                {c.nav.partners}
+              </a>
+            </div>
+          </div>
+        )}
       </div>
       {land !== "all" && (
         <ul className="mt-4 flex flex-wrap gap-2">

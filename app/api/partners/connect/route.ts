@@ -5,6 +5,7 @@ import {
   updatePartner,
   type PartnerRecord,
 } from "@/lib/partner-store";
+import { clientIp, rateLimit, rateLimitedResponse } from "@/lib/rate-limit";
 import { CONNECT_COUNTRY } from "@/lib/partners";
 import {
   appOrigin,
@@ -83,6 +84,9 @@ async function createExpressAccount(
 }
 
 export async function POST(req: Request) {
+  const limited = rateLimit(`partners-connect:${clientIp(req)}`, 8, 10 * 60 * 1000);
+  if (!limited.ok) return rateLimitedResponse(limited.retryAfter);
+
   if (!stripeConfigured()) {
     return Response.json({ error: "stripe_unconfigured" }, { status: 503 });
   }

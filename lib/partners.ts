@@ -110,16 +110,18 @@ export function toPublicPartner(
   const lat = Number(row.lat);
   const lng = Number(row.lng);
   if (!slug || !inChile(lat, lng)) return null;
+  const id = String(row.id || "").trim();
+  if (!id) return null;
   return {
-    id: String(row.id || ""),
+    id,
     slug,
-    business: String(row.business || ""),
-    city: String(row.city || ""),
-    role: String(row.role || ""),
+    business: String(row.business || "").slice(0, 160),
+    city: String(row.city || "").slice(0, 80),
+    role: String(row.role || "").slice(0, 40),
     lat,
     lng,
     price_from_clp: Math.max(0, Math.round(Number(row.price_from_clp) || 0)),
-    offer_summary: String(row.offer_summary || ""),
+    offer_summary: String(row.offer_summary || "").slice(0, 280),
     landscape: isLandscape(row.landscape) ? row.landscape : null,
   };
 }

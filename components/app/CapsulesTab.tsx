@@ -115,6 +115,7 @@ function CapsulesInner() {
 function BookForm({ slug, onClose }: { slug: string; onClose: () => void }) {
   const { locale } = useLocale();
   const a = at(locale);
+  const c = t(locale);
   const { profile } = useProfile();
   const [nights, setNights] = useState(2);
   const [guests, setGuests] = useState(2);
@@ -145,6 +146,10 @@ function BookForm({ slug, onClose }: { slug: string; onClose: () => void }) {
     setBusy(false);
     if (res.status === 503) {
       setStatus(a.noStripe);
+      return;
+    }
+    if (res.status === 429) {
+      setStatus(c.reserva.rateLimited);
       return;
     }
     if (!res.ok || !data.url) {

@@ -19,6 +19,7 @@ La **App** (PWA instalable, misma infraestructura que Kaenz / Salvazion) vive en
 | `/partners` | Alta de partners |
 | `/partners/onboard` | Stripe Connect Express (CL) |
 | `/reserva` | Checkout Stripe (CLP) |
+| `/admin/partners` | Admin (secret). No está en el menú |
 | `/login` `/signup` | Cuenta (correo, Google) |
 | `/app` | App PWA — Explorar |
 | `/app/capsulas` | Cápsulas y reserva Stripe |
@@ -73,7 +74,9 @@ Detalle y fallback US→CL: [`docs/stripe-connect.md`](docs/stripe-connect.md).
 
 En el proyecto Supabase compartido con Kaenz (`profiles.id` es uuid → `auth.users`), corre `supabase/p2.sql` (no recasts de `profiles.id`). `schema.sql` completo también es seguro ahora. Si `partners` aún no existe, P2 usa `applications` (solo filas Mapucoin).
 
-`MAPUCOIN_ADMIN_SECRET` es el header de approve/reject. Si falta, se acepta `AUTH_SECRET`.
+`MAPUCOIN_ADMIN_SECRET` es el header de approve/reject. Si falta, se acepta `AUTH_SECRET`. No hay secret por defecto: sin esas variables el admin responde 401. `/api/health` solo dice `admin: true|false`, nunca el valor.
+
+Admin UI (sin curl): `https://mapucoin.com/admin/partners` — no está en la navegación. Pega el secret, lista pending y aprueba/rechaza. Coords: elige un destino del catálogo (Atacama, etc.), no inventes.
 
 ### Test mode
 
@@ -81,8 +84,8 @@ En el proyecto Supabase compartido con Kaenz (`profiles.id` es uuid → `auth.us
 2. Connect settings (test): habilitar Chile si aparece. Branding mínimo para Account Links.
 3. `MAPUCOIN_ADMIN_SECRET` y `MAPUCOIN_PLATFORM_FEE_BPS=1200` en el entorno.
 4. Postula un partner real por `/#partners` (no inventar filas a mano).
-5. `GET /api/partners?status=pending` con el secret → copia `id`.
-6. Aprueba con geo del catálogo (ejemplo de body; usa el `id` real y coords de un destino curado, no un partner ficticio):
+5. Abre `/admin/partners` con el secret, o `GET /api/partners?status=pending` con Bearer → copia `id`.
+6. Aprueba con geo del catálogo (UI o curl; usa el `id` real y coords de un destino curado, no un partner ficticio):
 
 ```bash
 curl -sS -X POST https://mapucoin.com/api/partners/approve \
@@ -94,7 +97,7 @@ curl -sS -X POST https://mapucoin.com/api/partners/approve \
 7. `GET /api/partners/approved` y `/#mapa` filtro Partners (o Ambos). Pin extra solo si el `slug` no choca con el catálogo; si coincide, el pin curado se queda y el checkout igual enlaza al partner.
 8. `/partners/onboard` con el correo de esa postulación. Completa Express con [datos de test Connect](https://docs.stripe.com/connect/testing).
 9. Confirma `account.updated` en el webhook y `charges_enabled` / `payouts_enabled` en `GET /api/partners?status=approved`.
-10. Reserva `https://mapucoin.com/reserva?capsula=capsula-atacama-star` (u otro slug curado). Tarjeta test `4242…`. En el PaymentIntent: `application_fee_amount` = 12% CLP y `transfer_data.destination` si Connect-ready; si no, cargo plataforma y booking `payout_mode=manual`.
+10. Reserva `https://mapucoin.com/reserva?capsula=capsula-atacama-star` (u otro slug curado). Nombre + correo, CTA **Reservar / Pagar**, `Pago seguro con Stripe`. Tarjeta test `4242…`. Success: `/reserva/exito`. Cancel: vuelve a la cápsula. En el PaymentIntent: `application_fee_amount` = 12% CLP y `transfer_data.destination` si Connect-ready; si no, cargo plataforma y booking `payout_mode=manual`.
 11. Si `POST /api/partners/connect` responde `blocked: true`, deja el partner aprobado (el pin sigue) y usa el accounting manual. No fuerces destination charges.
 
 ## Dominio mapucoin.com

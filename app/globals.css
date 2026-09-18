@@ -152,6 +152,21 @@ body {
   transform: translateY(-1px);
 }
 
+.reserva-glass {
+  border: 1px solid color-mix(in srgb, var(--color-clay) 34%, var(--color-gold));
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-gold) 10%, transparent),
+      rgba(7, 5, 4, 0.62)
+    ),
+    rgba(26, 16, 12, 0.58);
+  backdrop-filter: blur(22px);
+  box-shadow:
+    0 1px 0 rgba(243, 230, 204, 0.08) inset,
+    0 24px 60px rgba(7, 5, 4, 0.45);
+}
+
 .mapu-card {
   border: 1px solid rgba(212, 175, 55, 0.16);
   background: linear-gradient(

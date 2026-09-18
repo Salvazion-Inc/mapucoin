@@ -8,6 +8,21 @@ import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
+function CancelNotice() {
+  const params = useSearchParams();
+  const { locale } = useLocale();
+  if (params.get("cancel") !== "1") return null;
+  return (
+    <p className="mx-auto mt-6 max-w-7xl px-4 text-sm">
+      <span className="block rounded-2xl border border-clay/40 bg-clay/10 px-4 py-3 text-sand">
+        {t(locale).capsules.canceled}
+      </span>
+    </p>
+  );
+}
 
 export default function CapsulaView({
   capsule,
@@ -35,6 +50,9 @@ export default function CapsulaView({
           <h1 className="font-display mt-2 text-4xl md:text-6xl">{cap.name}</h1>
         </div>
       </div>
+      <Suspense>
+        <CancelNotice />
+      </Suspense>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
           <p className="text-lg text-sand/80">{cap.description}</p>

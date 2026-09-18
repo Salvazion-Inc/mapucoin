@@ -1,3 +1,4 @@
+import { adminSecretConfigured } from "@/lib/admin";
 import { googleConfigured } from "@/lib/google-oauth";
 import { platformFeeBps } from "@/lib/partners";
 import { getSupabase } from "@/lib/supabase";
@@ -32,10 +33,6 @@ export async function GET() {
     supabaseReachable: supabase,
     app: process.env.NEXT_PUBLIC_APP_URL || "",
     platform_fee_bps: platformFeeBps(),
-    admin: Boolean(
-      process.env.MAPUCOIN_ADMIN_SECRET ||
-        process.env.AUTH_SECRET ||
-        "mapucoin-by-salvazion-inc-session-key",
-    ),
+    admin: adminSecretConfigured(),
   });
 }

@@ -15,8 +15,9 @@ create table if not exists public.partners (
   created_at timestamptz not null default now()
 );
 
+-- Shared Kaenz project: profiles.id is uuid → auth.users(id). Do not recast to text.
 create table if not exists public.profiles (
-  id text primary key,
+  id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
   email text,
   phone text,
@@ -48,16 +49,11 @@ create table if not exists public.bookings (
   created_at timestamptz not null default now()
 );
 
-do $$
-begin
-  if exists (
-    select 1 from information_schema.columns
-    where table_schema = 'public' and table_name = 'profiles' and column_name = 'id'
-      and data_type = 'uuid'
-  ) then
-    alter table public.profiles alter column id type text using id::text;
-  end if;
-end $$;
+alter table public.profiles add column if not exists email text;
+alter table public.profiles add column if not exists instagram text;
+alter table public.profiles add column if not exists city text;
+alter table public.profiles add column if not exists city_lat double precision;
+alter table public.profiles add column if not exists city_lng double precision;
 
 alter table public.bookings add column if not exists user_id text;
 alter table public.bookings add column if not exists yacht_slug text;

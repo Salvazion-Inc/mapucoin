@@ -11,6 +11,7 @@ import { localizeItem } from "@/lib/catalog-i18n";
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
 import { mapTiles } from "@/lib/map-tiles";
+import type { PublicPartner } from "@/lib/partners";
 import type { LatLngExpression } from "leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -22,8 +23,46 @@ import {
   type KeyboardEvent,
 } from "react";
 
-type KindFilter = "place" | "capsule" | "all";
-type MapPoint = ReturnType<typeof mapPoints>[number];
+type KindFilter = "place" | "capsule" | "partner" | "all";
+type CatalogPoint = ReturnType<typeof mapPoints>[number];
+type PartnerPoint = {
+  slug: string;
+  name: string;
+  city: string;
+  region: string;
+  tagline: string;
+  lat: number;
+  lng: number;
+  priceFromCLP: number;
+  landscapes?: Landscape[];
+  group: "partner";
+  href: string;
+};
+type MapPoint = (CatalogPoint & { href?: string }) | PartnerPoint;
+
+function partnerHref(slug: string, catalog: CatalogPoint[]) {
+  const cat = catalog.find((p) => p.slug === slug);
+  if (cat?.group === "capsule") return `/capsulas/${slug}`;
+  if (cat?.group === "place") return `/destinos/${slug}`;
+  return `/partners/${slug}`;
+}
+
+function toPartnerPoint(p: PublicPartner, catalog: CatalogPoint[]): PartnerPoint {
+  const cat = catalog.find((c) => c.slug === p.slug);
+  return {
+    slug: p.slug,
+    name: p.business,
+    city: p.city,
+    region: cat?.region || "",
+    tagline: p.offer_summary,
+    lat: p.lat,
+    lng: p.lng,
+    priceFromCLP: p.price_from_clp,
+    landscapes: p.landscape ? [p.landscape] : cat?.landscapes,
+    group: "partner",
+    href: partnerHref(p.slug, catalog),
+  };
+}
 
 const PIN_SIZE = 36;
 
@@ -76,32 +115,68 @@ export default function ChileMap({
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState(0);
+  const [partners, setPartners] = useState<PublicPartner[]>([]);
   const mapEl = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
   const searchFocusRef = useRef<string | null>(null);
   const catalog = useMemo(() => mapPoints(), []);
+  const merged = useMemo(() => {
+    const taken = new Set(catalog.map((p) => p.slug));
+    const extra = partners
+      .filter((p) => !taken.has(p.slug))
+      .map((p) => toPartnerPoint(p, catalog));
+    return [...catalog, ...extra] as MapPoint[];
+  }, [catalog, partners]);
   const points = useMemo(() => {
-    let all = catalog;
+    let all = merged;
     if (filter !== "all") all = all.filter((p) => p.group === filter);
     if (land !== "all") {
       all = all.filter((p) => p.landscapes?.includes(land));
     }
     return all;
-  }, [catalog, filter, land]);
+  }, [merged, filter, land]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/partners/approved")
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        const list = Array.isArray(data?.partners) ? data.partners : [];
+        setPartners(list);
+      })
+      .catch(() => {
+        if (!cancelled) setPartners([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const listed = useMemo(
     () => destinationsByLandscape(land),
     [land],
   );
 
+  function displayOf(p: MapPoint) {
+    if (p.group === "partner") return p;
+    return localizeItem(p, locale);
+  }
+
+  function groupLabel(group: MapPoint["group"]) {
+    if (group === "capsule") return c.map.capsule;
+    if (group === "partner") return c.map.partner;
+    return c.map.destination;
+  }
+
   const hits = useMemo(() => {
     const q = fold(query);
     if (!q) return [];
-    return catalog
+    return merged
       .map((p) => {
-        const shown = localizeItem(p, locale);
+        const shown = displayOf(p);
         const hay = fold(
           [
             shown.name,
@@ -119,7 +194,7 @@ export default function ChileMap({
       .filter((x) => x.hay.includes(q))
       .sort((a, b) => a.rank - b.rank || a.shown.name.localeCompare(b.shown.name, locale))
       .slice(0, 8);
-  }, [catalog, query, locale, c.landscapes]);
+  }, [merged, query, locale, c.landscapes]);
 
   function flyToKey(key: string) {
     const map = mapRef.current;
@@ -131,7 +206,7 @@ export default function ChileMap({
   }
 
   function selectPoint(p: MapPoint) {
-    const shown = localizeItem(p, locale);
+    const shown = displayOf(p);
     const key = pointKey(p);
     setQuery(shown.name);
     setMenuOpen(false);
@@ -206,13 +281,17 @@ export default function ChileMap({
         iconAnchor: [PIN_SIZE / 2, PIN_SIZE / 2],
       });
       const href =
-        p.group === "capsule" ? `/capsulas/${p.slug}` : `/destinos/${p.slug}`;
-      const shown = localizeItem(p, locale);
+        p.group === "partner"
+          ? p.href
+          : p.group === "capsule"
+            ? `/capsulas/${p.slug}`
+            : `/destinos/${p.slug}`;
+      const shown = displayOf(p);
       const marker = L.marker([p.lat, p.lng], { icon })
         .addTo(map)
         .bindPopup(
           `<div style="min-width:180px">
-            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#d4af37;margin:0">${p.group === "capsule" ? c.map.capsule : c.map.destination}</p>
+            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#d4af37;margin:0">${groupLabel(p.group)}</p>
             <strong style="font-size:15px;color:#f3e6cc">${shown.name}</strong>
             <p style="margin:6px 0 8px;color:#f3e6cc;font-size:13px;opacity:.8">${shown.tagline}</p>
             <p style="margin:0;font-size:13px;color:#d4af37">${c.from} ${formatCLP(p.priceFromCLP)}</p>
@@ -255,7 +334,7 @@ export default function ChileMap({
       mapRef.current = null;
       markersRef.current = new Map();
     };
-  }, [points, focusSlug, locale, c.from, c.map.capsule, c.map.destination, c.map.viewSheet]);
+  }, [points, focusSlug, locale, c.from, c.map.capsule, c.map.destination, c.map.partner, c.map.viewSheet]);
 
   useEffect(() => {
     const box = searchRef.current;
@@ -309,6 +388,7 @@ export default function ChileMap({
           [
             ["place", c.map.places],
             ["capsule", c.map.capsules],
+            ["partner", c.map.partners],
             ["all", c.map.both],
           ] as [KindFilter, string][]
         ).map(([id, label]) => (
@@ -400,9 +480,7 @@ export default function ChileMap({
                       onClick={() => selectPoint(hit.p)}
                     >
                       <span className="text-[10px] font-semibold tracking-[0.14em] text-gold uppercase">
-                        {hit.p.group === "capsule"
-                          ? c.map.capsule
-                          : c.map.destination}
+                        {groupLabel(hit.p.group)}
                       </span>
                       <span className="text-sm text-sand">{hit.shown.name}</span>
                       <span className="text-xs text-sand/50">

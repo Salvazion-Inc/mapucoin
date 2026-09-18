@@ -3,8 +3,33 @@
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
+
+function ConfirmPaid() {
+  const params = useSearchParams();
+  const sessionId = params.get("session_id") || "";
+  useEffect(() => {
+    if (!sessionId) return;
+    fetch("/api/checkout/confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId }),
+    }).catch(() => {});
+  }, [sessionId]);
+  return null;
+}
 
 export default function ExitoPage() {
+  return (
+    <Suspense>
+      <ConfirmPaid />
+      <ExitoInner />
+    </Suspense>
+  );
+}
+
+function ExitoInner() {
   const { locale } = useLocale();
   const c = t(locale);
   return (

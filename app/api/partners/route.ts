@@ -1,3 +1,5 @@
+import { adminAuthorized } from "@/lib/admin";
+import { insertPartner, listPartners } from "@/lib/partner-store";
 import { getSupabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -10,6 +12,25 @@ const roles = [
   "transporte",
   "vina",
 ] as const;
+
+export async function GET(req: Request) {
+  if (!adminAuthorized(req)) {
+    return Response.json({ error: "admin" }, { status: 401 });
+  }
+  const db = getSupabase();
+  if (!db) return Response.json({ error: "db" }, { status: 503 });
+
+  const status = new URL(req.url).searchParams.get("status") || "pending";
+  try {
+    const { partners, backend } = await listPartners(db, status);
+    return Response.json({ partners, backend });
+  } catch (err) {
+    return Response.json(
+      { error: err instanceof Error ? err.message : "db" },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
@@ -42,24 +63,11 @@ export async function POST(req: Request) {
   const db = getSupabase();
   let stored = false;
   if (db) {
-    const { error: partnerErr } = await db.from("partners").insert(row);
-    if (!partnerErr) {
-      stored = true;
-    } else {
-      const { error: appErr } = await db.from("applications").insert({
-        full_name,
-        email,
-        phone,
-        role: "owner",
-        yacht_name: business,
-        notes: `[mapucoin:${role}] ${city}${notes ? ` · ${notes}` : ""}`,
-        status: "pending",
-      });
-      if (appErr) {
-        return Response.json({ error: appErr.message }, { status: 500 });
-      }
-      stored = true;
+    const result = await insertPartner(db, row);
+    if (!result.ok) {
+      return Response.json({ error: result.error }, { status: 500 });
     }
+    stored = true;
   }
 
   return Response.json({ ok: true, stored });

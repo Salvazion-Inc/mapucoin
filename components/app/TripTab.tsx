@@ -20,11 +20,18 @@ function TripInner() {
   const a = at(locale);
   const params = useSearchParams();
   const { setTrip } = useTrip();
-  const paid = params.get("paid") === "1" || params.get("session_id");
+  const sessionId = params.get("session_id") || "";
+  const paid = params.get("paid") === "1" || sessionId;
 
   useEffect(() => {
     if (paid) setTrip({ paymentStatus: "paid" });
-  }, [paid, setTrip]);
+    if (!sessionId) return;
+    fetch("/api/checkout/confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId }),
+    }).catch(() => {});
+  }, [paid, sessionId, setTrip]);
 
   return (
     <div>

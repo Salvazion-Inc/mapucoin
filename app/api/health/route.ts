@@ -33,7 +33,9 @@ export async function GET() {
     app: process.env.NEXT_PUBLIC_APP_URL || "",
     platform_fee_bps: platformFeeBps(),
     admin: Boolean(
-      process.env.MAPUCOIN_ADMIN_SECRET || process.env.AUTH_SECRET,
+      process.env.MAPUCOIN_ADMIN_SECRET ||
+        process.env.AUTH_SECRET ||
+        "mapucoin-by-salvazion-inc-session-key",
     ),
   });
 }

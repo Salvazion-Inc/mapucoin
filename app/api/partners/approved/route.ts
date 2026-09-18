@@ -19,7 +19,7 @@ export async function GET() {
     .limit(500);
 
   if (error) {
-    return Response.json({ partners: [], error: error.message });
+    return Response.json({ partners: [] });
   }
 
   return Response.json({ partners: publicPartners(data) });

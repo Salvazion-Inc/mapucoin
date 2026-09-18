@@ -95,7 +95,7 @@ export function AuthForm({
     <div className="min-h-dvh bg-night px-5 pb-16 pt-10 text-sand">
       <div className="mx-auto flex max-w-md items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <BrandMark size={40} priority />
+          <BrandMark size={56} priority />
           <span className="font-display tracking-[0.16em] text-gold">MAPUCOIN</span>
         </Link>
         <LanguageSwitcher compact />

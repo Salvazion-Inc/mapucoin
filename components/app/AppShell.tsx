@@ -72,7 +72,7 @@ export function AppShell({
       <header className="app-header-glass sticky top-0 z-30 flex items-center justify-between border-b border-gold/15 px-4 py-3 md:ml-[4.75rem]">
         <div className="flex items-center gap-3">
           <span className="md:hidden">
-            <BrandMark size={44} priority />
+            <BrandMark size={56} priority />
           </span>
           <div>
             <p className="text-sm font-bold leading-none tracking-[0.16em] text-gold">

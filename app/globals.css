@@ -524,24 +524,62 @@ optgroup {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
-.app-splash-logo img {
-  width: 6.5rem;
-  height: 6.5rem;
-  border-radius: 1.6rem;
+.app-splash-logo-stage {
+  position: relative;
+  width: min(78vw, 22rem);
+  height: min(78vw, 22rem);
+}
+
+.app-splash-logo-halo {
+  position: absolute;
+  inset: -14%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-gold) 38%, transparent) 0%,
+    transparent 68%
+  );
+  pointer-events: none;
+  animation: mapu-halo 2.6s ease-in-out infinite;
+}
+
+.app-splash-logo-mark {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  clip-path: circle(50%);
   background: #000;
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--color-gold) 45%, transparent),
     0 18px 50px rgba(0, 0, 0, 0.55);
+}
+
+.app-splash-logo-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  background: #000;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: 50% 50%;
+  will-change: transform;
   animation: mapu-pulse 1.8s ease-in-out infinite;
 }
 
 .app-splash-logo p {
   font-family: var(--font-display);
   letter-spacing: 0.28em;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--color-gold);
 }
 
@@ -583,6 +621,18 @@ optgroup {
   }
 }
 
+@keyframes mapu-halo {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -593,8 +643,10 @@ optgroup {
   .award-side:hover {
     transform: none;
   }
-  .app-splash-logo img {
+  .app-splash-logo-halo,
+  .app-splash-logo-mark img {
     animation: none;
+    transform: none;
   }
   .fingerprint-unlock-btn,
   .fingerprint-unlock-btn-busy {

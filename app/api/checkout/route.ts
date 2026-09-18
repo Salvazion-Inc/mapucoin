@@ -1,4 +1,5 @@
 import { getBySlug } from "@/lib/catalog";
+import { findPartnerForCapsule } from "@/lib/partner-store";
 import {
   isConnectReady,
   platformFeeBps,
@@ -22,27 +23,11 @@ async function partnerForCheckout(
   slug: string,
   partnerId: string,
 ): Promise<PartnerConnectRow | null> {
-  const columns =
-    "id, slug, capsule_slug, stripe_account_id, charges_enabled, payouts_enabled, details_submitted, connect_blocked, status";
-  if (partnerId) {
-    const { data, error } = await db
-      .from("partners")
-      .select(columns)
-      .eq("id", partnerId)
-      .eq("status", "approved")
-      .maybeSingle();
-    if (error) return null;
-    return data;
+  try {
+    return await findPartnerForCapsule(db, slug, partnerId);
+  } catch {
+    return null;
   }
-  const { data, error } = await db
-    .from("partners")
-    .select(columns)
-    .eq("status", "approved")
-    .or(`slug.eq.${slug},capsule_slug.eq.${slug}`)
-    .limit(1)
-    .maybeSingle();
-  if (error) return null;
-  return data;
 }
 
 export async function POST(req: Request) {

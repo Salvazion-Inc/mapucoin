@@ -1,7 +1,8 @@
 import { timingSafeEqual } from "crypto";
 
 export function adminAuthorized(req: Request) {
-  const secret = process.env.MAPUCOIN_ADMIN_SECRET || "";
+  const secret =
+    process.env.MAPUCOIN_ADMIN_SECRET || process.env.AUTH_SECRET || "";
   if (!secret) return false;
   const header = req.headers.get("authorization") || "";
   const bearer = header.toLowerCase().startsWith("bearer ")

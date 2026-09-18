@@ -1,4 +1,5 @@
 import { adminAuthorized } from "@/lib/admin";
+import { getPartnerById, listPartners, updatePartner } from "@/lib/partner-store";
 import {
   catalogHint,
   inChile,
@@ -15,16 +16,16 @@ async function uniqueSlug(
   excludeId: string,
 ) {
   const base = slugify(raw) || `partner-${excludeId.slice(0, 8)}`;
-  let slug = base;
-  for (let i = 0; i < 12; i += 1) {
-    const { data } = await db
-      .from("partners")
-      .select("id")
-      .eq("slug", slug)
-      .neq("id", excludeId)
-      .maybeSingle();
-    if (!data) return slug;
-    slug = `${base}-${i + 2}`;
+  const { partners } = await listPartners(db, "all");
+  const taken = new Set(
+    partners
+      .filter((p) => p.id !== excludeId && p.slug)
+      .map((p) => String(p.slug)),
+  );
+  if (!taken.has(base)) return base;
+  for (let i = 2; i < 14; i += 1) {
+    const slug = `${base}-${i}`;
+    if (!taken.has(slug)) return slug;
   }
   return `${base}-${excludeId.slice(0, 8)}`;
 }
@@ -41,14 +42,7 @@ export async function POST(req: Request) {
   const id = String(body.id || "").trim();
   if (!id) return Response.json({ error: "id" }, { status: 400 });
 
-  const { data: current, error: loadErr } = await db
-    .from("partners")
-    .select(
-      "id, status, business, city, slug, lat, lng, price_from_clp, offer_summary, landscape, capsule_slug",
-    )
-    .eq("id", id)
-    .maybeSingle();
-  if (loadErr) return Response.json({ error: loadErr.message }, { status: 500 });
+  const current = await getPartnerById(db, id);
   if (!current) return Response.json({ error: "not_found" }, { status: 404 });
   if (current.status === "rejected") {
     return Response.json({ error: "rejected" }, { status: 409 });
@@ -92,28 +86,25 @@ export async function POST(req: Request) {
     body.capsule_slug ?? current.capsule_slug ?? "",
   ).trim();
 
-  const patch = {
-    status: "approved",
-    slug,
-    lat,
-    lng,
-    price_from_clp: price,
-    offer_summary,
-    landscape: landscapeRaw,
-    capsule_slug: capsule_slug || null,
-    approved_at: new Date().toISOString(),
-    rejected_at: null,
-    reject_reason: null,
-  };
-
-  const { data, error } = await db
-    .from("partners")
-    .update(patch)
-    .eq("id", id)
-    .select(
-      "id, status, slug, lat, lng, price_from_clp, offer_summary, landscape, capsule_slug, approved_at, business, city, role",
-    )
-    .maybeSingle();
-  if (error) return Response.json({ error: error.message }, { status: 500 });
-  return Response.json({ ok: true, partner: data });
+  try {
+    const partner = await updatePartner(db, id, {
+      status: "approved",
+      slug,
+      lat,
+      lng,
+      price_from_clp: price,
+      offer_summary,
+      landscape: landscapeRaw,
+      capsule_slug: capsule_slug || null,
+      approved_at: new Date().toISOString(),
+      rejected_at: null,
+      reject_reason: null,
+    });
+    return Response.json({ ok: true, partner });
+  } catch (err) {
+    return Response.json(
+      { error: err instanceof Error ? err.message : "db" },
+      { status: 500 },
+    );
+  }
 }

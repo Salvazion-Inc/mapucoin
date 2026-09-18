@@ -32,6 +32,8 @@ export async function GET() {
     supabaseReachable: supabase,
     app: process.env.NEXT_PUBLIC_APP_URL || "",
     platform_fee_bps: platformFeeBps(),
-    admin: Boolean(process.env.MAPUCOIN_ADMIN_SECRET),
+    admin: Boolean(
+      process.env.MAPUCOIN_ADMIN_SECRET || process.env.AUTH_SECRET,
+    ),
   });
 }

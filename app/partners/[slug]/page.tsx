@@ -1,9 +1,6 @@
 import { formatCLP, getBySlug, landscapeLabel } from "@/lib/catalog";
-import {
-  PUBLIC_PARTNER_COLUMNS,
-  toPublicPartner,
-  type PublicPartner,
-} from "@/lib/partners";
+import { listApprovedPublic } from "@/lib/partner-store";
+import type { PublicPartner } from "@/lib/partners";
 import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -13,13 +10,8 @@ type Props = { params: Promise<{ slug: string }> };
 async function loadPartner(slug: string): Promise<PublicPartner | null> {
   const db = getSupabase();
   if (!db) return null;
-  const { data } = await db
-    .from("partners")
-    .select(PUBLIC_PARTNER_COLUMNS)
-    .eq("status", "approved")
-    .eq("slug", slug)
-    .maybeSingle();
-  return toPublicPartner(data);
+  const partners = await listApprovedPublic(db);
+  return partners.find((p) => p.slug === slug) || null;
 }
 
 export async function generateMetadata({ params }: Props) {

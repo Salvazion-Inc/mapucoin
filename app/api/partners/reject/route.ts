@@ -1,4 +1,5 @@
 import { adminAuthorized } from "@/lib/admin";
+import { getPartnerById, updatePartner } from "@/lib/partner-store";
 import { getSupabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -15,26 +16,32 @@ export async function POST(req: Request) {
   const id = String(body.id || "").trim();
   if (!id) return Response.json({ error: "id" }, { status: 400 });
 
-  const { data: current, error: loadErr } = await db
-    .from("partners")
-    .select("id, status")
-    .eq("id", id)
-    .maybeSingle();
-  if (loadErr) return Response.json({ error: loadErr.message }, { status: 500 });
+  const current = await getPartnerById(db, id);
   if (!current) return Response.json({ error: "not_found" }, { status: 404 });
 
   const reason = String(body.reason || "").trim().slice(0, 500);
 
-  const { data, error } = await db
-    .from("partners")
-    .update({
+  try {
+    const partner = await updatePartner(db, id, {
       status: "rejected",
       rejected_at: new Date().toISOString(),
       reject_reason: reason || null,
-    })
-    .eq("id", id)
-    .select("id, status, rejected_at, reject_reason")
-    .maybeSingle();
-  if (error) return Response.json({ error: error.message }, { status: 500 });
-  return Response.json({ ok: true, partner: data });
+    });
+    return Response.json({
+      ok: true,
+      partner: partner
+        ? {
+            id: partner.id,
+            status: partner.status,
+            rejected_at: partner.rejected_at,
+            reject_reason: partner.reject_reason,
+          }
+        : null,
+    });
+  } catch (err) {
+    return Response.json(
+      { error: err instanceof Error ? err.message : "db" },
+      { status: 500 },
+    );
+  }
 }

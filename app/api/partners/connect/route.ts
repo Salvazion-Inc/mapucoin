@@ -1,4 +1,10 @@
 import { adminAuthorized } from "@/lib/admin";
+import {
+  getPartnerByEmail,
+  getPartnerById,
+  updatePartner,
+  type PartnerRecord,
+} from "@/lib/partner-store";
 import { CONNECT_COUNTRY } from "@/lib/partners";
 import {
   appOrigin,
@@ -11,9 +17,6 @@ import { getSupabase } from "@/lib/supabase";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
-
-const CONNECT_SELECT =
-  "id, email, business, status, offer_summary, stripe_account_id, charges_enabled, payouts_enabled, details_submitted, connect_country, connect_blocked";
 
 function stripeAccountPatch(account: Stripe.Account) {
   return {
@@ -30,39 +33,27 @@ async function loadPartner(
   db: NonNullable<ReturnType<typeof getSupabase>>,
   body: Record<string, unknown>,
   asAdmin: boolean,
-) {
+): Promise<{ error: "not_found" | "email" | "id" | "ambiguous" | null; partner: PartnerRecord | null }> {
   const id = String(body.id || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
 
   if (id) {
-    const { data, error } = await db
-      .from("partners")
-      .select(CONNECT_SELECT)
-      .eq("id", id)
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    if (!data) return { error: "not_found" as const, partner: null };
+    const partner = await getPartnerById(db, id);
+    if (!partner) return { error: "not_found", partner: null };
     if (!asAdmin) {
-      if (!email || email !== String(data.email || "").toLowerCase()) {
-        return { error: "email" as const, partner: null };
+      if (!email || email !== String(partner.email || "").toLowerCase()) {
+        return { error: "email", partner: null };
       }
     }
-    return { error: null, partner: data };
+    return { error: null, partner };
   }
 
-  if (!email) return { error: "id" as const, partner: null };
+  if (!email) return { error: "id", partner: null };
 
-  const { data, error } = await db
-    .from("partners")
-    .select(CONNECT_SELECT)
-    .eq("email", email)
-    .eq("status", "approved")
-    .order("approved_at", { ascending: false })
-    .limit(2);
-  if (error) throw new Error(error.message);
-  if (!data?.length) return { error: "not_found" as const, partner: null };
-  if (data.length > 1) return { error: "ambiguous" as const, partner: null };
-  return { error: null, partner: data[0] };
+  const rows = await getPartnerByEmail(db, email);
+  if (!rows.length) return { error: "not_found", partner: null };
+  if (rows.length > 1) return { error: "ambiguous", partner: null };
+  return { error: null, partner: rows[0] };
 }
 
 async function createExpressAccount(
@@ -128,15 +119,14 @@ export async function POST(req: Request) {
   let accountId = String(partner.stripe_account_id || "");
   if (!accountId) {
     try {
-      const account = await createExpressAccount(stripe, partner);
+      const account = await createExpressAccount(stripe, {
+        id: partner.id,
+        email: String(partner.email || ""),
+        business: String(partner.business || ""),
+        offer_summary: partner.offer_summary,
+      });
       accountId = account.id;
-      const { error } = await db
-        .from("partners")
-        .update(stripeAccountPatch(account))
-        .eq("id", partner.id);
-      if (error) {
-        return Response.json({ error: error.message }, { status: 500 });
-      }
+      await updatePartner(db, partner.id, stripeAccountPatch(account));
     } catch (err) {
       const reason = [
         stripeErrorCode(err),
@@ -144,13 +134,10 @@ export async function POST(req: Request) {
       ]
         .filter(Boolean)
         .join(": ");
-      await db
-        .from("partners")
-        .update({
-          connect_blocked: reason.slice(0, 500) || "connect_blocked",
-          connect_country: CONNECT_COUNTRY,
-        })
-        .eq("id", partner.id);
+      await updatePartner(db, partner.id, {
+        connect_blocked: reason.slice(0, 500) || "connect_blocked",
+        connect_country: CONNECT_COUNTRY,
+      });
       return Response.json({
         ok: false,
         blocked: true,
@@ -181,12 +168,9 @@ export async function POST(req: Request) {
     ]
       .filter(Boolean)
       .join(": ");
-    await db
-      .from("partners")
-      .update({
-        connect_blocked: reason.slice(0, 500) || "account_link_blocked",
-      })
-      .eq("id", partner.id);
+    await updatePartner(db, partner.id, {
+      connect_blocked: reason.slice(0, 500) || "account_link_blocked",
+    });
     return Response.json({
       ok: false,
       blocked: true,

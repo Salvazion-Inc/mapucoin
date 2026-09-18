@@ -71,7 +71,9 @@ Detalle y fallback US→CL: [`docs/stripe-connect.md`](docs/stripe-connect.md).
 - `POST /api/partners/connect` — Express `country=CL` + Account Link. Partner: mismo correo de la postulación. Admin: Bearer + `{ "id" }`.
 - `/api/checkout` — si el partner de la cápsula está Connect-ready (`charges_enabled` y `payouts_enabled`): `payment_intent_data.application_fee_amount` (12%) + `transfer_data.destination`. Si no, o si Stripe rechaza el destination charge: guest Checkout en la plataforma y `payout_mode=manual` con fee contabilizado.
 
-Aplica `supabase/schema.sql` en el SQL editor (idempotente) antes de aprobar.
+Aplica `supabase/schema.sql` en el SQL editor (idempotente) cuando puedas. Si la tabla `partners` aún no existe, P2 usa `applications` (solo filas Mapucoin) para approve, pins y Connect.
+
+`MAPUCOIN_ADMIN_SECRET` es el header de approve/reject. Si falta, se acepta `AUTH_SECRET`.
 
 ### Test mode
 

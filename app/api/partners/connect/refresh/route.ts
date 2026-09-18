@@ -1,3 +1,4 @@
+import { getPartnerById, updatePartner } from "@/lib/partner-store";
 import { CONNECT_COUNTRY } from "@/lib/partners";
 import { appOrigin, getStripe, stripeConfigured } from "@/lib/stripe";
 import { getSupabase } from "@/lib/supabase";
@@ -15,11 +16,7 @@ export async function GET(req: Request) {
   const db = getSupabase();
   if (!db) return Response.json({ error: "db" }, { status: 503 });
 
-  const { data: partner } = await db
-    .from("partners")
-    .select("id, stripe_account_id, status")
-    .eq("id", id)
-    .maybeSingle();
+  const partner = await getPartnerById(db, id);
   if (!partner?.stripe_account_id || partner.status !== "approved") {
     return Response.redirect(
       `${appOrigin(req)}/partners/onboard?id=${encodeURIComponent(id)}&error=account`,
@@ -38,13 +35,10 @@ export async function GET(req: Request) {
     });
     return Response.redirect(link.url, 302);
   } catch {
-    await db
-      .from("partners")
-      .update({
-        connect_blocked: "account_link_refresh_failed",
-        connect_country: CONNECT_COUNTRY,
-      })
-      .eq("id", partner.id);
+    await updatePartner(db, partner.id, {
+      connect_blocked: "account_link_refresh_failed",
+      connect_country: CONNECT_COUNTRY,
+    });
     return Response.redirect(
       `${origin}/partners/onboard?id=${encodeURIComponent(id)}&error=link`,
       302,

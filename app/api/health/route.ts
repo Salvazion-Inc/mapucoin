@@ -1,4 +1,5 @@
 import { googleConfigured } from "@/lib/google-oauth";
+import { platformFeeBps } from "@/lib/partners";
 import { getSupabase } from "@/lib/supabase";
 import { stripeConfigured } from "@/lib/stripe";
 
@@ -30,5 +31,7 @@ export async function GET() {
     supabase: Boolean(db),
     supabaseReachable: supabase,
     app: process.env.NEXT_PUBLIC_APP_URL || "",
+    platform_fee_bps: platformFeeBps(),
+    admin: Boolean(process.env.MAPUCOIN_ADMIN_SECRET),
   });
 }

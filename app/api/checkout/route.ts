@@ -1,9 +1,49 @@
 import { getBySlug } from "@/lib/catalog";
+import {
+  isConnectReady,
+  platformFeeBps,
+  platformFeeClp,
+  type PartnerConnectRow,
+} from "@/lib/partners";
 import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
-import { appOrigin, getStripe, stripeConfigured } from "@/lib/stripe";
+import {
+  appOrigin,
+  getStripe,
+  stripeConfigured,
+  stripeErrorMessage,
+} from "@/lib/stripe";
+import type Stripe from "stripe";
 
 export const runtime = "nodejs";
+
+async function partnerForCheckout(
+  db: NonNullable<ReturnType<typeof getSupabase>>,
+  slug: string,
+  partnerId: string,
+): Promise<PartnerConnectRow | null> {
+  const columns =
+    "id, slug, capsule_slug, stripe_account_id, charges_enabled, payouts_enabled, details_submitted, connect_blocked, status";
+  if (partnerId) {
+    const { data, error } = await db
+      .from("partners")
+      .select(columns)
+      .eq("id", partnerId)
+      .eq("status", "approved")
+      .maybeSingle();
+    if (error) return null;
+    return data;
+  }
+  const { data, error } = await db
+    .from("partners")
+    .select(columns)
+    .eq("status", "approved")
+    .or(`slug.eq.${slug},capsule_slug.eq.${slug}`)
+    .limit(1)
+    .maybeSingle();
+  if (error) return null;
+  return data;
+}
 
 export async function POST(req: Request) {
   if (!stripeConfigured()) {
@@ -35,6 +75,27 @@ export async function POST(req: Request) {
   );
 
   const db = getSupabase();
+  const feeBps = platformFeeBps();
+  let partner: PartnerConnectRow | null = null;
+  if (db) {
+    partner = await partnerForCheckout(
+      db,
+      item.slug,
+      String(body.partner_id || "").trim(),
+    );
+  }
+
+  const applicationFee = partner ? platformFeeClp(amount, feeBps) : 0;
+  const connectReady = isConnectReady(partner);
+  let payoutMode: "connect" | "manual" | "platform" = partner
+    ? connectReady
+      ? "connect"
+      : "manual"
+    : "platform";
+  const destination =
+    payoutMode === "connect" ? String(partner?.stripe_account_id || "") : "";
+  const partnerPayout = partner ? amount - applicationFee : 0;
+
   if (db) {
     const row = {
       id: bookingId,
@@ -50,11 +111,20 @@ export async function POST(req: Request) {
       nights,
       amount,
       status: "checkout",
+      partner_id: partner?.id || null,
+      stripe_account_id: destination || null,
+      application_fee_clp: applicationFee || null,
+      partner_payout_clp: partnerPayout || null,
+      payout_mode: payoutMode,
+      fee_bps: partner ? feeBps : null,
       notes: JSON.stringify({
         source: fromApp ? "mapucoin-app" : "mapucoin",
         capsule: item.slug,
         nights,
         guests,
+        payout_mode: payoutMode,
+        application_fee_clp: applicationFee,
+        fee_bps: feeBps,
       }),
     };
     const { error } = await db.from("bookings").insert(row);
@@ -74,7 +144,20 @@ export async function POST(req: Request) {
     }
   }
 
-  const session = await stripe.checkout.sessions.create({
+  const metadata: Stripe.MetadataParam = {
+    booking_id: bookingId,
+    capsule: item.slug,
+    nights: String(nights),
+    guests: String(guests),
+    user_id: sessionUser?.id || "",
+    source: fromApp ? "app" : "web",
+    partner_id: partner?.id || "",
+    payout_mode: payoutMode,
+    application_fee_clp: String(applicationFee),
+    fee_bps: String(feeBps),
+  };
+
+  const sessionParams: Stripe.Checkout.SessionCreateParams = {
     mode: "payment",
     customer_email: email,
     client_reference_id: bookingId,
@@ -98,20 +181,45 @@ export async function POST(req: Request) {
         },
       },
     ],
-    metadata: {
-      booking_id: bookingId,
-      capsule: item.slug,
-      nights: String(nights),
-      guests: String(guests),
-      user_id: sessionUser?.id || "",
-      source: fromApp ? "app" : "web",
-    },
-  });
+    metadata,
+  };
+
+  if (payoutMode === "connect" && destination && applicationFee > 0) {
+    sessionParams.payment_intent_data = {
+      application_fee_amount: applicationFee,
+      transfer_data: { destination },
+    };
+  }
+
+  let session: Stripe.Checkout.Session;
+  try {
+    session = await stripe.checkout.sessions.create(sessionParams);
+  } catch (err) {
+    if (payoutMode === "connect") {
+      console.error("checkout_connect_fallback", stripeErrorMessage(err));
+      payoutMode = "manual";
+      metadata.payout_mode = "manual";
+      delete sessionParams.payment_intent_data;
+      sessionParams.metadata = metadata;
+      session = await stripe.checkout.sessions.create(sessionParams);
+      if (db) {
+        await db
+          .from("bookings")
+          .update({
+            payout_mode: "manual",
+            stripe_account_id: null,
+          })
+          .eq("id", bookingId);
+      }
+    } else {
+      throw err;
+    }
+  }
 
   if (db) {
     await db
       .from("bookings")
-      .update({ stripe_session_id: session.id })
+      .update({ stripe_session_id: session.id, payout_mode: payoutMode })
       .eq("id", bookingId);
   }
 
@@ -119,5 +227,8 @@ export async function POST(req: Request) {
     id: bookingId,
     url: session.url,
     amount,
+    payout_mode: payoutMode,
+    application_fee_clp: applicationFee,
+    fee_bps: feeBps,
   });
 }

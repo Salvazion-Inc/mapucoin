@@ -34,13 +34,15 @@ const es = {
     all: "Todos",
     places: "Lugares",
     capsules: "Cápsulas",
-    both: "Ambos",
+    partners: "Partners",
+    both: "Todos",
     legend: "Isologo Mapucoin",
     loading: "Cargando mapa de Chile…",
     viewSheet: "Ver ficha →",
     destination: "Destino",
     capsule: "Cápsula",
-    search: "Buscar destino o cápsula",
+    partner: "Partner",
+    search: "Buscar destino, cápsula o partner",
     searchEmpty: "Sin coincidencias",
     searchClear: "Limpiar búsqueda",
   },
@@ -141,6 +143,16 @@ const es = {
     ok: "Solicitud recibida. Te contactamos para activar tu ficha y Stripe.",
     okNoDb:
       "Solicitud recibida. Conecta Supabase para guardar partners en producción.",
+    onboardTitle: "Activar Stripe Connect",
+    onboardLead:
+      "Usa el mismo correo de tu postulación. Stripe abre una cuenta Express en Chile (CL).",
+    onboardSubmit: "Continuar a Stripe",
+    onboardBlocked:
+      "Stripe no pudo crear la cuenta Connect en Chile. El cobro sigue en la plataforma Mapucoin; el 12% queda contabilizado para payout manual.",
+    onboardNeedEmail: "Ingresa el correo de la postulación.",
+    returnTitle: "Onboarding enviado",
+    returnLead:
+      "Cuando Stripe active charges y payouts, el checkout comparte el pago (12% plataforma).",
   },
   partnerRoles: {
     capsula: "Cápsula / alojamiento",
@@ -305,13 +317,15 @@ const en: typeof es = {
     all: "All",
     places: "Places",
     capsules: "Capsules",
-    both: "Both",
+    partners: "Partners",
+    both: "All",
     legend: "Mapucoin isologo",
     loading: "Loading the map of Chile…",
     viewSheet: "View sheet →",
     destination: "Destination",
     capsule: "Capsule",
-    search: "Search destination or capsule",
+    partner: "Partner",
+    search: "Search destination, capsule or partner",
     searchEmpty: "No matches",
     searchClear: "Clear search",
   },
@@ -412,6 +426,16 @@ const en: typeof es = {
     ok: "Request received. We will contact you to activate your listing and Stripe.",
     okNoDb:
       "Request received. Connect Supabase to store partners in production.",
+    onboardTitle: "Activate Stripe Connect",
+    onboardLead:
+      "Use the same email from your application. Stripe opens an Express account in Chile (CL).",
+    onboardSubmit: "Continue to Stripe",
+    onboardBlocked:
+      "Stripe could not create a Connect account in Chile. Checkout stays on the Mapucoin platform; the 12% fee is stored for a manual payout.",
+    onboardNeedEmail: "Enter the application email.",
+    returnTitle: "Onboarding sent",
+    returnLead:
+      "When Stripe enables charges and payouts, checkout splits the payment (12% platform).",
   },
   partnerRoles: {
     capsula: "Capsule / lodging",
@@ -576,13 +600,15 @@ const pt: typeof es = {
     all: "Todos",
     places: "Lugares",
     capsules: "Cápsulas",
-    both: "Ambos",
+    partners: "Partners",
+    both: "Todos",
     legend: "Isologo Mapucoin",
     loading: "Carregando o mapa do Chile…",
     viewSheet: "Ver ficha →",
     destination: "Destino",
     capsule: "Cápsula",
-    search: "Buscar destino ou cápsula",
+    partner: "Partner",
+    search: "Buscar destino, cápsula ou partner",
     searchEmpty: "Sem resultados",
     searchClear: "Limpar busca",
   },
@@ -683,6 +709,16 @@ const pt: typeof es = {
     ok: "Pedido recebido. Entramos em contato para ativar sua ficha e o Stripe.",
     okNoDb:
       "Pedido recebido. Conecte o Supabase para guardar partners em produção.",
+    onboardTitle: "Ativar Stripe Connect",
+    onboardLead:
+      "Use o mesmo e-mail da candidatura. A Stripe abre uma conta Express no Chile (CL).",
+    onboardSubmit: "Continuar na Stripe",
+    onboardBlocked:
+      "A Stripe não pôde criar a conta Connect no Chile. O cobro segue na plataforma Mapucoin; os 12% ficam contabilizados para payout manual.",
+    onboardNeedEmail: "Informe o e-mail da candidatura.",
+    returnTitle: "Onboarding enviado",
+    returnLead:
+      "Quando a Stripe ativar charges e payouts, o checkout reparte o pagamento (12% plataforma).",
   },
   partnerRoles: {
     capsula: "Cápsula / hospedagem",
@@ -847,13 +883,15 @@ const fr: typeof es = {
     all: "Tous",
     places: "Lieux",
     capsules: "Capsules",
-    both: "Les deux",
+    partners: "Partenaires",
+    both: "Tous",
     legend: "Isologo Mapucoin",
     loading: "Chargement de la carte du Chili…",
     viewSheet: "Voir la fiche →",
     destination: "Destination",
     capsule: "Capsule",
-    search: "Rechercher une destination ou une capsule",
+    partner: "Partenaire",
+    search: "Rechercher une destination, une capsule ou un partenaire",
     searchEmpty: "Aucun résultat",
     searchClear: "Effacer la recherche",
   },
@@ -954,6 +992,16 @@ const fr: typeof es = {
     ok: "Demande reçue. Nous vous contactons pour activer votre fiche et Stripe.",
     okNoDb:
       "Demande reçue. Connectez Supabase pour enregistrer les partenaires en production.",
+    onboardTitle: "Activer Stripe Connect",
+    onboardLead:
+      "Utilisez le même e-mail que votre candidature. Stripe ouvre un compte Express au Chili (CL).",
+    onboardSubmit: "Continuer vers Stripe",
+    onboardBlocked:
+      "Stripe n’a pas pu créer le compte Connect au Chili. Le paiement reste sur la plateforme Mapucoin ; les 12 % sont comptabilisés pour un payout manuel.",
+    onboardNeedEmail: "Saisissez l’e-mail de la candidature.",
+    returnTitle: "Onboarding envoyé",
+    returnLead:
+      "Lorsque Stripe active charges et payouts, le checkout partage le paiement (12 % plateforme).",
   },
   partnerRoles: {
     capsula: "Capsule / hébergement",
@@ -1118,13 +1166,15 @@ const it: typeof es = {
     all: "Tutti",
     places: "Luoghi",
     capsules: "Capsule",
-    both: "Entrambi",
+    partners: "Partner",
+    both: "Tutti",
     legend: "Isologo Mapucoin",
     loading: "Caricamento della mappa del Cile…",
     viewSheet: "Vedi scheda →",
     destination: "Destinazione",
     capsule: "Capsula",
-    search: "Cerca destinazione o capsula",
+    partner: "Partner",
+    search: "Cerca destinazione, capsula o partner",
     searchEmpty: "Nessun risultato",
     searchClear: "Cancella ricerca",
   },
@@ -1225,6 +1275,16 @@ const it: typeof es = {
     ok: "Richiesta ricevuta. Ti contattiamo per attivare la scheda e Stripe.",
     okNoDb:
       "Richiesta ricevuta. Collega Supabase per salvare i partner in produzione.",
+    onboardTitle: "Attiva Stripe Connect",
+    onboardLead:
+      "Usa la stessa email della candidatura. Stripe apre un account Express in Cile (CL).",
+    onboardSubmit: "Continua su Stripe",
+    onboardBlocked:
+      "Stripe non ha potuto creare l’account Connect in Cile. Il pagamento resta sulla piattaforma Mapucoin; il 12% è contabilizzato per un payout manuale.",
+    onboardNeedEmail: "Inserisci l’email della candidatura.",
+    returnTitle: "Onboarding inviato",
+    returnLead:
+      "Quando Stripe attiva charges e payouts, il checkout divide il pagamento (12% piattaforma).",
   },
   partnerRoles: {
     capsula: "Capsula / alloggio",

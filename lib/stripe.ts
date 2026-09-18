@@ -22,3 +22,17 @@ export function appOrigin(req: Request) {
     (host?.includes("localhost") ? "http" : "https");
   return host ? `${proto}://${host}` : "https://mapucoin.com";
 }
+
+export function stripeErrorMessage(err: unknown) {
+  if (err && typeof err === "object" && "message" in err) {
+    return String((err as { message?: string }).message || "stripe_error");
+  }
+  return "stripe_error";
+}
+
+export function stripeErrorCode(err: unknown) {
+  if (err && typeof err === "object" && "code" in err) {
+    return String((err as { code?: string }).code || "");
+  }
+  return "";
+}

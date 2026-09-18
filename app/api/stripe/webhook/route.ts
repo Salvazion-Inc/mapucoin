@@ -1,5 +1,5 @@
+import { markBookingPaid } from "@/lib/booking-paid";
 import { syncStripeAccount } from "@/lib/partner-store";
-import { getSupabase } from "@/lib/supabase";
 import { getStripe } from "@/lib/stripe";
 import type Stripe from "stripe";
 
@@ -36,29 +36,7 @@ export async function POST(req: Request) {
     event.type === "checkout.session.async_payment_succeeded"
   ) {
     const session = event.data.object as Stripe.Checkout.Session;
-    if (session.payment_status !== "paid") {
-      return Response.json({ received: true, skipped: "unpaid" });
-    }
-    const bookingId =
-      session.client_reference_id || session.metadata?.booking_id;
-    const db = getSupabase();
-    if (db && bookingId) {
-      const fee = Number(session.metadata?.application_fee_clp);
-      const mode = String(session.metadata?.payout_mode || "");
-      await db
-        .from("bookings")
-        .update({
-          status: "paid",
-          stripe_payment_intent:
-            typeof session.payment_intent === "string"
-              ? session.payment_intent
-              : "",
-          stripe_session_id: session.id,
-          ...(Number.isFinite(fee) ? { application_fee_clp: fee } : {}),
-          ...(mode ? { payout_mode: mode } : {}),
-        })
-        .eq("id", bookingId);
-    }
+    await markBookingPaid(session);
   }
 
   if (event.type === "account.updated") {

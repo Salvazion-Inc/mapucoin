@@ -261,6 +261,7 @@ export default function HomePage() {
                 {c.partners.title}
               </h2>
               <p className="mt-4 text-sand/75">{c.partners.lead}</p>
+              <p className="mt-4 text-sm text-sand/50">{c.partners.privacy}</p>
             </div>
             <PartnersForm />
           </div>

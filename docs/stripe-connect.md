@@ -7,7 +7,7 @@ Take-rate por defecto: **12%** (`MAPUCOIN_PLATFORM_FEE_BPS=1200`). Entero CLP, s
 ## Flujo
 
 1. Partner postula en `/#partners` (`POST /api/partners`) → `status=pending`.
-2. Admin aprueba (`POST /api/partners/approve` con `MAPUCOIN_ADMIN_SECRET`) y define `lat`, `lng`, `slug`, `price_from_clp`, `offer_summary`, `landscape`.
+2. Admin aprueba en `/admin/partners` o `POST /api/partners/approve` con `MAPUCOIN_ADMIN_SECRET` y define `lat`, `lng`, `slug`, `price_from_clp`, `offer_summary`, `landscape` (coords de catálogo, no inventadas).
 3. El partner (correo de la postulación) abre `/partners/onboard` → Express Account Link, `country=CL`.
 4. Webhook `account.updated` copia `charges_enabled`, `payouts_enabled`, `details_submitted`.
 5. Checkout: si el partner está Connect-ready → `application_fee_amount` + `transfer_data.destination`. Si no → cargo solo en plataforma (guest Checkout actual) y se guardan `application_fee_clp` / `partner_payout_clp` / `payout_mode=manual`.

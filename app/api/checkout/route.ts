@@ -1,4 +1,11 @@
 import { getBySlug } from "@/lib/catalog";
+import {
+  honeypotFilled,
+  isEmail,
+  isPersonName,
+  originAllowed,
+  originRejectedResponse,
+} from "@/lib/http-guard";
 import { findPartnerForCapsule } from "@/lib/partner-store";
 import {
   isConnectReady,
@@ -6,6 +13,11 @@ import {
   platformFeeClp,
   type PartnerConnectRow,
 } from "@/lib/partners";
+import {
+  clientIp,
+  rateLimit,
+  rateLimitedResponse,
+} from "@/lib/rate-limit";
 import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
 import {
@@ -31,11 +43,20 @@ async function partnerForCheckout(
 }
 
 export async function POST(req: Request) {
+  if (!originAllowed(req)) return originRejectedResponse();
+
+  const limited = rateLimit(`checkout:${clientIp(req)}`, 8, 10 * 60 * 1000);
+  if (!limited.ok) return rateLimitedResponse(limited.retryAfter);
+
   if (!stripeConfigured()) {
     return Response.json({ error: "stripe_unconfigured" }, { status: 503 });
   }
 
-  const body = await req.json().catch(() => ({}));
+  const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
+  if (honeypotFilled(body)) {
+    return Response.json({ error: "profile" }, { status: 400 });
+  }
+
   const slug = String(body.capsula || body.slug || "");
   const item = getBySlug(slug);
   if (!item || item.kind !== "capsule") {
@@ -44,9 +65,9 @@ export async function POST(req: Request) {
 
   const nights = Math.min(21, Math.max(1, Number(body.nights) || 1));
   const guests = Math.min(8, Math.max(1, Number(body.guests) || 2));
-  const email = String(body.email || "").trim();
+  const email = String(body.email || "").trim().toLowerCase();
   const fullName = String(body.full_name || "").trim();
-  if (!email || !fullName) {
+  if (!isPersonName(fullName) || !isEmail(email)) {
     return Response.json({ error: "profile" }, { status: 400 });
   }
 
@@ -86,7 +107,7 @@ export async function POST(req: Request) {
       id: bookingId,
       full_name: fullName,
       email,
-      phone: String(body.phone || ""),
+      phone: String(body.phone || "").trim().slice(0, 40),
       yacht_slug: item.slug,
       capsule_slug: item.slug,
       user_id: sessionUser?.id || null,
@@ -118,7 +139,7 @@ export async function POST(req: Request) {
         id: bookingId,
         full_name: fullName,
         email,
-        phone: String(body.phone || ""),
+        phone: String(body.phone || "").trim().slice(0, 40),
         capsule_slug: item.slug,
         nights,
         guests,
@@ -151,7 +172,7 @@ export async function POST(req: Request) {
       : `${originUrl}/reserva/exito?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: fromApp
       ? `${originUrl}/app/capsulas?cancel=1`
-      : `${originUrl}/reserva?capsula=${item.slug}&cancel=1`,
+      : `${originUrl}/capsulas/${item.slug}?cancel=1`,
     integration_identifier: `mapucoin_capsule_${crypto.randomUUID().slice(0, 8)}`,
     line_items: [
       {
@@ -213,7 +234,5 @@ export async function POST(req: Request) {
     url: session.url,
     amount,
     payout_mode: payoutMode,
-    application_fee_clp: applicationFee,
-    fee_bps: feeBps,
   });
 }

@@ -8,7 +8,10 @@ import { usePathname } from "next/navigation";
 export default function SiteFrame({ children }: { children: React.ReactNode }) {
   const path = usePathname() || "/";
   const hide =
-    path.startsWith("/app") || path === "/login" || path === "/signup";
+    path.startsWith("/app") ||
+    path === "/login" ||
+    path === "/signup" ||
+    path.startsWith("/admin");
 
   if (hide) return <>{children}</>;
 

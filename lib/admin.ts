@@ -1,21 +1,42 @@
-import { timingSafeEqual } from "crypto";
+import { createHash, timingSafeEqual } from "crypto";
 
-export function adminAuthorized(req: Request) {
-  const secret =
-    process.env.MAPUCOIN_ADMIN_SECRET ||
-    process.env.AUTH_SECRET ||
-    "mapucoin-by-salvazion-inc-session-key";
+function digest(value: string) {
+  return createHash("sha256").update(value, "utf8").digest();
+}
+
+export function adminSecretConfigured() {
+  return Boolean(
+    process.env.MAPUCOIN_ADMIN_SECRET || process.env.AUTH_SECRET,
+  );
+}
+
+function expectedSecret() {
+  return (
+    process.env.MAPUCOIN_ADMIN_SECRET || process.env.AUTH_SECRET || ""
+  );
+}
+
+export function adminToken(req: Request) {
   const header = req.headers.get("authorization") || "";
   const bearer = header.toLowerCase().startsWith("bearer ")
     ? header.slice(7).trim()
     : "";
-  const given =
+  return (
     bearer ||
     (req.headers.get("x-admin-secret") || "").trim() ||
-    (req.headers.get("x-mapucoin-admin") || "").trim();
+    (req.headers.get("x-mapucoin-admin") || "").trim()
+  );
+}
+
+export function secretsMatch(given: string, expected: string) {
+  if (!given || !expected) return false;
+  return timingSafeEqual(digest(given), digest(expected));
+}
+
+export function adminAuthorized(req: Request) {
+  const secret = expectedSecret();
+  if (!secret) return false;
+  const given = adminToken(req);
   if (!given) return false;
-  const a = Buffer.from(given);
-  const b = Buffer.from(secret);
-  if (a.length !== b.length) return false;
-  return timingSafeEqual(a, b);
+  return secretsMatch(given, secret);
 }

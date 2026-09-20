@@ -8,7 +8,6 @@ import { at } from "@/lib/app-copy";
 import {
   destinations,
   formatCLP,
-  landscapes,
   type Landscape,
 } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
@@ -68,32 +67,13 @@ export function ExploreTab() {
         <p className="mt-2 text-xs text-sand/50">{a.locationDenied}</p>
       ) : null}
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        <button
-          type="button"
-          onClick={() => setLand("all")}
-          className={`rounded-full px-3 py-1 text-xs ${
-            land === "all" ? "bg-gold text-night" : "border border-gold/30 text-sand"
-          }`}
-        >
-          {a.all}
-        </button>
-        {landscapes.map((ls) => (
-          <button
-            key={ls.id}
-            type="button"
-            onClick={() => setLand(ls.id)}
-            className={`rounded-full px-3 py-1 text-xs ${
-              land === ls.id ? "bg-gold text-night" : "border border-gold/30 text-sand"
-            }`}
-          >
-            {c.landscapes[ls.id]}
-          </button>
-        ))}
-      </div>
-
       <div className="mapu-card mt-5 overflow-hidden p-1.5">
-        <MapLoader height="46vh" />
+        <MapLoader
+          height="46vh"
+          land={land}
+          onLandChange={setLand}
+          showListed={false}
+        />
       </div>
 
       <p className="mt-6 text-xs font-bold uppercase tracking-widest text-gold">

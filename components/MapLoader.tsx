@@ -1,5 +1,6 @@
 "use client";
 
+import type { Landscape } from "@/lib/catalog";
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
 import dynamic from "next/dynamic";
@@ -21,9 +22,23 @@ function MapLoading() {
 export default function MapLoader({
   focusSlug,
   height,
+  land,
+  onLandChange,
+  showListed,
 }: {
   focusSlug?: string;
   height?: string;
+  land?: Landscape | "all";
+  onLandChange?: (land: Landscape | "all") => void;
+  showListed?: boolean;
 }) {
-  return <ChileMap focusSlug={focusSlug} height={height} />;
+  return (
+    <ChileMap
+      focusSlug={focusSlug}
+      height={height}
+      land={land}
+      onLandChange={onLandChange}
+      showListed={showListed}
+    />
+  );
 }

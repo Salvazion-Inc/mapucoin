@@ -103,13 +103,24 @@ function SearchIcon() {
 export default function ChileMap({
   focusSlug,
   height = "70vh",
+  land: landProp,
+  onLandChange,
+  showListed = true,
 }: {
   focusSlug?: string;
   height?: string;
+  land?: Landscape | "all";
+  onLandChange?: (land: Landscape | "all") => void;
+  showListed?: boolean;
 }) {
   const { locale } = useLocale();
   const c = t(locale);
-  const [land, setLand] = useState<Landscape | "all">("all");
+  const [internalLand, setInternalLand] = useState<Landscape | "all">("all");
+  const land = landProp ?? internalLand;
+  const setLand = (next: Landscape | "all") => {
+    if (landProp === undefined) setInternalLand(next);
+    onLandChange?.(next);
+  };
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -352,7 +363,7 @@ export default function ChileMap({
           <button
             key={l.id}
             type="button"
-            onClick={() => setLand((v) => (v === l.id ? "all" : l.id))}
+            onClick={() => setLand(land === l.id ? "all" : l.id)}
             className={`rounded-full px-4 py-1.5 text-sm ${
               land === l.id
                 ? "bg-gold text-black"
@@ -458,7 +469,7 @@ export default function ChileMap({
         </div>
         <div ref={mapEl} className="relative z-0" style={{ height }} />
       </div>
-      {land !== "all" && (
+      {showListed && land !== "all" && (
         <ul className="mt-4 flex flex-wrap gap-2">
           {listed.map((d) => (
             <li key={d.slug}>

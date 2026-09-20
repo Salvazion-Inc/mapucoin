@@ -23,7 +23,6 @@ import {
   type KeyboardEvent,
 } from "react";
 
-type KindFilter = "place" | "capsule" | "partner" | "all";
 type CatalogPoint = ReturnType<typeof mapPoints>[number];
 type PartnerPoint = {
   slug: string;
@@ -110,7 +109,6 @@ export default function ChileMap({
 }) {
   const { locale } = useLocale();
   const c = t(locale);
-  const [filter, setFilter] = useState<KindFilter>("place");
   const [land, setLand] = useState<Landscape | "all">("all");
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -130,13 +128,9 @@ export default function ChileMap({
     return [...catalog, ...extra] as MapPoint[];
   }, [catalog, partners]);
   const points = useMemo(() => {
-    let all = merged;
-    if (filter !== "all") all = all.filter((p) => p.group === filter);
-    if (land !== "all") {
-      all = all.filter((p) => p.landscapes?.includes(land));
-    }
-    return all;
-  }, [merged, filter, land]);
+    if (land === "all") return merged;
+    return merged.filter((p) => p.landscapes?.includes(land));
+  }, [merged, land]);
 
   useEffect(() => {
     let cancelled = false;
@@ -212,14 +206,11 @@ export default function ChileMap({
     setMenuOpen(false);
     setActive(0);
     searchFocusRef.current = key;
-    const visible =
-      (filter === "all" || filter === p.group) &&
-      (land === "all" || Boolean(p.landscapes?.includes(land)));
+    const visible = land === "all" || Boolean(p.landscapes?.includes(land));
     if (visible && flyToKey(key)) {
       searchFocusRef.current = null;
       return;
     }
-    setFilter(p.group);
     setLand("all");
   }
 
@@ -383,34 +374,6 @@ export default function ChileMap({
           {c.map.all}
         </button>
       </div>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        {(
-          [
-            ["place", c.map.places],
-            ["capsule", c.map.capsules],
-            ["partner", c.map.partners],
-            ["all", c.map.both],
-          ] as [KindFilter, string][]
-        ).map(([id, label]) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setFilter(id)}
-            className={`rounded-full px-3 py-1 text-xs ${
-              filter === id
-                ? "bg-sand text-night"
-                : "border border-gold/20 text-sand/70"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-        <span className="self-center text-xs text-sand/50">
-          {c.map.legend}
-          {land !== "all" ? ` · ${c.landscapes[land]}` : ""}
-          {` · ${points.length}`}
-        </span>
-      </div>
       <div className="relative overflow-hidden rounded-3xl border border-gold/15">
         <div
           ref={searchRef}
@@ -494,19 +457,6 @@ export default function ChileMap({
           ) : null}
         </div>
         <div ref={mapEl} className="relative z-0" style={{ height }} />
-        {filter === "partner" && partners !== null && partners.length === 0 && (
-          <div className="absolute inset-0 z-[1050] flex items-center justify-center bg-night/70 p-6 text-center backdrop-blur-[2px]">
-            <div className="reserva-glass max-w-sm rounded-3xl px-6 py-7">
-              <p className="font-display text-xl text-sand">
-                {c.map.emptyPartners}
-              </p>
-              <p className="mt-2 text-sm text-sand/70">{c.map.emptyPartnersHint}</p>
-              <a href="/#partners" className="btn-gold mt-5 text-sm">
-                {c.nav.partners}
-              </a>
-            </div>
-          </div>
-        )}
       </div>
       {land !== "all" && (
         <ul className="mt-4 flex flex-wrap gap-2">

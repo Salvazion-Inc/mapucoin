@@ -623,7 +623,7 @@ const seeds: Seed[] = [
     city: "Puerto Varas",
     lat: -41.3195,
     lng: -72.9854,
-    image: p("osorno.jpg"),
+    image: p("puerto-varas.jpg"),
     gallery: [p("puerto-varas.jpg"), p("osorno.jpg")],
     youtubeStart: 733,
     tagline: "Lago Llanquihue y los volcanes Osorno y Calbuco.",
@@ -1774,7 +1774,7 @@ export const activities: CatalogItem[] = [
     city: "Melipeuco",
     lat: -38.65,
     lng: -71.63,
-    image: p("villarrica.jpg"),
+    image: p("pn-conguillio.jpg"),
     tagline: "Araucarias, lava del Llaima y la laguna verde.",
     description:
       "Sendero Sierra Nevada o Los Lagos. Guía, picnic y entrada al parque. Pase digital en pasesparques.cl.",
@@ -1793,7 +1793,7 @@ export const activities: CatalogItem[] = [
     city: "Pucón",
     lat: -39.13,
     lng: -71.73,
-    image: p("pucon.jpg"),
+    image: p("pn-huerquehue.jpg"),
     tagline: "Tres lagunas de altura y bosque de araucaria.",
     description:
       "Trekking clásico de Pucón. Guía, picnic y entrada. Pase digital en pasesparques.cl.",
@@ -1812,7 +1812,7 @@ export const activities: CatalogItem[] = [
     city: "Puerto Natales",
     lat: -51.57,
     lng: -72.62,
-    image: p("paine.jpg"),
+    image: p("mn-cueva-del-milodon.jpg"),
     tagline: "La caverna paleontológica a un paso de Natales.",
     description:
       "Visita guiada a la cueva, relato del milodón y vista al seno. Pase digital en pasesparques.cl.",

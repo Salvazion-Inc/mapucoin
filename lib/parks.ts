@@ -9,7 +9,6 @@ type ParkSeed = {
   city: string;
   lat: number;
   lng: number;
-  image: string;
   tagline: string;
   description: string;
   highlights: string[];
@@ -29,7 +28,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Petrohué",
     lat: -41.16,
     lng: -72.45,
-    image: p("osorno.jpg"),
     tagline: "El parque más antiguo de Chile: Osorno, Todos los Santos y Petrohué.",
     description:
       "Volcán Osorno, lago Todos los Santos y los saltos del Petrohué. Pase digital en pasesparques.cl.",
@@ -44,7 +42,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Melipeuco",
     lat: -38.65,
     lng: -71.63,
-    image: p("villarrica.jpg"),
     tagline: "Araucarias, lava del Llaima y lagunas de agua verde.",
     description:
       "Bosque de araucaria milenaria, Sierra Nevada y el volcán Llaima. Senderos Sierra Nevada y Los Lagos. Pase digital en pasesparques.cl.",
@@ -59,7 +56,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Antuco",
     lat: -37.39,
     lng: -71.4,
-    image: p("laja.jpg"),
     tagline: "Volcán Antuco, laguna de altura y el salto del Laja cerca.",
     description:
       "Laguna andina al pie del Antuco, nieve en invierno y senderos de lava. Pase digital en pasesparques.cl.",
@@ -74,7 +70,6 @@ const parkSeeds: ParkSeed[] = [
     city: "San Pedro de Atacama",
     lat: -23.25,
     lng: -67.76,
-    image: p("atacama-luna.jpg"),
     tagline: "Salares, flamencos y el altiplano de Atacama.",
     description:
       "Siete sectores: Chaxa, Miscanti, Cejar, Valle de la Luna y más. Pase digital en pasesparques.cl.",
@@ -89,7 +84,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Pucón",
     lat: -39.42,
     lng: -71.94,
-    image: p("villarrica.jpg"),
     tagline: "El cono activo, crampones y los lagos a los pies.",
     description:
       "Sector norte en La Araucanía: ascenso al Villarrica, bosques de araucaria y termas cercanas. Pase digital en pasesparques.cl.",
@@ -104,7 +98,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Puerto Montt",
     lat: -41.58,
     lng: -72.58,
-    image: p("olmue.jpg"),
     tagline: "Alerces de mil años entre fiordos y lagunas.",
     description:
       "Bosque templado lluvioso al este de Puerto Montt. Senderos a alerzales y lagunas andinas. Pase digital en pasesparques.cl.",
@@ -119,7 +112,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Pucón",
     lat: -39.13,
     lng: -71.73,
-    image: p("pucon.jpg"),
     tagline: "Lagunas de altura y araucarias a un salto de Pucón.",
     description:
       "Sendero Los Lagos, araucarias y vistas al Villarrica. Uno de los trekkings clásicos de la Araucanía. Pase digital en pasesparques.cl.",
@@ -134,7 +126,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Cucao",
     lat: -42.62,
     lng: -74.12,
-    image: p("palafitos.jpg"),
     tagline: "Dunas, bosque valdiviano y el Pacífico de Cucao.",
     description:
       "Costa occidental de la Isla Grande: Chepu y Abtao, playa de Cucao y alerzales. Pase digital en pasesparques.cl.",
@@ -149,7 +140,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Temuco",
     lat: -38.72,
     lng: -72.58,
-    image: p("olmue.jpg"),
     tagline: "Bosque nativo urbano sobre Temuco.",
     description:
       "Cerro de boldo, peumo y copihue en la ciudad. Senderos cortos y mirador. Pase digital en pasesparques.cl.",
@@ -164,7 +154,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Concepción",
     lat: -36.88,
     lng: -72.96,
-    image: p("concepcion.jpg"),
     tagline: "El último bosque nativo costero del Gran Concepción.",
     description:
       "Hualqui, Chiguayante y Concepción. Senderos de bosque caducifolio y esteros. Pase digital en pasesparques.cl.",
@@ -179,7 +168,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Puerto Montt",
     lat: -41.45,
     lng: -73.02,
-    image: p("olmue.jpg"),
     tagline: "Un alerzal relicto a minutos de Puerto Montt.",
     description:
       "Pasarelas entre alerces milenarios en el Ñadi. Visita corta, de alto valor botánico. Pase digital en pasesparques.cl.",
@@ -194,7 +182,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Curacautín",
     lat: -38.22,
     lng: -71.73,
-    image: p("villarrica.jpg"),
     tagline: "Araucarias, laguna Malleco y termas de montaña.",
     description:
       "Cordillera de Malleco, bosque andino-patagónico y la laguna Malleco. Pase digital en pasesparques.cl.",
@@ -209,7 +196,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Puerto Natales",
     lat: -51.57,
     lng: -72.62,
-    image: p("paine.jpg"),
     tagline: "La caverna donde se halló el milodón, a un paso de Natales.",
     description:
       "Cueva de 30 m de alto, relato paleontológico y vista al seno Última Esperanza. Pase digital en pasesparques.cl.",
@@ -223,7 +209,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Puyuhuapi",
     lat: -44.4,
     lng: -72.4,
-    image: p("coyhaique.jpg"),
     tagline: "El ventisquero colgante sobre la Carretera Austral.",
     description:
       "Bosque siempreverde, fiordo y el glaciar colgante de Queulat. Pase digital en pasesparques.cl.",
@@ -238,7 +223,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Pirque",
     lat: -33.72,
     lng: -70.43,
-    image: p("cajon.jpg"),
     tagline: "Espino, litre y el río a una hora de Santiago.",
     description:
       "Bosque esclerófilo del Cajón del Maipo. Senderos de río y picnic. Pase digital en pasesparques.cl.",
@@ -253,7 +237,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Ovalle",
     lat: -30.67,
     lng: -71.68,
-    image: p("elqui.jpg"),
     tagline: "Bosque valdiviano en pleno desierto, gracias a la camanchaca.",
     description:
       "Reserva de la biósfera: olivillo y canelo sobre terrazas costeras del Norte Chico. Pase digital en pasesparques.cl.",
@@ -268,7 +251,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Puerto Natales",
     lat: -48.5,
     lng: -74.0,
-    image: p("paine.jpg"),
     tagline: "El parque más extenso de Chile: hielo, fiordos y el glaciar Pío XI.",
     description:
       "Campo de Hielo Sur, fiordos y navegación al glaciar. Pase digital en pasesparques.cl.",
@@ -283,7 +265,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Punta Arenas",
     lat: -53.15,
     lng: -71.05,
-    image: p("paine.jpg"),
     tagline: "Lenga y coigüe sobre Punta Arenas, con vista al estrecho.",
     description:
       "Senderos de bosque magallánico a minutos de la ciudad. Pase digital en pasesparques.cl.",
@@ -298,7 +279,6 @@ const parkSeeds: ParkSeed[] = [
     city: "San Clemente",
     lat: -35.6,
     lng: -71.03,
-    image: p("siete-tazas.jpg"),
     tagline: "Roble, lenga y el Enladrillado volcánico del Maule.",
     description:
       "Cordillera del Maule, sendero al Enladrillado y bosques de Nothofagus. Pase digital en pasesparques.cl.",
@@ -313,7 +293,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Machalí",
     lat: -34.27,
     lng: -70.45,
-    image: p("cajon.jpg"),
     tagline: "Ciprés de la cordillera y guanacos en el valle del Cachapoal.",
     description:
       "Valle andino de O'Higgins, senderos de río y fauna. Pase digital en pasesparques.cl.",
@@ -328,7 +307,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Coyhaique",
     lat: -45.45,
     lng: -72.33,
-    image: p("coyhaique.jpg"),
     tagline: "El cañón del Simpson entre Coyhaique y Puerto Aysén.",
     description:
       "Bosque y río turquesa junto a la Carretera Austral. Pase digital en pasesparques.cl.",
@@ -343,7 +321,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Coyhaique",
     lat: -45.54,
     lng: -72.0,
-    image: p("coyhaique.jpg"),
     tagline: "Lenga sobre la ciudad, con vista a la pampa y la cordillera.",
     description:
       "Senderos cortos desde Coyhaique, bosque de lenga y miradores. Pase digital en pasesparques.cl.",
@@ -358,7 +335,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Panguipulli",
     lat: -39.58,
     lng: -72.05,
-    image: p("villarrica.jpg"),
     tagline: "La ladera sur del Villarrica, desde Panguipulli.",
     description:
       "Sector Los Ríos del mismo volcán: bosques, lagunas y acceso por Panguipulli. Pase digital en pasesparques.cl.",
@@ -373,7 +349,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Chanco",
     lat: -35.73,
     lng: -72.55,
-    image: p("concepcion.jpg"),
     tagline: "El bosque plantado que detuvo las dunas de Chanco.",
     description:
       "Pino, eucalipto y dunas costeras del Maule. Pase digital en pasesparques.cl.",
@@ -388,7 +363,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Puerto Chacabuco",
     lat: -46.67,
     lng: -73.83,
-    image: p("marmol.jpg"),
     tagline: "El glaciar San Rafael calving en la laguna.",
     description:
       "Campo de Hielo Norte, navegación a la laguna y hielo milenario. Reserva de la biósfera. Pase digital en pasesparques.cl.",
@@ -403,7 +377,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Huasco",
     lat: -28.13,
     lng: -71.18,
-    image: p("bahia-inglesa.jpg"),
     tagline: "Desierto florido, guanacos y el Pacífico de Huasco.",
     description:
       "Llanos costeros, cactáceas y el fenómeno del desierto florido. Pase digital en pasesparques.cl.",
@@ -418,7 +391,6 @@ const parkSeeds: ParkSeed[] = [
     city: "San José de Maipo",
     lat: -33.74,
     lng: -70.06,
-    image: p("cajon.jpg"),
     tagline: "Glaciar San Francisco y el morado sobre el Cajón.",
     description:
       "Trekking a la laguna y el glaciar, a dos horas de Santiago. Pase digital en pasesparques.cl.",
@@ -433,7 +405,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Pinto",
     lat: -36.85,
     lng: -71.45,
-    image: p("chillan.jpg"),
     tagline: "Huemul, lenga y la cordillera de Chillán.",
     description:
       "Bosque andino y hábitat de huemul junto a las Termas de Chillán. Pase digital en pasesparques.cl.",
@@ -448,7 +419,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Punta Arenas",
     lat: -53.4,
     lng: -71.25,
-    image: p("paine.jpg"),
     tagline: "Turberas, coigüe de Magallanes y una laguna escondida.",
     description:
       "Bosque magallánico al sur de Punta Arenas. Pesca y senderos de turbera. Pase digital en pasesparques.cl.",
@@ -463,7 +433,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Pozo Almonte",
     lat: -20.47,
     lng: -69.7,
-    image: p("humberstone.jpg"),
     tagline: "Tamarugos, geoglifos y la pampa salitrera.",
     description:
       "Bosque de tamarugo en el desierto, geoglifos de Pintados y oficina salitrera cerca. Pase digital en pasesparques.cl.",
@@ -478,7 +447,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Río Hurtado",
     lat: -30.39,
     lng: -70.87,
-    image: p("elqui.jpg"),
     tagline: "Fósiles, petrificados y el valle del Hurtado.",
     description:
       "Bosque petrificado y restos de dinosaurios en el Limarí. Pase digital en pasesparques.cl.",
@@ -493,7 +461,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Empedrado",
     lat: -35.55,
     lng: -72.35,
-    image: p("olmue.jpg"),
     tagline: "El ruil, árbol endémico del Maule, en un bosque chico y raro.",
     description:
       "Conservación del Nothofagus alessandrii. Visita breve de alto valor botánico. Pase digital en pasesparques.cl.",
@@ -508,7 +475,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Panguipulli",
     lat: -39.93,
     lng: -72.03,
-    image: p("villarrica.jpg"),
     tagline: "Dos volcanes gemelos y bosque sobre el Ranco.",
     description:
       "Mocho y Choshuenco, nieve, araucarias y acceso desde Panguipulli. Pase digital en pasesparques.cl.",
@@ -523,7 +489,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Vichuquén",
     lat: -34.77,
     lng: -72.07,
-    image: p("colchagua.jpg"),
     tagline: "Cisnes de cuello negro entre Vichuquén y el mar.",
     description:
       "Humedal costero del Maule, aves y bosque de eucalipto. Pase digital en pasesparques.cl.",
@@ -538,7 +503,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Punta Arenas",
     lat: -52.1,
     lng: -69.73,
-    image: p("paine.jpg"),
     tagline: "Campos de lava, cráteres y el viento de la pampa magallánica.",
     description:
       "Volcanismo cuaternario, cuevas arqueológicas y estepa. Pase digital en pasesparques.cl.",
@@ -553,7 +517,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Coyhaique",
     lat: -45.75,
     lng: -71.85,
-    image: p("coyhaique.jpg"),
     tagline: "Dos espejos de agua y bosque de ñire cerca de Coyhaique.",
     description:
       "Lagunas El Toro y Escondida, picnic y aves. Pase digital en pasesparques.cl.",
@@ -568,7 +531,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Chañaral",
     lat: -26.15,
     lng: -70.65,
-    image: p("bahia-inglesa.jpg"),
     tagline: "Desierto, pingüinos de Humboldt y caleta Pan de Azúcar.",
     description:
       "Costa de Atacama, cactus copiapoa, isla de pingüinos y campamento frente al Pacífico. Pase digital en pasesparques.cl.",
@@ -583,7 +545,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Illapel",
     lat: -31.5,
     lng: -71.1,
-    image: p("elqui.jpg"),
     tagline: "La chinchilla de cola larga en el secano de Illapel.",
     description:
       "Matorral estepario, sendero interpretativo y cría de chinchilla. Pase digital en pasesparques.cl.",
@@ -598,7 +559,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Coihueco",
     lat: -36.73,
     lng: -71.48,
-    image: p("chillan.jpg"),
     tagline: "Santuario del huemul en la cordillera de Ñuble.",
     description:
       "Bosque andino y protección del huemul, junto a Ñuble y Chillán. Pase digital en pasesparques.cl.",
@@ -613,7 +573,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Copiapó",
     lat: -27.1,
     lng: -69.0,
-    image: p("parinacota.jpg"),
     tagline: "Salar de Maricunga, flamencos y el Ojos del Salado al fondo.",
     description:
       "Altiplano de Atacama, lagunas Verde y Santa Rosa, volcanes de más de 6.000 m. Pase digital en pasesparques.cl.",
@@ -628,7 +587,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Santo Domingo",
     lat: -33.75,
     lng: -71.7,
-    image: p("isla-negra.jpg"),
     tagline: "El humedal Ramsar más importante de Chile central.",
     description:
       "Lagunas costeras, aves migratorias y dunas entre Santo Domingo y El Yali. Pase digital en pasesparques.cl.",
@@ -643,7 +601,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Valparaíso",
     lat: -33.17,
     lng: -71.48,
-    image: p("valparaiso.jpg"),
     tagline: "Embalse, bosque y la biósfera La Campana-Peñuelas.",
     description:
       "Entre Valparaíso y Santiago: laguna, aves y bosque esclerófilo. Pase digital en pasesparques.cl.",
@@ -658,7 +615,6 @@ const parkSeeds: ParkSeed[] = [
     city: "Cochrane",
     lat: -47.17,
     lng: -72.5,
-    image: p("coyhaique.jpg"),
     tagline: "Estepa, jeinimeni y el valle Chacabuco, de Cochrane a Chile Chico.",
     description:
       "Tres unidades: Jeinimeni, Tamango y valle Chacabuco. Guanacos, huemules y la Carretera Austral. Pase digital en pasesparques.cl.",
@@ -673,7 +629,6 @@ const parkSeeds: ParkSeed[] = [
     city: "La Unión",
     lat: -40.17,
     lng: -73.43,
-    image: p("palafitos.jpg"),
     tagline: "Alerces de la cordillera de la Costa, entre Valdivia y La Unión.",
     description:
       "Alerzales costeros, alerce milenario y bosque valdiviano. Pase digital en pasesparques.cl.",
@@ -693,8 +648,8 @@ export const nationalParks: CatalogItem[] = parkSeeds.map((s) => ({
   city: s.city,
   lat: s.lat,
   lng: s.lng,
-  image: s.image,
-  gallery: [s.image],
+  image: p(`${s.slug}.jpg`),
+  gallery: [p(`${s.slug}.jpg`)],
   tagline: s.tagline,
   description: s.description,
   highlights: s.highlights,

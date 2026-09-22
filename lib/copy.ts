@@ -92,6 +92,7 @@ const es = {
     previewStay: "Dormir",
     previewTable: "Mesa",
     previewActs: "Hacer",
+    previewPass: "Pase",
     more: "+{n}",
     loadingHint: "Cápsula, mesa y actividades según tu presupuesto.",
     budget: "Presupuesto total · {price}",
@@ -128,6 +129,18 @@ const es = {
     included: "incluido",
     bookStay: "Reservar cápsula",
     seeMap: "Ver en el mapa",
+    passes: "Pases",
+    buyPass: "Comprar pase oficial",
+    passRates:
+      "Adulto nacional {adult} × {guests}. Joven {youth}. Niño, adulto mayor y discapacidad nacional: sin costo. Extranjero adulto {foreign}.",
+    passStay: "Pase de más de 1 día. Un día: {day} por adulto nacional.",
+    passZero: "La ficha oficial publica $0. Confirma el valor al comprar.",
+    passCampana:
+      "Sector Granizo. Ocoa y Cajón Grande se compran aparte, a la misma tarifa.",
+    passPatagonia:
+      "Sector Chacabuco. Jeinimeni y Tamango se compran aparte, a la misma tarifa.",
+    passSource:
+      "Tarifa de pasesparques.cl. Mapucoin no cobra el pase: la compra es en el sitio oficial.",
   },
   partners: {
     kicker: "Partners",
@@ -233,6 +246,16 @@ const es = {
     gallery: "Galería",
     onMap: "En el mapa",
     from: "Experiencias desde",
+    passFrom: "Entrada adulto nacional",
+    passKicker: "Pase oficial",
+    passAdult: "Nacional {national} · extranjero {foreign}",
+    passYouth: "Joven nacional {youth} · joven extranjero {foreignYouth}",
+    passFree:
+      "Niño, adulto mayor y persona con discapacidad nacional entran sin costo.",
+    passMulti:
+      "Más de 1 día: nacional {national} · extranjero {foreign}. Un día: {day}.",
+    buyPass: "Comprar en pasesparques.cl",
+    passSource: "Tarifa publicada en pasesparques.cl.",
     planThis: "Planificar este destino",
     seeCapsule: "Ver cápsula {name}",
     related: "Dormir, comer y hacer",
@@ -406,6 +429,7 @@ const en: typeof es = {
     previewStay: "Stay",
     previewTable: "Table",
     previewActs: "Do",
+    previewPass: "Pass",
     more: "+{n}",
     loadingHint: "Capsule, table and activities for your budget.",
     budget: "Total budget · {price}",
@@ -442,6 +466,18 @@ const en: typeof es = {
     included: "included",
     bookStay: "Book capsule",
     seeMap: "See on the map",
+    passes: "Passes",
+    buyPass: "Buy official pass",
+    passRates:
+      "Chilean adult {adult} × {guests}. Youth {youth}. Chilean child, senior and disabled visitor: free. Foreign adult {foreign}.",
+    passStay: "Pass for more than 1 day. One day: {day} per Chilean adult.",
+    passZero: "The official listing shows $0. Confirm the price when you buy.",
+    passCampana:
+      "Granizo sector. Ocoa and Cajón Grande are separate passes at the same fare.",
+    passPatagonia:
+      "Chacabuco sector. Jeinimeni and Tamango are separate passes at the same fare.",
+    passSource:
+      "Fare from pasesparques.cl. Mapucoin does not charge the pass: you buy it on the official site.",
   },
   partners: {
     kicker: "Partners",
@@ -547,6 +583,15 @@ const en: typeof es = {
     gallery: "Gallery",
     onMap: "On the map",
     from: "Experiences from",
+    passFrom: "Chilean adult entry",
+    passKicker: "Official pass",
+    passAdult: "Chilean {national} · foreign {foreign}",
+    passYouth: "Chilean youth {youth} · foreign youth {foreignYouth}",
+    passFree: "Chilean children, seniors and disabled visitors enter free.",
+    passMulti:
+      "More than 1 day: Chilean {national} · foreign {foreign}. One day: {day}.",
+    buyPass: "Buy on pasesparques.cl",
+    passSource: "Fare published on pasesparques.cl.",
     planThis: "Plan this destination",
     seeCapsule: "See capsule {name}",
     related: "Stay, eat and do",
@@ -721,6 +766,7 @@ const pt: typeof es = {
     previewStay: "Dormir",
     previewTable: "Mesa",
     previewActs: "Fazer",
+    previewPass: "Passe",
     more: "+{n}",
     loadingHint: "Cápsula, mesa e atividades segundo o seu orçamento.",
     budget: "Orçamento total · {price}",
@@ -757,6 +803,18 @@ const pt: typeof es = {
     included: "incluído",
     bookStay: "Reservar cápsula",
     seeMap: "Ver no mapa",
+    passes: "Passes",
+    buyPass: "Comprar passe oficial",
+    passRates:
+      "Adulto nacional {adult} × {guests}. Jovem {youth}. Criança, idoso e pessoa com deficiência nacional: sem custo. Estrangeiro adulto {foreign}.",
+    passStay: "Passe de mais de 1 dia. Um dia: {day} por adulto nacional.",
+    passZero: "A ficha oficial publica $0. Confirme o valor ao comprar.",
+    passCampana:
+      "Setor Granizo. Ocoa e Cajón Grande compram-se à parte, na mesma tarifa.",
+    passPatagonia:
+      "Setor Chacabuco. Jeinimeni e Tamango compram-se à parte, na mesma tarifa.",
+    passSource:
+      "Tarifa de pasesparques.cl. A Mapucoin não cobra o passe: a compra é no site oficial.",
   },
   partners: {
     kicker: "Partners",
@@ -862,6 +920,16 @@ const pt: typeof es = {
     gallery: "Galeria",
     onMap: "No mapa",
     from: "Experiências a partir de",
+    passFrom: "Entrada adulto nacional",
+    passKicker: "Passe oficial",
+    passAdult: "Nacional {national} · estrangeiro {foreign}",
+    passYouth: "Jovem nacional {youth} · jovem estrangeiro {foreignYouth}",
+    passFree:
+      "Criança, idoso e pessoa com deficiência nacional entram sem custo.",
+    passMulti:
+      "Mais de 1 dia: nacional {national} · estrangeiro {foreign}. Um dia: {day}.",
+    buyPass: "Comprar em pasesparques.cl",
+    passSource: "Tarifa publicada em pasesparques.cl.",
     planThis: "Planejar este destino",
     seeCapsule: "Ver cápsula {name}",
     related: "Dormir, comer e fazer",
@@ -1036,6 +1104,7 @@ const fr: typeof es = {
     previewStay: "Dormir",
     previewTable: "Table",
     previewActs: "Faire",
+    previewPass: "Pass",
     more: "+{n}",
     loadingHint: "Capsule, table et activités selon votre budget.",
     budget: "Budget total · {price}",
@@ -1072,6 +1141,18 @@ const fr: typeof es = {
     included: "inclus",
     bookStay: "Réserver la capsule",
     seeMap: "Voir sur la carte",
+    passes: "Pass",
+    buyPass: "Acheter le pass officiel",
+    passRates:
+      "Adulte chilien {adult} × {guests}. Jeune {youth}. Enfant, senior et handicap chilien : gratuit. Adulte étranger {foreign}.",
+    passStay: "Pass de plus d'un jour. Un jour : {day} par adulte chilien.",
+    passZero: "La fiche officielle affiche 0 $. Confirmez le prix à l'achat.",
+    passCampana:
+      "Secteur Granizo. Ocoa et Cajón Grande s'achètent à part, au même tarif.",
+    passPatagonia:
+      "Secteur Chacabuco. Jeinimeni et Tamango s'achètent à part, au même tarif.",
+    passSource:
+      "Tarif de pasesparques.cl. Mapucoin n'encaisse pas le pass : l'achat se fait sur le site officiel.",
   },
   partners: {
     kicker: "Partenaires",
@@ -1177,6 +1258,16 @@ const fr: typeof es = {
     gallery: "Galerie",
     onMap: "Sur la carte",
     from: "Expériences à partir de",
+    passFrom: "Entrée adulte chilien",
+    passKicker: "Pass officiel",
+    passAdult: "Chilien {national} · étranger {foreign}",
+    passYouth: "Jeune chilien {youth} · jeune étranger {foreignYouth}",
+    passFree:
+      "Enfant, senior et personne handicapée chiliens entrent sans frais.",
+    passMulti:
+      "Plus d'un jour : chilien {national} · étranger {foreign}. Un jour : {day}.",
+    buyPass: "Acheter sur pasesparques.cl",
+    passSource: "Tarif publié sur pasesparques.cl.",
     planThis: "Planifier cette destination",
     seeCapsule: "Voir la capsule {name}",
     related: "Dormir, manger et faire",
@@ -1351,6 +1442,7 @@ const it: typeof es = {
     previewStay: "Dormire",
     previewTable: "Tavola",
     previewActs: "Fare",
+    previewPass: "Pass",
     more: "+{n}",
     loadingHint: "Capsula, tavola e attività secondo il tuo budget.",
     budget: "Budget totale · {price}",
@@ -1387,6 +1479,18 @@ const it: typeof es = {
     included: "incluso",
     bookStay: "Prenota la capsula",
     seeMap: "Vedi sulla mappa",
+    passes: "Pass",
+    buyPass: "Compra il pass ufficiale",
+    passRates:
+      "Adulto nazionale {adult} × {guests}. Giovane {youth}. Bambino, over 60 e disabilità nazionale: gratis. Adulto straniero {foreign}.",
+    passStay: "Pass per più di 1 giorno. Un giorno: {day} per adulto nazionale.",
+    passZero: "La scheda ufficiale indica $0. Conferma il prezzo all'acquisto.",
+    passCampana:
+      "Settore Granizo. Ocoa e Cajón Grande si comprano a parte, alla stessa tariffa.",
+    passPatagonia:
+      "Settore Chacabuco. Jeinimeni e Tamango si comprano a parte, alla stessa tariffa.",
+    passSource:
+      "Tariffa di pasesparques.cl. Mapucoin non incassa il pass: l'acquisto è sul sito ufficiale.",
   },
   partners: {
     kicker: "Partner",
@@ -1492,6 +1596,16 @@ const it: typeof es = {
     gallery: "Galleria",
     onMap: "Sulla mappa",
     from: "Esperienze da",
+    passFrom: "Ingresso adulto nazionale",
+    passKicker: "Pass ufficiale",
+    passAdult: "Nazionale {national} · straniero {foreign}",
+    passYouth: "Giovane nazionale {youth} · giovane straniero {foreignYouth}",
+    passFree:
+      "Bambino, over 60 e persona con disabilità nazionale entrano gratis.",
+    passMulti:
+      "Più di 1 giorno: nazionale {national} · straniero {foreign}. Un giorno: {day}.",
+    buyPass: "Compra su pasesparques.cl",
+    passSource: "Tariffa pubblicata su pasesparques.cl.",
     planThis: "Pianifica questa destinazione",
     seeCapsule: "Vedi capsula {name}",
     related: "Dormire, mangiare e fare",

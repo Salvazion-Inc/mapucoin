@@ -3,6 +3,7 @@
 import { formatCLP, planCatalog } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
+import { passesForPlace } from "@/lib/park-passes";
 import { useLocale } from "@/lib/locale-context";
 
 export default function PlannerPreview({ placeSlug }: { placeSlug: string }) {
@@ -13,6 +14,7 @@ export default function PlannerPreview({ placeSlug }: { placeSlug: string }) {
   const doing = acts.slice(0, 2).map((i) => localizeItem(i, locale));
   const extraFood = Math.max(0, food.length - 2);
   const extraActs = Math.max(0, acts.length - 2);
+  const passes = passesForPlace(place.slug);
 
   return (
     <div className="rounded-[1.75rem] border border-gold/20 bg-black p-6 md:p-8">
@@ -61,6 +63,34 @@ export default function PlannerPreview({ placeSlug }: { placeSlug: string }) {
           />
         )}
       </div>
+
+      {passes.length > 0 && (
+        <ul className="mt-4 space-y-2">
+          {passes.map((pass) => (
+            <li
+              key={pass.slug}
+              className="flex flex-wrap items-baseline justify-between gap-2 rounded-2xl border border-gold/20 px-4 py-3"
+            >
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.16em] text-gold">
+                  {c.plan.previewPass}
+                </p>
+                <a
+                  href={pass.buyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sand hover:text-gold"
+                >
+                  {pass.name}
+                </a>
+              </div>
+              <p className="text-sm text-gold">
+                {formatCLP(pass.day.national.adult)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {(dishes[1] || doing[1]) && (
         <ul className="mt-4 flex flex-wrap gap-2">

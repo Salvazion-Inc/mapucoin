@@ -4,15 +4,17 @@ import { formatCLP, getBySlug } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import type { QuotedPass } from "@/lib/park-passes";
 import Image from "next/image";
 import Link from "next/link";
 
 export type PlanItem = {
-  type: "stay" | "food" | "activity" | "place";
+  type: "stay" | "food" | "activity" | "place" | "ticket";
   name: string;
   slug?: string;
   costCLP: number;
   note: string;
+  pass?: QuotedPass;
 };
 
 export type PlanDay = {
@@ -33,13 +35,39 @@ export type TravelPlan = {
     stay: number;
     food: number;
     activities: number;
+    tickets?: number;
     total: number;
     remaining: number;
   };
 };
 
+function passNote(item: PlanItem, c: ReturnType<typeof t>) {
+  const pass = item.pass;
+  if (!pass) return item.note;
+  if (pass.perGuestCLP === 0) return c.itinerary.passZero;
+  const parts = [
+    tr(c.itinerary.passRates, {
+      adult: formatCLP(pass.adultNationalCLP),
+      guests: pass.guests,
+      youth: formatCLP(pass.youthNationalCLP),
+      foreign: formatCLP(pass.adultForeignCLP),
+    }),
+  ];
+  if (pass.multiDay) {
+    parts.push(
+      tr(c.itinerary.passStay, { day: formatCLP(pass.dayAdultNationalCLP) }),
+    );
+  }
+  if (pass.sector === "campana") parts.push(c.itinerary.passCampana);
+  if (pass.sector === "patagonia") parts.push(c.itinerary.passPatagonia);
+  return parts.join(" ");
+}
+
 const typeHref = (item: PlanItem) => {
   if (!item.slug) return null;
+  if (item.type === "ticket") {
+    return getBySlug(item.slug) ? `/destinos/${item.slug}` : null;
+  }
   if (item.type === "stay") return `/capsulas/${item.slug}`;
   if (item.type === "food") return `/#${item.slug}`;
   if (item.type === "activity") return `/#actividades`;
@@ -52,6 +80,9 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
   const stay = plan.days
     .flatMap((d) => d.items)
     .find((i) => i.type === "stay");
+  const tickets = plan.days
+    .flatMap((d) => d.items)
+    .filter((i) => i.type === "ticket");
 
   return (
     <div className="space-y-8">
@@ -81,11 +112,16 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
         </dl>
       </header>
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div
+        className={`grid grid-cols-2 gap-3 ${tickets.length ? "md:grid-cols-4" : "md:grid-cols-3"}`}
+      >
         {[
           [c.itinerary.stay, plan.totals.stay],
           [c.itinerary.table, plan.totals.food],
           [c.itinerary.acts, plan.totals.activities],
+          ...(tickets.length
+            ? [[c.itinerary.passes, plan.totals.tickets || 0] as const]
+            : []),
         ].map(([label, n]) => (
           <div
             key={String(label)}
@@ -123,7 +159,10 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
                       ? c.itinerary.table
                       : item.type === "activity"
                         ? c.itinerary.acts
-                        : c.kinds.place;
+                        : item.type === "ticket"
+                          ? c.itinerary.passes
+                          : c.kinds.place;
+                const note = item.pass ? passNote(item, c) : cat?.tagline || item.note;
                 return (
                   <li
                     key={`${item.name}-${i}`}
@@ -154,12 +193,20 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
                             cat?.name || item.name
                           )}
                         </p>
-                        <p className="text-sm text-sand/70">
-                          {cat?.tagline || item.note}
-                        </p>
+                        <p className="text-sm text-sand/70">{note}</p>
+                        {item.pass && (
+                          <a
+                            href={item.pass.buyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-block rounded-full border border-gold/40 px-3 py-1 text-xs text-gold hover:border-gold"
+                          >
+                            {c.itinerary.buyPass}
+                          </a>
+                        )}
                       </div>
                       <p className="mt-1 shrink-0 text-sm text-gold md:mt-0">
-                        {item.costCLP
+                        {item.type === "ticket" || item.costCLP
                           ? formatCLP(item.costCLP)
                           : c.itinerary.included}
                       </p>
@@ -188,6 +235,9 @@ export default function ItineraryView({ plan }: { plan: TravelPlan }) {
           {c.itinerary.seeMap}
         </Link>
       </div>
+      {tickets.length > 0 && (
+        <p className="text-sm text-sand/55">{c.itinerary.passSource}</p>
+      )}
     </div>
   );
 }

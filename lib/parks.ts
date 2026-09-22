@@ -1,4 +1,5 @@
 import type { CatalogItem, Landscape, Region } from "./catalog";
+import { adultNationalCLP } from "./park-passes";
 
 const p = (file: string) => `/images/places/${file}`;
 
@@ -638,7 +639,7 @@ const parkSeeds: ParkSeed[] = [
   },
 ];
 
-export const PARKS_PASS_URL = "https://www.pasesparques.cl/en";
+export const PARKS_PASS_URL = "https://www.pasesparques.cl/es";
 
 export const nationalParks: CatalogItem[] = parkSeeds.map((s) => ({
   slug: s.slug,
@@ -653,7 +654,7 @@ export const nationalParks: CatalogItem[] = parkSeeds.map((s) => ({
   tagline: s.tagline,
   description: s.description,
   highlights: s.highlights,
-  priceFromCLP: s.priceFromCLP,
+  priceFromCLP: adultNationalCLP(s.slug) ?? s.priceFromCLP,
   tags: ["parque", "conaf", "pasesparques", "naturaleza"],
   landscapes: ["parques", ...(s.extraLandscapes || [])] as Landscape[],
 }));

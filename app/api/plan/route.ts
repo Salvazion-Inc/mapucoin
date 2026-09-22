@@ -1,5 +1,6 @@
 import { destinations, getBySlug, planCatalog } from "@/lib/catalog";
 import { localeMeta, parseLocale } from "@/lib/locale";
+import { applyOfficialPasses } from "@/lib/park-passes";
 
 export const runtime = "nodejs";
 
@@ -83,6 +84,7 @@ function fallbackPlan(input: {
       stay: stayTotal,
       food: foodTotal,
       activities: actTotal,
+      tickets: 0,
       total,
       remaining: input.presupuesto - total,
     },
@@ -116,15 +118,21 @@ export async function POST(req: Request) {
   });
 
   const key = process.env.XAI_API_KEY;
+  const quoted = (
+    plan: ReturnType<typeof fallbackPlan>,
+  ) => applyOfficialPasses(plan, lugar);
+
   if (!key) {
     return Response.json({
-      plan: fallbackPlan({
-        lugar,
-        presupuesto,
-        noches,
-        viajeros,
-        intereses,
-      }),
+      plan: quoted(
+        fallbackPlan({
+          lugar,
+          presupuesto,
+          noches,
+          viajeros,
+          intereses,
+        }),
+      ),
       source: "catalog",
     });
   }
@@ -141,9 +149,9 @@ Responde SOLO JSON válido con esta forma:
   "guests": number,
   "budgetCLP": number,
   "days": [{"day": number, "title": string, "items": [{"type": "stay"|"food"|"activity"|"place", "name": string, "slug": string, "costCLP": number, "note": string}]}],
-  "totals": {"stay": number, "food": number, "activities": number, "total": number, "remaining": number}
+  "totals": {"stay": number, "food": number, "activities": number, "tickets": number, "total": number, "remaining": number}
 }
-El total no debe superar el presupuesto. Prefiere una cápsula todas las noches. Incluye al menos una experiencia gastronómica y una actividad del paisaje. Si el destino tiene pocas fichas, usa gastronomía y actividades del mismo paisaje. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
+El total no debe superar el presupuesto. Prefiere una cápsula todas las noches. Incluye al menos una experiencia gastronómica y una actividad del paisaje. Si el destino tiene pocas fichas, usa gastronomía y actividades del mismo paisaje. No inventes el precio de entradas a parques, reservas o monumentos: el servidor agrega el pase oficial de pasesparques.cl. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
 
   const user = `Destino: ${dest.name} (${lugar})
 Presupuesto: ${presupuesto} CLP
@@ -174,13 +182,15 @@ ${catalogJson}`;
     const credits =
       /credits|spending limit|permission-denied/i.test(errText);
     return Response.json({
-      plan: fallbackPlan({
-        lugar,
-        presupuesto,
-        noches,
-        viajeros,
-        intereses,
-      }),
+      plan: quoted(
+        fallbackPlan({
+          lugar,
+          presupuesto,
+          noches,
+          viajeros,
+          intereses,
+        }),
+      ),
       source: "catalog",
       grok: credits ? "credits" : "error",
     });
@@ -190,17 +200,19 @@ ${catalogJson}`;
   const text: string = data.choices?.[0]?.message?.content || "";
   const match = text.match(/\{[\s\S]*\}/);
   try {
-    const plan = JSON.parse(match ? match[0] : text);
+    const plan = quoted(JSON.parse(match ? match[0] : text));
     return Response.json({ plan, source: "grok" });
   } catch {
     return Response.json({
-      plan: fallbackPlan({
-        lugar,
-        presupuesto,
-        noches,
-        viajeros,
-        intereses,
-      }),
+      plan: quoted(
+        fallbackPlan({
+          lugar,
+          presupuesto,
+          noches,
+          viajeros,
+          intereses,
+        }),
+      ),
       source: "catalog",
     });
   }

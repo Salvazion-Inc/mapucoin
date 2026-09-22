@@ -6,6 +6,7 @@ import PlaceCard from "@/components/PlaceCard";
 import PlaceVideo from "@/components/PlaceVideo";
 import type { CatalogItem } from "@/lib/catalog";
 import { formatCLP } from "@/lib/catalog";
+import { getParkPass, passesForPlace, type ParkPass } from "@/lib/park-passes";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
@@ -26,6 +27,11 @@ export default function DestinoView({
   const { locale } = useLocale();
   const c = t(locale);
   const d = localizeItem(destination, locale);
+  const ownPass = getParkPass(d.slug);
+  const showPassPrice = Boolean(ownPass && /^(pn|rn|mn)-/.test(d.slug));
+  const linkedPasses = passesForPlace(d.slug).filter(
+    (pass) => !showPassPrice || pass.slug !== d.slug,
+  );
 
   return (
     <article>
@@ -97,10 +103,22 @@ export default function DestinoView({
           </div>
         </div>
         <aside className="h-fit rounded-[1.75rem] border border-gold/20 bg-black p-7">
-          <p className="kicker text-gold">{c.destino.from}</p>
-          <p className="font-display mt-2 text-4xl text-sand">
-            {formatCLP(d.priceFromCLP)}
+          <p className="kicker text-gold">
+            {showPassPrice ? c.destino.passFrom : c.destino.from}
           </p>
+          <p className="font-display mt-2 text-4xl text-sand">
+            {formatCLP(
+              showPassPrice && ownPass
+                ? ownPass.day.national.adult
+                : d.priceFromCLP,
+            )}
+          </p>
+          {showPassPrice && ownPass && (
+            <PassTariff pass={ownPass} c={c} compact />
+          )}
+          {linkedPasses.map((pass) => (
+            <PassTariff key={pass.slug} pass={pass} c={c} />
+          ))}
           <Link
             href={`/?lugar=${d.slug}&presupuesto=800000&noches=4&viajeros=2&intereses=naturaleza,gastronomia#planificar`}
             className="mt-7 block rounded-full bg-gold py-3.5 text-center text-black transition hover:bg-[#e3c25a]"
@@ -128,5 +146,60 @@ export default function DestinoView({
         </section>
       )}
     </article>
+  );
+}
+
+function PassTariff({
+  pass,
+  c,
+  compact = false,
+}: {
+  pass: ParkPass;
+  c: ReturnType<typeof t>;
+  compact?: boolean;
+}) {
+  const day = pass.day;
+  return (
+    <div className={compact ? "mt-4" : "mt-6 rounded-2xl border border-gold/25 p-4"}>
+      {!compact && (
+        <>
+          <p className="text-[10px] uppercase tracking-[0.16em] text-gold">
+            {c.destino.passKicker}
+          </p>
+          <p className="mt-1 font-medium text-sand">{pass.name}</p>
+        </>
+      )}
+      <p className="mt-2 text-sm text-sand/80">
+        {tr(c.destino.passAdult, {
+          national: formatCLP(day.national.adult),
+          foreign: formatCLP(day.foreign.adult),
+        })}
+      </p>
+      <p className="text-sm text-sand/70">
+        {tr(c.destino.passYouth, {
+          youth: formatCLP(day.national.youth),
+          foreignYouth: formatCLP(day.foreign.youth),
+        })}
+      </p>
+      <p className="mt-1 text-sm text-sand/60">{c.destino.passFree}</p>
+      {pass.stay && (
+        <p className="mt-1 text-sm text-sand/70">
+          {tr(c.destino.passMulti, {
+            national: formatCLP(pass.stay.national.adult),
+            foreign: formatCLP(pass.stay.foreign.adult),
+            day: formatCLP(pass.day.national.adult),
+          })}
+        </p>
+      )}
+      <a
+        href={pass.buyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 block rounded-full border border-gold/40 py-3 text-center text-gold hover:border-gold"
+      >
+        {c.destino.buyPass}
+      </a>
+      <p className="mt-2 text-xs text-sand/45">{c.destino.passSource}</p>
+    </div>
   );
 }

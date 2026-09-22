@@ -1,0 +1,1080 @@
+{
+  "fetchedAt": "2026-09-22",
+  "source": "https://www.pasesparques.cl/es",
+  "passes": [
+    {
+      "slug": "juan-fernandez",
+      "name": "Parque Nacional Archipiélago Juan Fernández",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-archipielago-juan-fernandez-3405",
+      "internalId": 3405,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "mn-cerro-nielol",
+      "name": "Monumento Natural Cerro Ñielol",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/monumento-natural-cerro-nielol-3428",
+      "internalId": 3428,
+      "day": {
+        "national": {
+          "adult": 2800,
+          "youth": 2300,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 5000,
+          "youth": 2800,
+          "child": 0,
+          "senior": 5000,
+          "disability": 5000
+        }
+      }
+    },
+    {
+      "slug": "mn-cueva-del-milodon",
+      "name": "Monumento Natural Cueva del Milodón",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/monumento-natural-cueva-del-milodon-3411",
+      "internalId": 3411,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 12000,
+          "youth": 6000,
+          "child": 0,
+          "senior": 12000,
+          "disability": 12000
+        }
+      }
+    },
+    {
+      "slug": "mn-dos-lagunas",
+      "name": "Monumento Natural Dos Lagunas",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/monumento-natural-dos-lagunas-3414",
+      "internalId": 3414,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "mn-el-morado",
+      "name": "Monumento Natural El Morado",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/monumento-natural-el-morado-3433",
+      "internalId": 3433,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9300,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9300,
+          "disability": 9300
+        }
+      }
+    },
+    {
+      "slug": "mn-lahuen-nadi",
+      "name": "Monumento Natural Lahuen Ñadi",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/monumento-natural-lahuen-nadi-3449",
+      "internalId": 3449,
+      "day": {
+        "national": {
+          "adult": 3900,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 8200,
+          "youth": 4500,
+          "child": 0,
+          "senior": 8200,
+          "disability": 8200
+        }
+      }
+    },
+    {
+      "slug": "mn-pichasca",
+      "name": "Monumento Natural Pichasca",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/monumento-natural-pichasca-3434",
+      "internalId": 3434,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 10998
+        }
+      }
+    },
+    {
+      "slug": "pn-alerce-andino",
+      "name": "Parque Nacional Alerce Andino",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-alerce-andino-3440",
+      "internalId": 3440,
+      "day": {
+        "national": {
+          "adult": 3900,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 8200,
+          "youth": 4500,
+          "child": 0,
+          "senior": 8200,
+          "disability": 8200
+        }
+      }
+    },
+    {
+      "slug": "pn-alerce-costero",
+      "name": "Parque Nacional Alerce Costero",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-alerce-costero-3425",
+      "internalId": 3425,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "pn-bernardo-ohiggins",
+      "name": "Parque Nacional Bernardo O'Higgins",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-bernardo-o-higgins-3442",
+      "internalId": 3442,
+      "day": {
+        "national": {
+          "adult": 7700,
+          "youth": 3900,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 15300,
+          "youth": 8200,
+          "child": 0,
+          "senior": 15300,
+          "disability": 15300
+        }
+      }
+    },
+    {
+      "slug": "pn-bosque-fray-jorge",
+      "name": "Parque Nacional Bosque Fray Jorge",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-bosque-fray-jorge-3439",
+      "internalId": 3439,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 6000,
+          "child": 0,
+          "senior": 11000,
+          "disability": 0
+        }
+      }
+    },
+    {
+      "slug": "pn-chiloe",
+      "name": "Parque Nacional Chiloé",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-chiloe-3406",
+      "internalId": 3406,
+      "day": {
+        "national": {
+          "adult": 3900,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 8200,
+          "youth": 4500,
+          "child": 0,
+          "senior": 8200,
+          "disability": 8200
+        }
+      }
+    },
+    {
+      "slug": "pn-conguillio",
+      "name": "Parque Nacional Conguillío",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-conguillio-3472",
+      "internalId": 3472,
+      "day": {
+        "national": {
+          "adult": 6700,
+          "youth": 3900,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 14200,
+          "youth": 7200,
+          "child": 0,
+          "senior": 14200,
+          "disability": 14200
+        }
+      }
+    },
+    {
+      "slug": "pn-huerquehue",
+      "name": "Parque Nacional Huerquehue",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-huerquehue-3470",
+      "internalId": 3470,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "pn-la-campana",
+      "name": "Parque Nacional La Campana",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-la-campana-sector-granizo-3419",
+      "internalId": 3419,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      },
+      "sector": "campana"
+    },
+    {
+      "slug": "pn-laguna-del-laja",
+      "name": "Parque Nacional Laguna del Laja",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-laguna-del-laja-3426",
+      "internalId": 3426,
+      "day": {
+        "national": {
+          "adult": 3400,
+          "youth": 2300,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 6000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 6000,
+          "disability": 6000
+        }
+      }
+    },
+    {
+      "slug": "pn-laguna-san-rafael",
+      "name": "Parque Nacional Laguna San Rafael",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-laguna-san-rafael-3408",
+      "internalId": 3408,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 12000,
+          "youth": 6000,
+          "child": 0,
+          "senior": 12000,
+          "disability": 12000
+        }
+      }
+    },
+    {
+      "slug": "pn-llanos-de-challe",
+      "name": "Parque Nacional Llanos de Challe",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-llanos-de-challe-3686",
+      "internalId": 3686,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "pn-nevado-tres-cruces",
+      "name": "Parque Nacional Nevado Tres Cruces",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-nevado-tres-cruces-3435",
+      "internalId": 3435,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "pn-nonguen",
+      "name": "Parque Nacional Nonguén",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-nonguen-3432",
+      "internalId": 3432,
+      "day": {
+        "national": {
+          "adult": 3400,
+          "youth": 2300,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 6000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 6000,
+          "disability": 6000
+        }
+      }
+    },
+    {
+      "slug": "pn-pali-aike",
+      "name": "Parque Nacional Pali Aike",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nancional-pali-aike-3448",
+      "internalId": 3448,
+      "day": {
+        "national": {
+          "adult": 3400,
+          "youth": 2300,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 6000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 6000,
+          "disability": 6000
+        }
+      }
+    },
+    {
+      "slug": "pn-pan-de-azucar",
+      "name": "Parque Nacional Pan de Azúcar",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-pan-de-azucar-3438",
+      "internalId": 3438,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "pn-patagonia",
+      "name": "Parque Nacional Patagonia",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-patagonia-sector-chacabuco-3415",
+      "internalId": 3415,
+      "day": {
+        "national": {
+          "adult": 5200,
+          "youth": 3200,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11400,
+          "youth": 5700,
+          "child": 0,
+          "senior": 11400,
+          "disability": 11400
+        }
+      },
+      "sector": "patagonia"
+    },
+    {
+      "slug": "pn-queulat",
+      "name": "Parque Nacional Queulat",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-queulat-3423",
+      "internalId": 3423,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 12000,
+          "youth": 6000,
+          "child": 0,
+          "senior": 12000,
+          "disability": 12000
+        }
+      }
+    },
+    {
+      "slug": "pn-rio-clarillo",
+      "name": "Parque Nacional Río Clarillo",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-rio-clarillo-3599",
+      "internalId": 3599,
+      "day": {
+        "national": {
+          "adult": 7700,
+          "youth": 3900,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 15300,
+          "youth": 8200,
+          "child": 0,
+          "senior": 15300,
+          "disability": 15300
+        }
+      }
+    },
+    {
+      "slug": "pn-tolhuaca",
+      "name": "Parque Nacional Tolhuaca",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-tolhuaca-3688",
+      "internalId": 3688,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "pn-vicente-perez-rosales",
+      "name": "Parque Nacional Vicente Pérez Rosales",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-vicente-perez-rosales-3600",
+      "internalId": 3600,
+      "day": {
+        "national": {
+          "adult": 3900,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 8200,
+          "youth": 4500,
+          "child": 0,
+          "senior": 8200,
+          "disability": 8200
+        }
+      }
+    },
+    {
+      "slug": "pn-villarrica",
+      "name": "Parque Nacional Villarrica",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-villarrica-norte-3424",
+      "internalId": 3424,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "pn-villarrica-sur",
+      "name": "Parque Nacional Villarrica (Los Ríos)",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-villarrica-sur-3407",
+      "internalId": 3407,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "rn-altos-de-lircay",
+      "name": "Reserva Nacional Altos de Lircay",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-altos-de-lircay-3441",
+      "internalId": 3441,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-coyhaique",
+      "name": "Reserva Nacional Coyhaique",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-coyhaique-3430",
+      "internalId": 3430,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-el-yali",
+      "name": "Reserva Nacional El Yali",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/yali-5863",
+      "internalId": 5863,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-federico-albert",
+      "name": "Reserva Nacional Federico Albert",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-federico-albert-3444",
+      "internalId": 3444,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9397,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-huemules-de-niblinto",
+      "name": "Reserva Nacional Huemules de Niblinto",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-huemules-de-niblinto-3689",
+      "internalId": 3689,
+      "day": {
+        "national": {
+          "adult": 0,
+          "youth": 0,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 0,
+          "youth": 0,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        }
+      }
+    },
+    {
+      "slug": "rn-lago-penuelas",
+      "name": "Reserva Nacional Lago Peñuelas",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-lago-penuelas-3420",
+      "internalId": 3420,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-laguna-parrillar",
+      "name": "Reserva Nacional Laguna Parrillar",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-laguna-parrillar-3687",
+      "internalId": 3687,
+      "day": {
+        "national": {
+          "adult": 3900,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 8200,
+          "youth": 4500,
+          "child": 0,
+          "senior": 8200,
+          "disability": 8200
+        }
+      }
+    },
+    {
+      "slug": "rn-laguna-torca",
+      "name": "Reserva Nacional Laguna Torca",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-laguna-torca-3431",
+      "internalId": 3431,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-las-chinchillas",
+      "name": "Reserva Nacional Las Chinchillas",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-las-chinchillas-3443",
+      "internalId": 3443,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "rn-los-flamencos",
+      "name": "Reserva Nacional Los Flamencos",
+      "buyUrl": "https://www.pasesparques.cl/es/san-pedro-de-atacama-202/reserva-nacional-los-flamencos-6185",
+      "internalId": 6185,
+      "day": {
+        "national": {
+          "adult": 0,
+          "youth": 0,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 0,
+          "youth": 0,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        }
+      }
+    },
+    {
+      "slug": "rn-los-ruiles",
+      "name": "Reserva Nacional Los Ruiles",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-los-ruiles-3445",
+      "internalId": 3445,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9398,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-magallanes",
+      "name": "Reserva Nacional Magallanes",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-magallanes-3409",
+      "internalId": 3409,
+      "day": {
+        "national": {
+          "adult": 3900,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 8200,
+          "youth": 4500,
+          "child": 0,
+          "senior": 8200,
+          "disability": 8200
+        }
+      }
+    },
+    {
+      "slug": "rn-mocho-choshuenco",
+      "name": "Reserva Nacional Mocho-Choshuenco",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-mocho-choshuenco-3413",
+      "internalId": 3413,
+      "day": {
+        "national": {
+          "adult": 5000,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 11000,
+          "youth": 5500,
+          "child": 0,
+          "senior": 11000,
+          "disability": 11000
+        }
+      }
+    },
+    {
+      "slug": "rn-nuble",
+      "name": "Reserva Nacional Ñuble",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-nuble-3421",
+      "internalId": 3421,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-pampa-del-tamarugal",
+      "name": "Reserva Nacional Pampa del Tamarugal",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-pampa-del-tamarugal-3436",
+      "internalId": 3436,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-rio-de-los-cipreses",
+      "name": "Reserva Nacional Río de los Cipreses",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-rio-de-los-cipreses-3685",
+      "internalId": 3685,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "rn-rio-simpson",
+      "name": "Reserva Nacional Río Simpson",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/reserva-nacional-rio-simpson-3410",
+      "internalId": 3410,
+      "day": {
+        "national": {
+          "adult": 5500,
+          "youth": 3400,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 12000,
+          "youth": 6000,
+          "child": 0,
+          "senior": 12000,
+          "disability": 12000
+        }
+      }
+    },
+    {
+      "slug": "siete-tazas",
+      "name": "Parque Nacional Radal Siete Tazas",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-radal-siete-tazas-3427",
+      "internalId": 3427,
+      "day": {
+        "national": {
+          "adult": 4500,
+          "youth": 2800,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 9400,
+          "youth": 5000,
+          "child": 0,
+          "senior": 9400,
+          "disability": 9400
+        }
+      }
+    },
+    {
+      "slug": "torres-del-paine",
+      "name": "Parque Nacional Torres del Paine",
+      "buyUrl": "https://www.pasesparques.cl/es/undefined-undefined/parque-nacional-torres-del-paine-3412",
+      "internalId": 3412,
+      "day": {
+        "national": {
+          "adult": 9400,
+          "youth": 5200,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 32400,
+          "youth": 16600,
+          "child": 0,
+          "senior": 32400,
+          "disability": 32400
+        }
+      },
+      "stay": {
+        "national": {
+          "adult": 14200,
+          "youth": 8200,
+          "child": 0,
+          "senior": 0,
+          "disability": 0
+        },
+        "foreign": {
+          "adult": 48500,
+          "youth": 48500,
+          "child": 0,
+          "senior": 48500,
+          "disability": 48500
+        }
+      }
+    }
+  ]
+}

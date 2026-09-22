@@ -13,13 +13,33 @@ import {
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t } from "@/lib/copy";
 import { formatKm, haversineKm } from "@/lib/geo";
+import type { Locale } from "@/lib/locale";
 import { useLocale } from "@/lib/locale-context";
 import { useLocation } from "@/lib/location";
+
+const EXPLORE_VIDEO: Record<Locale, string> = {
+  es: "/videos/explore-chile-es.mp4",
+  en: "/videos/why-chile-en.mp4",
+  pt: "/videos/explore-chile-pt.mp4",
+  fr: "/videos/explore-chile-fr.mp4",
+  it: "/videos/why-chile-en.mp4",
+  de: "/videos/explore-chile-de.mp4",
+};
+
+const EXPLORE_POSTER: Record<Locale, string> = {
+  es: "/images/why-chile-es.jpg",
+  en: "/images/why-chile-en.jpg",
+  pt: "/images/why-chile-pt.jpg",
+  fr: "/images/why-chile-fr.jpg",
+  it: "/images/why-chile-en.jpg",
+  de: "/images/why-chile-de.jpg",
+};
 
 export function ExploreTab() {
   const { locale } = useLocale();
   const a = at(locale);
   const c = t(locale);
+  const film = EXPLORE_VIDEO[locale];
   const { here, located, locating, denied, locate } = useLocation();
   const [land, setLand] = useState<Landscape | "all">("all");
   const [query, setQuery] = useState("");
@@ -45,6 +65,19 @@ export function ExploreTab() {
 
   return (
     <div>
+      <div className="relative mb-5 aspect-video overflow-hidden rounded-3xl bg-black">
+        <video
+          key={film}
+          className="absolute inset-0 h-full w-full bg-black object-cover"
+          controls
+          playsInline
+          preload="metadata"
+          poster={EXPLORE_POSTER[locale]}
+          aria-label={c.whyChile.video}
+        >
+          <source src={film} type="video/mp4" />
+        </video>
+      </div>
       <h1 className="font-display text-2xl font-bold">{a.tabs.explorar}</h1>
       <p className="mt-1 text-sm text-sand/70">{a.explorarLead}</p>
 

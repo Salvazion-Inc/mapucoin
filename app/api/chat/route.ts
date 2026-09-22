@@ -9,7 +9,7 @@ const catalog = [
     (c) =>
       `Cápsula ${c.name} (${c.slug}) en ${c.city}: ${c.priceFromCLP} CLP/noche. ${c.tagline}`,
   ),
-  ...gastronomy.map((g) => `Mesa ${g.name} (${g.slug}): ${g.tagline}`),
+  ...gastronomy.map((g) => `Gastronomía ${g.name} (${g.slug}): ${g.tagline}`),
   ...activities.map((a) => `Actividad ${a.name} (${a.slug}): ${a.tagline}`),
 ].join("\n");
 

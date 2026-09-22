@@ -6,7 +6,7 @@ export const SEO = {
   description:
     "Chile por paisaje: desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cápsulas de cobre y vidrio, gastronomía local, mapa y Stripe.",
   ogDescription:
-    "Viaja Chile en casas cápsula de cobre y vidrio. Mapa vivo, mesa local y presupuesto. Operado por Salvazion, Inc.",
+    "Viaja Chile en casas cápsula de cobre y vidrio. Mapa vivo, gastronomía local y presupuesto. Operado por Salvazion, Inc.",
   url: "https://mapucoin.com",
   supportEmail: "info@salvazion.org",
   xUrl: "https://x.com/MAPUCOIN",

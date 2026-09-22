@@ -2,7 +2,7 @@
 
 Plataforma turística de Chile: el viajero indica **presupuesto** y **lugar**, Grok arma un itinerario con **cápsulas tecnológicas**, **gastronomía local** y **actividades**, sobre un **mapa interactivo**. Partners se inscriben y Stripe cobra.
 
-La **App** (PWA instalable, misma infraestructura que Kaenz / Salvazion) vive en `/app`: cuenta, mapa, cápsulas, viaje con Grok y mesa. Entrar en `/login`.
+La **App** (PWA instalable, misma infraestructura que Kaenz / Salvazion) vive en `/app`: cuenta, mapa, cápsulas, viaje con Grok y gastronomía. Entrar en `/login`.
 
 - Dominio: [mapucoin.com](https://mapucoin.com)
 - Marca: logo kultrún en Canva (`Logo Mapucoin`)

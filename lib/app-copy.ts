@@ -10,7 +10,7 @@ const es = {
     explorar: "Explorar",
     capsulas: "Cápsulas",
     viaje: "Viaje",
-    mesa: "Mesa",
+    mesa: "Gastronomía",
     cuenta: "Cuenta",
   },
   explorarLead:
@@ -38,10 +38,10 @@ const es = {
   bookNeedProfile: "Completa nombre y correo en Cuenta para reservar.",
   bookFail: "No se pudo iniciar el pago.",
   viajeLead:
-    "Elige paisaje y presupuesto. Mapucoin arma cápsula, mesa y actividades, y Grok responde.",
+    "Elige paisaje y presupuesto. Mapucoin arma cápsula, gastronomía y actividades, y Grok responde.",
   paidBanner: "Pago recibido. Te escribimos con el check-in de la cápsula.",
   mesaLead:
-    "La mesa del territorio y lo que se hace ahí: astronomía, surf, cata, trekking, kayak, ski.",
+    "La gastronomía del territorio y lo que se hace ahí: astronomía, surf, cata, trekking, kayak, ski.",
   food: "Gastronomía",
   activities: "Actividades",
   account: {
@@ -60,7 +60,7 @@ const es = {
     bookings: "Tus reservas",
     noBookings: "Aún no hay reservas. Elige una cápsula y paga con Stripe.",
     partnerCta: "Ingresar como partner",
-    partnerLead: "Operas una cápsula, una mesa o un tour. Postula desde aquí.",
+    partnerLead: "Operas una cápsula, gastronomía o un tour. Postula desde aquí.",
     roles: {
       traveler: "Viajero",
       partner: "Partner",
@@ -127,7 +127,7 @@ const en: typeof es = {
     explorar: "Explore",
     capsulas: "Capsules",
     viaje: "Trip",
-    mesa: "Table",
+    mesa: "Gastronomy",
     cuenta: "Account",
   },
   explorarLead:
@@ -155,10 +155,10 @@ const en: typeof es = {
   bookNeedProfile: "Add your name and email in Account to book.",
   bookFail: "Could not start checkout.",
   viajeLead:
-    "Choose landscape and budget. Mapucoin builds capsule, table and activities, and Grok answers.",
+    "Choose landscape and budget. Mapucoin builds capsule, gastronomy and activities, and Grok answers.",
   paidBanner: "Payment received. We will write with capsule check-in.",
   mesaLead:
-    "The table of the territory and what you do there: astronomy, surf, tasting, trekking, kayak, ski.",
+    "The gastronomy of the territory and what you do there: astronomy, surf, tasting, trekking, kayak, ski.",
   food: "Gastronomy",
   activities: "Activities",
   account: {
@@ -177,7 +177,7 @@ const en: typeof es = {
     bookings: "Your bookings",
     noBookings: "No bookings yet. Pick a capsule and pay with Stripe.",
     partnerCta: "Join as a partner",
-    partnerLead: "You run a capsule, a table or a tour. Apply from here.",
+    partnerLead: "You run a capsule, gastronomy or a tour. Apply from here.",
     roles: {
       traveler: "Traveler",
       partner: "Partner",
@@ -244,7 +244,7 @@ const pt: typeof es = {
     explorar: "Explorar",
     capsulas: "Cápsulas",
     viaje: "Viagem",
-    mesa: "Mesa",
+    mesa: "Gastronomia",
     cuenta: "Conta",
   },
   explorarLead:
@@ -272,10 +272,10 @@ const pt: typeof es = {
   bookNeedProfile: "Complete nome e e-mail em Conta para reservar.",
   bookFail: "Não foi possível iniciar o pagamento.",
   viajeLead:
-    "Escolha paisagem e orçamento. O Mapucoin monta cápsula, mesa e atividades, e o Grok responde.",
+    "Escolha paisagem e orçamento. O Mapucoin monta cápsula, gastronomia e atividades, e o Grok responde.",
   paidBanner: "Pagamento recebido. Escrevemos com o check-in da cápsula.",
   mesaLead:
-    "A mesa do território e o que se faz lá: astronomia, surf, degustação, trekking, caiaque, ski.",
+    "A gastronomia do território e o que se faz lá: astronomia, surf, degustação, trekking, caiaque, ski.",
   food: "Gastronomia",
   activities: "Atividades",
   account: {
@@ -294,7 +294,7 @@ const pt: typeof es = {
     bookings: "Suas reservas",
     noBookings: "Ainda não há reservas. Escolha uma cápsula e pague com Stripe.",
     partnerCta: "Entrar como partner",
-    partnerLead: "Você opera uma cápsula, uma mesa ou um tour. Candidate-se aqui.",
+    partnerLead: "Você opera uma cápsula, gastronomia ou um tour. Candidate-se aqui.",
     roles: {
       traveler: "Viajante",
       partner: "Partner",
@@ -361,7 +361,7 @@ const fr: typeof es = {
     explorar: "Explorer",
     capsulas: "Capsules",
     viaje: "Voyage",
-    mesa: "Table",
+    mesa: "Gastronomy",
     cuenta: "Compte",
   },
   explorarLead:
@@ -389,10 +389,10 @@ const fr: typeof es = {
   bookNeedProfile: "Ajoutez nom et e-mail dans Compte pour réserver.",
   bookFail: "Impossible de lancer le paiement.",
   viajeLead:
-    "Choisissez paysage et budget. Mapucoin compose capsule, table et activités, et Grok répond.",
+    "Choisissez paysage et budget. Mapucoin compose capsule, gastronomie et activités, et Grok répond.",
   paidBanner: "Paiement reçu. Nous écrivons avec le check-in de la capsule.",
   mesaLead:
-    "La table du territoire et ce que l’on y fait : astronomie, surf, dégustation, trekking, kayak, ski.",
+    "La gastronomie du territoire et ce que l’on y fait : astronomie, surf, dégustation, trekking, kayak, ski.",
   food: "Gastronomie",
   activities: "Activités",
   account: {
@@ -411,7 +411,7 @@ const fr: typeof es = {
     bookings: "Vos réservations",
     noBookings: "Pas encore de réservation. Choisissez une capsule et payez avec Stripe.",
     partnerCta: "Devenir partenaire",
-    partnerLead: "Vous tenez une capsule, une table ou un tour. Candidatez ici.",
+    partnerLead: "Vous tenez une capsule, de la gastronomie ou un tour. Candidatez ici.",
     roles: {
       traveler: "Voyageur",
       partner: "Partenaire",
@@ -478,7 +478,7 @@ const it: typeof es = {
     explorar: "Esplora",
     capsulas: "Capsule",
     viaje: "Viaggio",
-    mesa: "Tavola",
+    mesa: "Gastronomia",
     cuenta: "Account",
   },
   explorarLead:
@@ -506,10 +506,10 @@ const it: typeof es = {
   bookNeedProfile: "Completa nome e email in Account per prenotare.",
   bookFail: "Impossibile avviare il pagamento.",
   viajeLead:
-    "Scegli paesaggio e budget. Mapucoin compone capsula, tavola e attività, e Grok risponde.",
+    "Scegli paesaggio e budget. Mapucoin compone capsula, gastronomia e attività, e Grok risponde.",
   paidBanner: "Pagamento ricevuto. Scriviamo con il check-in della capsula.",
   mesaLead:
-    "La tavola del territorio e cosa si fa lì: astronomia, surf, degustazione, trekking, kayak, sci.",
+    "La gastronomia del territorio e cosa si fa lì: astronomia, surf, degustazione, trekking, kayak, sci.",
   food: "Gastronomia",
   activities: "Attività",
   account: {
@@ -528,7 +528,7 @@ const it: typeof es = {
     bookings: "Le tue prenotazioni",
     noBookings: "Nessuna prenotazione. Scegli una capsula e paga con Stripe.",
     partnerCta: "Entra come partner",
-    partnerLead: "Gestisci una capsula, una tavola o un tour. Candidati da qui.",
+    partnerLead: "Gestisci una capsula, gastronomia o un tour. Candidati da qui.",
     roles: {
       traveler: "Viaggiatore",
       partner: "Partner",
@@ -595,7 +595,7 @@ const de: typeof es = {
     explorar: "Entdecken",
     capsulas: "Kapseln",
     viaje: "Reise",
-    mesa: "Tafel",
+    mesa: "Gastronomie",
     cuenta: "Konto",
   },
   explorarLead:
@@ -623,10 +623,10 @@ const de: typeof es = {
   bookNeedProfile: "Trag Name und E-Mail im Konto ein, um zu buchen.",
   bookFail: "Die Zahlung konnte nicht gestartet werden.",
   viajeLead:
-    "Wähle Landschaft und Budget. Mapucoin stellt Kapsel, Tafel und Aktivitäten zusammen, und Grok antwortet.",
+    "Wähle Landschaft und Budget. Mapucoin stellt Kapsel, Gastronomie und Aktivitäten zusammen, und Grok antwortet.",
   paidBanner: "Zahlung erhalten. Wir schreiben dir zum Check-in der Kapsel.",
   mesaLead:
-    "Die Tafel des Gebiets und was man dort tut: Astronomie, Surfen, Verkostung, Trekking, Kajak, Ski.",
+    "Die Gastronomie des Gebiets und was man dort tut: Astronomie, Surfen, Verkostung, Trekking, Kajak, Ski.",
   food: "Gastronomie",
   activities: "Aktivitäten",
   account: {
@@ -645,7 +645,7 @@ const de: typeof es = {
     bookings: "Deine Buchungen",
     noBookings: "Noch keine Buchungen. Wähle eine Kapsel und zahle mit Stripe.",
     partnerCta: "Als Partner beitreten",
-    partnerLead: "Du betreibst eine Kapsel, eine Tafel oder eine Tour. Bewirb dich hier.",
+    partnerLead: "Du betreibst eine Kapsel, Gastronomie oder eine Tour. Bewirb dich hier.",
     roles: {
       traveler: "Reisende",
       partner: "Partner",

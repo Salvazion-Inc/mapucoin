@@ -946,7 +946,7 @@ export const gastronomy: CatalogItem[] = [
     tagline: "Mariscos, carne y milcao cocidos bajo tierra con nalca.",
     description:
       "Ritual chilote: hoyo, piedras calientes, chapaleles y mariscos del canal. Experiencia con familia local.",
-    highlights: ["Cocción ancestral", "Mariscos del canal", "Mesa compartida"],
+    highlights: ["Cocción ancestral", "Mariscos del canal", "Gastronomía compartida"],
     priceFromCLP: 28000,
     durationHours: 3,
     tags: ["chilote", "mariscos", "ancestral"],

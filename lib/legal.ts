@@ -5,11 +5,11 @@ export const terms = {
   sections: [
     {
       heading: "1. Definiciones",
-      body: "Mapucoin es una plataforma tecnológica de viajes en Chile, operada por Salvazion, Inc. Usuario: quien planifica o reserva. Partner: quien opera una cápsula, mesa, tour, guía, transporte o viña. Cápsula: módulo de alojamiento listado en la plataforma. Viaje: itinerario armado con presupuesto, destino, noches y viajeros.",
+      body: "Mapucoin es una plataforma tecnológica de viajes en Chile, operada por Salvazion, Inc. Usuario: quien planifica o reserva. Partner: quien opera una cápsula, gastronomía, tour, guía, transporte o viña. Cápsula: módulo de alojamiento listado en la plataforma. Viaje: itinerario armado con presupuesto, destino, noches y viajeros.",
     },
     {
       heading: "2. Nuestro rol",
-      body: "Mapucoin es solo una plataforma tecnológica. No somos tour operador, hotelero ni empleador de los partners. Las cápsulas, mesas y actividades las operan partners independientes. Los itinerarios son sugerencias, no un contrato de viaje.",
+      body: "Mapucoin es solo una plataforma tecnológica. No somos tour operador, hotelero ni empleador de los partners. Las cápsulas, la gastronomía y las actividades las operan partners independientes. Los itinerarios son sugerencias, no un contrato de viaje.",
     },
     {
       heading: "3. Elegibilidad",

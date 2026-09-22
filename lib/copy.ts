@@ -23,7 +23,7 @@ const es = {
   },
   hero: {
     title: "Chile, de norte a sur.",
-    lead: "Cápsulas de cobre y vidrio en desiertos, playas, viñedos, volcanes, ríos, lagos, bosques, nieve y parques nacionales. Mesa local y presupuesto en CLP.",
+    lead: "Cápsulas de cobre y vidrio en desiertos, playas, viñedos, volcanes, ríos, lagos, bosques, nieve y parques nacionales. Gastronomía local y presupuesto en CLP.",
     planCta: "Planificar",
     appCta: "Abrir App",
   },
@@ -71,8 +71,8 @@ const es = {
   },
   food: {
     kicker: "Gastronomía",
-    title: "La mesa del territorio",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos y la mesa de cada territorio. Con partners locales.",
+    title: "La gastronomía del territorio",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos y la gastronomía de cada territorio. Con partners locales.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -85,22 +85,22 @@ const es = {
   plan: {
     kicker: "Planificar",
     title: "Tu viaje, a tu presupuesto",
-    lead: "Elige el paisaje, el presupuesto en CLP y Mapucoin arma noches en cápsula, mesa y actividades de ese territorio.",
+    lead: "Elige el paisaje, el presupuesto en CLP y Mapucoin arma noches en cápsula, gastronomía y actividades de ese territorio.",
     formKicker: "Planificador",
     formTitle: "¿Cuánto y a dónde?",
     formLead:
-      "Elige el paisaje y el presupuesto en pesos chilenos. Mapucoin arma cápsula, mesa y actividades de ese territorio.",
+      "Elige el paisaje y el presupuesto en pesos chilenos. Mapucoin arma cápsula, gastronomía y actividades de ese territorio.",
     landscape: "Paisaje",
     place: "Lugar a conocer",
     previewTitle: "En este territorio",
     previewLead:
-      "Cápsula, mesa y lo que se hace en el paisaje. Arma el viaje para ver el itinerario día a día.",
+      "Cápsula, gastronomía y lo que se hace en el paisaje. Arma el viaje para ver el itinerario día a día.",
     previewStay: "Dormir",
-    previewTable: "Mesa",
+    previewTable: "Gastronomía",
     previewActs: "Hacer",
     previewPass: "Pase",
     more: "+{n}",
-    loadingHint: "Cápsula, mesa y actividades según tu presupuesto.",
+    loadingHint: "Cápsula, gastronomía y actividades según tu presupuesto.",
     budget: "Presupuesto total · {price}",
     budgetMin: "250 mil",
     budgetMax: "3,5 millones",
@@ -119,7 +119,7 @@ const es = {
     errorPlan: "No se pudo armar el itinerario.",
     errorNet: "Error de red al armar el itinerario.",
     empty:
-      "Elige un paisaje y arma el viaje. El itinerario aparece aquí, con cápsula, mesa y actividades.",
+      "Elige un paisaje y arma el viaje. El itinerario aparece aquí, con cápsula, gastronomía y actividades.",
     chatFail: "no pude responder ahora.",
   },
   itinerary: {
@@ -129,7 +129,7 @@ const es = {
     remaining: "Queda",
     nightsGuests: "Noches · viajeros",
     stay: "Cápsula",
-    table: "Mesa",
+    table: "Gastronomía",
     acts: "Actividades",
     day: "Día {n}",
     included: "incluido",
@@ -141,7 +141,7 @@ const es = {
     removeActs: "Quitar actividades",
     removeOther: "Quitar pases y otros",
     feeNote:
-      "Mapucoin retiene el 12% ({fee}). Los {payout} van a los proveedores de cápsula, mesa y actividades.",
+      "Mapucoin retiene el 12% ({fee}). Los {payout} van a los proveedores de cápsula, gastronomía y actividades.",
     pay: "Pagar a los proveedores",
     payNeed: "Nombre y correo para el cobro.",
     payEmpty: "No queda un cobro de Mapucoin. Los pases se compran en el sitio oficial.",
@@ -215,7 +215,7 @@ const es = {
   kinds: {
     place: "Destino",
     capsule: "Cápsula",
-    food: "Mesa",
+    food: "Gastronomía",
     activity: "Actividad",
   },
   landscapes: {
@@ -380,7 +380,7 @@ const en: typeof es = {
   },
   hero: {
     title: "Chile, north to south.",
-    lead: "Copper and glass capsules in deserts, beaches, vineyards, volcanoes, rivers, lakes, forests, snow and national parks. Local table and budget in CLP.",
+    lead: "Copper and glass capsules in deserts, beaches, vineyards, volcanoes, rivers, lakes, forests, snow and national parks. Local gastronomy and budget in CLP.",
     planCta: "Plan",
     appCta: "Open App",
   },
@@ -427,8 +427,8 @@ const en: typeof es = {
   },
   food: {
     kicker: "Gastronomy",
-    title: "The table of the territory",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos and the table of each territory. With local partners.",
+    title: "The gastronomy of the territory",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos and the gastronomy of each territory. With local partners.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -441,22 +441,22 @@ const en: typeof es = {
   plan: {
     kicker: "Plan",
     title: "Your trip, at your budget",
-    lead: "Choose the landscape and a budget in CLP. Mapucoin builds capsule nights, table and activities of that territory.",
+    lead: "Choose the landscape and a budget in CLP. Mapucoin builds capsule nights, gastronomy and activities of that territory.",
     formKicker: "Planner",
     formTitle: "How much and where?",
     formLead:
-      "Choose the landscape and a budget in Chilean pesos. Mapucoin builds capsule, table and activities of that territory.",
+      "Choose the landscape and a budget in Chilean pesos. Mapucoin builds capsule, gastronomy and activities of that territory.",
     landscape: "Landscape",
     place: "Place to visit",
     previewTitle: "In this territory",
     previewLead:
-      "Capsule, table and what you do in the landscape. Build the trip to see the day-by-day itinerary.",
+      "Capsule, gastronomy and what you do in the landscape. Build the trip to see the day-by-day itinerary.",
     previewStay: "Stay",
-    previewTable: "Table",
+    previewTable: "Gastronomy",
     previewActs: "Do",
     previewPass: "Pass",
     more: "+{n}",
-    loadingHint: "Capsule, table and activities for your budget.",
+    loadingHint: "Capsule, gastronomy and activities for your budget.",
     budget: "Total budget · {price}",
     budgetMin: "250 thousand",
     budgetMax: "3.5 million",
@@ -475,7 +475,7 @@ const en: typeof es = {
     errorPlan: "Could not build the itinerary.",
     errorNet: "Network error while building the itinerary.",
     empty:
-      "Choose a landscape and build the trip. The itinerary appears here, with capsule, table and activities.",
+      "Choose a landscape and build the trip. The itinerary appears here, with capsule, gastronomy and activities.",
     chatFail: "I could not reply right now.",
   },
   itinerary: {
@@ -485,7 +485,7 @@ const en: typeof es = {
     remaining: "Left",
     nightsGuests: "Nights · travelers",
     stay: "Capsule",
-    table: "Table",
+    table: "Gastronomy",
     acts: "Activities",
     day: "Day {n}",
     included: "included",
@@ -571,7 +571,7 @@ const en: typeof es = {
   kinds: {
     place: "Destination",
     capsule: "Capsule",
-    food: "Table",
+    food: "Gastronomy",
     activity: "Activity",
   },
   landscapes: {
@@ -735,7 +735,7 @@ const pt: typeof es = {
   },
   hero: {
     title: "Chile, do norte ao sul.",
-    lead: "Cápsulas de cobre e vidro em desertos, praias, vinhedos, vulcões, rios, lagos, florestas, neve e parques nacionais. Mesa local e orçamento em CLP.",
+    lead: "Cápsulas de cobre e vidro em desertos, praias, vinhedos, vulcões, rios, lagos, florestas, neve e parques nacionais. Gastronomia local e orçamento em CLP.",
     planCta: "Planejar",
     appCta: "Abrir App",
   },
@@ -783,8 +783,8 @@ const pt: typeof es = {
   },
   food: {
     kicker: "Gastronomia",
-    title: "A mesa do território",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos e a mesa de cada território. Com partners locais.",
+    title: "A gastronomia do território",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos e a gastronomia de cada território. Com partners locais.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -797,22 +797,22 @@ const pt: typeof es = {
   plan: {
     kicker: "Planejar",
     title: "Sua viagem, no seu orçamento",
-    lead: "Escolha a paisagem e o orçamento em CLP. A Mapucoin arma noites em cápsula, mesa e atividades desse território.",
+    lead: "Escolha a paisagem e o orçamento em CLP. A Mapucoin arma noites em cápsula, gastronomia e atividades desse território.",
     formKicker: "Planejador",
     formTitle: "Quanto e para onde?",
     formLead:
-      "Escolha a paisagem e o orçamento em pesos chilenos. A Mapucoin arma cápsula, mesa e atividades desse território.",
+      "Escolha a paisagem e o orçamento em pesos chilenos. A Mapucoin arma cápsula, gastronomia e atividades desse território.",
     landscape: "Paisagem",
     place: "Lugar a conhecer",
     previewTitle: "Neste território",
     previewLead:
-      "Cápsula, mesa e o que se faz na paisagem. Arme a viagem para ver o itinerário dia a dia.",
+      "Cápsula, gastronomia e o que se faz na paisagem. Arme a viagem para ver o itinerário dia a dia.",
     previewStay: "Dormir",
-    previewTable: "Mesa",
+    previewTable: "Gastronomia",
     previewActs: "Fazer",
     previewPass: "Passe",
     more: "+{n}",
-    loadingHint: "Cápsula, mesa e atividades segundo o seu orçamento.",
+    loadingHint: "Cápsula, gastronomia e atividades segundo o seu orçamento.",
     budget: "Orçamento total · {price}",
     budgetMin: "250 mil",
     budgetMax: "3,5 milhões",
@@ -831,7 +831,7 @@ const pt: typeof es = {
     errorPlan: "Não foi possível armar o itinerário.",
     errorNet: "Erro de rede ao armar o itinerário.",
     empty:
-      "Escolha uma paisagem e arme a viagem. O itinerário aparece aqui, com cápsula, mesa e atividades.",
+      "Escolha uma paisagem e arme a viagem. O itinerário aparece aqui, com cápsula, gastronomia e atividades.",
     chatFail: "não pude responder agora.",
   },
   itinerary: {
@@ -841,7 +841,7 @@ const pt: typeof es = {
     remaining: "Sobra",
     nightsGuests: "Noites · viajantes",
     stay: "Cápsula",
-    table: "Mesa",
+    table: "Gastronomia",
     acts: "Atividades",
     day: "Dia {n}",
     included: "incluído",
@@ -853,7 +853,7 @@ const pt: typeof es = {
     removeActs: "Tirar atividades",
     removeOther: "Tirar passes e outros",
     feeNote:
-      "A Mapucoin fica com 12% ({fee}). Os {payout} vão aos fornecedores da cápsula, da mesa e das atividades.",
+      "A Mapucoin fica com 12% ({fee}). Os {payout} vão aos fornecedores da cápsula, da gastronomia e das atividades.",
     pay: "Pagar aos fornecedores",
     payNeed: "Nome e e-mail para a cobrança.",
     payEmpty: "Não resta cobrança da Mapucoin. Os passes compram-se no site oficial.",
@@ -927,7 +927,7 @@ const pt: typeof es = {
   kinds: {
     place: "Destino",
     capsule: "Cápsula",
-    food: "Mesa",
+    food: "Gastronomia",
     activity: "Atividade",
   },
   landscapes: {
@@ -1092,7 +1092,7 @@ const fr: typeof es = {
   },
   hero: {
     title: "Le Chili, du nord au sud.",
-    lead: "Capsules de cuivre et de verre dans les déserts, plages, vignobles, volcans, rivières, lacs, forêts, neige et parcs nationaux. Table locale et budget en CLP.",
+    lead: "Capsules de cuivre et de verre dans les déserts, plages, vignobles, volcans, rivières, lacs, forêts, neige et parcs nationaux. Gastronomie locale et budget en CLP.",
     planCta: "Planifier",
     appCta: "Ouvrir l’App",
   },
@@ -1140,8 +1140,8 @@ const fr: typeof es = {
   },
   food: {
     kicker: "Gastronomie",
-    title: "La table du territoire",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos et la table de chaque territoire. Avec des partenaires locaux.",
+    title: "La gastronomie du territoire",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos et la gastronomie de chaque territoire. Avec des partenaires locaux.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -1154,22 +1154,22 @@ const fr: typeof es = {
   plan: {
     kicker: "Planifier",
     title: "Votre voyage, à votre budget",
-    lead: "Choisissez le paysage et un budget en CLP. Mapucoin compose nuits en capsule, table et activités de ce territoire.",
+    lead: "Choisissez le paysage et un budget en CLP. Mapucoin compose nuits en capsule, gastronomie et activités de ce territoire.",
     formKicker: "Planificateur",
     formTitle: "Combien et où ?",
     formLead:
-      "Choisissez le paysage et un budget en pesos chiliens. Mapucoin compose capsule, table et activités de ce territoire.",
+      "Choisissez le paysage et un budget en pesos chiliens. Mapucoin compose capsule, gastronomie et activités de ce territoire.",
     landscape: "Paysage",
     place: "Lieu à découvrir",
     previewTitle: "Sur ce territoire",
     previewLead:
       "Capsule, table et ce que l'on fait dans le paysage. Composez le voyage pour voir l'itinéraire jour par jour.",
     previewStay: "Dormir",
-    previewTable: "Table",
+    previewTable: "Gastronomie",
     previewActs: "Faire",
     previewPass: "Pass",
     more: "+{n}",
-    loadingHint: "Capsule, table et activités selon votre budget.",
+    loadingHint: "Capsule, gastronomie et activités selon votre budget.",
     budget: "Budget total · {price}",
     budgetMin: "250 mille",
     budgetMax: "3,5 millions",
@@ -1188,7 +1188,7 @@ const fr: typeof es = {
     errorPlan: "Impossible de composer l'itinéraire.",
     errorNet: "Erreur réseau lors de la composition de l'itinéraire.",
     empty:
-      "Choisissez un paysage et composez le voyage. L'itinéraire apparaît ici, avec capsule, table et activités.",
+      "Choisissez un paysage et composez le voyage. L'itinéraire apparaît ici, avec capsule, gastronomie et activités.",
     chatFail: "je n'ai pas pu répondre pour le moment.",
   },
   itinerary: {
@@ -1198,7 +1198,7 @@ const fr: typeof es = {
     remaining: "Reste",
     nightsGuests: "Nuits · voyageurs",
     stay: "Capsule",
-    table: "Table",
+    table: "Gastronomie",
     acts: "Activités",
     day: "Jour {n}",
     included: "inclus",
@@ -1210,7 +1210,7 @@ const fr: typeof es = {
     removeActs: "Retirer les activités",
     removeOther: "Retirer les pass et le reste",
     feeNote:
-      "Mapucoin retient 12 % ({fee}). Les {payout} vont aux prestataires de la capsule, de la table et des activités.",
+      "Mapucoin retient 12 % ({fee}). Les {payout} vont aux prestataires de la capsule, de la gastronomie et des activités.",
     pay: "Payer les prestataires",
     payNeed: "Nom et e-mail pour l’encaissement.",
     payEmpty: "Plus rien à encaisser chez Mapucoin. Les pass s’achètent sur le site officiel.",
@@ -1284,7 +1284,7 @@ const fr: typeof es = {
   kinds: {
     place: "Destination",
     capsule: "Capsule",
-    food: "Table",
+    food: "Gastronomie",
     activity: "Activité",
   },
   landscapes: {
@@ -1449,7 +1449,7 @@ const it: typeof es = {
   },
   hero: {
     title: "Il Cile, da nord a sud.",
-    lead: "Capsule di rame e vetro in deserti, spiagge, vigneti, vulcani, fiumi, laghi, boschi, neve e parchi nazionali. Tavola locale e budget in CLP.",
+    lead: "Capsule di rame e vetro in deserti, spiagge, vigneti, vulcani, fiumi, laghi, boschi, neve e parchi nazionali. Gastronomia locale e budget in CLP.",
     planCta: "Pianifica",
     appCta: "Apri App",
   },
@@ -1497,8 +1497,8 @@ const it: typeof es = {
   },
   food: {
     kicker: "Gastronomia",
-    title: "La tavola del territorio",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos e la tavola di ogni territorio. Con partner locali.",
+    title: "La gastronomia del territorio",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos e la gastronomia di ogni territorio. Con partner locali.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -1511,22 +1511,22 @@ const it: typeof es = {
   plan: {
     kicker: "Pianifica",
     title: "Il tuo viaggio, al tuo budget",
-    lead: "Scegli il paesaggio e il budget in CLP. Mapucoin compone notti in capsula, tavola e attività di quel territorio.",
+    lead: "Scegli il paesaggio e il budget in CLP. Mapucoin compone notti in capsula, gastronomia e attività di quel territorio.",
     formKicker: "Pianificatore",
     formTitle: "Quanto e dove?",
     formLead:
-      "Scegli il paesaggio e il budget in pesos cileni. Mapucoin compone capsula, tavola e attività di quel territorio.",
+      "Scegli il paesaggio e il budget in pesos cileni. Mapucoin compone capsula, gastronomia e attività di quel territorio.",
     landscape: "Paesaggio",
     place: "Luogo da conoscere",
     previewTitle: "In questo territorio",
     previewLead:
       "Capsula, tavola e ciò che si fa nel paesaggio. Componi il viaggio per vedere l'itinerario giorno per giorno.",
     previewStay: "Dormire",
-    previewTable: "Tavola",
+    previewTable: "Gastronomia",
     previewActs: "Fare",
     previewPass: "Pass",
     more: "+{n}",
-    loadingHint: "Capsula, tavola e attività secondo il tuo budget.",
+    loadingHint: "Capsula, gastronomia e attività secondo il tuo budget.",
     budget: "Budget totale · {price}",
     budgetMin: "250 mila",
     budgetMax: "3,5 milioni",
@@ -1545,7 +1545,7 @@ const it: typeof es = {
     errorPlan: "Impossibile comporre l'itinerario.",
     errorNet: "Errore di rete nella composizione dell'itinerario.",
     empty:
-      "Scegli un paesaggio e componi il viaggio. L'itinerario appare qui, con capsula, tavola e attività.",
+      "Scegli un paesaggio e componi il viaggio. L'itinerario appare qui, con capsula, gastronomia e attività.",
     chatFail: "non ho potuto rispondere ora.",
   },
   itinerary: {
@@ -1555,7 +1555,7 @@ const it: typeof es = {
     remaining: "Resta",
     nightsGuests: "Notti · viaggiatori",
     stay: "Capsula",
-    table: "Tavola",
+    table: "Gastronomia",
     acts: "Attività",
     day: "Giorno {n}",
     included: "incluso",
@@ -1567,7 +1567,7 @@ const it: typeof es = {
     removeActs: "Togli le attività",
     removeOther: "Togli pass e altro",
     feeNote:
-      "Mapucoin trattiene il 12% ({fee}). I {payout} vanno ai fornitori di capsula, tavola e attività.",
+      "Mapucoin trattiene il 12% ({fee}). I {payout} vanno ai fornitori di capsula, gastronomia e attività.",
     pay: "Paga i fornitori",
     payNeed: "Nome ed e-mail per l’addebito.",
     payEmpty: "Non resta un addebito Mapucoin. I pass si comprano sul sito ufficiale.",
@@ -1641,7 +1641,7 @@ const it: typeof es = {
   kinds: {
     place: "Destinazione",
     capsule: "Capsula",
-    food: "Tavola",
+    food: "Gastronomia",
     activity: "Attività",
   },
   landscapes: {
@@ -1806,7 +1806,7 @@ const de: typeof es = {
   },
   hero: {
     title: "Chile, von Nord nach Süd.",
-    lead: "Kapseln aus Kupfer und Glas in Wüsten, an Stränden, in Weinbergen, an Vulkanen, Flüssen, Seen, in Wäldern, im Schnee und in Nationalparks. Lokale Tafel und Budget in CLP.",
+    lead: "Kapseln aus Kupfer und Glas in Wüsten, an Stränden, in Weinbergen, an Vulkanen, Flüssen, Seen, in Wäldern, im Schnee und in Nationalparks. Lokale Gastronomie und Budget in CLP.",
     planCta: "Planen",
     appCta: "App öffnen",
   },
@@ -1854,8 +1854,8 @@ const de: typeof es = {
   },
   food: {
     kicker: "Gastronomie",
-    title: "Die Tafel des Gebiets",
-    lead: "Curanto, Empanadas de pino, Pastel de choclo, Caldillo de congrio, Mote con huesillos und die Tafel jedes Gebiets. Mit lokalen Partnern.",
+    title: "Die Gastronomie des Gebiets",
+    lead: "Curanto, Empanadas de pino, Pastel de choclo, Caldillo de congrio, Mote con huesillos und die Gastronomie jedes Gebiets. Mit lokalen Partnern.",
     hours: "{price} · {hours} Std.",
   },
   activities: {
@@ -1868,22 +1868,22 @@ const de: typeof es = {
   plan: {
     kicker: "Planen",
     title: "Deine Reise, dein Budget",
-    lead: "Wähle die Landschaft und ein Budget in CLP. Mapucoin stellt Kapselnächte, Tafel und Aktivitäten dieses Gebiets zusammen.",
+    lead: "Wähle die Landschaft und ein Budget in CLP. Mapucoin stellt Kapselnächte, Gastronomie und Aktivitäten dieses Gebiets zusammen.",
     formKicker: "Planer",
     formTitle: "Wie viel und wohin?",
     formLead:
-      "Wähle die Landschaft und ein Budget in chilenischen Pesos. Mapucoin stellt Kapsel, Tafel und Aktivitäten dieses Gebiets zusammen.",
+      "Wähle die Landschaft und ein Budget in chilenischen Pesos. Mapucoin stellt Kapsel, Gastronomie und Aktivitäten dieses Gebiets zusammen.",
     landscape: "Landschaft",
     place: "Ort",
     previewTitle: "In diesem Gebiet",
     previewLead:
-      "Kapsel, Tafel und was man in der Landschaft unternimmt. Stell die Reise zusammen, um den Tagesplan zu sehen.",
+      "Kapsel, Gastronomie und was man in der Landschaft unternimmt. Stell die Reise zusammen, um den Tagesplan zu sehen.",
     previewStay: "Schlafen",
-    previewTable: "Tafel",
+    previewTable: "Gastronomie",
     previewActs: "Tun",
     previewPass: "Pass",
     more: "+{n}",
-    loadingHint: "Kapsel, Tafel und Aktivitäten für dein Budget.",
+    loadingHint: "Kapsel, Gastronomie und Aktivitäten für dein Budget.",
     budget: "Gesamtbudget · {price}",
     budgetMin: "250 Tausend",
     budgetMax: "3,5 Millionen",
@@ -1902,7 +1902,7 @@ const de: typeof es = {
     errorPlan: "Der Reiseplan konnte nicht erstellt werden.",
     errorNet: "Netzwerkfehler beim Erstellen des Reiseplans.",
     empty:
-      "Wähle eine Landschaft und stell die Reise zusammen. Der Plan erscheint hier, mit Kapsel, Tafel und Aktivitäten.",
+      "Wähle eine Landschaft und stell die Reise zusammen. Der Plan erscheint hier, mit Kapsel, Gastronomie und Aktivitäten.",
     chatFail: "ich konnte gerade nicht antworten.",
   },
   itinerary: {
@@ -1912,7 +1912,7 @@ const de: typeof es = {
     remaining: "Übrig",
     nightsGuests: "Nächte · Reisende",
     stay: "Kapsel",
-    table: "Tafel",
+    table: "Gastronomie",
     acts: "Aktivitäten",
     day: "Tag {n}",
     included: "inklusive",
@@ -2000,7 +2000,7 @@ const de: typeof es = {
   kinds: {
     place: "Reiseziel",
     capsule: "Kapsel",
-    food: "Tafel",
+    food: "Gastronomie",
     activity: "Aktivität",
   },
   landscapes: {

@@ -179,7 +179,7 @@ Responde SOLO JSON válido con esta forma:
   "days": [{"day": number, "title": string, "items": [{"type": "stay"|"food"|"activity"|"place", "name": string, "slug": string, "costCLP": number, "note": string}]}],
   "totals": {"stay": number, "food": number, "activities": number, "tickets": number, "total": number, "remaining": number}
 }
-El total no debe superar el presupuesto. Si no cabe la cápsula todas las noches, incluye menos noches. Si una comida, actividad o pase no cabe, no la incluyas. Prefiere la cápsula, después una mesa y una actividad del paisaje. No inventes el precio de entradas a parques: el servidor agrega el pase oficial de pasesparques.cl y recorta lo que se pase del presupuesto. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
+El total no debe superar el presupuesto. Si no cabe la cápsula todas las noches, incluye menos noches. Si una comida, actividad o pase no cabe, no la incluyas. Prefiere la cápsula, después gastronomía y una actividad del paisaje. No inventes el precio de entradas a parques: el servidor agrega el pase oficial de pasesparques.cl y recorta lo que se pase del presupuesto. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
 
   const user = `Destino: ${dest.name} (${lugar})
 Presupuesto: ${presupuesto} CLP

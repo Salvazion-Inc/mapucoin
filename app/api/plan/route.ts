@@ -1,5 +1,6 @@
-import { destinations, getBySlug, planCatalog } from "@/lib/catalog";
+import { destinations, getBySlug, planCatalog, type CatalogItem } from "@/lib/catalog";
 import { localeMeta, parseLocale } from "@/lib/locale";
+import { trimToBudget, type BudgetPlan } from "@/lib/plan-budget";
 import { applyOfficialPasses } from "@/lib/park-passes";
 
 export const runtime = "nodejs";
@@ -13,22 +14,35 @@ function fallbackPlan(input: {
 }) {
   const { place, stay, food, acts } = planCatalog(input.lugar);
   const dest = place;
-  const stayTotal = stay.priceFromCLP * input.noches;
-  const meals = food.slice(0, Math.min(3, input.noches));
-  const chosenActs = acts.slice(0, Math.max(1, Math.min(3, input.noches)));
+  let room = Math.max(0, Math.round(input.presupuesto));
+  const nightPrice = stay?.priceFromCLP || 0;
+  const stayNights =
+    nightPrice > 0 ? Math.min(input.noches, Math.floor(room / nightPrice)) : 0;
+  room -= stayNights * nightPrice;
+  const meals: CatalogItem[] = [];
+  for (const meal of food) {
+    if (meals.length >= input.noches) break;
+    if (meal.priceFromCLP <= room) {
+      meals.push(meal);
+      room -= meal.priceFromCLP;
+    }
+  }
+  const chosenActs: CatalogItem[] = [];
+  for (const act of acts) {
+    if (chosenActs.length >= input.noches) break;
+    if (act.priceFromCLP <= room) {
+      chosenActs.push(act);
+      room -= act.priceFromCLP;
+    }
+  }
+  const stayTotal = stayNights * nightPrice;
   const foodTotal = meals.reduce((s, m) => s + m.priceFromCLP, 0);
   const actTotal = chosenActs.reduce((s, a) => s + a.priceFromCLP, 0);
   const total = stayTotal + foodTotal + actTotal;
-  const days = Array.from({ length: input.noches }, (_, i) => {
+  const dayCount = Math.max(stayNights, meals.length, chosenActs.length, 1);
+  const days = Array.from({ length: dayCount }, (_, i) => {
     const items = [];
     if (i === 0) {
-      items.push({
-        type: "stay" as const,
-        name: stay.name,
-        slug: stay.slug,
-        costCLP: stay.priceFromCLP,
-        note: stay.tagline,
-      });
       items.push({
         type: "place" as const,
         name: dest.name,
@@ -36,16 +50,17 @@ function fallbackPlan(input: {
         costCLP: 0,
         note: "Llegada y orientación en el territorio.",
       });
-    } else {
+    }
+    if (stay && i < stayNights) {
       items.push({
         type: "stay" as const,
         name: stay.name,
         slug: stay.slug,
         costCLP: stay.priceFromCLP,
-        note: "Noche en cápsula tecnológica.",
+        note: stay.tagline,
       });
     }
-    const meal = meals[i % Math.max(meals.length, 1)];
+    const meal = meals[i];
     if (meal) {
       items.push({
         type: "food" as const,
@@ -55,8 +70,8 @@ function fallbackPlan(input: {
         note: meal.tagline,
       });
     }
-    const act = chosenActs[i % Math.max(chosenActs.length, 1)];
-    if (act && i < chosenActs.length) {
+    const act = chosenActs[i];
+    if (act) {
       items.push({
         type: "activity" as const,
         name: act.name,
@@ -73,10 +88,10 @@ function fallbackPlan(input: {
   });
 
   return {
-    title: `${input.noches} noches en ${dest.name}`,
+    title: `${stayNights || input.noches} noches en ${dest.name}`,
     summary: dest.description,
     destination: dest.name,
-    nights: input.noches,
+    nights: stayNights || input.noches,
     guests: input.viajeros,
     budgetCLP: input.presupuesto,
     days,
@@ -118,9 +133,22 @@ export async function POST(req: Request) {
   });
 
   const key = process.env.XAI_API_KEY;
-  const quoted = (
-    plan: ReturnType<typeof fallbackPlan>,
-  ) => applyOfficialPasses(plan, lugar);
+  const quoted = (plan: ReturnType<typeof fallbackPlan>) => {
+    for (const day of plan.days || []) {
+      for (const item of day.items || []) {
+        if (!item.slug) continue;
+        if (item.type !== "stay" && item.type !== "food" && item.type !== "activity") {
+          continue;
+        }
+        const cat = getBySlug(item.slug);
+        const kind =
+          item.type === "stay" ? "capsule" : item.type === "food" ? "food" : "activity";
+        item.costCLP = cat && cat.kind === kind ? cat.priceFromCLP : 0;
+      }
+    }
+    const withPasses = applyOfficialPasses(plan, lugar);
+    return trimToBudget(withPasses as BudgetPlan & typeof withPasses);
+  };
 
   if (!key) {
     return Response.json({
@@ -151,7 +179,7 @@ Responde SOLO JSON válido con esta forma:
   "days": [{"day": number, "title": string, "items": [{"type": "stay"|"food"|"activity"|"place", "name": string, "slug": string, "costCLP": number, "note": string}]}],
   "totals": {"stay": number, "food": number, "activities": number, "tickets": number, "total": number, "remaining": number}
 }
-El total no debe superar el presupuesto. Prefiere una cápsula todas las noches. Incluye al menos una experiencia gastronómica y una actividad del paisaje. Si el destino tiene pocas fichas, usa gastronomía y actividades del mismo paisaje. No inventes el precio de entradas a parques, reservas o monumentos: el servidor agrega el pase oficial de pasesparques.cl. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
+El total no debe superar el presupuesto. Si no cabe la cápsula todas las noches, incluye menos noches. Si una comida, actividad o pase no cabe, no la incluyas. Prefiere la cápsula, después una mesa y una actividad del paisaje. No inventes el precio de entradas a parques: el servidor agrega el pase oficial de pasesparques.cl y recorta lo que se pase del presupuesto. Write title, summary, day titles and notes in ${language}. Keep place names in Spanish. Tono cálido y concreto.`;
 
   const user = `Destino: ${dest.name} (${lugar})
 Presupuesto: ${presupuesto} CLP

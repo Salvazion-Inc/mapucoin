@@ -168,7 +168,7 @@ function PlannerInner() {
           </div>
         )}
         {error && <p className="text-gold">{error}</p>}
-        {plan && !loading && <ItineraryView plan={plan} />}
+        {plan && !loading && <ItineraryView plan={plan} onPlan={setPlan} />}
         {!loading && !plan && (
           <PlannerPreview
             placeSlug={

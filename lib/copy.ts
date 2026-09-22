@@ -5,6 +5,7 @@ const es = {
   skip: "Saltar al contenido",
   language: "Idioma",
   nav: {
+    why: "Por qué Chile",
     map: "Mapa",
     capsules: "Cápsulas",
     food: "Gastronomía",
@@ -26,6 +27,12 @@ const es = {
     mapCta: "Mapa interactivo",
     planCta: "Planificar",
     appCta: "Abrir App",
+  },
+  whyChile: {
+    kicker: "Viaje infinito",
+    title: "¿Por qué Chile?",
+    lead: "Treinta segundos para recorrer el país de norte a sur.",
+    video: "Por qué Chile, versión en español",
   },
   map: {
     kicker: "Mapa",
@@ -343,6 +350,7 @@ const en: typeof es = {
   skip: "Skip to content",
   language: "Language",
   nav: {
+    why: "Why Chile",
     map: "Map",
     capsules: "Capsules",
     food: "Gastronomy",
@@ -364,6 +372,12 @@ const en: typeof es = {
     mapCta: "Interactive map",
     planCta: "Plan",
     appCta: "Open App",
+  },
+  whyChile: {
+    kicker: "Infinite journey",
+    title: "Why Chile?",
+    lead: "Thirty seconds across the country, north to south.",
+    video: "Why Chile, English version",
   },
   map: {
     kicker: "Map",
@@ -679,6 +693,7 @@ const pt: typeof es = {
   skip: "Saltar para o conteúdo",
   language: "Idioma",
   nav: {
+    why: "Por que o Chile",
     map: "Mapa",
     capsules: "Cápsulas",
     food: "Gastronomia",
@@ -700,6 +715,12 @@ const pt: typeof es = {
     mapCta: "Mapa interativo",
     planCta: "Planejar",
     appCta: "Abrir App",
+  },
+  whyChile: {
+    kicker: "Viagem infinita",
+    title: "Por que o Chile?",
+    lead: "Trinta segundos pelo país, do norte ao sul.",
+    video: "Por que o Chile, versão em português",
   },
   map: {
     kicker: "Mapa",
@@ -1017,6 +1038,7 @@ const fr: typeof es = {
   skip: "Aller au contenu",
   language: "Langue",
   nav: {
+    why: "Pourquoi le Chili",
     map: "Carte",
     capsules: "Capsules",
     food: "Gastronomie",
@@ -1038,6 +1060,12 @@ const fr: typeof es = {
     mapCta: "Carte interactive",
     planCta: "Planifier",
     appCta: "Ouvrir l’App",
+  },
+  whyChile: {
+    kicker: "Voyage infini",
+    title: "Pourquoi le Chili ?",
+    lead: "Trente secondes à travers le pays, du nord au sud.",
+    video: "Pourquoi le Chili, version française",
   },
   map: {
     kicker: "Carte",
@@ -1355,6 +1383,7 @@ const it: typeof es = {
   skip: "Salta al contenuto",
   language: "Lingua",
   nav: {
+    why: "Perché il Cile",
     map: "Mappa",
     capsules: "Capsule",
     food: "Gastronomia",
@@ -1376,6 +1405,12 @@ const it: typeof es = {
     mapCta: "Mappa interattiva",
     planCta: "Pianifica",
     appCta: "Apri App",
+  },
+  whyChile: {
+    kicker: "Viaggio infinito",
+    title: "Perché il Cile?",
+    lead: "Trenta secondi attraverso il paese, da nord a sud.",
+    video: "Perché il Cile, versione in inglese",
   },
   map: {
     kicker: "Mappa",
@@ -1693,6 +1728,7 @@ const de: typeof es = {
   skip: "Zum Inhalt springen",
   language: "Sprache",
   nav: {
+    why: "Warum Chile",
     map: "Karte",
     capsules: "Kapseln",
     food: "Gastronomie",
@@ -1714,6 +1750,12 @@ const de: typeof es = {
     mapCta: "Interaktive Karte",
     planCta: "Planen",
     appCta: "App öffnen",
+  },
+  whyChile: {
+    kicker: "Unendliche Reise",
+    title: "Warum Chile?",
+    lead: "Dreißig Sekunden durch das Land, von Nord nach Süd.",
+    video: "Warum Chile, deutsche Fassung",
   },
   map: {
     kicker: "Karte",

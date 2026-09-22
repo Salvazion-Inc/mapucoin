@@ -20,6 +20,7 @@ export default function Header() {
   const [me, setMe] = useState<Me>(null);
 
   const links = [
+    { href: "/#por-que-chile", hash: "por-que-chile", label: c.nav.why },
     { href: "/#mapa", hash: "mapa", label: c.nav.map },
     { href: "/#capsulas", hash: "capsulas", label: c.nav.capsules },
     { href: "/#gastronomia", hash: "gastronomia", label: c.nav.food },
@@ -92,12 +93,12 @@ export default function Header() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-4 text-[13px] font-semibold text-sand/80 xl:flex">
+        <div className="hidden items-center gap-3 text-[13px] font-semibold text-sand/80 xl:flex">
           {links.map((l) => (
             <Link
               key={l.hash}
               href={l.href}
-              className={`transition ${
+              className={`whitespace-nowrap transition ${
                 isActive(l) ? "text-gold" : "hover:text-gold"
               }`}
             >

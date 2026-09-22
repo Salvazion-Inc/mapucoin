@@ -7,6 +7,7 @@ import MapLoader from "@/components/MapLoader";
 import PartnersForm from "@/components/PartnersForm";
 import PlaceCard from "@/components/PlaceCard";
 import PlannerSection from "@/components/PlannerSection";
+import WhyChile from "@/components/WhyChile";
 import { localizeItem } from "@/lib/catalog-i18n";
 import {
   featuredCapsules,
@@ -65,6 +66,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <WhyChile />
 
         <section id="mapa" className="scroll-mt-24 py-24">
           <div className="mx-auto max-w-6xl px-5">

@@ -9,6 +9,7 @@ import PlaceCard from "@/components/PlaceCard";
 import PlannerSection from "@/components/PlannerSection";
 import WhyChile from "@/components/WhyChile";
 import { localizeItem } from "@/lib/catalog-i18n";
+import { operatorFor } from "@/lib/operators";
 import {
   featuredCapsules,
   formatCLP,
@@ -163,6 +164,7 @@ export default function HomePage() {
               >
                 {gastronomy.map((g) => {
                   const dish = localizeItem(g, locale);
+                  const operator = operatorFor(dish.slug);
                   return (
                     <article
                       key={dish.slug}
@@ -193,6 +195,16 @@ export default function HomePage() {
                             hours: dish.durationHours || 1,
                           })}
                         </p>
+                        {operator && (
+                          <a
+                            href={operator.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 block text-sm text-sand/80 underline decoration-gold/40 underline-offset-2 hover:text-gold"
+                          >
+                            {c.operator} {operator.name}
+                          </a>
+                        )}
                       </div>
                     </article>
                   );

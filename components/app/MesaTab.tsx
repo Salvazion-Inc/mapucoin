@@ -12,6 +12,7 @@ import {
 } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t } from "@/lib/copy";
+import { operatorFor } from "@/lib/operators";
 import { useLocale } from "@/lib/locale-context";
 
 export function MesaTab() {
@@ -79,7 +80,9 @@ export function MesaTab() {
       </div>
 
       <ul className="mt-5 space-y-3">
-        {items.map((item) => (
+        {items.map((item) => {
+          const operator = operatorFor(item.slug);
+          return (
           <li key={item.slug} className="mapu-card flex overflow-hidden">
             <div className="relative h-28 w-28 shrink-0">
               <Image
@@ -95,9 +98,20 @@ export function MesaTab() {
               <h3 className="font-display truncate text-base">{item.name}</h3>
               <p className="mt-1 line-clamp-2 text-xs text-sand/70">{item.tagline}</p>
               <p className="mt-1 text-sm text-gold">{formatCLP(item.priceFromCLP)}</p>
+              {operator && (
+                <a
+                  href={operator.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 block truncate text-xs text-sand/70 underline decoration-gold/40"
+                >
+                  {c.operator} {operator.name}
+                </a>
+              )}
             </div>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </div>
   );

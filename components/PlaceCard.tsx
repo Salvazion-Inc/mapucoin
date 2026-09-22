@@ -3,6 +3,7 @@
 import { localizeItem } from "@/lib/catalog-i18n";
 import { CatalogItem, formatCLP } from "@/lib/catalog";
 import { t } from "@/lib/copy";
+import { operatorFor } from "@/lib/operators";
 import { useLocale } from "@/lib/locale-context";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,11 +21,13 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
   const c = t(locale);
   const shown = localizeItem(item, locale);
   const land = shown.landscapes?.[0];
+  const operator = operatorFor(shown.slug);
 
   return (
+    <div className="mapu-card mapu-card-hover group relative h-full overflow-hidden">
     <Link
       href={hrefFor(shown)}
-      className="mapu-card mapu-card-hover group relative block h-full overflow-hidden"
+      className="block h-full"
     >
       <div className="relative h-72">
         <Image
@@ -61,5 +64,16 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
         </div>
       </div>
     </Link>
+    {operator && (
+      <a
+        href={operator.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block truncate px-5 pb-4 text-xs text-sand/80 underline decoration-gold/40 underline-offset-2 hover:text-gold"
+      >
+        {c.operator} {operator.name}
+      </a>
+    )}
+    </div>
   );
 }

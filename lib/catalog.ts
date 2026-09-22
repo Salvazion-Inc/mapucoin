@@ -68,7 +68,7 @@ export const landscapes: { id: Landscape; label: string }[] = [
   { id: "parques", label: "Parques Nacionales" },
 ];
 
-/** Official Drive renders of the copper capsule, one per landscape. */
+/** Shared landscape stills. Each capsule card uses its own place photo. */
 export const landscapeHero: Record<Landscape, string> = {
   desierto: "/images/capsulas/desierto.jpg",
   playa: "/images/capsulas/playa.jpg",
@@ -921,7 +921,7 @@ export const capsules: CatalogItem[] = seeds.map((s) => ({
   city: s.city,
   lat: Number((s.lat + 0.018).toFixed(4)),
   lng: Number((s.lng - 0.022).toFixed(4)),
-  image: landscapeHero[s.landscapes[0]] || s.capsuleImage,
+  image: `/images/capsulas/${s.slug}.jpg`,
   tagline: s.capsuleTagline,
   description: s.capsuleDescription,
   highlights: s.capsuleHighlights,

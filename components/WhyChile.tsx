@@ -30,7 +30,7 @@ export default function WhyChile() {
   return (
     <section
       id="por-que-chile"
-      className="scroll-mt-24 border-t border-gold/15 pt-24 pb-8"
+      className="scroll-mt-24 border-t border-gold/15 pt-14 pb-8"
     >
       <div className="mx-auto max-w-6xl px-5">
         <p className="kicker">{c.whyChile.kicker}</p>

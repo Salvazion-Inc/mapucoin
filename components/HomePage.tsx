@@ -66,7 +66,7 @@ export default function HomePage() {
 
       <WhyChile />
 
-        <section id="mapa" className="scroll-mt-24 pt-6 pb-24">
+        <section id="mapa" className="scroll-mt-24 pt-6 pb-8">
           <div className="mx-auto max-w-6xl px-5">
             <p className="kicker">{c.map.kicker}</p>
             <h2 className="font-display mt-3 max-w-3xl text-3xl font-bold tracking-tight text-sand md:text-5xl">
@@ -81,7 +81,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="capsulas" className="scroll-mt-24 border-t border-gold/15 py-24">
+        <section id="capsulas" className="scroll-mt-24 border-t border-gold/15 pt-6 pb-8">
           <div className="mx-auto max-w-6xl px-5">
             <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
               <div>
@@ -147,7 +147,7 @@ export default function HomePage() {
 
         <section
           id="gastronomia"
-          className="scroll-mt-24 border-t border-gold/15 bg-black/40 py-24"
+          className="scroll-mt-24 border-t border-gold/15 bg-black/40 pt-6 pb-8"
         >
           <div className="mx-auto max-w-6xl px-5">
             <p className="kicker">{c.food.kicker}</p>
@@ -202,7 +202,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="actividades" className="scroll-mt-24 py-24">
+        <section id="actividades" className="scroll-mt-24 pt-6 pb-8">
           <div className="mx-auto max-w-6xl px-5">
             <p className="kicker">{c.activities.kicker}</p>
             <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-sand md:text-5xl">
@@ -241,7 +241,7 @@ export default function HomePage() {
 
         <section
           id="planificar"
-          className="scroll-mt-24 border-t border-gold/15 bg-black/40 py-24"
+          className="scroll-mt-24 border-t border-gold/15 bg-black/40 pt-6 pb-8"
         >
           <div className="mx-auto max-w-6xl px-5">
             <p className="kicker">{c.plan.kicker}</p>
@@ -253,7 +253,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="partners" className="scroll-mt-24 py-24">
+        <section id="partners" className="scroll-mt-24 pt-6 pb-8">
           <div className="mx-auto grid max-w-6xl items-start gap-12 px-5 lg:grid-cols-[1fr_1.1fr]">
             <div>
               <p className="kicker">{c.partners.kicker}</p>
@@ -269,7 +269,7 @@ export default function HomePage() {
 
         <section
           id="premios"
-          className="scroll-mt-24 border-t border-gold/15 bg-black/40 py-24"
+          className="scroll-mt-24 border-t border-gold/15 bg-black/40 pt-6 pb-12"
         >
           <div className="mx-auto max-w-6xl px-5">
             <p className="kicker">{c.awards.kicker}</p>

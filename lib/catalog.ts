@@ -1584,7 +1584,7 @@ export const activities: CatalogItem[] = [
     city: "Lo Barnechea",
     lat: -33.354,
     lng: -70.249,
-    image: p("valle-nevado.jpg"),
+    image: p("ski-valle-nevado.jpg"),
     tagline: "Pistas andinas a una hora de Santiago.",
     description:
       "Día de ski con ticket, equipo y traslado desde la ciudad. Temporada de junio a octubre.",
@@ -1755,7 +1755,7 @@ export const activities: CatalogItem[] = [
     city: "Lo Barnechea",
     lat: -33.332,
     lng: -70.29,
-    image: p("valle-nevado.jpg"),
+    image: p("ski-la-parva.jpg"),
     tagline: "Pistas familiares y fuera de pista a un paso de Farellones.",
     description:
       "Día de ski en La Parva con ticket, equipo y traslado desde Santiago. Temporada de junio a octubre.",

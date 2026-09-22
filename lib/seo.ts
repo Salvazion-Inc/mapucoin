@@ -12,7 +12,7 @@ export const SEO = {
   xUrl: "https://x.com/MAPUCOIN",
   twitterHandle: "@MAPUCOIN",
   locale: "es_CL",
-  locales: ["es_CL", "en_US", "pt_BR", "fr_FR", "it_IT"],
+  locales: ["es_CL", "en_US", "pt_BR", "fr_FR", "it_IT", "de_DE"],
   ogImage: "/og.jpg",
   ogImageWidth: 1200,
   ogImageHeight: 630,

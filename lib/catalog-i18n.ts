@@ -768,11 +768,203 @@ const it: Record<string, ItemText> = {
   },
 };
 
+const de: Record<string, ItemText> = {
+  "curanto-chilote": {
+    description:
+      "Chilotes Ritual: Grube, heiße Steine, Chapaleles und Meeresfrüchte aus dem Kanal. Mit einer lokalen Familie.",
+  },
+  "asado-patagonico": {
+    description:
+      "Lamm von der Estancia, Merkén-Chimichurri und Wein aus dem Maule. Abendessen in der südlichen Dämmerung.",
+  },
+  "cocina-mapuche": {
+    description:
+      "Mittagessen in einer Ruka mit lokalen Erzeugerinnen. Geschichte des Gebiets, Kräuter vom Vulkan und Brot aus Candeal-Weizen.",
+  },
+  "mariscal-valpo": {
+    description:
+      "Caleta mit Blick auf die Hügel. Machas a la parmesana, Ceviche aus Reineta und Wein aus Casablanca.",
+  },
+  "pisco-elqui": {
+    description:
+      "Drei Stationen: Familienbrennerei, hoher Weinberg und Pisco Sour mit Pica-Limette.",
+  },
+  "mercado-central": {
+    description:
+      "Ein Gang durch die Fischstände, Pastel de choclo und ein Abschluss in Lastarria mit Carménère.",
+  },
+  "mote-con-huesillos": {
+    description:
+      "Das Glas eines Sommers in Santiago: eingeweichte getrocknete Pfirsiche, Weizen-Mote und Chancaca-Sirup. Markt, Plaza oder Schatten einer Linde.",
+  },
+  "pastelitos-curacavi": {
+    description:
+      "Der klassische Halt auf dem Weg nach Curacaví: knuspriger Teig, Manjar und Puderzucker. Dazu Kaffee aus der Kanne.",
+  },
+  sopaipillas: {
+    description:
+      "Eine Scheibe Kürbisteig im heißen Öl. Im Winter pasadas, im Sommer mit Pebre. Die chilenische Straße in einem Bissen.",
+  },
+  "empanadas-de-pino": {
+    description:
+      "Die Empanada der Nationalfeiertage und Sonntage. Ofenteig, saftiges Pino und das Ritual, nicht in die überraschende Olive zu beißen.",
+  },
+  "pastel-de-choclo": {
+    description:
+      "Tontopf, süßer Maisbrei und darunter Pino. Das Fundo-Mittagessen des Zentraltals, mit chilenischem Salat.",
+  },
+  humitas: {
+    description:
+      "Sommersaison: geriebener Mais, Basilikum und eine Schnur aus Stroh. Dazu Tomatensalat und Ají.",
+  },
+  "caldillo-de-congrio": {
+    description:
+      "Goldene Congrio-Suppe, Kartoffel, Tomate und eine Meeresbrühe. Caleta, Wachstuch und ein Weißwein aus Casablanca.",
+  },
+  "pastel-de-centolla": {
+    description:
+      "Königskrabbenfleisch, Sahne und Gratin. Auf einer Estancia oder in der Caleta, mit einem kräftigen Weißwein und Wind am Fenster.",
+  },
+  mariscal: {
+    description:
+      "Muscheln, Venusmuscheln, Piure, Garnelen und Eis, das keine Gnade kennt. Der Aperitif der Caleta vor dem warmen Teller.",
+  },
+  cazuela: {
+    description:
+      "Das Mittagessen eines chilenischen Hauses. Jeder Löffel bringt ein anderes Stück. Dampfend serviert, mit Koriander und farbigem Ají.",
+  },
+  charquican: {
+    description:
+      "Ein dicker Eintopf aus Gemüse und Dörrfleisch. Ein Winter- und Landteller, mit Ají und Koriander.",
+  },
+  "porotos-granados": {
+    description:
+      "Der Eintopf des Februars. Reife Bohnen, Maisbrei und farbiges Öl. Dazu chilenischer Salat.",
+  },
+  chorrillana: {
+    description:
+      "Die Platte von Valparaíso. Geteilt mit Pipeño oder einem Bier, nach dem Aufstieg zum Cerro Alegre.",
+  },
+  "astronomia-atacama": {
+    name: "Astronomie in der Wüste",
+    tagline: "Teleskope, die Milchstraße und eine andine Erzählung des Himmels.",
+  },
+  "sandboard-atacama": {
+    name: "Sandboard im Valle de la Muerte",
+    tagline: "Gipsdünen, ein Board und der Licancabur im Hintergrund.",
+  },
+  "buceo-punta-choros": {
+    name: "Tauchen an der Punta de Choros",
+    tagline: "Klares Wasser, Seelöwen und das Humboldt-Pinguin-Reservat.",
+  },
+  "surf-pichilemu": {
+    name: "Surfen an der Punta de Lobos",
+    tagline: "Pazifikwelle in der Hauptstadt des chilenischen Surfens.",
+  },
+  "cata-colchagua": {
+    name: "Weinprobe in Colchagua",
+    tagline: "Carménère, Cabernet und das Tal im Glas.",
+  },
+  "volcan-villarrica": {
+    name: "Trekking auf den Villarrica",
+    tagline: "Aktiver Krater, Steigeisen und Blick auf die Seen.",
+  },
+  "ciclismo-pucon": {
+    name: "Radfahren um den Villarrica",
+    tagline: "Seeroute, Araukarienwald und immer der Kegel im Blick.",
+  },
+  "termas-geometricas": {
+    name: "Termas Geométricas",
+    tagline: "Rote Stege, vulkanische Becken und Wald.",
+  },
+  "kayak-siete-tazas": {
+    name: "Kajak in Siete Tazas",
+    tagline: "Basaltbecken, Wasserfälle und der Río Claro im Kajak.",
+  },
+  "rafting-futaleufu": {
+    name: "Rafting auf dem Futaleufú",
+    tagline: "Wildwasser der Klasse IV–V auf dem berühmtesten Fluss des Südens.",
+  },
+  "barco-peulla": {
+    name: "Schifffahrt nach Peulla",
+    tagline: "Seeüberfahrt, Vulkane und das Dorf am Ende des Todos los Santos.",
+  },
+  "nautico-llanquihue": {
+    name: "Wassersport auf dem Llanquihue",
+    tagline: "Kajak, Segeln oder Paddeln mit dem Osorno im See.",
+  },
+  "tour-bosque-chiloe": {
+    name: "Tour durch die Wälder von Chiloé",
+    tagline: "Tepú, junge Alerce, Palafitos und die Mythologie des Archipels.",
+  },
+  "trekking-la-campana": {
+    name: "Trekking in La Campana",
+    tagline: "Chilenische Palme, Hartlaubwald und der Hügel, den Darwin bestieg.",
+  },
+  "ski-valle-nevado": {
+    name: "Ski im Valle Nevado",
+    tagline: "Andine Pisten, eine Stunde von Santiago.",
+  },
+  "snowboard-chillan": {
+    name: "Snowboard in Chillán",
+    tagline: "Vulkanischer Schnee, Wald und die Pisten der Nevados de Chillán.",
+  },
+  "geiseres-el-tatio": {
+    name: "Geysire El Tatio",
+    tagline: "Sonnenaufgang auf 4.300 m, Dampfsäulen und das Altiplano.",
+  },
+  "kayak-bahia-inglesa": {
+    name: "Kajak in der Bahía Inglesa",
+    tagline: "Türkises Wasser, Küstenwüste und eine Bucht aus weißem Sand.",
+  },
+  "cata-maipo": {
+    name: "Weinprobe im Maipo",
+    tagline: "Carménère und Cabernet, eine halbe Stunde von der Hauptstadt.",
+  },
+  "cata-elqui": {
+    name: "Pisco und Weinberge im Elqui",
+    tagline: "Muskat, eine Familienbrennerei und das Tal im Glas.",
+  },
+  "kayak-laja": {
+    name: "Kajak auf dem Laja",
+    tagline: "Wasser des Laja, Wald und der klassische Wasserfall des Südens.",
+  },
+  "navegacion-marmol": {
+    name: "Fahrt zu den Marmorkapellen",
+    tagline: "Blaue Höhlen auf dem Lago General Carrera.",
+  },
+  "sendero-alerce-chiloe": {
+    name: "Alerce-Pfad in Chiloé",
+    tagline: "Alerce, Tepú und der immergrüne Wald des Archipels.",
+  },
+  "ski-la-parva": {
+    name: "Ski in La Parva",
+    tagline: "Familienpisten und Gelände direkt bei Farellones.",
+  },
+  "valle-de-la-luna": {
+    name: "Sonnenuntergang im Valle de la Luna",
+    tagline: "Dünen, Salzwüste und die Sonne, die auf den Licancabur fällt.",
+  },
+  "w-paine": {
+    name: "Ein Tag an der Base Torres",
+    tagline: "Das klassische Trekking zu den drei Granittürmen.",
+  },
+  "cerros-valpo": {
+    name: "Hügel, Murals und Aufzüge",
+    tagline: "Alegre, Concepción und der Hafen mit lokalem Guide.",
+  },
+  "tongariki-amanecer": {
+    name: "Sonnenaufgang in Tongariki",
+    tagline: "Fünfzehn Moai gegen die Sonne des Pazifiks.",
+  },
+};
+
 const byLocale: Record<Exclude<Locale, "es">, Record<string, ItemText>> = {
   en,
   pt,
   fr,
   it,
+  de,
 };
 
 export function localizeItem(item: CatalogItem, locale: Locale): CatalogItem {

@@ -14,7 +14,10 @@ export default function LanguageSwitcher({
     : "h-[15px] w-[22px] md:h-[19px] md:w-[28px]";
 
   return (
-    <nav aria-label="Language" className="flex items-center gap-1.5">
+    <nav
+      aria-label="Language"
+      className={`flex items-center ${compact ? "gap-1" : "gap-1.5"}`}
+    >
       {LOCALES.map((code) => {
         const meta = localeMeta[code];
         const active = code === locale;

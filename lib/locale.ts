@@ -1,4 +1,4 @@
-export const LOCALES = ["es", "en", "pt", "fr", "it"] as const;
+export const LOCALES = ["es", "en", "pt", "fr", "it", "de"] as const;
 export type Locale = (typeof LOCALES)[number];
 
 export const DEFAULT_LOCALE: Locale = "es";
@@ -50,6 +50,13 @@ export const localeMeta: Record<
     ogLocale: "it_IT",
     replyLanguage: "Italian",
   },
+  de: {
+    flag: "germany",
+    name: "Deutsch",
+    htmlLang: "de",
+    ogLocale: "de_DE",
+    replyLanguage: "German",
+  },
 };
 
 export function isLocale(value: string | null | undefined): value is Locale {
@@ -60,13 +67,15 @@ export function parseLocale(value: unknown): Locale {
   return isLocale(String(value)) ? (value as Locale) : DEFAULT_LOCALE;
 }
 
+const localePrefix = new RegExp(`^/(${LOCALES.join("|")})(?=/|$)`);
+
 export function localeFromPath(pathname: string): Locale | null {
-  const match = pathname.match(/^\/(es|en|pt|fr|it)(?=\/|$)/);
-  return match ? (match[1] as Locale) : null;
+  const match = pathname.match(localePrefix);
+  return match && isLocale(match[1]) ? match[1] : null;
 }
 
 export function stripLocalePrefix(pathname: string): string {
-  const match = pathname.match(/^\/(es|en|pt|fr|it)(?=\/|$)/);
+  const match = pathname.match(localePrefix);
   if (!match) return pathname || "/";
   return pathname.slice(match[0].length) || "/";
 }
@@ -74,11 +83,7 @@ export function stripLocalePrefix(pathname: string): string {
 export function languageAlternates(path = "/") {
   const url = `${SITE}${path === "/" ? "" : path}`;
   return {
-    es: url,
-    en: url,
-    pt: url,
-    fr: url,
-    it: url,
+    ...Object.fromEntries(LOCALES.map((code) => [code, url])),
     "x-default": url,
   };
 }

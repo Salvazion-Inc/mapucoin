@@ -24,7 +24,6 @@ const es = {
   hero: {
     title: "Chile, de norte a sur.",
     lead: "Cápsulas de cobre y vidrio en desiertos, playas, viñedos, volcanes, ríos, lagos, bosques, nieve y parques nacionales. Mesa local y presupuesto en CLP.",
-    mapCta: "Mapa interactivo",
     planCta: "Planificar",
     appCta: "Abrir App",
   },
@@ -369,7 +368,6 @@ const en: typeof es = {
   hero: {
     title: "Chile, north to south.",
     lead: "Copper and glass capsules in deserts, beaches, vineyards, volcanoes, rivers, lakes, forests, snow and national parks. Local table and budget in CLP.",
-    mapCta: "Interactive map",
     planCta: "Plan",
     appCta: "Open App",
   },
@@ -712,7 +710,6 @@ const pt: typeof es = {
   hero: {
     title: "Chile, do norte ao sul.",
     lead: "Cápsulas de cobre e vidro em desertos, praias, vinhedos, vulcões, rios, lagos, florestas, neve e parques nacionais. Mesa local e orçamento em CLP.",
-    mapCta: "Mapa interativo",
     planCta: "Planejar",
     appCta: "Abrir App",
   },
@@ -1057,7 +1054,6 @@ const fr: typeof es = {
   hero: {
     title: "Le Chili, du nord au sud.",
     lead: "Capsules de cuivre et de verre dans les déserts, plages, vignobles, volcans, rivières, lacs, forêts, neige et parcs nationaux. Table locale et budget en CLP.",
-    mapCta: "Carte interactive",
     planCta: "Planifier",
     appCta: "Ouvrir l’App",
   },
@@ -1402,7 +1398,6 @@ const it: typeof es = {
   hero: {
     title: "Il Cile, da nord a sud.",
     lead: "Capsule di rame e vetro in deserti, spiagge, vigneti, vulcani, fiumi, laghi, boschi, neve e parchi nazionali. Tavola locale e budget in CLP.",
-    mapCta: "Mappa interattiva",
     planCta: "Pianifica",
     appCta: "Apri App",
   },
@@ -1747,7 +1742,6 @@ const de: typeof es = {
   hero: {
     title: "Chile, von Nord nach Süd.",
     lead: "Kapseln aus Kupfer und Glas in Wüsten, an Stränden, in Weinbergen, an Vulkanen, Flüssen, Seen, in Wäldern, im Schnee und in Nationalparks. Lokale Tafel und Budget in CLP.",
-    mapCta: "Interaktive Karte",
     planCta: "Planen",
     appCta: "App öffnen",
   },

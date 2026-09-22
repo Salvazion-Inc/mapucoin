@@ -57,9 +57,6 @@ export default function HomePage() {
             <Link href="/app" className="btn-gold text-base">
               {c.hero.appCta}
             </Link>
-            <Link href="#mapa" className="btn-ghost text-base">
-              {c.hero.mapCta}
-            </Link>
             <Link href="#planificar" className="btn-ghost text-base">
               {c.hero.planCta}
             </Link>
@@ -69,7 +66,7 @@ export default function HomePage() {
 
       <WhyChile />
 
-        <section id="mapa" className="scroll-mt-24 py-24">
+        <section id="mapa" className="scroll-mt-24 pt-6 pb-24">
           <div className="mx-auto max-w-6xl px-5">
             <p className="kicker">{c.map.kicker}</p>
             <h2 className="font-display mt-3 max-w-3xl text-3xl font-bold tracking-tight text-sand md:text-5xl">

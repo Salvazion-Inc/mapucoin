@@ -72,7 +72,7 @@ const es = {
   food: {
     kicker: "Gastronomía",
     title: "La gastronomía del territorio",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos y la gastronomía de cada territorio. Con partners locales.",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos, pisco sour, terremoto y la gastronomía de cada territorio. Con partners locales.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -428,7 +428,7 @@ const en: typeof es = {
   food: {
     kicker: "Gastronomy",
     title: "The gastronomy of the territory",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos and the gastronomy of each territory. With local partners.",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos, pisco sour, terremoto and the gastronomy of each territory. With local partners.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -784,7 +784,7 @@ const pt: typeof es = {
   food: {
     kicker: "Gastronomia",
     title: "A gastronomia do território",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos e a gastronomia de cada território. Com partners locais.",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos, pisco sour, terremoto e a gastronomia de cada território. Com partners locais.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -1141,7 +1141,7 @@ const fr: typeof es = {
   food: {
     kicker: "Gastronomie",
     title: "La gastronomie du territoire",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos et la gastronomie de chaque territoire. Avec des partenaires locaux.",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos, pisco sour, terremoto et la gastronomie de chaque territoire. Avec des partenaires locaux.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -1498,7 +1498,7 @@ const it: typeof es = {
   food: {
     kicker: "Gastronomia",
     title: "La gastronomia del territorio",
-    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos e la gastronomia di ogni territorio. Con partner locali.",
+    lead: "Curanto, empanadas de pino, pastel de choclo, caldillo de congrio, mote con huesillos, pisco sour, terremoto e la gastronomia di ogni territorio. Con partner locali.",
     hours: "{price} · {hours} h",
   },
   activities: {
@@ -1855,7 +1855,7 @@ const de: typeof es = {
   food: {
     kicker: "Gastronomie",
     title: "Die Gastronomie des Gebiets",
-    lead: "Curanto, Empanadas de pino, Pastel de choclo, Caldillo de congrio, Mote con huesillos und die Gastronomie jedes Gebiets. Mit lokalen Partnern.",
+    lead: "Curanto, Empanadas de pino, Pastel de choclo, Caldillo de congrio, Mote con huesillos, Pisco sour, Terremoto und die Gastronomie jedes Gebiets. Mit lokalen Partnern.",
     hours: "{price} · {hours} Std.",
   },
   activities: {

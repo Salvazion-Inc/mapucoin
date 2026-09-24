@@ -65,6 +65,9 @@ export function ExploreTab() {
 
   return (
     <div>
+      <h2 className="font-display mb-3 text-2xl font-bold tracking-tight">
+        {c.whyChile.title}
+      </h2>
       <div className="relative mb-5 aspect-video overflow-hidden rounded-3xl bg-black">
         <video
           key={film}

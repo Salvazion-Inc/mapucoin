@@ -84,6 +84,106 @@ const en: Record<string, ItemText> = {
     description:
       "The platter of Valparaíso. Shared with pipeño or a beer, after walking up Cerro Alegre.",
   },
+  completo: {
+    description:
+      "Chile's hot dog. The italiano comes with avocado, tomato and mayonnaise. Eaten standing up, at night, downtown.",
+  },
+  choripan: {
+    description:
+      "The asado in a bun. Marked sausage, toasted marraqueta and pebre or ají. It shows up at fondas, fairs and Sundays.",
+  },
+  "pastel-de-jaiba": {
+    description:
+      "Crab meat, soaked bread and cheese from the oven. The caleta plate when the Pacific is rough.",
+  },
+  cancato: {
+    description:
+      "The Chilote oven: an opened fish, longaniza, cheese and tomato. Shared at the table, with pan amasado.",
+  },
+  "pan-amasado": {
+    description:
+      "The fundo's first plate. Hot pan amasado, pebre with cilantro and ají, and a glass of pipeño on Sunday.",
+  },
+  "porotos-con-riendas": {
+    description:
+      "The winter stew of the Central Valley. The riendas are the noodles. Served with ají and a Chilean salad.",
+  },
+  plateada: {
+    description:
+      "Hours in the oven or the pot. The beef falls apart and the juice is for the mash. Sunday lunch in the country.",
+  },
+  "kuchen-de-frambuesa": {
+    description:
+      "The once of Puerto Varas and Frutillar. Raspberry, murta or apple kuchen, with a cup of coffee.",
+  },
+  milcao: {
+    description:
+      "Chilote potato bread. Raw and cooked potato in the same dough, with cracklings if the house has them.",
+  },
+  "palta-reina": {
+    description:
+      "A Chilean restaurant starter for decades. Half an avocado, shredded chicken and mayonnaise.",
+  },
+  "trucha-a-la-mantequilla": {
+    description:
+      "Lunch on the southern rivers. Just-caught trout, browned butter and potatoes. Eaten looking at the water.",
+  },
+  patasca: {
+    description:
+      "Andean soup of hominy and meat, food for altitude and cold. In the north it is served steaming, with ají.",
+  },
+  "marraqueta-palta-pebre": {
+    description:
+      "What fits in a pack and in a refuge. Marraqueta, mashed avocado and pebre. Chilean once when there is no kitchen.",
+  },
+  "pisco-sour": {
+    description:
+      "Chile's drink. In Elqui it is taken with Pica lime, at dusk, after the distillery.",
+  },
+  terremoto: {
+    description:
+      "The glass of the fonda and the 18th. Pipeño, pineapple ice cream and, if the night goes on, a smaller replica.",
+  },
+  borgona: {
+    description:
+      "Mixed in a jug: red wine, strawberries and ice. It appears at New Year, on the beach and at January lunch.",
+  },
+  navegado: {
+    description:
+      "The southern drink when it rains or when there is snow. Red wine, orange peel and a stick of cinnamon.",
+  },
+  "cola-de-mono": {
+    description:
+      "Made at home for the 24th. Milk, coffee, sugar, clove and aguardiente. Served cold, in a small glass.",
+  },
+  "chicha-de-manzana": {
+    description:
+      "The archipelago's cider. Crushed apple, a short ferment and a glass at the fair or at the family house.",
+  },
+  pipeno: {
+    description:
+      "Red or white, without aging, from a jug or a glass. It goes with the asado, the empanada and Sunday in the valley.",
+  },
+  "papaya-sour": {
+    description:
+      "The sour of the Coquimbo coast. Papaya in syrup, pisco and lime. Ordered on Avenida del Mar.",
+  },
+  muday: {
+    description:
+      "Mapuche drink of wheat, corn or piñón. Offered in the ruka, with the story and the hearth meal.",
+  },
+  piscola: {
+    description:
+      "The most ordered drink in the country. Pisco, ice and a cola. Taken at the bar, at home and after the asado.",
+  },
+  vaina: {
+    description:
+      "An old-bar cocktail. Fortified wine, cognac, yolk and a cloud. Ordered in the afternoon in Valparaíso.",
+  },
+  "licor-de-oro": {
+    description:
+      "Made on the island: whey, aguardiente and a thread of saffron. Sweet, gold and a small glass at the end of the meal.",
+  },
   "astronomia-atacama": {
     name: "Astronomy in the desert",
     tagline: "Telescopes, the Milky Way and an Andean telling of the sky.",
@@ -275,6 +375,106 @@ const pt: Record<string, ItemText> = {
     description:
       "A travessa de Valparaíso. Partilha-se com copo de pipeño ou uma cerveja, depois de subir o Alegre a pé.",
   },
+  completo: {
+    description:
+      "O hot dog do Chile. Na versão italiano leva abacate, tomate e maionese. Come-se de pé, à noite, no centro.",
+  },
+  choripan: {
+    description:
+      "O assado num pão. Linguiça marcada, marraqueta tostada e pebre ou ají. Aparece em fondas, feiras e domingos.",
+  },
+  "pastel-de-jaiba": {
+    description:
+      "Carne de jaiba, pão ensopado e queijo ao forno. O prato da caleta quando o Pacífico está bravo.",
+  },
+  cancato: {
+    description:
+      "O forno chilote: um peixe aberto, longaniza, queijo e tomate. Parte-se na mesa, com pan amasado.",
+  },
+  "pan-amasado": {
+    description:
+      "A entrada do fundo. Pan amasado quente, pebre com coentro e ají, e um copo de pipeño ao domingo.",
+  },
+  "porotos-con-riendas": {
+    description:
+      "O guisado de inverno do Vale Central. As riendas são o macarrão. Serve-se com ají e salada chilena.",
+  },
+  plateada: {
+    description:
+      "Horas de forno ou de panela. A carne desfaz-se e o caldo fica para o puré. Almoço de domingo no campo.",
+  },
+  "kuchen-de-frambuesa": {
+    description:
+      "A once de Puerto Varas e Frutillar. Kuchen de framboesa, murta ou maçã, com café.",
+  },
+  milcao: {
+    description:
+      "O pão de batata chilote. Batata crua e cozida na mesma massa, com torresmo se a casa tiver.",
+  },
+  "palta-reina": {
+    description:
+      "Entrada de restaurante chileno há décadas. Meio abacate, frango desfiado e maionese.",
+  },
+  "trucha-a-la-mantequilla": {
+    description:
+      "O almoço dos rios do sul. Truta acabada de pescar, manteiga e batatas. Come-se a olhar a água.",
+  },
+  patasca: {
+    description:
+      "Sopa andina de milho descascado e carne, comida de altitude e de frio. No norte serve-se a fumegar, com ají.",
+  },
+  "marraqueta-palta-pebre": {
+    description:
+      "O que cabe na mochila e no refúgio. Marraqueta, abacate amassado e pebre. A once chilena quando não há cozinha.",
+  },
+  "pisco-sour": {
+    description:
+      "O trago do Chile. No Elqui bebe-se com limão de Pica, ao anoitecer, depois da destilaria.",
+  },
+  terremoto: {
+    description:
+      "O copo da fonda e do 18. Pipeño, gelado de ananás e, se a noite continua, uma réplica mais pequena.",
+  },
+  borgona: {
+    description:
+      "Prepara-se numa jarra: tinto, morangos e gelo. Aparece no ano novo, na praia e no almoço de janeiro.",
+  },
+  navegado: {
+    description:
+      "O trago do sul quando chove ou quando há neve. Tinto, casca de laranja e um pau de canela.",
+  },
+  "cola-de-mono": {
+    description:
+      "Prepara-se em casa para o dia 24. Leite, café, açúcar, cravo e aguardiente. Serve-se frio, em copo pequeno.",
+  },
+  "chicha-de-manzana": {
+    description:
+      "A sidra do arquipélago. Maçã moída, fermento curto e um copo na feira ou na casa da família.",
+  },
+  pipeno: {
+    description:
+      "Tinto ou branco, sem estágio, em garrafão ou em copo. Acompanha o assado, a empanada e o domingo no vale.",
+  },
+  "papaya-sour": {
+    description:
+      "O sour da costa de Coquimbo. Papaia em calda, pisco e limão. Pede-se na Avenida del Mar.",
+  },
+  muday: {
+    description:
+      "Bebida mapuche de trigo, milho ou piñón. Oferece-se na ruka, com o relato e a comida do fogão.",
+  },
+  piscola: {
+    description:
+      "O trago mais pedido do país. Pisco, gelo e uma cola. Bebe-se no bar, em casa e depois do assado.",
+  },
+  vaina: {
+    description:
+      "Coquetel de balcão antigo. Vinho generoso, conhaque, gema e uma nuvem. Pede-se à tarde em Valparaíso.",
+  },
+  "licor-de-oro": {
+    description:
+      "Faz-se na ilha: soro, aguardiente e um fio de açafrão. Doce, dourado e de copo pequeno no fim da refeição.",
+  },
   "astronomia-atacama": {
     name: "Astronomia no deserto",
     tagline: "Telescópios, Via Láctea e um relato andino do céu.",
@@ -464,6 +664,106 @@ const fr: Record<string, ItemText> = {
   chorrillana: {
     description:
       "Le plat de Valparaíso. On le partage avec un verre de pipeño ou une bière, après avoir monté l'Alegre à pied.",
+  },
+  completo: {
+    description:
+      "Le hot-dog du Chili. La version italiano porte avocat, tomate et mayonnaise. On le mange debout, le soir, au centre.",
+  },
+  choripan: {
+    description:
+      "L'asado dans un pain. Saucisse marquée, marraqueta grillée et pebre ou ají. Il apparaît aux fondas, aux foires et le dimanche.",
+  },
+  "pastel-de-jaiba": {
+    description:
+      "Chair de crabe, pain trempé et fromage au four. Le plat de caleta quand le Pacifique est dur.",
+  },
+  cancato: {
+    description:
+      "Le four chilote : un poisson ouvert, longaniza, fromage et tomate. On le partage à table, avec du pan amasado.",
+  },
+  "pan-amasado": {
+    description:
+      "L'entrée du fundo. Pan amasado chaud, pebre au coriandre et à l'ají, et un verre de pipeño le dimanche.",
+  },
+  "porotos-con-riendas": {
+    description:
+      "Le ragoût d'hiver de la Vallée Centrale. Les riendas sont les nouilles. On le sert avec de l'ají et une salade chilienne.",
+  },
+  plateada: {
+    description:
+      "Des heures de four ou de marmite. La viande se défait et le jus est pour la purée. Déjeuner du dimanche à la campagne.",
+  },
+  "kuchen-de-frambuesa": {
+    description:
+      "L'once de Puerto Varas et Frutillar. Kuchen de framboise, de murta ou de pomme, avec un café.",
+  },
+  milcao: {
+    description:
+      "Le pain de pomme de terre chilote. Pomme de terre crue et cuite dans la même pâte, avec des grattons si la maison en a.",
+  },
+  "palta-reina": {
+    description:
+      "Entrée de restaurant chilien depuis des décennies. Demi-avocat, poulet effiloché et mayonnaise.",
+  },
+  "trucha-a-la-mantequilla": {
+    description:
+      "Le déjeuner des rivières du sud. Truite tout juste pêchée, beurre et pommes de terre. On la mange en regardant l'eau.",
+  },
+  patasca: {
+    description:
+      "Soupe andine de maïs pelé et de viande, plat d'altitude et de froid. Dans le nord on la sert fumante, avec de l'ají.",
+  },
+  "marraqueta-palta-pebre": {
+    description:
+      "Ce qui tient dans le sac et dans le refuge. Marraqueta, avocat écrasé et pebre. L'once chilienne quand il n'y a pas de cuisine.",
+  },
+  "pisco-sour": {
+    description:
+      "Le verre du Chili. Dans l'Elqui on le boit au citron de Pica, au crépuscule, après la distillerie.",
+  },
+  terremoto: {
+    description:
+      "Le verre de la fonda et du 18. Pipeño, glace à l'ananas et, si la nuit continue, une réplique plus petite.",
+  },
+  borgona: {
+    description:
+      "Préparé en pichet : vin rouge, fraises et glace. Il apparaît au nouvel an, à la plage et au déjeuner de janvier.",
+  },
+  navegado: {
+    description:
+      "Le verre du sud quand il pleut ou quand il neige. Vin rouge, zeste d'orange et un bâton de cannelle.",
+  },
+  "cola-de-mono": {
+    description:
+      "Préparé à la maison pour le 24. Lait, café, sucre, clou de girofle et aguardiente. Servi froid, dans un petit verre.",
+  },
+  "chicha-de-manzana": {
+    description:
+      "Le cidre de l'archipel. Pomme broyée, fermentation courte et un verre à la foire ou dans la maison de la famille.",
+  },
+  pipeno: {
+    description:
+      "Rouge ou blanc, sans élevage, en dame-jeanne ou en verre. Il accompagne l'asado, l'empanada et le dimanche dans la vallée.",
+  },
+  "papaya-sour": {
+    description:
+      "Le sour de la côte de Coquimbo. Papaye au sirop, pisco et citron. On le commande sur l'Avenida del Mar.",
+  },
+  muday: {
+    description:
+      "Boisson mapuche de blé, de maïs ou de piñón. Offerte dans la ruka, avec le récit et le repas du foyer.",
+  },
+  piscola: {
+    description:
+      "Le verre le plus commandé du pays. Pisco, glace et un cola. On le boit au bar, à la maison et après l'asado.",
+  },
+  vaina: {
+    description:
+      "Cocktail de vieux comptoir. Vin doux, cognac, jaune d'œuf et un nuage. Commandé l'après-midi à Valparaíso.",
+  },
+  "licor-de-oro": {
+    description:
+      "Fait sur l'île : petit-lait, aguardiente et un fil de safran. Doux, doré et un petit verre en fin de repas.",
   },
   "astronomia-atacama": {
     name: "Astronomie dans le désert",
@@ -655,6 +955,106 @@ const it: Record<string, ItemText> = {
     description:
       "Il piatto di Valparaíso. Si condivide con un bicchiere di pipeño o una birra, dopo aver salito l'Alegre a piedi.",
   },
+  completo: {
+    description:
+      "L'hot dog del Cile. Nella versione italiano porta avocado, pomodoro e maionese. Si mangia in piedi, di notte, in centro.",
+  },
+  choripan: {
+    description:
+      "L'asado in un pane. Salsiccia segnata, marraqueta tostata e pebre o ají. Compare alle fondas, alle fiere e la domenica.",
+  },
+  "pastel-de-jaiba": {
+    description:
+      "Polpa di granchio, pane ammollato e formaggio al forno. Il piatto di caleta quando il Pacifico è duro.",
+  },
+  cancato: {
+    description:
+      "Il forno chilota: un pesce aperto, longaniza, formaggio e pomodoro. Si condivide a tavola, con pan amasado.",
+  },
+  "pan-amasado": {
+    description:
+      "L'ingresso del fundo. Pan amasado caldo, pebre con coriandolo e ají, e un bicchiere di pipeño la domenica.",
+  },
+  "porotos-con-riendas": {
+    description:
+      "Lo stufato d'inverno della Valle Centrale. Le riendas sono la pasta. Si serve con ají e insalata cilena.",
+  },
+  plateada: {
+    description:
+      "Ore di forno o di pentola. La carne si sfalda e il sugo è per il purè. Pranzo della domenica in campagna.",
+  },
+  "kuchen-de-frambuesa": {
+    description:
+      "L'once di Puerto Varas e Frutillar. Kuchen di lampone, murta o mela, con un caffè.",
+  },
+  milcao: {
+    description:
+      "Il pane di patata chilota. Patata cruda e cotta nello stesso impasto, con ciccioli se la casa ne ha.",
+  },
+  "palta-reina": {
+    description:
+      "Antipasto da ristorante cileno da decenni. Mezzo avocado, pollo sfilacciato e maionese.",
+  },
+  "trucha-a-la-mantequilla": {
+    description:
+      "Il pranzo dei fiumi del sud. Trota appena pescata, burro e patate. Si mangia guardando l'acqua.",
+  },
+  patasca: {
+    description:
+      "Zuppa andina di mais pelato e carne, cibo di altitudine e di freddo. Al nord si serve fumante, con ají.",
+  },
+  "marraqueta-palta-pebre": {
+    description:
+      "Quello che entra nello zaino e nel rifugio. Marraqueta, avocado schiacciato e pebre. L'once cilena quando non c'è cucina.",
+  },
+  "pisco-sour": {
+    description:
+      "Il bicchiere del Cile. Nell'Elqui si beve con lime di Pica, al tramonto, dopo la distilleria.",
+  },
+  terremoto: {
+    description:
+      "Il bicchiere della fonda e del 18. Pipeño, gelato all'ananas e, se la notte continua, una replica più piccola.",
+  },
+  borgona: {
+    description:
+      "Si prepara in brocca: rosso, fragole e ghiaccio. Compare a capodanno, in spiaggia e a pranzo a gennaio.",
+  },
+  navegado: {
+    description:
+      "Il bicchiere del sud quando piove o quando c'è neve. Rosso, scorza d'arancia e una stecca di cannella.",
+  },
+  "cola-de-mono": {
+    description:
+      "Si prepara in casa per il 24. Latte, caffè, zucchero, chiodo di garofano e aguardiente. Si serve freddo, in un bicchiere piccolo.",
+  },
+  "chicha-de-manzana": {
+    description:
+      "Il sidro dell'arcipelago. Mela macinata, fermento breve e un bicchiere alla fiera o in casa della famiglia.",
+  },
+  pipeno: {
+    description:
+      "Rosso o bianco, senza affinamento, in damigiana o in bicchiere. Accompagna l'asado, l'empanada e la domenica in valle.",
+  },
+  "papaya-sour": {
+    description:
+      "Il sour della costa di Coquimbo. Papaya sciroppata, pisco e lime. Si ordina sull'Avenida del Mar.",
+  },
+  muday: {
+    description:
+      "Bevanda mapuche di grano, mais o piñón. Si offre nella ruka, con il racconto e il pasto del focolare.",
+  },
+  piscola: {
+    description:
+      "Il bicchiere più ordinato del paese. Pisco, ghiaccio e una cola. Si beve al bar, a casa e dopo l'asado.",
+  },
+  vaina: {
+    description:
+      "Cocktail da banco antico. Vino liquoroso, cognac, tuorlo e una nuvola. Si ordina nel pomeriggio a Valparaíso.",
+  },
+  "licor-de-oro": {
+    description:
+      "Si fa sull'isola: siero, aguardiente e un filo di zafferano. Dolce, dorato e un bicchierino a fine pasto.",
+  },
   "astronomia-atacama": {
     name: "Astronomia nel deserto",
     tagline: "Telescopi, Via Lattea e un racconto andino del cielo.",
@@ -844,6 +1244,106 @@ const de: Record<string, ItemText> = {
   chorrillana: {
     description:
       "Die Platte von Valparaíso. Geteilt mit Pipeño oder einem Bier, nach dem Aufstieg zum Cerro Alegre.",
+  },
+  completo: {
+    description:
+      "Der Hotdog Chiles. Die Version italiano trägt Avocado, Tomate und Mayonnaise. Man isst ihn im Stehen, nachts, im Zentrum.",
+  },
+  choripan: {
+    description:
+      "Das Asado im Brot. Gezeichnete Wurst, geröstete Marraqueta und Pebre oder Ají. Er erscheint auf Fondas, Märkten und sonntags.",
+  },
+  "pastel-de-jaiba": {
+    description:
+      "Krabbenfleisch, eingeweichtes Brot und Käse aus dem Ofen. Das Caleta-Gericht, wenn der Pazifik rau ist.",
+  },
+  cancato: {
+    description:
+      "Der chilotische Ofen: ein geöffneter Fisch, Longaniza, Käse und Tomate. Geteilt am Tisch, mit Pan amasado.",
+  },
+  "pan-amasado": {
+    description:
+      "Der erste Gang des Fundo. Heißes Pan amasado, Pebre mit Koriander und Ají, und sonntags ein Glas Pipeño.",
+  },
+  "porotos-con-riendas": {
+    description:
+      "Der Wintereintopf des Zentraltals. Die Riendas sind die Nudeln. Serviert mit Ají und chilenischem Salat.",
+  },
+  plateada: {
+    description:
+      "Stunden im Ofen oder im Topf. Das Fleisch zerfällt und der Saft ist für den Püree. Sonntagsessen auf dem Land.",
+  },
+  "kuchen-de-frambuesa": {
+    description:
+      "Die Once von Puerto Varas und Frutillar. Kuchen mit Himbeere, Murta oder Apfel, dazu Kaffee.",
+  },
+  milcao: {
+    description:
+      "Chilotisches Kartoffelbrot. Rohe und gekochte Kartoffel im selben Teig, mit Grieben, wenn das Haus sie hat.",
+  },
+  "palta-reina": {
+    description:
+      "Seit Jahrzehnten eine chilenische Restaurantvorspeise. Halbe Avocado, gezupftes Huhn und Mayonnaise.",
+  },
+  "trucha-a-la-mantequilla": {
+    description:
+      "Das Mittagessen an den Flüssen des Südens. Frisch gefangene Forelle, Butter und Kartoffeln. Gegessen mit Blick aufs Wasser.",
+  },
+  patasca: {
+    description:
+      "Andine Suppe aus geschältem Mais und Fleisch, Essen für Höhe und Kälte. Im Norden dampfend serviert, mit Ají.",
+  },
+  "marraqueta-palta-pebre": {
+    description:
+      "Was in den Rucksack und in die Hütte passt. Marraqueta, zerdrückte Avocado und Pebre. Chilenische Once ohne Küche.",
+  },
+  "pisco-sour": {
+    description:
+      "Das Glas Chiles. Im Elqui trinkt man ihn mit Pica-Limette, in der Dämmerung, nach der Destillerie.",
+  },
+  terremoto: {
+    description:
+      "Das Glas der Fonda und des 18. Pipeño, Ananaseis und, wenn die Nacht weitergeht, eine kleinere Réplica.",
+  },
+  borgona: {
+    description:
+      "In einer Kanne gemischt: Rotwein, Erdbeeren und Eis. Erscheint zu Neujahr, am Strand und beim Januar-Mittagessen.",
+  },
+  navegado: {
+    description:
+      "Das Glas des Südens, wenn es regnet oder schneit. Rotwein, Orangenschale und ein Zimtstück.",
+  },
+  "cola-de-mono": {
+    description:
+      "Zu Hause für den 24. zubereitet. Milch, Kaffee, Zucker, Nelke und Aguardiente. Kalt serviert, im kleinen Glas.",
+  },
+  "chicha-de-manzana": {
+    description:
+      "Der Apfelwein des Archipels. Gemahlener Apfel, kurze Gärung und ein Glas auf dem Markt oder im Haus der Familie.",
+  },
+  pipeno: {
+    description:
+      "Rot oder weiß, ohne Ausbau, aus der Korbflasche oder dem Glas. Begleitet Asado, Empanada und den Sonntag im Tal.",
+  },
+  "papaya-sour": {
+    description:
+      "Der Sour der Küste von Coquimbo. Papaya im Sirup, Pisco und Limette. Bestellt an der Avenida del Mar.",
+  },
+  muday: {
+    description:
+      "Mapuche-Getränk aus Weizen, Mais oder Piñón. In der Ruka angeboten, mit der Erzählung und dem Essen vom Feuer.",
+  },
+  piscola: {
+    description:
+      "Das meistbestellte Glas des Landes. Pisco, Eis und eine Cola. In der Bar, zu Hause und nach dem Asado.",
+  },
+  vaina: {
+    description:
+      "Cocktail alter Theken. Likörwein, Cognac, Eigelb und eine Wolke. Nachmittags in Valparaíso bestellt.",
+  },
+  "licor-de-oro": {
+    description:
+      "Auf der Insel gemacht: Molke, Aguardiente und ein Safranfaden. Süß, golden und ein kleines Glas zum Schluss.",
   },
   "astronomia-atacama": {
     name: "Astronomie in der Wüste",

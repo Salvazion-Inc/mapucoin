@@ -31,7 +31,7 @@ export default function HomePage() {
     <>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-night"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-full focus:bg-gold-deep focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white"
       >
         {c.skip}
       </a>
@@ -123,7 +123,7 @@ export default function HomePage() {
                           draggable={false}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/20 to-transparent" />
-                        <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-[11px] font-semibold tracking-wide text-night">
+                        <span className="absolute left-4 top-4 rounded-full bg-gold-deep px-3 py-1 text-[11px] font-semibold tracking-wide text-white">
                           {c.landscapes[land]}
                         </span>
                         <div className="absolute inset-x-0 bottom-0 p-5 text-sand">

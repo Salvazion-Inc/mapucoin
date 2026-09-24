@@ -22,7 +22,7 @@ const outfit = Outfit({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#d4af37",
+  themeColor: "#072487",
   colorScheme: "dark",
   viewportFit: "cover",
 };

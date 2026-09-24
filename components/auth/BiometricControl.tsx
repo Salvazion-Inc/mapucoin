@@ -101,12 +101,12 @@ export function BiometricControl() {
               disabled={busy || cap === null}
               onClick={() => (enabled ? disable() : void enable())}
               className={`relative h-7 w-12 rounded-full transition-colors disabled:opacity-50 ${
-                enabled ? "bg-gold" : "bg-sand/20"
+                enabled ? "bg-gold-deep" : "bg-sand/20"
               }`}
               aria-label={a.biometricTitle}
             >
               <span
-                className={`absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-night transition-transform ${
+                className={`absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-white transition-transform ${
                   enabled ? "translate-x-5" : "translate-x-0"
                 }`}
               />

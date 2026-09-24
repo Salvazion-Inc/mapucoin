@@ -36,7 +36,7 @@ export default function CatalogBrowser({
           onClick={() => setLand("all")}
           className={`rounded-full px-4 py-1.5 text-sm transition ${
             land === "all"
-              ? "bg-gold text-black"
+              ? "bg-gold-deep text-white"
               : "border border-gold/30 text-sand hover:border-gold"
           }`}
         >
@@ -49,7 +49,7 @@ export default function CatalogBrowser({
             onClick={() => setLand(l.id)}
             className={`rounded-full px-4 py-1.5 text-sm transition ${
               land === l.id
-                ? "bg-gold text-black"
+                ? "bg-gold-deep text-white"
                 : "border border-gold/30 text-sand hover:border-gold"
             }`}
           >

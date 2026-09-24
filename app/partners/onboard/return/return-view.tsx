@@ -16,7 +16,7 @@ export default function ReturnView() {
       <p className="mt-3 text-sand/75">{c.partners.returnLead}</p>
       <Link
         href="/#mapa"
-        className="mt-8 inline-block rounded-full bg-gold px-6 py-3 text-black hover:bg-[#e3c25a]"
+        className="mt-8 inline-block rounded-full bg-gold-deep px-6 py-3 text-white hover:bg-gold-hot"
       >
         {c.map.kicker}
       </Link>

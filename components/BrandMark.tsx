@@ -11,7 +11,7 @@ export default function BrandMark({
 }) {
   return (
     <span
-      className={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-black shadow-[0_0_0_1px_rgba(212,175,55,0.35)] ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.28)] ${className}`}
       style={{ width: size, height: size, clipPath: "circle(50%)" }}
     >
       <Image

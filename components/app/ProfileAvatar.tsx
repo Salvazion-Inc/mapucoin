@@ -8,7 +8,7 @@ export function ProfileAvatar({
   const initial = (name || "M").trim().charAt(0).toUpperCase() || "M";
   return (
     <span
-      className="inline-grid shrink-0 place-items-center rounded-full bg-gold font-bold text-night"
+      className="inline-grid shrink-0 place-items-center rounded-full bg-gold-deep font-bold text-white"
       style={{ width: size, height: size, fontSize: size * 0.42 }}
       aria-hidden
     >

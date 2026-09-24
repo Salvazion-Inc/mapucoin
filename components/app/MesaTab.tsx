@@ -39,7 +39,7 @@ export function MesaTab() {
           type="button"
           onClick={() => setKind("food")}
           className={`rounded-xl py-2 text-sm font-bold ${
-            kind === "food" ? "bg-gold text-night" : "border border-gold/30 text-sand"
+            kind === "food" ? "bg-gold-deep text-white" : "border border-gold/30 text-sand"
           }`}
         >
           {a.food}
@@ -48,7 +48,7 @@ export function MesaTab() {
           type="button"
           onClick={() => setKind("activity")}
           className={`rounded-xl py-2 text-sm font-bold ${
-            kind === "activity" ? "bg-gold text-night" : "border border-gold/30 text-sand"
+            kind === "activity" ? "bg-gold-deep text-white" : "border border-gold/30 text-sand"
           }`}
         >
           {a.activities}
@@ -60,7 +60,7 @@ export function MesaTab() {
           type="button"
           onClick={() => setLand("all")}
           className={`rounded-full px-3 py-1 text-xs ${
-            land === "all" ? "bg-gold text-night" : "border border-gold/30 text-sand"
+            land === "all" ? "bg-gold-deep text-white" : "border border-gold/30 text-sand"
           }`}
         >
           {a.all}
@@ -71,7 +71,7 @@ export function MesaTab() {
             type="button"
             onClick={() => setLand(ls.id)}
             className={`rounded-full px-3 py-1 text-xs ${
-              land === ls.id ? "bg-gold text-night" : "border border-gold/30 text-sand"
+              land === ls.id ? "bg-gold-deep text-white" : "border border-gold/30 text-sand"
             }`}
           >
             {c.landscapes[ls.id]}

@@ -153,7 +153,7 @@ function PlannerInner() {
             />
             <button
               disabled={streaming}
-              className="rounded-xl bg-gold px-3 py-2 text-sm text-black"
+              className="rounded-xl bg-gold-deep px-3 py-2 text-sm text-white"
             >
               {c.plan.send}
             </button>

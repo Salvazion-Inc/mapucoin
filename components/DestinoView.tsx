@@ -121,7 +121,7 @@ export default function DestinoView({
           ))}
           <Link
             href={`/?lugar=${d.slug}&presupuesto=800000&noches=4&viajeros=2&intereses=naturaleza,gastronomia#planificar`}
-            className="mt-7 block rounded-full bg-gold py-3.5 text-center text-black transition hover:bg-[#e3c25a]"
+            className="mt-7 block rounded-full bg-gold-deep py-3.5 text-center text-white transition hover:bg-gold-hot"
           >
             {c.destino.planThis}
           </Link>

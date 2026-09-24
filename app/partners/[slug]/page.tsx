@@ -53,7 +53,7 @@ export default async function PartnerSheetPage({ params }: Props) {
         {reservaHref ? (
           <Link
             href={reservaHref}
-            className="rounded-full bg-gold px-5 py-2.5 text-black hover:bg-[#e3c25a]"
+            className="rounded-full bg-gold-deep px-5 py-2.5 text-white hover:bg-gold-hot"
           >
             Reservar
           </Link>

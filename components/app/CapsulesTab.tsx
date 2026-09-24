@@ -53,7 +53,7 @@ function CapsulesInner() {
           type="button"
           onClick={() => setLand("all")}
           className={`rounded-full px-3 py-1 text-xs ${
-            land === "all" ? "bg-gold text-night" : "border border-gold/30 text-sand"
+            land === "all" ? "bg-gold-deep text-white" : "border border-gold/30 text-sand"
           }`}
         >
           {a.all}
@@ -64,7 +64,7 @@ function CapsulesInner() {
             type="button"
             onClick={() => setLand(ls.id)}
             className={`rounded-full px-3 py-1 text-xs ${
-              land === ls.id ? "bg-gold text-night" : "border border-gold/30 text-sand"
+              land === ls.id ? "bg-gold-deep text-white" : "border border-gold/30 text-sand"
             }`}
           >
             {c.landscapes[ls.id]}
@@ -99,7 +99,7 @@ function CapsulesInner() {
                 <button
                   type="button"
                   onClick={() => setOpen(item.slug)}
-                  className="mt-3 w-full rounded-lg bg-gold py-2.5 text-sm font-bold text-night"
+                  className="mt-3 w-full rounded-lg bg-gold-deep py-2.5 text-sm font-bold text-white"
                 >
                   {a.bookThis}
                 </button>
@@ -191,7 +191,7 @@ function BookForm({ slug, onClose }: { slug: string; onClose: () => void }) {
           type="button"
           disabled={busy}
           onClick={book}
-          className="flex-1 rounded-lg bg-gold py-2 text-sm font-bold text-night disabled:opacity-60"
+          className="flex-1 rounded-lg bg-gold-deep py-2 text-sm font-bold text-white disabled:opacity-60"
         >
           {busy ? a.booking : a.payStripe}
         </button>

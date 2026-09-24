@@ -1,17 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-earth: #1a100c;
-  --color-bark: #3d2418;
-  --color-clay: #c45c26;
-  --color-ember: #e07a3d;
-  --color-gold: #d4af37;
-  --color-gold-deep: #b8942c;
-  --color-sand: #f3e6cc;
-  --color-cream: #f7f1e6;
-  --color-moss: #3d5a3a;
-  --color-ink: #0c0907;
-  --color-night: #070504;
+  --color-earth: #0c1424;
+  --color-bark: #132038;
+  --color-clay: #ff6b78;
+  --color-ember: #b00517;
+  --color-gold: #a9c0ff;
+  --color-gold-deep: #072487;
+  --color-gold-hot: #4c61a9;
+  --color-sand: #f4f7fb;
+  --color-cream: #e6eef8;
+  --color-moss: #6ee7b7;
+  --color-ink: #000000;
+  --color-night: #05060a;
   --font-display: "Fraunces", serif;
   --font-sans: "Outfit", system-ui, sans-serif;
 }
@@ -32,8 +33,8 @@ body {
 }
 
 ::selection {
-  background: var(--color-gold);
-  color: var(--color-night);
+  background: var(--color-gold-deep);
+  color: #fff;
 }
 
 :focus-visible {
@@ -48,16 +49,16 @@ body {
 
 .hero-title {
   letter-spacing: -0.03em;
-  text-shadow: 0 8px 40px rgba(7, 5, 4, 0.55);
+  text-shadow: 0 8px 40px rgba(5, 6, 10, 0.55);
 }
 
 .hero-veil {
   background:
     linear-gradient(
       180deg,
-      rgba(7, 5, 4, 0.35) 0%,
-      rgba(7, 5, 4, 0.18) 40%,
-      rgba(7, 5, 4, 0.78) 100%
+      rgba(5, 6, 10, 0.35) 0%,
+      rgba(5, 6, 10, 0.18) 40%,
+      rgba(5, 6, 10, 0.78) 100%
     ),
     radial-gradient(
       80% 50% at 50% 100%,
@@ -75,9 +76,9 @@ body {
   padding-top: env(safe-area-inset-top, 0px);
   background: linear-gradient(
     180deg,
-    rgba(7, 5, 4, 0.78) 0%,
-    rgba(7, 5, 4, 0.32) 62%,
-    rgba(7, 5, 4, 0) 100%
+    rgba(5, 6, 10, 0.78) 0%,
+    rgba(5, 6, 10, 0.32) 62%,
+    rgba(5, 6, 10, 0) 100%
   );
   transform: translateZ(0);
   transition:
@@ -88,8 +89,8 @@ body {
 
 .site-header.is-scrolled {
   background: var(--color-night);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
-  box-shadow: 0 12px 36px rgba(7, 5, 4, 0.45);
+  border-bottom: 1px solid rgba(169, 192, 255, 0.22);
+  box-shadow: 0 12px 36px rgba(5, 6, 10, 0.45);
 }
 
 .kicker {
@@ -106,14 +107,14 @@ body {
   justify-content: center;
   gap: 0.45rem;
   border-radius: 9999px;
-  background: var(--color-gold);
-  color: var(--color-night);
+  background: var(--color-gold-deep);
+  color: #fff;
   font-weight: 700;
   letter-spacing: 0.01em;
   padding: 0.85rem 1.55rem;
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.22) inset,
-    0 10px 28px color-mix(in srgb, var(--color-gold) 38%, transparent);
+    0 10px 28px color-mix(in srgb, var(--color-gold-deep) 55%, transparent);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -121,11 +122,11 @@ body {
 }
 
 .btn-gold:hover {
-  background: #e3c25a;
+  background: var(--color-gold-hot);
   transform: translateY(-1px);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.22) inset,
-    0 16px 36px color-mix(in srgb, var(--color-gold) 48%, transparent);
+    0 16px 36px color-mix(in srgb, var(--color-gold-deep) 65%, transparent);
 }
 
 .btn-ghost {
@@ -134,8 +135,8 @@ body {
   justify-content: center;
   gap: 0.45rem;
   border-radius: 9999px;
-  border: 1px solid rgba(243, 230, 204, 0.28);
-  background: rgba(243, 230, 204, 0.07);
+  border: 1px solid rgba(244, 247, 251, 0.28);
+  background: rgba(244, 247, 251, 0.07);
   color: var(--color-sand);
   font-weight: 700;
   padding: 0.85rem 1.45rem;
@@ -147,32 +148,32 @@ body {
 }
 
 .btn-ghost:hover {
-  background: rgba(243, 230, 204, 0.14);
+  background: rgba(244, 247, 251, 0.14);
   border-color: color-mix(in srgb, var(--color-gold) 55%, white);
   transform: translateY(-1px);
 }
 
 .reserva-glass {
-  border: 1px solid color-mix(in srgb, var(--color-clay) 34%, var(--color-gold));
+  border: 1px solid color-mix(in srgb, var(--color-gold-deep) 55%, var(--color-gold));
   background:
     linear-gradient(
       180deg,
       color-mix(in srgb, var(--color-gold) 10%, transparent),
-      rgba(7, 5, 4, 0.62)
+      rgba(5, 6, 10, 0.62)
     ),
-    rgba(26, 16, 12, 0.58);
+    rgba(8, 12, 24, 0.58);
   backdrop-filter: blur(22px);
   box-shadow:
-    0 1px 0 rgba(243, 230, 204, 0.08) inset,
-    0 24px 60px rgba(7, 5, 4, 0.45);
+    0 1px 0 rgba(244, 247, 251, 0.08) inset,
+    0 24px 60px rgba(5, 6, 10, 0.45);
 }
 
 .mapu-card {
-  border: 1px solid rgba(212, 175, 55, 0.16);
+  border: 1px solid rgba(169, 192, 255, 0.16);
   background: linear-gradient(
     180deg,
-    rgba(243, 230, 204, 0.06),
-    rgba(243, 230, 204, 0.02)
+    rgba(244, 247, 251, 0.06),
+    rgba(244, 247, 251, 0.02)
   );
   border-radius: 1.35rem;
   backdrop-filter: blur(18px);
@@ -186,7 +187,7 @@ a.mapu-card:hover,
 .mapu-card-hover:hover {
   transform: translateY(-4px);
   border-color: color-mix(in srgb, var(--color-gold) 50%, transparent);
-  box-shadow: 0 22px 50px rgba(7, 5, 4, 0.35);
+  box-shadow: 0 22px 50px rgba(5, 6, 10, 0.35);
 }
 
 .rail-wrap {
@@ -245,8 +246,8 @@ a.mapu-card:hover,
   height: 2.5rem;
   margin-top: -1.25rem;
   border-radius: 999px;
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  background: rgba(7, 5, 4, 0.72);
+  border: 1px solid rgba(169, 192, 255, 0.4);
+  background: rgba(5, 6, 10, 0.72);
   color: var(--color-gold);
   font-size: 1.55rem;
   line-height: 1;
@@ -254,8 +255,8 @@ a.mapu-card:hover,
 }
 
 .rail-nav:hover {
-  background: var(--color-gold);
-  color: var(--color-night);
+  background: var(--color-gold-deep);
+  color: #fff;
 }
 
 .rail-nav-prev {
@@ -283,26 +284,26 @@ input,
 select,
 textarea {
   outline: none;
-  background: #111;
+  background: #0a0e16;
   color: var(--color-sand);
-  border-color: rgb(212 175 55 / 0.28);
+  border-color: rgb(169 192 255 / 0.28);
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  box-shadow: 0 0 0 3px rgb(212 175 55 / 0.28);
-  border-color: rgb(212 175 55 / 0.7);
+  box-shadow: 0 0 0 3px rgb(169 192 255 / 0.28);
+  border-color: rgb(169 192 255 / 0.7);
 }
 
 option,
 optgroup {
-  background: #111;
+  background: #0a0e16;
   color: var(--color-sand);
 }
 
 .leaflet-container {
-  background: #0b1a14;
+  background: #070c16;
   font-family: var(--font-sans);
   border-radius: 1.5rem;
 }
@@ -312,7 +313,7 @@ optgroup {
 .mapucoin-popup .leaflet-popup-content-wrapper,
 .mapucoin-popup .leaflet-popup-tip {
   background: #000 !important;
-  color: #f3e6cc !important;
+  color: #f4f7fb !important;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
 }
 
@@ -327,7 +328,7 @@ optgroup {
 }
 
 .leaflet-container a.leaflet-popup-close-button {
-  color: #f3e6cc;
+  color: #f4f7fb;
 }
 
 .leaflet-container a.leaflet-popup-close-button:hover {
@@ -371,7 +372,7 @@ optgroup {
   display: block;
   overflow: hidden;
   border-radius: 3px;
-  box-shadow: 0 0 0 1px rgba(243, 230, 204, 0.38);
+  box-shadow: 0 0 0 1px rgba(244, 247, 251, 0.38);
   opacity: 0.78;
   transition:
     transform 0.15s ease,
@@ -388,8 +389,8 @@ optgroup {
   opacity: 1;
   transform: scale(1.1);
   box-shadow:
-    0 0 0 2px #f3e6cc,
-    0 0 8px rgba(212, 175, 55, 0.55);
+    0 0 0 2px #f4f7fb,
+    0 0 8px rgba(169, 192, 255, 0.55);
 }
 
 .award-stage {
@@ -417,19 +418,19 @@ optgroup {
   text-align: center;
   padding: 2.5rem 1.75rem 2rem;
   border-radius: 1.6rem;
-  border: 1px solid rgba(212, 175, 55, 0.38);
+  border: 1px solid rgba(169, 192, 255, 0.38);
   background:
-    radial-gradient(80% 70% at 50% 0%, rgba(212, 175, 55, 0.16), transparent 58%),
-    linear-gradient(180deg, rgba(20, 14, 8, 0.96), rgba(7, 5, 4, 0.98));
+    radial-gradient(80% 70% at 50% 0%, rgba(169, 192, 255, 0.16), transparent 58%),
+    linear-gradient(180deg, rgba(10, 16, 32, 0.96), rgba(5, 6, 10, 0.98));
   box-shadow:
-    0 1px 0 rgba(243, 230, 204, 0.08) inset,
+    0 1px 0 rgba(244, 247, 251, 0.08) inset,
     0 28px 70px rgba(0, 0, 0, 0.45);
 }
 
 .award-seal {
   margin-top: 1.25rem;
   color: var(--color-gold);
-  filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.28));
+  filter: drop-shadow(0 0 18px rgba(169, 192, 255, 0.28));
 }
 
 .award-side {
@@ -438,8 +439,8 @@ optgroup {
   text-align: left;
   padding: 1.5rem 1.25rem;
   border-radius: 1.35rem;
-  border: 1px solid rgba(212, 175, 55, 0.12);
-  background: rgba(243, 230, 204, 0.03);
+  border: 1px solid rgba(169, 192, 255, 0.12);
+  background: rgba(244, 247, 251, 0.03);
   opacity: 0.55;
   transition:
     opacity 0.25s ease,
@@ -449,7 +450,7 @@ optgroup {
 
 .award-side:hover {
   opacity: 0.95;
-  border-color: rgba(212, 175, 55, 0.4);
+  border-color: rgba(169, 192, 255, 0.4);
 }
 
 .award-nav {
@@ -462,8 +463,8 @@ optgroup {
   height: 2.6rem;
   margin-top: -1.3rem;
   border-radius: 999px;
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  background: rgba(7, 5, 4, 0.72);
+  border: 1px solid rgba(169, 192, 255, 0.4);
+  background: rgba(5, 6, 10, 0.72);
   color: var(--color-gold);
   font-size: 1.6rem;
   line-height: 1;
@@ -471,8 +472,8 @@ optgroup {
 }
 
 .award-nav:hover {
-  background: var(--color-gold);
-  color: var(--color-night);
+  background: var(--color-gold-deep);
+  color: #fff;
 }
 
 .award-nav-prev {
@@ -507,7 +508,7 @@ optgroup {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 999px;
-  background: rgba(243, 230, 204, 0.28);
+  background: rgba(244, 247, 251, 0.28);
 }
 
 .award-dots button.is-active {
@@ -588,14 +589,14 @@ optgroup {
   100% {
     transform: scale(1);
     box-shadow:
-      0 0 0 1px rgba(212, 175, 55, 0.45),
-      0 0 18px rgba(212, 175, 55, 0.18);
+      0 0 0 1px rgba(169, 192, 255, 0.45),
+      0 0 18px rgba(169, 192, 255, 0.18);
   }
   50% {
     transform: scale(1.045);
     box-shadow:
-      0 0 0 10px rgba(212, 175, 55, 0.1),
-      0 0 32px rgba(212, 175, 55, 0.32);
+      0 0 0 10px rgba(169, 192, 255, 0.1),
+      0 0 32px rgba(169, 192, 255, 0.32);
   }
 }
 .fingerprint-unlock-btn {
@@ -613,11 +614,11 @@ optgroup {
   0%,
   100% {
     transform: scale(1);
-    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.18));
+    filter: drop-shadow(0 0 12px rgba(169, 192, 255, 0.18));
   }
   50% {
     transform: scale(1.04);
-    filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.42));
+    filter: drop-shadow(0 0 22px rgba(169, 192, 255, 0.42));
   }
 }
 

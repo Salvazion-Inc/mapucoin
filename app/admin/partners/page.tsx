@@ -146,7 +146,7 @@ export default function AdminPartnersPage() {
             type="button"
             onClick={() => setFilter(id)}
             className={`rounded-full px-4 py-1.5 text-sm ${
-              filter === id ? "bg-gold text-night" : "border border-gold/30"
+              filter === id ? "bg-gold-deep text-white" : "border border-gold/30"
             }`}
           >
             {id}

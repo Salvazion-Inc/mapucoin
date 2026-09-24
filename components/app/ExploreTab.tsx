@@ -142,7 +142,7 @@ export function ExploreTab() {
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   <Link
                     href={`/app/viaje?lugar=${item.slug}&presupuesto=800000&noches=4&viajeros=2&intereses=naturaleza,gastronomia`}
-                    className="rounded-lg bg-gold py-2 text-center text-[11px] font-bold text-night"
+                    className="rounded-lg bg-gold-deep py-2 text-center text-[11px] font-bold text-white"
                   >
                     {a.planThis}
                   </Link>

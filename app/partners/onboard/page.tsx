@@ -70,7 +70,7 @@ function OnboardInner() {
         </label>
         <button
           disabled={loading}
-          className="w-full rounded-full bg-gold py-3.5 text-black disabled:opacity-60 hover:bg-[#e3c25a]"
+          className="w-full rounded-full bg-gold-deep py-3.5 text-white disabled:opacity-60 hover:bg-gold-hot"
         >
           {loading ? c.partners.sending : c.partners.onboardSubmit}
         </button>

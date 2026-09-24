@@ -159,7 +159,7 @@ export function AccountTab() {
                 type="button"
                 onClick={() => setRole(r)}
                 className={`rounded-full px-3 py-1.5 text-sm ${
-                  role === r ? "bg-gold text-night" : "border border-gold/30 text-sand"
+                  role === r ? "bg-gold-deep text-white" : "border border-gold/30 text-sand"
                 }`}
               >
                 {a.account.roles[r]}

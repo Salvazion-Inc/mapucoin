@@ -128,7 +128,7 @@ export default function Header() {
           <Link href="/app" className="btn-ghost !px-3 !py-1.5 text-xs">
             {c.nav.app}
           </Link>
-          <Link href="/#planificar" className="btn-gold !px-3.5 !py-1.5 text-xs">
+          <Link href="/#planificar" className="btn-gold !px-3.5 !py-1.5 text-xs max-[519px]:!hidden">
             {c.nav.plan}
           </Link>
           <button
@@ -139,8 +139,8 @@ export default function Header() {
             onClick={() => setOpen((v) => !v)}
           >
             <span className="flex flex-col gap-1.5">
-              <span className="block h-px w-4 bg-gold" />
-              <span className="block h-px w-4 bg-gold" />
+              <span className="block h-px w-4 bg-sand" />
+              <span className="block h-px w-4 bg-sand" />
             </span>
           </button>
         </div>

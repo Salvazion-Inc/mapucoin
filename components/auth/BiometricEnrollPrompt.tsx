@@ -86,7 +86,7 @@ export function BiometricEnrollPrompt() {
               type="button"
               disabled={busy}
               onClick={() => void enable()}
-              className="rounded-full bg-gold px-3 py-1.5 text-[11px] font-bold text-night disabled:opacity-60"
+              className="rounded-full bg-gold-deep px-3 py-1.5 text-[11px] font-bold text-white disabled:opacity-60"
             >
               {busy ? a.biometricProcessing : a.biometricPromptEnable}
             </button>

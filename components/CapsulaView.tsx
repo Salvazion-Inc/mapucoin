@@ -91,7 +91,7 @@ export default function CapsulaView({
           </p>
           <Link
             href={`/reserva?capsula=${cap.slug}&noches=2&viajeros=2`}
-            className="mt-6 block rounded-full bg-gold py-3.5 text-center text-black hover:bg-[#e3c25a]"
+            className="mt-6 block rounded-full bg-gold-deep py-3.5 text-center text-white hover:bg-gold-hot"
           >
             {copy.capsules.book}
           </Link>

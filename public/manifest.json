@@ -6,8 +6,8 @@
   "scope": "https://mapucoin.com/",
   "id": "https://mapucoin.com/app",
   "display": "standalone",
-  "background_color": "#070504",
-  "theme_color": "#d4af37",
+  "background_color": "#05060a",
+  "theme_color": "#072487",
   "lang": "es",
   "icons": [
     {

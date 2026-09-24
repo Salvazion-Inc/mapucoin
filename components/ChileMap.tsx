@@ -293,11 +293,11 @@ export default function ChileMap({
         .addTo(map)
         .bindPopup(
           `<div style="min-width:180px">
-            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#d4af37;margin:0">${groupLabel(p.group)}</p>
-            <strong style="font-size:15px;color:#f3e6cc">${shown.name}</strong>
-            <p style="margin:6px 0 8px;color:#f3e6cc;font-size:13px;opacity:.8">${shown.tagline}</p>
-            <p style="margin:0;font-size:13px;color:#d4af37">${c.from} ${formatCLP(p.priceFromCLP)}</p>
-            <a href="${href}" style="display:inline-block;margin-top:8px;color:#d4af37;font-weight:600">${c.map.viewSheet}</a>
+            <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#a9c0ff;margin:0">${groupLabel(p.group)}</p>
+            <strong style="font-size:15px;color:#f4f7fb">${shown.name}</strong>
+            <p style="margin:6px 0 8px;color:#f4f7fb;font-size:13px;opacity:.8">${shown.tagline}</p>
+            <p style="margin:0;font-size:13px;color:#a9c0ff">${c.from} ${formatCLP(p.priceFromCLP)}</p>
+            <a href="${href}" style="display:inline-block;margin-top:8px;color:#a9c0ff;font-weight:600">${c.map.viewSheet}</a>
           </div>`,
           {
             className: "mapucoin-popup",
@@ -366,7 +366,7 @@ export default function ChileMap({
             onClick={() => setLand(land === l.id ? "all" : l.id)}
             className={`rounded-full px-4 py-1.5 text-sm ${
               land === l.id
-                ? "bg-gold text-black"
+                ? "bg-gold-deep text-white"
                 : "border border-gold/30 text-sand"
             }`}
           >
@@ -378,7 +378,7 @@ export default function ChileMap({
           onClick={() => setLand("all")}
           className={`rounded-full px-4 py-1.5 text-sm ${
             land === "all"
-              ? "bg-gold text-black"
+              ? "bg-gold-deep text-white"
               : "border border-gold/30 text-sand"
           }`}
         >

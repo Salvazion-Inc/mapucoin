@@ -109,7 +109,7 @@ export default function PlannerForm({
             onClick={() => pickLandscape(ls.id)}
             className={`rounded-full px-3 py-1 text-xs ${
               land === ls.id
-                ? "bg-gold text-night"
+                ? "bg-gold-deep text-white"
                 : "border border-gold/30 text-sand hover:border-gold"
             }`}
           >
@@ -212,7 +212,7 @@ export default function PlannerForm({
               onClick={() => toggle(i.id)}
               className={`rounded-full px-3 py-1.5 text-sm ${
                 picked.includes(i.id)
-                  ? "bg-gold text-black"
+                  ? "bg-gold-deep text-white"
                   : "border border-gold/30 text-sand"
               }`}
             >
@@ -233,7 +233,7 @@ export default function PlannerForm({
 
       <button
         type="submit"
-        className="mt-6 w-full rounded-full bg-gold py-3.5 font-medium text-black transition hover:bg-[#e3c25a]"
+        className="mt-6 w-full rounded-full bg-gold-deep py-3.5 font-medium text-white transition hover:bg-gold-hot"
       >
         {c.plan.submit}
       </button>

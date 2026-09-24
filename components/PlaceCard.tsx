@@ -44,7 +44,7 @@ export default function PlaceCard({ item }: { item: CatalogItem }) {
             {c.kinds[shown.kind]}
           </span>
           {land && (
-            <span className="rounded-full bg-gold/90 px-3 py-1 text-[11px] tracking-wide text-night">
+            <span className="rounded-full bg-gold-deep px-3 py-1 text-[11px] tracking-wide text-white">
               {c.landscapes[land]}
             </span>
           )}

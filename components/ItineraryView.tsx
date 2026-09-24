@@ -355,7 +355,7 @@ export default function ItineraryView({
             <button
               type="submit"
               disabled={paying}
-              className="rounded-full bg-gold px-6 py-3 text-black hover:bg-[#e3c25a] disabled:opacity-60"
+              className="rounded-full bg-gold-deep px-6 py-3 text-white hover:bg-gold-hot disabled:opacity-60"
             >
               {paying ? c.itinerary.paying : c.itinerary.pay}
             </button>

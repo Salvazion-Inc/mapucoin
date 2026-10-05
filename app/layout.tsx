@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Fraunces, Outfit } from "next/font/google";
 import { cookies } from "next/headers";
 import HtmlLang from "@/components/HtmlLang";
@@ -119,6 +120,7 @@ export default async function RootLayout({
           <HtmlLang />
           <SiteFrame>{children}</SiteFrame>
         </LocaleProvider>
+        <Analytics />
       </body>
     </html>
   );

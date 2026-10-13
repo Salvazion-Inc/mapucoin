@@ -84,13 +84,17 @@ export function MesaTab() {
           const operator = operatorFor(item.slug);
           return (
           <li key={item.slug} className="mapu-card flex overflow-hidden">
-            <div className="relative h-28 w-28 shrink-0">
+            <div
+              className={`relative shrink-0 ${
+                kind === "food" ? "aspect-[3/2] w-36" : "h-28 w-28"
+              }`}
+            >
               <Image
                 src={item.image}
                 alt={item.name}
                 fill
                 className="object-cover"
-                sizes="112px"
+                sizes={kind === "food" ? "144px" : "112px"}
               />
             </div>
             <div className="min-w-0 flex-1 p-3">

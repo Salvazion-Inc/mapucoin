@@ -171,7 +171,7 @@ export default function HomePage() {
                       id={dish.slug}
                       className="mapu-card scroll-mt-28 flex h-full flex-col overflow-hidden"
                     >
-                      <div className="relative h-52">
+                      <div className="relative aspect-[3/2] w-full">
                         <Image
                           src={dish.image}
                           alt={dish.name}

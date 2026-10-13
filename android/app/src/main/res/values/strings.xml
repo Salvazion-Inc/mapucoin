@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Mapucoin</string>
+    <string name="title_activity_main">Mapucoin</string>
+    <string name="package_name">com.mapucoin.app</string>
+    <string name="custom_url_scheme">com.mapucoin.app</string>
+</resources>

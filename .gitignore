@@ -9,3 +9,25 @@ out
 *.log
 .DS_Store
 *.tsbuildinfo
+
+# Capacitor build output. Keep the android/ and ios/ projects.
+android/app/build
+android/build
+android/.gradle
+android/local.properties
+android/captures
+android/.idea
+ios/App/Pods
+ios/App/App/public
+ios/DerivedData
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# Supabase CLI cache
+supabase/.temp/
+
+# Local Vercel CLI experiments. They read the machine auth file.
+scripts/refresh-vercel.mjs
+scripts/set-vercel-env.mjs

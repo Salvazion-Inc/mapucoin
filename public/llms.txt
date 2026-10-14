@@ -4,6 +4,8 @@
 
 Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion, Inc. (a Delaware corporation). Independent partners run capsules, meals, and activities. Payments use Stripe (CLP). The installable App lives at https://mapucoin.com/app.
 
+Mapucoin es el nombre de la plataforma de viajes, no un activo. Si la clave $SALVAZION está habilitada, es solo una llave de acceso a Mapucoin Premium: no es una inversión, no genera retornos y no hay promesa de precio.
+
 ## Official sources
 
 - [Home](https://mapucoin.com/)

@@ -35,6 +35,10 @@ export const terms = {
       heading: "8. Ley aplicable",
       body: "Estos términos se rigen por las leyes del Estado de Delaware, Estados Unidos, sin perjuicio de derechos irrenunciables del consumidor en Chile. Contacto: info@salvazion.org.",
     },
+    {
+      heading: "9. Clave de acceso $SALVAZION",
+      body: "Si Mapucoin habilita Mapucoin Premium, la clave $SALVAZION sirve únicamente para abrir ese acceso. Es una llave de acceso a la plataforma de viajes. No es una inversión, no genera retornos, intereses, dividendos ni participación, y Mapucoin no promete un precio, una apreciación ni un resultado financiero. El único beneficio del holder es el acceso Premium. Desactivar la función cierra ese acceso.",
+    },
   ],
 };
 

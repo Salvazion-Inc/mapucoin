@@ -8,7 +8,13 @@ import { ExploreTab } from "./ExploreTab";
 import { MesaTab } from "./MesaTab";
 import { TripTab } from "./TripTab";
 
-export function MapucoinApp({ tab }: { tab: AppTab }) {
+export function MapucoinApp({
+  tab,
+  premiumKeyEnabled = false,
+}: {
+  tab: AppTab;
+  premiumKeyEnabled?: boolean;
+}) {
   const body =
     tab === "explorar" ? (
       <ExploreTab />
@@ -19,7 +25,7 @@ export function MapucoinApp({ tab }: { tab: AppTab }) {
     ) : tab === "mesa" ? (
       <MesaTab />
     ) : (
-      <AccountTab />
+      <AccountTab premiumKeyEnabled={premiumKeyEnabled} />
     );
 
   return <AppShell tab={tab}>{body}</AppShell>;

@@ -10,6 +10,7 @@ import { PROFILE_ROLES, type ProfileRole } from "@/lib/profile";
 import { useProfile } from "@/lib/profile-store";
 import { disableBiometric } from "@/lib/auth/biometric";
 import { BiometricControl } from "@/components/auth/BiometricControl";
+import { PremiumKeyPanel } from "./PremiumKeyPanel";
 import { ProfileAvatar } from "./ProfileAvatar";
 
 type BookingRow = {
@@ -24,7 +25,11 @@ type BookingRow = {
   destination?: string | null;
 };
 
-export function AccountTab() {
+export function AccountTab({
+  premiumKeyEnabled = false,
+}: {
+  premiumKeyEnabled?: boolean;
+}) {
   const { locale } = useLocale();
   const a = at(locale);
   const { profile, ready, save } = useProfile();
@@ -104,6 +109,8 @@ export function AccountTab() {
           <p className="text-sm text-sand/70">{a.account.lead}</p>
         </div>
       </div>
+
+      {premiumKeyEnabled ? <PremiumKeyPanel /> : null}
 
       <form onSubmit={onSubmit} className="mt-6 space-y-3">
         <label className="block text-sm font-medium">

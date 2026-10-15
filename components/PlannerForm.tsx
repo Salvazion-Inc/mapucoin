@@ -11,6 +11,7 @@ import {
 } from "@/lib/catalog";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import { redirectUnlessVerified } from "@/lib/service-redirect";
 import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
@@ -66,7 +67,7 @@ export default function PlannerForm({
     );
   }
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     const q = new URLSearchParams({
       lugar: place,
@@ -75,11 +76,15 @@ export default function PlannerForm({
       viajeros: String(guests),
       intereses: picked.join(","),
     });
+    const next = inApp
+      ? `/app/viaje?${q.toString()}`
+      : `/?${q.toString()}#planificar`;
+    if (await redirectUnlessVerified(next)) return;
     if (inApp) {
-      router.push(`/app/viaje?${q.toString()}`);
+      router.push(next);
       return;
     }
-    router.push(`/?${q.toString()}#planificar`);
+    router.push(next);
     requestAnimationFrame(() => {
       document.getElementById("planificar")?.scrollIntoView({
         behavior: "smooth",

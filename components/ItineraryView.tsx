@@ -4,13 +4,15 @@ import { formatCLP, getBySlug } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
+import { useSessionIdentity } from "@/lib/use-session-identity";
 import { dropPlanItem, dropPlanTypes } from "@/lib/plan-budget";
 import { platformFeeClp } from "@/lib/partners";
 import type { QuotedPass } from "@/lib/park-passes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type PlanItem = {
   type: "stay" | "food" | "activity" | "place" | "ticket";
@@ -89,8 +91,17 @@ export default function ItineraryView({
   const c = t(locale);
   const path = usePathname();
   const [payer, setPayer] = useState({ name: "", email: "" });
+  const identity = useSessionIdentity();
   const [paying, setPaying] = useState(false);
   const [payError, setPayError] = useState("");
+  useEffect(() => {
+    if (!identity) return;
+    setPayer((current) => ({
+      name: current.name || identity.name,
+      email: current.email || identity.email,
+    }));
+  }, [identity]);
+
   const stay = plan.days
     .flatMap((d) => d.items)
     .find((i) => i.type === "stay");
@@ -323,6 +334,7 @@ export default function ItineraryView({
                   }),
                 });
                 const data = await res.json().catch(() => ({}));
+                if (redirectForStatus(res.status, data.error, herePath())) return;
                 if (!res.ok || !data.url) {
                   setPayError(c.itinerary.payFail);
                   return;

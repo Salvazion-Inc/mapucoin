@@ -4,10 +4,12 @@ import { capsules, formatCLP, getBySlug } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
+import { useSessionIdentity } from "@/lib/use-session-identity";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { FormEvent, Suspense, useMemo, useState } from "react";
+import { FormEvent, Suspense, useEffect, useMemo, useState } from "react";
 
 function validEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim());
@@ -27,12 +29,19 @@ function ReservaInner() {
   );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const identity = useSessionIdentity();
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
   const item = useMemo(() => getBySlug(slug), [slug]);
   const shown = item ? localizeItem(item, locale) : null;
   const total = (item?.priceFromCLP || 0) * nights;
   const canceled = params.get("cancel") === "1";
+
+  useEffect(() => {
+    if (!identity) return;
+    setName((current) => current || identity.name);
+    setEmail((current) => current || identity.email);
+  }, [identity]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -64,6 +73,7 @@ function ReservaInner() {
       }),
     }).catch(() => null);
     const data = res ? await res.json().catch(() => ({})) : {};
+    if (res && redirectForStatus(res.status, data.error, herePath())) return;
     if (!res) {
       setBusy(false);
       setStatus(c.reserva.fail);

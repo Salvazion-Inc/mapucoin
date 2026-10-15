@@ -6,6 +6,7 @@ import {
   originAllowed,
   originRejectedResponse,
 } from "@/lib/http-guard";
+import { partnerDelivery } from "@/lib/partner-delivery";
 import { insertPartner, listPartners } from "@/lib/partner-store";
 import {
   clientIp,
@@ -13,6 +14,7 @@ import {
   rateLimitedResponse,
 } from "@/lib/rate-limit";
 import { getSupabase } from "@/lib/supabase";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 
@@ -47,6 +49,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   if (!originAllowed(req)) return originRejectedResponse();
 
   const limited = rateLimit(`partners:${clientIp(req)}`, 5, 10 * 60 * 1000);
@@ -86,6 +91,16 @@ export async function POST(req: Request) {
     status: "pending",
   };
 
+  const delivery = partnerDelivery();
+  if (!delivery.store) {
+    return Response.json({
+      ok: true,
+      stored: false,
+      preview: true,
+      notified: false,
+    });
+  }
+
   const db = getSupabase();
   let stored = false;
   if (db) {
@@ -96,5 +111,10 @@ export async function POST(req: Request) {
     stored = true;
   }
 
-  return Response.json({ ok: true, stored });
+  return Response.json({
+    ok: true,
+    stored,
+    preview: false,
+    notified: delivery.notify,
+  });
 }

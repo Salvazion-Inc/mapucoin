@@ -15,6 +15,7 @@ import {
   stripeErrorMessage,
 } from "@/lib/stripe";
 import { getSupabase } from "@/lib/supabase";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -84,6 +85,11 @@ async function createExpressAccount(
 }
 
 export async function POST(req: Request) {
+  if (!adminAuthorized(req)) {
+    const gate = await requireVerifiedAccount(req);
+    if (!gate.ok) return gate.response;
+  }
+
   const limited = rateLimit(`partners-connect:${clientIp(req)}`, 8, 10 * 60 * 1000);
   if (!limited.ok) return rateLimitedResponse(limited.retryAfter);
 

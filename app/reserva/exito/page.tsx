@@ -3,6 +3,7 @@
 import { formatCLP, getBySlug } from "@/lib/catalog";
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
@@ -35,8 +36,11 @@ function ExitoInner() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ session_id: sessionId }),
     })
-      .then((res) => res.json())
-      .then((data) => setReceipt(data))
+      .then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+        if (redirectForStatus(res.status, data.error, herePath())) return;
+        setReceipt(data);
+      })
       .catch(() => setReceipt({ ok: false, error: "net" }));
   }, [sessionId]);
 

@@ -2,7 +2,9 @@
 
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
-import { FormEvent, Suspense, useState } from "react";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
+import { useSessionIdentity } from "@/lib/use-session-identity";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 function OnboardInner() {
@@ -11,7 +13,14 @@ function OnboardInner() {
   const params = useSearchParams();
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const identity = useSessionIdentity();
   const presetId = params.get("id") || "";
+
+  useEffect(() => {
+    if (!identity) return;
+    setEmail((current) => current || identity.email);
+  }, [identity]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,6 +42,7 @@ function OnboardInner() {
     });
     const data = await res.json().catch(() => ({}));
     setLoading(false);
+    if (redirectForStatus(res.status, data.error, herePath())) return;
     if (data.url) {
       window.location.href = data.url;
       return;
@@ -65,6 +75,8 @@ function OnboardInner() {
             name="email"
             type="email"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="mt-1 w-full rounded-xl border border-earth/15 px-3 py-2.5"
           />
         </label>

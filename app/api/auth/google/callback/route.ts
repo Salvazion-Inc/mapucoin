@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { persistVerifiedAccountByEmail } from "@/lib/account-verification";
+import { rememberVerifiedEmail } from "@/lib/email-verification";
 import {
   ACCOUNTS_COOKIE,
   accountsCookie,
@@ -90,6 +92,7 @@ export async function GET(req: Request) {
       email: user.email,
       name: user.name,
       hash: GOOGLE_MARKER,
+      emailVerified: true,
     } satisfies AccountRecord;
     users.push(account);
     if (users.length > 25) users.splice(0, users.length - 25);
@@ -97,16 +100,23 @@ export async function GET(req: Request) {
     account.name = user.name;
   }
   account.id = user.id;
+  account.emailVerified = true;
 
   const session = await createSessionToken({
     id: account.id,
     email: account.email,
     name: account.name,
+    emailVerified: true,
   });
+  await persistVerifiedAccountByEmail(account.email);
   const vault = await signAccounts(users);
   const res = NextResponse.redirect(dest(req, next));
   res.headers.append("Set-Cookie", sessionCookie(session));
   res.headers.append("Set-Cookie", accountsCookie(vault));
+  res.headers.append(
+    "Set-Cookie",
+    await rememberVerifiedEmail(req.headers.get("cookie"), account.email),
+  );
   res.headers.append("Set-Cookie", clearOauthStateCookie());
   return res;
 }

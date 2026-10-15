@@ -13,6 +13,7 @@ import { localizeItem } from "@/lib/catalog-i18n";
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
 import { useProfile } from "@/lib/profile-store";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
@@ -144,6 +145,7 @@ function BookForm({ slug, onClose }: { slug: string; onClose: () => void }) {
     });
     const data = await res.json().catch(() => ({}));
     setBusy(false);
+    if (redirectForStatus(res.status, data.error, herePath())) return;
     if (res.status === 503) {
       setStatus(a.noStripe);
       return;

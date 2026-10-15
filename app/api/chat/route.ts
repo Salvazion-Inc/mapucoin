@@ -1,5 +1,6 @@
 import { capsules, destinations, gastronomy, activities } from "@/lib/catalog";
 import { localeMeta, parseLocale } from "@/lib/locale";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 
@@ -14,6 +15,9 @@ const catalog = [
 ].join("\n");
 
 export async function POST(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   const key = process.env.XAI_API_KEY;
   if (!key) {
     return Response.json({ error: "Missing XAI_API_KEY" }, { status: 500 });

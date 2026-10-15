@@ -1,6 +1,7 @@
 import { markBookingPaid } from "@/lib/booking-paid";
 import { getStripe, stripeConfigured } from "@/lib/stripe";
 import { clientIp, rateLimit, rateLimitedResponse } from "@/lib/rate-limit";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,6 +16,9 @@ async function confirm(sessionId: string) {
 }
 
 export async function GET(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   const limited = rateLimit(`confirm:${clientIp(req)}`, 20, 10 * 60 * 1000);
   if (!limited.ok) return rateLimitedResponse(limited.retryAfter);
   const sessionId = new URL(req.url).searchParams.get("session_id") || "";
@@ -27,6 +31,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   const limited = rateLimit(`confirm:${clientIp(req)}`, 20, 10 * 60 * 1000);
   if (!limited.ok) return rateLimitedResponse(limited.retryAfter);
   const body = await req.json().catch(() => ({}));

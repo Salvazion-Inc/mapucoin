@@ -20,6 +20,7 @@ import {
   rateLimitedResponse,
 } from "@/lib/rate-limit";
 import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 import { getSupabase } from "@/lib/supabase";
 import {
   appOrigin,
@@ -44,6 +45,9 @@ async function partnerForCheckout(
 }
 
 export async function POST(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   if (!originAllowed(req)) return originRejectedResponse();
 
   const limited = rateLimit(`checkout:${clientIp(req)}`, 8, 10 * 60 * 1000);

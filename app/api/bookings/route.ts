@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
-import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 
 export async function GET(req: Request) {
-  const user = await readSession(
-    cookieValue(req.headers.get("cookie"), SESSION_COOKIE),
-  );
-  if (!user) {
-    return NextResponse.json({ error: "auth" }, { status: 401 });
-  }
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+  const user = gate.user;
 
   const db = getSupabase();
   if (!db) return NextResponse.json({ bookings: [] });

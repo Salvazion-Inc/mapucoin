@@ -11,6 +11,7 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
     path.startsWith("/app") ||
     path === "/login" ||
     path === "/signup" ||
+    path === "/verificar" ||
     path.startsWith("/admin");
 
   if (hide) return <>{children}</>;

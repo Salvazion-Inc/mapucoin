@@ -79,11 +79,19 @@ export function AuthForm({
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, full_name }),
+          body: JSON.stringify({ email, password, full_name, next }),
         },
       );
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error("auth");
-      router.replace(next.startsWith("/") ? next : "/app");
+      if (typeof data.devUrl === "string" && data.devUrl) {
+        sessionStorage.setItem("mapucoin_dev_verify_url", data.devUrl);
+      }
+      const dest = next.startsWith("/") ? next : "/app";
+      const verified = Boolean(data.user?.emailVerified);
+      router.replace(
+        verified ? dest : `/verificar?next=${encodeURIComponent(dest)}`,
+      );
       router.refresh();
     } catch {
       setStatus("err");
@@ -111,10 +119,17 @@ export function AuthForm({
           />
         ) : (
           <>
-        <p className="text-sm text-gold">{a.sessionNeeded}</p>
+        <p className="text-sm text-gold">
+          {mode === "signup" ? a.signupLead : a.sessionNeeded}
+        </p>
         <h1 className="font-display mt-2 text-4xl font-bold">
           {mode === "login" ? a.loginTitle : a.signupTitle}
         </h1>
+        {mode === "signup" ? (
+          <p className="mt-3 text-sm leading-relaxed text-sand/75">
+            {a.signupPersonalized}
+          </p>
+        ) : null}
         <form
           onSubmit={onSubmit}
           className="mt-8 rounded-2xl border border-gold/20 bg-black/70 p-6"

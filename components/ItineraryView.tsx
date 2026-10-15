@@ -4,6 +4,7 @@ import { formatCLP, getBySlug } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
 import { dropPlanItem, dropPlanTypes } from "@/lib/plan-budget";
 import { platformFeeClp } from "@/lib/partners";
 import type { QuotedPass } from "@/lib/park-passes";
@@ -323,6 +324,7 @@ export default function ItineraryView({
                   }),
                 });
                 const data = await res.json().catch(() => ({}));
+                if (redirectForStatus(res.status, data.error, herePath())) return;
                 if (!res.ok || !data.url) {
                   setPayError(c.itinerary.payFail);
                   return;

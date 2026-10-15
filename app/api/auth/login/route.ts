@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
+import {
+  resolveEmailVerified,
+  verifiedEmailsFrom,
+} from "@/lib/email-verification";
 import { verifyPassword } from "@/lib/passwords";
 import {
   ACCOUNTS_COOKIE,
+  accountsCookie,
   cookieValue,
   createSessionToken,
   readAccounts,
   sessionCookie,
+  signAccounts,
 } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
 
@@ -22,13 +28,29 @@ export async function POST(req: Request) {
   const users = await readAccounts(
     cookieValue(req.headers.get("cookie"), ACCOUNTS_COOKIE),
   );
+  const verifiedEmails = await verifiedEmailsFrom(req.headers.get("cookie"));
   const local = users.find((u) => u.email === email);
   if (local && verifyPassword(password, local.hash)) {
-    const session = await createSessionToken(local);
+    const emailVerified = resolveEmailVerified(local.email, local, verifiedEmails);
+    if (emailVerified) local.emailVerified = true;
+    const session = await createSessionToken({
+      id: local.id,
+      email: local.email,
+      name: local.name,
+      emailVerified,
+    });
     const res = NextResponse.json({
-      user: { id: local.id, email: local.email, name: local.name },
+      user: {
+        id: local.id,
+        email: local.email,
+        name: local.name,
+        emailVerified,
+      },
     });
     res.headers.append("Set-Cookie", sessionCookie(session));
+    if (emailVerified) {
+      res.headers.append("Set-Cookie", accountsCookie(await signAccounts(users)));
+    }
     return res;
   }
 
@@ -40,12 +62,19 @@ export async function POST(req: Request) {
         password,
       });
       if (!error && data.user) {
+        const account = users.find((u) => u.email === (data.user.email || email));
+        const emailVerified = resolveEmailVerified(
+          data.user.email || email,
+          account,
+          verifiedEmails,
+        );
         const user = {
           id: data.user.id,
           email: data.user.email || email,
           name:
             String(data.user.user_metadata?.full_name || "") ||
             (data.user.email || email),
+          emailVerified,
         };
         const session = await createSessionToken(user);
         const res = NextResponse.json({ user });

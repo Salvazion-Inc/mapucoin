@@ -2,6 +2,7 @@
 
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
 import { FormEvent, Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -33,6 +34,7 @@ function OnboardInner() {
     });
     const data = await res.json().catch(() => ({}));
     setLoading(false);
+    if (redirectForStatus(res.status, data.error, herePath())) return;
     if (data.url) {
       window.location.href = data.url;
       return;

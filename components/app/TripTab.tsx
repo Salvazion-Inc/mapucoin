@@ -4,6 +4,7 @@ import PlannerSection from "@/components/PlannerSection";
 import { at } from "@/lib/app-copy";
 import { useLocale } from "@/lib/locale-context";
 import { useTrip } from "@/lib/trip-store";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
@@ -30,7 +31,12 @@ function TripInner() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ session_id: sessionId }),
-    }).catch(() => {});
+    })
+      .then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+        redirectForStatus(res.status, data.error, herePath());
+      })
+      .catch(() => {});
   }, [paid, sessionId, setTrip]);
 
   return (

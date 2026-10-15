@@ -1,4 +1,10 @@
 import { NextResponse } from "next/server";
+import {
+  createEmailVerifyToken,
+  deliverVerificationEmail,
+  verificationLinkExposed,
+  verificationUrl,
+} from "@/lib/email-verification";
 import { hashPassword } from "@/lib/passwords";
 import {
   ACCOUNTS_COOKIE,
@@ -11,6 +17,7 @@ import {
   type AccountRecord,
 } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
+import { safeNextPath } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 
@@ -42,6 +49,7 @@ export async function POST(req: Request) {
     email,
     name,
     hash: hashPassword(password),
+    emailVerified: false,
   };
   users.push(account);
   if (users.length > 25) users.splice(0, users.length - 25);
@@ -52,6 +60,8 @@ export async function POST(req: Request) {
       await supabase.auth.admin.createUser({
         email,
         password,
+        // Supabase confirm stays on so password login keeps working.
+        // Mapucoin's own emailVerified flag is what gates services.
         email_confirm: true,
         user_metadata: { full_name: name },
       });
@@ -67,9 +77,21 @@ export async function POST(req: Request) {
     }
   }
 
-  const session = await createSessionToken({ id, email, name });
+  const session = await createSessionToken({
+    id,
+    email,
+    name,
+    emailVerified: false,
+  });
   const vault = await signAccounts(users);
-  const res = NextResponse.json({ user: { id, email, name } });
+  const verifyToken = await createEmailVerifyToken(email);
+  const devUrl = verificationUrl(req, verifyToken, safeNextPath(String(body.next || "/app")));
+  await deliverVerificationEmail({ to: email, name, url: devUrl });
+  const res = NextResponse.json({
+    user: { id, email, name, emailVerified: false },
+    verificationRequired: true,
+    devUrl: verificationLinkExposed() ? devUrl : undefined,
+  });
   res.headers.append("Set-Cookie", sessionCookie(session));
   res.headers.append("Set-Cookie", accountsCookie(vault));
   return res;

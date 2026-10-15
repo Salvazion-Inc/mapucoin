@@ -7,6 +7,7 @@ import { destinations } from "@/lib/catalog";
 import { t } from "@/lib/copy";
 import { localeMeta } from "@/lib/locale";
 import { useLocale } from "@/lib/locale-context";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 
@@ -48,9 +49,13 @@ function PlannerInner() {
         locale,
       }),
     })
-      .then((r) => r.json())
-      .then((data) => {
+      .then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        return { r, data };
+      })
+      .then(({ r, data }) => {
         if (cancelled) return;
+        if (redirectForStatus(r.status, data.error, herePath())) return;
         if (data.plan) {
           setPlan(data.plan);
         } else setError(c.plan.errorPlan);
@@ -103,6 +108,10 @@ function PlannerInner() {
         language: localeMeta[locale].replyLanguage,
       }),
     });
+    if (res.status === 401 || res.status === 403) {
+      const data = await res.json().catch(() => ({}));
+      if (redirectForStatus(res.status, data.error, herePath())) return;
+    }
     if (!res.ok || !res.body) {
       setChat((rows) => [...rows, `Mapucoin: ${c.plan.chatFail}`]);
       setStreaming(false);

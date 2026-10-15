@@ -4,6 +4,7 @@ import { capsules, formatCLP, getBySlug } from "@/lib/catalog";
 import { localizeItem } from "@/lib/catalog-i18n";
 import { t, tr } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import { herePath, redirectForStatus } from "@/lib/service-redirect";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -64,6 +65,7 @@ function ReservaInner() {
       }),
     }).catch(() => null);
     const data = res ? await res.json().catch(() => ({})) : {};
+    if (res && redirectForStatus(res.status, data.error, herePath())) return;
     if (!res) {
       setBusy(false);
       setStatus(c.reserva.fail);

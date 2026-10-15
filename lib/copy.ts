@@ -85,11 +85,11 @@ const es = {
   plan: {
     kicker: "Planificar",
     title: "Tu viaje, a tu presupuesto",
-    lead: "Elige el paisaje, el presupuesto en CLP y Mapucoin arma noches en cápsula, gastronomía y actividades de ese territorio.",
+    lead: "Elige el paisaje, el presupuesto en CLP y Mapucoin arma noches en cápsula, gastronomía y actividades de ese territorio. Registrarte y verificar tu correo abre una experiencia personalizada: el plan, las reservas y el concierge quedan en tu cuenta.",
     formKicker: "Planificador",
     formTitle: "¿Cuánto y a dónde?",
     formLead:
-      "Elige el paisaje y el presupuesto en pesos chilenos. Mapucoin arma cápsula, gastronomía y actividades de ese territorio.",
+      "Elige el paisaje y el presupuesto en pesos chilenos. Mapucoin arma cápsula, gastronomía y actividades de ese territorio. Para armar el viaje necesitas una cuenta verificada: así la experiencia es personalizada y no de invitado.",
     landscape: "Paisaje",
     place: "Lugar a conocer",
     previewTitle: "En este territorio",
@@ -163,7 +163,7 @@ const es = {
   partners: {
     kicker: "Partners",
     title: "Ingresa como partner",
-    lead: "Operas una cápsula, una ruka, una caleta, un tour o una viña. Mapucoin te muestra en el mapa, entra al itinerario y cobra con Stripe.",
+    lead: "Operas una cápsula, una ruka, una caleta, un tour o una viña. Mapucoin te muestra en el mapa, entra al itinerario y cobra con Stripe. La postulación pide una cuenta con el correo verificado, para personalizar tu alta.",
     name: "Nombre",
     email: "Correo",
     phone: "Teléfono",
@@ -186,7 +186,7 @@ const es = {
       "Recibimos tu postulación. Conecta Supabase para guardar partners en producción.",
     onboardTitle: "Activar Stripe Connect",
     onboardLead:
-      "Usa el mismo correo de tu postulación. Stripe abre una cuenta Express en Chile (CL).",
+      "Usa el mismo correo de tu cuenta verificada. Stripe abre una cuenta Express en Chile (CL). El registro personaliza tu alta de partner.",
     onboardSubmit: "Continuar a Stripe",
     onboardBlocked:
       "Stripe no pudo crear la cuenta Connect en Chile. El cobro sigue en la plataforma Mapucoin; el 12% queda contabilizado para payout manual.",

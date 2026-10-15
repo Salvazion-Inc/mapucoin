@@ -3,6 +3,11 @@
 import { destinations } from "@/lib/catalog";
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
+import {
+  herePath,
+  redirectForStatus,
+  redirectUnlessVerified,
+} from "@/lib/service-redirect";
 import { FormEvent, useState } from "react";
 
 const roleIds = [
@@ -44,6 +49,8 @@ export default function PartnersForm() {
       return;
     }
     setStatus("loading");
+    const next = herePath().includes("#") ? herePath() : `${herePath()}#partners`;
+    if (await redirectUnlessVerified(next)) return;
     const payload = Object.fromEntries(data.entries());
     const res = await fetch("/api/partners", {
       method: "POST",
@@ -51,6 +58,7 @@ export default function PartnersForm() {
       body: JSON.stringify(payload),
     }).catch(() => null);
     const body = res ? await res.json().catch(() => ({})) : {};
+    if (res && redirectForStatus(res.status, body.error, next)) return;
     if (!res || res.status === 429) {
       setStatus("err");
       setMessage(res?.status === 429 ? c.reserva.rateLimited : c.partners.error);

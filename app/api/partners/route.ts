@@ -13,6 +13,7 @@ import {
   rateLimitedResponse,
 } from "@/lib/rate-limit";
 import { getSupabase } from "@/lib/supabase";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 
@@ -47,6 +48,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   if (!originAllowed(req)) return originRejectedResponse();
 
   const limited = rateLimit(`partners:${clientIp(req)}`, 5, 10 * 60 * 1000);

@@ -16,6 +16,8 @@ import { POST as connectPost } from "../app/api/partners/connect/route.ts";
 import { POST as planPost } from "../app/api/plan/route.ts";
 import { GET as premiumGet, POST as premiumPost } from "../app/api/premium/route.ts";
 import { GET as profileGet, PUT as profilePut } from "../app/api/profile/route.ts";
+import { GET as logoutGet, POST as logoutPost } from "../app/api/auth/logout/route.ts";
+import { GET as meGet } from "../app/api/auth/me/route.ts";
 import { POST as signupPost } from "../app/api/auth/signup/route.ts";
 import { POST as verifyPost } from "../app/api/auth/verify-email/route.ts";
 import { at } from "../lib/app-copy.ts";
@@ -24,8 +26,12 @@ import {
   createEmailVerifyToken,
   grantVerifiedEmail,
   readEmailVerifyToken,
+  requestOrigin,
   verificationLinkExposed,
+  verificationUrl,
 } from "../lib/email-verification.ts";
+import { partnerDelivery } from "../lib/partner-delivery.ts";
+import { signupPathFromVerify } from "../lib/service-redirect.ts";
 import {
   createSessionToken,
   readSession,
@@ -367,5 +373,275 @@ describe("verified account gate", () => {
     assert.equal(second.status, 429);
     assert.equal(secondBody.delivered, false);
     assert.ok((secondBody.retryAfter || 0) >= 1);
+  });
+
+  it("builds verification links from the current deployment, never the baked-in production domain", () => {
+    const previewHeaders = {
+      "x-forwarded-host": "mapucoin-git-preview.vercel.app",
+      "x-forwarded-proto": "https",
+      host: "mapucoin.com",
+    };
+    const previewReq = new Request("https://mapucoin.com/api/auth/signup", {
+      headers: previewHeaders,
+    });
+    const env = (extra: Record<string, string | undefined>) =>
+      ({ ...process.env, ...extra }) as NodeJS.ProcessEnv;
+    assert.equal(
+      requestOrigin(
+        previewReq,
+        env({
+          NEXT_PUBLIC_APP_URL: "https://mapucoin.com",
+          VERCEL_ENV: "preview",
+          VERCEL_URL: "mapucoin-abc123.vercel.app",
+        }),
+      ),
+      "https://mapucoin-git-preview.vercel.app",
+    );
+    assert.equal(
+      requestOrigin(
+        new Request("https://mapucoin.com/api/auth/signup", {
+          headers: { "x-forwarded-host": "mapucoin.com", "x-forwarded-proto": "https" },
+        }),
+        env({
+          NEXT_PUBLIC_APP_URL: "https://mapucoin.com",
+          VERCEL_ENV: "preview",
+          VERCEL_URL: "mapucoin-abc123.vercel.app",
+        }),
+      ),
+      "https://mapucoin-abc123.vercel.app",
+    );
+    assert.equal(
+      requestOrigin(
+        new Request("https://mapucoin.com/api/auth/signup"),
+        env({
+          NEXT_PUBLIC_APP_URL: "https://mapucoin.com",
+          VERCEL_URL: "mapucoin-abc123.vercel.app",
+        }),
+      ),
+      "https://mapucoin-abc123.vercel.app",
+    );
+    assert.equal(
+      requestOrigin(
+        new Request("https://mapucoin.com/api/auth/signup"),
+        env({ NEXT_PUBLIC_APP_URL: "https://mapucoin.com", VERCEL_URL: "" }),
+      ),
+      "http://127.0.0.1:3000",
+    );
+    assert.equal(
+      requestOrigin(
+        new Request("https://mapucoin.com/api/auth/signup", {
+          headers: { host: "mapucoin.com", "x-forwarded-proto": "https" },
+        }),
+        env({ VERCEL_ENV: "production", NEXT_PUBLIC_APP_URL: "https://example.test" }),
+      ),
+      "https://mapucoin.com",
+    );
+
+    const previous = process.env.NEXT_PUBLIC_APP_URL;
+    process.env.NEXT_PUBLIC_APP_URL = "https://mapucoin.com";
+    try {
+      const link = verificationUrl(previewReq, "tok", "/reserva?capsula=domo");
+      assert.match(
+        link,
+        /^https:\/\/mapucoin-git-preview\.vercel\.app\/api\/auth\/verify-email\?/,
+      );
+      assert.equal(link.includes("https://mapucoin.com"), false);
+      const parsed = new URL(link);
+      assert.equal(parsed.searchParams.get("next"), "/reserva?capsula=domo");
+    } finally {
+      if (previous === undefined) delete process.env.NEXT_PUBLIC_APP_URL;
+      else process.env.NEXT_PUBLIC_APP_URL = previous;
+    }
+  });
+
+  it("returns a preview verify link from signup when the request host is the deployment", async () => {
+    const previous = process.env.NEXT_PUBLIC_APP_URL;
+    process.env.NEXT_PUBLIC_APP_URL = "https://mapucoin.com";
+    try {
+      const res = await signupPost(
+        new Request("https://mapucoin.com/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-forwarded-host": "mapucoin-git-preview.vercel.app",
+            "x-forwarded-proto": "https",
+          },
+          body: JSON.stringify({
+            name: "Ana Preview",
+            email: "preview-link@mapucoin.test",
+            password: "supersecret",
+          }),
+        }),
+      );
+      const data = (await res.json()) as { devUrl?: string };
+      assert.equal(res.status, 200);
+      assert.match(
+        data.devUrl || "",
+        /^https:\/\/mapucoin-git-preview\.vercel\.app\/api\/auth\/verify-email\?/,
+      );
+      assert.equal((data.devUrl || "").includes("mapucoin.com"), false);
+    } finally {
+      if (previous === undefined) delete process.env.NEXT_PUBLIC_APP_URL;
+      else process.env.NEXT_PUBLIC_APP_URL = previous;
+    }
+  });
+
+  it("preserves the original next when /verificar has no session", () => {
+    const reserva = "/reserva?capsula=domo";
+    const search = `?next=${encodeURIComponent(reserva)}`;
+    assert.equal(
+      pageGateTarget("/verificar", search, null),
+      `/signup?next=${encodeURIComponent(reserva)}`,
+    );
+    assert.equal(
+      signupPathFromVerify(search),
+      `/signup?next=${encodeURIComponent(reserva)}`,
+    );
+    const absolute = `?next=${encodeURIComponent(`https://mapucoin-git-x.vercel.app${reserva}`)}`;
+    assert.equal(
+      pageGateTarget("/verificar", absolute, null),
+      `/signup?next=${encodeURIComponent(reserva)}`,
+    );
+    assert.equal(pageGateTarget("/verificar", "", null), "/signup?next=%2Fapp");
+  });
+
+  it("clears session and verification cookies on logout and drops the session", async () => {
+    const cookie = [
+      await cookieFor(unverified),
+      "mapucoin_verified=signed",
+      "mapucoin_profiles=signed",
+      "mapucoin_oauth=signed",
+      "sb-preview-auth-token=supabase-session",
+    ].join("; ");
+    const before = await meGet(
+      new Request("http://localhost/api/auth/me", { headers: { cookie } }),
+    );
+    assert.equal(((await before.json()) as { user?: { email?: string } }).user?.email, unverified.email);
+
+    const res = await logoutPost(
+      new Request("http://localhost/api/auth/logout", {
+        method: "POST",
+        headers: { cookie, host: "localhost:3000" },
+      }),
+    );
+    const cleared = res.headers.getSetCookie();
+    for (const name of [
+      "mapucoin_session",
+      "mapucoin_verified",
+      "mapucoin_profiles",
+      "mapucoin_oauth",
+      "sb-preview-auth-token",
+    ]) {
+      assert.ok(
+        cleared.some((line) => line.startsWith(`${name}=`) && /Max-Age=0/i.test(line)),
+        name,
+      );
+    }
+    const jar = new Map<string, string>();
+    for (const part of cookie.split(";")) {
+      const [name, ...rest] = part.trim().split("=");
+      jar.set(name, rest.join("="));
+    }
+    for (const line of cleared) {
+      if (!/Max-Age=0/i.test(line)) continue;
+      const name = line.split("=")[0];
+      jar.delete(name);
+    }
+    const after = await meGet(
+      new Request("http://localhost/api/auth/me", {
+        headers: { cookie: [...jar.entries()].map(([k, v]) => `${k}=${v}`).join("; ") },
+      }),
+    );
+    assert.equal(((await after.json()) as { user: unknown }).user, null);
+
+    const next = `/login?next=${encodeURIComponent("/reserva?capsula=domo")}`;
+    const leave = await logoutGet(
+      new Request(`https://mapucoin.com/api/auth/logout?next=${encodeURIComponent(next)}`, {
+        headers: {
+          cookie,
+          "x-forwarded-host": "mapucoin-git-preview.vercel.app",
+          "x-forwarded-proto": "https",
+        },
+      }),
+    );
+    assert.equal(leave.status, 303);
+    assert.equal(
+      leave.headers.get("location"),
+      `https://mapucoin-git-preview.vercel.app${next}`,
+    );
+  });
+
+  it("lets an unverified visitor leave /verificar and keeps login errors visible", () => {
+    const screen = readFileSync("components/auth/VerifyEmailScreen.tsx", "utf8");
+    assert.match(screen, /\/api\/auth\/logout\?next=/);
+    assert.match(screen, /account\.logout/);
+    assert.equal(at("es").account.logout, "Salir");
+    assert.doesNotMatch(screen, /href=\{`\/login\?next=/);
+    const auth = readFileSync("components/AuthForm.tsx", "utf8");
+    assert.match(auth, /setHydrated\(true\)/);
+    assert.match(auth, /disabled=\{!hydrated/);
+    assert.match(auth, /role="alert"/);
+    assert.match(auth, /a\.loginError/);
+    assert.match(auth, /a\.authWait/);
+  });
+
+  it("prefills booking and partner identity and does not default the partner city", () => {
+    assert.equal(t("es").partners.cityPlaceholder, "Elige tu ciudad");
+    const partners = readFileSync("components/PartnersForm.tsx", "utf8");
+    const reserva = readFileSync("app/reserva/page.tsx", "utf8");
+    assert.match(partners, /useSessionIdentity/);
+    assert.match(reserva, /useSessionIdentity/);
+    assert.match(partners, /cityPlaceholder/);
+    assert.match(partners, /value=""/);
+    assert.equal(partners.includes('value="Putre"'), false);
+    assert.equal(partners.includes("defaultValue=\"Putre\""), false);
+  });
+
+  it("does not store or notify partner applications outside production", async () => {
+    const deliveryEnv = (vercel: string | undefined) =>
+      ({ ...process.env, VERCEL_ENV: vercel }) as NodeJS.ProcessEnv;
+    assert.equal(partnerDelivery(deliveryEnv("preview")).store, false);
+    assert.equal(partnerDelivery(deliveryEnv("preview")).notify, false);
+    assert.equal(partnerDelivery(deliveryEnv("production")).store, true);
+    assert.equal(partnerDelivery(deliveryEnv("production")).notify, false);
+    assert.equal(partnerDelivery(deliveryEnv(undefined)).preview, true);
+    const source = readFileSync("app/api/partners/route.ts", "utf8");
+    assert.equal(/slack|resend|webhook/i.test(source), false);
+
+    const previous = process.env.VERCEL_ENV;
+    process.env.VERCEL_ENV = "preview";
+    try {
+      const res = await partnersPost(
+        new Request("http://localhost/api/partners", {
+          method: "POST",
+          headers: {
+            cookie: await cookieFor(verified),
+            "content-type": "application/json",
+            host: "localhost:3000",
+          },
+          body: JSON.stringify({
+            full_name: "Ana Ruiz",
+            email: "ana@mapucoin.test",
+            role: "capsula",
+            business: "Domo Sur",
+            city: "Pucón",
+          }),
+        }),
+      );
+      const body = (await res.json()) as {
+        ok?: boolean;
+        stored?: boolean;
+        preview?: boolean;
+        notified?: boolean;
+      };
+      assert.equal(res.status, 200);
+      assert.equal(body.ok, true);
+      assert.equal(body.stored, false);
+      assert.equal(body.preview, true);
+      assert.equal(body.notified, false);
+    } finally {
+      if (previous === undefined) delete process.env.VERCEL_ENV;
+      else process.env.VERCEL_ENV = previous;
+    }
   });
 });

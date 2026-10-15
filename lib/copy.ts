@@ -170,6 +170,9 @@ const es = {
     role: "Tipo de partner",
     business: "Nombre del negocio",
     city: "Ciudad / territorio",
+    cityPlaceholder: "Elige tu ciudad",
+    previewOk:
+      "Vista previa: no avisamos a nadie. No se guarda la postulación ni se envía correo, Slack o webhook.",
     notes: "Cuéntanos tu oferta",
     submit: "Postular",
     sending: "Enviando…",
@@ -526,6 +529,9 @@ const en: typeof es = {
     role: "Partner type",
     business: "Business name",
     city: "City / territory",
+    cityPlaceholder: "Choose your city",
+    previewOk:
+      "Preview: nobody is notified. The application is not stored and no email, Slack, or webhook is sent.",
     notes: "Tell us what you offer",
     submit: "Apply",
     sending: "Sending…",
@@ -882,6 +888,9 @@ const pt: typeof es = {
     role: "Tipo de partner",
     business: "Nome do negócio",
     city: "Cidade / território",
+    cityPlaceholder: "Escolha sua cidade",
+    previewOk:
+      "Prévia: ninguém é avisado. A candidatura não é guardada e não enviamos e-mail, Slack nem webhook.",
     notes: "Conte sua oferta",
     submit: "Candidatar",
     sending: "Enviando…",
@@ -1239,6 +1248,9 @@ const fr: typeof es = {
     role: "Type de partenaire",
     business: "Nom de l'activité",
     city: "Ville / territoire",
+    cityPlaceholder: "Choisissez votre ville",
+    previewOk:
+      "Aperçu : personne n’est prévenu. La candidature n’est pas enregistrée et aucun e-mail, Slack ou webhook n’est envoyé.",
     notes: "Parlez-nous de votre offre",
     submit: "Postuler",
     sending: "Envoi…",
@@ -1596,6 +1608,9 @@ const it: typeof es = {
     role: "Tipo di partner",
     business: "Nome dell'attività",
     city: "Città / territorio",
+    cityPlaceholder: "Scegli la tua città",
+    previewOk:
+      "Anteprima: non avvisiamo nessuno. La candidatura non viene salvata e non inviamo email, Slack o webhook.",
     notes: "Raccontaci la tua offerta",
     submit: "Candidati",
     sending: "Invio…",
@@ -1955,6 +1970,9 @@ const de: typeof es = {
     role: "Partnerart",
     business: "Name des Betriebs",
     city: "Stadt / Gebiet",
+    cityPlaceholder: "Wähle deine Stadt",
+    previewOk:
+      "Vorschau: niemand wird benachrichtigt. Die Bewerbung wird nicht gespeichert und es gibt keine E-Mail, keinen Slack und keinen Webhook.",
     notes: "Erzähl uns dein Angebot",
     submit: "Bewerben",
     sending: "Senden…",

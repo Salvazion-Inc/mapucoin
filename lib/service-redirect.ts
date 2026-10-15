@@ -1,10 +1,27 @@
 export function safeNextPath(value: string | null | undefined, fallback = "/app") {
   if (!value) return fallback;
-  if (!value.startsWith("/") || value.startsWith("//") || value.includes("\\")) {
+  let path = value.trim();
+  if (path.includes("://")) {
+    try {
+      const url = new URL(path);
+      path = `${url.pathname}${url.search}`;
+    } catch {
+      return fallback;
+    }
+  }
+  if (!path.startsWith("/") || path.startsWith("//") || path.includes("\\")) {
     return fallback;
   }
-  if (value.includes("://")) return fallback;
-  return value;
+  if (path.includes("://")) return fallback;
+  return path;
+}
+
+/** Logged-out /verificar keeps the original next instead of dropping it. */
+export function signupPathFromVerify(search: string) {
+  const raw = search.startsWith("?") ? search.slice(1) : search;
+  const requested = safeNextPath(new URLSearchParams(raw).get("next"), "");
+  const next = requested && !requested.startsWith("/verificar") ? requested : "/app";
+  return `/signup?next=${encodeURIComponent(next)}`;
 }
 
 export function herePath() {

@@ -4,6 +4,7 @@ import {
   deliverVerificationEmail,
   grantVerifiedEmail,
   readEmailVerifyToken,
+  requestOrigin,
   verificationLinkExposed,
   verificationUrl,
 } from "@/lib/email-verification";
@@ -22,9 +23,10 @@ function withCookies(res: NextResponse, cookies: string[]) {
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
+  const origin = requestOrigin(req);
   const next = safeNextPath(url.searchParams.get("next"));
   const token = await readEmailVerifyToken(url.searchParams.get("token"));
-  const fail = new URL("/verificar", url.origin);
+  const fail = new URL("/verificar", origin);
   fail.searchParams.set("error", "token");
   fail.searchParams.set("next", next);
   if (!token) return NextResponse.redirect(fail);
@@ -39,8 +41,8 @@ export async function GET(req: Request) {
   }
 
   const dest = granted.user
-    ? new URL(next, url.origin)
-    : new URL(`/login?next=${encodeURIComponent(next)}`, url.origin);
+    ? new URL(next, origin)
+    : new URL(`/login?next=${encodeURIComponent(next)}`, origin);
   return withCookies(NextResponse.redirect(dest), granted.cookies);
 }
 

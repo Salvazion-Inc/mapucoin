@@ -88,21 +88,50 @@ export async function readEmailVerifyToken(token: string | null | undefined) {
   }
 }
 
-export function requestOrigin(req: Request) {
-  const host = (req.headers.get("x-forwarded-host") || req.headers.get("host") || "")
-    .split(",")[0]
-    .trim();
-  if (host.includes("localhost") || host.startsWith("127.")) {
-    const proto = req.headers.get("x-forwarded-proto") || "http";
-    return `${proto}://${host}`;
+function cleanHost(value: string) {
+  const host = value.split(",")[0]?.trim() || "";
+  if (!host || /[\s/@\\]/.test(host)) return "";
+  return host;
+}
+
+function isLocalHost(host: string) {
+  return host.includes("localhost") || host.startsWith("127.");
+}
+
+function isProductionHost(host: string) {
+  return (
+    host === "mapucoin.com" ||
+    host === "www.mapucoin.com" ||
+    host.endsWith(".mapucoin.com")
+  );
+}
+
+/**
+ * Origin of the deployment that is handling this request.
+ * Preview links must stay on that deployment: the request host, otherwise
+ * VERCEL_URL. NEXT_PUBLIC_APP_URL is not consulted, and there is no
+ * baked-in production domain.
+ */
+export function requestOrigin(req: Request, env: NodeJS.ProcessEnv = process.env) {
+  const host = cleanHost(
+    req.headers.get("x-forwarded-host") || req.headers.get("host") || "",
+  );
+  const vercelHost = cleanHost(
+    (env["VERCEL_URL"] || "").replace(/^https?:\/\//, "").replace(/\/$/, ""),
+  );
+  const local = Boolean(host) && isLocalHost(host);
+  const proto =
+    req.headers.get("x-forwarded-proto") || (local ? "http" : "https");
+
+  if (local && host) return `${proto}://${host}`;
+
+  const offProduction = env["VERCEL_ENV"] !== "production";
+  if (offProduction && host && isProductionHost(host) && vercelHost) {
+    return `https://${vercelHost}`;
   }
-  const env = (process.env.NEXT_PUBLIC_APP_URL || "").replace(/\/$/, "");
-  if (env) return env;
-  if (host) {
-    const proto = req.headers.get("x-forwarded-proto") || "https";
-    return `${proto}://${host}`;
-  }
-  return "https://mapucoin.com";
+  if (host) return `${proto}://${host}`;
+  if (vercelHost) return `https://${vercelHost}`;
+  return "http://127.0.0.1:3000";
 }
 
 export function verificationLinkExposed(env: NodeJS.ProcessEnv = process.env) {

@@ -8,7 +8,8 @@ import {
   redirectForStatus,
   redirectUnlessVerified,
 } from "@/lib/service-redirect";
-import { FormEvent, useState } from "react";
+import { useSessionIdentity } from "@/lib/use-session-identity";
+import { FormEvent, useEffect, useState } from "react";
 
 const roleIds = [
   "capsula",
@@ -30,6 +31,17 @@ export default function PartnersForm() {
     "idle",
   );
   const [message, setMessage] = useState("");
+  const [preview, setPreview] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const identity = useSessionIdentity();
+
+  useEffect(() => {
+    if (!identity) return;
+    setFullName((current) => current || identity.name);
+    setEmail((current) => current || identity.email);
+  }, [identity]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -75,17 +87,27 @@ export default function PartnersForm() {
       );
       return;
     }
+    setPreview(Boolean(body.preview));
     setStatus("ok");
-    setMessage(body.stored ? c.partners.ok : c.partners.okNoDb);
+    setMessage(
+      body.preview
+        ? c.partners.previewOk
+        : body.stored
+          ? c.partners.ok
+          : c.partners.okNoDb,
+    );
     form.reset();
+    setCity("");
   }
 
   if (status === "ok") {
     return (
       <div className="reserva-glass space-y-4 rounded-[1.75rem] p-6 md:p-8">
         <p className="kicker">{c.partners.kicker}</p>
-        <h3 className="font-display text-3xl text-sand">{c.partners.ok}</h3>
-        <p className="text-sand/80">{c.partners.okLead}</p>
+        <h3 className="font-display text-3xl text-sand">
+          {preview ? c.partners.previewOk : c.partners.ok}
+        </h3>
+        {preview ? null : <p className="text-sand/80">{c.partners.okLead}</p>}
         <p className="text-sm text-sand/55">{c.partners.privacy}</p>
         <button
           type="button"
@@ -93,6 +115,10 @@ export default function PartnersForm() {
           onClick={() => {
             setStatus("idle");
             setMessage("");
+            setPreview(false);
+            setFullName("");
+            setEmail("");
+            setCity("");
           }}
         >
           {c.partners.another}
@@ -114,6 +140,8 @@ export default function PartnersForm() {
           required
           minLength={2}
           maxLength={120}
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
           className="mt-1 w-full rounded-xl border border-earth/15 bg-black/50 px-3 py-2.5"
         />
       </label>
@@ -124,6 +152,8 @@ export default function PartnersForm() {
           type="email"
           autoComplete="email"
           required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="mt-1 w-full rounded-xl border border-earth/15 bg-black/50 px-3 py-2.5"
         />
       </label>
@@ -163,8 +193,14 @@ export default function PartnersForm() {
         {c.partners.city}
         <select
           name="city"
+          required
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
           className="mt-1 w-full rounded-xl border border-earth/15 bg-black/50 px-3 py-2.5"
         >
+          <option value="" disabled>
+            {c.partners.cityPlaceholder}
+          </option>
           {destinations.map((d) => (
             <option key={d.slug} value={d.city}>
               {d.city}

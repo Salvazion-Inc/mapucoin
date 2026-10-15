@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BrandMark from "@/components/BrandMark";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { BiometricLogin } from "@/components/auth/BiometricLogin";
@@ -26,6 +26,7 @@ export function AuthForm({
   const next = search.get("next") || "/app";
   const [status, setStatus] = useState<"idle" | "sending" | "err">("idle");
   const [message, setMessage] = useState("");
+  const [hydrated, setHydrated] = useState(false);
   const [passwordFallback, setPasswordFallback] = useState(false);
   const { ready: biometricReady, enabled: biometricEnabled } = useBiometricGate();
   const thumbGate =
@@ -44,11 +45,20 @@ export function AuthForm({
           ? a.googleError
           : "";
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   const field =
     "mt-2 w-full rounded-xl border border-gold/25 bg-black px-4 py-3 text-sand outline-none focus:border-gold";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!hydrated) {
+      setStatus("err");
+      setMessage(a.authWait);
+      return;
+    }
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") || "");
     const password = String(form.get("password") || "");
@@ -82,8 +92,18 @@ export function AuthForm({
           body: JSON.stringify({ email, password, full_name, next }),
         },
       );
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error("auth");
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        devUrl?: string;
+        delivered?: boolean;
+        verificationRequired?: boolean;
+        user?: { emailVerified?: boolean };
+      };
+      if (!res.ok) {
+        setStatus("err");
+        setMessage(mode === "login" ? a.loginError : a.signupError);
+        return;
+      }
       if (typeof data.devUrl === "string" && data.devUrl) {
         sessionStorage.setItem("mapucoin_dev_verify_url", data.devUrl);
       }
@@ -115,9 +135,15 @@ export function AuthForm({
         <LanguageSwitcher compact />
       </div>
       <section className="mx-auto mt-12 max-w-md">
-        {waitingGate ? (
-          <p className="text-sm text-sand/50">{a.biometricProcessing}</p>
-        ) : thumbGate ? (
+        {message || googleMessage ? (
+          <div
+            role="alert"
+            className="mb-4 rounded-lg border border-clay/40 bg-clay/10 px-3 py-2 text-sm text-sand"
+          >
+            {message || googleMessage}
+          </div>
+        ) : null}
+        {thumbGate ? (
           <BiometricLogin
             locale={locale}
             next={next}
@@ -140,14 +166,6 @@ export function AuthForm({
           onSubmit={onSubmit}
           className="mt-8 rounded-2xl border border-gold/20 bg-black/70 p-6"
         >
-          {message || googleMessage ? (
-            <div
-              role="alert"
-              className="mb-4 rounded-lg border border-clay/40 bg-clay/10 px-3 py-2 text-sm text-sand"
-            >
-              {message || googleMessage}
-            </div>
-          ) : null}
           <a
             href={`/api/auth/google?next=${encodeURIComponent(next)}&from=${mode}`}
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-gold/25 bg-night py-3 text-sm font-semibold hover:border-gold"
@@ -192,7 +210,7 @@ export function AuthForm({
           ) : null}
           <button
             type="submit"
-            disabled={status === "sending"}
+            disabled={!hydrated || waitingGate || status === "sending"}
             className="btn-gold mt-6 w-full !py-3 disabled:opacity-60"
           >
             {status === "sending"

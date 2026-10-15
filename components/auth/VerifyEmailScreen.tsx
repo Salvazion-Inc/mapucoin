@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import BrandMark from "@/components/BrandMark";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { at } from "@/lib/app-copy";
+import { disableBiometric } from "@/lib/auth/biometric";
 import { useLocale } from "@/lib/locale-context";
-import { safeNextPath } from "@/lib/service-redirect";
+import { safeNextPath, signupPathFromVerify } from "@/lib/service-redirect";
 import { verifyMailFeedback } from "@/lib/verify-feedback";
 
 const DEV_KEY = "mapucoin_dev_verify_url";
@@ -19,6 +20,8 @@ export function VerifyEmailScreen() {
   const router = useRouter();
   const search = useSearchParams();
   const next = safeNextPath(search.get("next"));
+  const entrarHref = `/api/auth/logout?next=${encodeURIComponent(`/login?next=${encodeURIComponent(next)}`)}`;
+  const salirHref = "/api/auth/logout?next=/";
   const tokenError = search.get("error");
   const [email, setEmail] = useState("");
   const [ready, setReady] = useState(false);
@@ -37,17 +40,21 @@ export function VerifyEmailScreen() {
 
   useEffect(() => {
     let cancelled = false;
+    const search = window.location.search;
+    const preserved = safeNextPath(
+      new URLSearchParams(search).get("next"),
+    );
     fetch("/api/auth/me")
       .then((res) => res.json())
       .then((data: { user?: { email?: string; emailVerified?: boolean } | null }) => {
         if (cancelled) return;
         const user = data.user;
         if (!user?.email) {
-          router.replace(`/signup?next=${encodeURIComponent(next)}`);
+          router.replace(signupPathFromVerify(search));
           return;
         }
         if (user.emailVerified) {
-          router.replace(next);
+          router.replace(preserved);
           return;
         }
         setEmail(user.email);
@@ -62,7 +69,7 @@ export function VerifyEmailScreen() {
     return () => {
       cancelled = true;
     };
-  }, [next, router]);
+  }, [router]);
 
   useEffect(() => {
     if (waitSeconds <= 0) return;
@@ -109,6 +116,25 @@ export function VerifyEmailScreen() {
   }
 
   const canResend = ready && Boolean(email) && !pending && waitSeconds <= 0;
+
+  function leave(event: React.MouseEvent<HTMLAnchorElement>, kind: "entrar" | "salir") {
+    event.preventDefault();
+    try {
+      sessionStorage.removeItem(DEV_KEY);
+      sessionStorage.removeItem(DELIVERED_KEY);
+      disableBiometric();
+    } catch {
+      /* the logout URL still clears the cookies */
+    }
+    const preserved = safeNextPath(
+      new URLSearchParams(window.location.search).get("next"),
+    );
+    const href =
+      kind === "salir"
+        ? "/api/auth/logout?next=/"
+        : `/api/auth/logout?next=${encodeURIComponent(`/login?next=${encodeURIComponent(preserved)}`)}`;
+    window.location.assign(href);
+  }
 
   return (
     <div className="min-h-dvh bg-night px-5 pb-16 pt-10 text-sand">
@@ -166,10 +192,13 @@ export function VerifyEmailScreen() {
             {pending ? a.sending : a.verifyResend}
           </button>
         </div>
-        <p className="mt-6 text-sm text-sand/70">
-          <Link href={`/login?next=${encodeURIComponent(next)}`} className="text-gold">
+        <p className="mt-6 flex items-center justify-between gap-4 text-sm text-sand/70">
+          <a href={entrarHref} className="text-gold" onClick={(event) => leave(event, "entrar")}>
             {a.haveAccount}
-          </Link>
+          </a>
+          <a href={salirHref} className="text-gold" onClick={(event) => leave(event, "salir")}>
+            {a.account.logout}
+          </a>
         </p>
       </section>
     </div>

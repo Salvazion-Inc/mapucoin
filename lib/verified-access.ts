@@ -34,11 +34,20 @@ export const SERVICE_API_ROUTES = [
 
 export function safeNextPath(value: string | null | undefined, fallback = "/app") {
   if (!value) return fallback;
-  if (!value.startsWith("/") || value.startsWith("//") || value.includes("\\")) {
+  let path = value.trim();
+  if (path.includes("://")) {
+    try {
+      const url = new URL(path);
+      path = `${url.pathname}${url.search}`;
+    } catch {
+      return fallback;
+    }
+  }
+  if (!path.startsWith("/") || path.startsWith("//") || path.includes("\\")) {
     return fallback;
   }
-  if (value.includes("://")) return fallback;
-  return value;
+  if (path.includes("://")) return fallback;
+  return path;
 }
 
 export function isServicePage(pathname: string) {

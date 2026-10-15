@@ -10,6 +10,8 @@ export type SessionUser = {
   email: string;
   name: string;
   emailVerified: boolean;
+  /** Pre-gate account that still has to confirm once. Not a stored false flag. */
+  legacyVerification?: boolean;
 };
 
 export type AccountRecord = {
@@ -25,6 +27,7 @@ type SessionPayload = {
   email: string;
   name?: string;
   emailVerified?: boolean;
+  legacyVerification?: boolean;
   exp: number;
 };
 
@@ -110,6 +113,7 @@ export async function readSession(
       email: data.email,
       name: data.name || data.email,
       emailVerified: data.emailVerified === true,
+      legacyVerification: data.legacyVerification === true,
     };
   } catch {
     return null;

@@ -76,7 +76,7 @@ export function pageGateTarget(
     const requested = nextFromSearch(search);
     const next =
       requested && !requested.startsWith("/verificar") ? requested : "/app";
-    if (!user) return `/signup?next=${encodeURIComponent(next)}`;
+    if (!user) return `/login?next=${encodeURIComponent(next)}`;
     if (user.emailVerified) return safeNextPath(next);
     return null;
   }

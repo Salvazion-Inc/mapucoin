@@ -8,7 +8,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { at } from "@/lib/app-copy";
 import { disableBiometric } from "@/lib/auth/biometric";
 import { useLocale } from "@/lib/locale-context";
-import { safeNextPath, signupPathFromVerify } from "@/lib/service-redirect";
+import { loginPathFromVerify, safeNextPath } from "@/lib/service-redirect";
 import { verifyMailFeedback } from "@/lib/verify-feedback";
 
 const DEV_KEY = "mapucoin_dev_verify_url";
@@ -20,8 +20,6 @@ export function VerifyEmailScreen() {
   const router = useRouter();
   const search = useSearchParams();
   const next = safeNextPath(search.get("next"));
-  const entrarHref = `/api/auth/logout?next=${encodeURIComponent(`/login?next=${encodeURIComponent(next)}`)}`;
-  const salirHref = "/api/auth/logout?next=/";
   const tokenError = search.get("error");
   const [email, setEmail] = useState("");
   const [ready, setReady] = useState(false);
@@ -30,6 +28,12 @@ export function VerifyEmailScreen() {
   const [failed, setFailed] = useState(false);
   const [waitSeconds, setWaitSeconds] = useState(0);
   const [devUrl, setDevUrl] = useState("");
+  const [hydrated, setHydrated] = useState(false);
+  const [legacy, setLegacy] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     const stored = sessionStorage.getItem(DEV_KEY) || "";
@@ -46,17 +50,18 @@ export function VerifyEmailScreen() {
     );
     fetch("/api/auth/me")
       .then((res) => res.json())
-      .then((data: { user?: { email?: string; emailVerified?: boolean } | null }) => {
+      .then((data: { user?: { email?: string; emailVerified?: boolean; legacyVerification?: boolean } | null }) => {
         if (cancelled) return;
         const user = data.user;
         if (!user?.email) {
-          router.replace(signupPathFromVerify(search));
+          router.replace(loginPathFromVerify(search));
           return;
         }
         if (user.emailVerified) {
           router.replace(preserved);
           return;
         }
+        setLegacy(user.legacyVerification === true);
         setEmail(user.email);
         setReady(true);
       })
@@ -70,6 +75,26 @@ export function VerifyEmailScreen() {
       cancelled = true;
     };
   }, [router]);
+
+  useEffect(() => {
+    if (!ready || !email || devUrl) return;
+    let cancelled = false;
+    fetch("/api/auth/verify-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ next, linkOnly: true }),
+    })
+      .then((res) => res.json())
+      .then((data: { devUrl?: string }) => {
+        if (cancelled || typeof data.devUrl !== "string" || !data.devUrl) return;
+        sessionStorage.setItem(DEV_KEY, data.devUrl);
+        setDevUrl(data.devUrl);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [ready, email, devUrl, next]);
 
   useEffect(() => {
     if (waitSeconds <= 0) return;
@@ -117,8 +142,8 @@ export function VerifyEmailScreen() {
 
   const canResend = ready && Boolean(email) && !pending && waitSeconds <= 0;
 
-  function leave(event: React.MouseEvent<HTMLAnchorElement>, kind: "entrar" | "salir") {
-    event.preventDefault();
+  function leave(kind: "entrar" | "salir") {
+    if (!hydrated) return;
     try {
       sessionStorage.removeItem(DEV_KEY);
       sessionStorage.removeItem(DELIVERED_KEY);
@@ -160,6 +185,11 @@ export function VerifyEmailScreen() {
               {a.verifyInvalid}
             </p>
           ) : null}
+          {legacy ? (
+            <p className="mt-4 text-sm leading-relaxed text-sand" role="status">
+              {a.verifyLegacy}
+            </p>
+          ) : null}
           {failed ? (
             <p className="mt-4 text-sm leading-relaxed text-clay" role="alert">
               {a.verifyNotSent}
@@ -193,12 +223,22 @@ export function VerifyEmailScreen() {
           </button>
         </div>
         <p className="mt-6 flex items-center justify-between gap-4 text-sm text-sand/70">
-          <a href={entrarHref} className="text-gold" onClick={(event) => leave(event, "entrar")}>
+          <button
+            type="button"
+            disabled={!hydrated}
+            onClick={() => leave("entrar")}
+            className="text-gold disabled:opacity-60"
+          >
             {a.haveAccount}
-          </a>
-          <a href={salirHref} className="text-gold" onClick={(event) => leave(event, "salir")}>
+          </button>
+          <button
+            type="button"
+            disabled={!hydrated}
+            onClick={() => leave("salir")}
+            className="text-gold disabled:opacity-60"
+          >
             {a.account.logout}
-          </a>
+          </button>
         </p>
       </section>
     </div>

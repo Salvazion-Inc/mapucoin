@@ -30,7 +30,11 @@ export async function ensureSupabaseUser(email: string, name: string) {
           await admin.auth.admin.createUser({
             email,
             email_confirm: true,
-            user_metadata: { full_name: name, provider: "google" },
+            user_metadata: {
+              full_name: name,
+              provider: "google",
+              mapucoin_email_verified: true,
+            },
           })
         ).data.user?.id;
     if (!id) return null;

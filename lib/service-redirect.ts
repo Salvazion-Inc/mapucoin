@@ -16,12 +16,12 @@ export function safeNextPath(value: string | null | undefined, fallback = "/app"
   return path;
 }
 
-/** Logged-out /verificar keeps the original next instead of dropping it. */
-export function signupPathFromVerify(search: string) {
+/** Logged-out /verificar keeps the original next and opens login, which links to signup. */
+export function loginPathFromVerify(search: string) {
   const raw = search.startsWith("?") ? search.slice(1) : search;
   const requested = safeNextPath(new URLSearchParams(raw).get("next"), "");
   const next = requested && !requested.startsWith("/verificar") ? requested : "/app";
-  return `/signup?next=${encodeURIComponent(next)}`;
+  return `/login?next=${encodeURIComponent(next)}`;
 }
 
 export function herePath() {

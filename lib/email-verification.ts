@@ -14,6 +14,7 @@ import {
   verifiedCookie,
   type SessionUser,
 } from "./session";
+import { persistVerifiedAccountByEmail } from "./account-verification";
 import { safeNextPath } from "./verified-access";
 
 const VERIFY_TTL_SEC = 60 * 60 * 24;
@@ -135,9 +136,9 @@ export function requestOrigin(req: Request, env: NodeJS.ProcessEnv = process.env
 }
 
 export function verificationLinkExposed(env: NodeJS.ProcessEnv = process.env) {
-  if (env.MAPUCOIN_DEV_VERIFY === "1") return true;
-  if (env.VERCEL_ENV === "production") return false;
-  return env.NODE_ENV !== "production";
+  // Bracket access so Next does not inline the flag at build time.
+  if (env["MAPUCOIN_DEV_VERIFY"] === "1") return true;
+  return env["VERCEL_ENV"] !== "production";
 }
 
 export function verificationUrl(req: Request, token: string, next: string) {
@@ -202,7 +203,12 @@ export async function grantVerifiedEmail(opts: {
 
   let user: SessionUser | null = null;
   if (session) {
-    user = { ...session, email: session.email, emailVerified: true };
+    user = {
+      ...session,
+      email: session.email,
+      emailVerified: true,
+      legacyVerification: false,
+    };
     cookies.push(sessionCookie(await createSessionToken(user)));
   } else if (account) {
     user = {
@@ -210,9 +216,11 @@ export async function grantVerifiedEmail(opts: {
       email: account.email,
       name: account.name,
       emailVerified: true,
+      legacyVerification: false,
     };
     cookies.push(sessionCookie(await createSessionToken(user)));
   }
 
+  await persistVerifiedAccountByEmail(email);
   return { mismatch: false as const, cookies, user };
 }

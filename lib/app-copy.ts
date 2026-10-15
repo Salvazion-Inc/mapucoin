@@ -102,6 +102,8 @@ const es = {
   verifySent: "Correo enviado. Revisa tu bandeja de entrada y la carpeta de spam.",
   verifyNotSent:
     "No pudimos enviar el correo de verificación. El envío falló y no hay un enlace en tu bandeja. Tu cuenta sí quedó creada. Pulsa «Reenviar correo» para intentarlo otra vez. Si aparece una espera, cuenta los segundos y vuelve a pulsar: no te quedas sin salida.",
+  verifyLegacy:
+    "Tu cuenta es anterior a la verificación por correo. Confírmala una vez para seguir usando Mapucoin. Tu contraseña no cambia.",
   verifyWait: "Espera {n} segundos para reenviar el correo.",
   verifyDev: "Entorno de prueba: abre este enlace para verificar y volver a donde estabas.",
   verifyOpenLink: "Verificar correo",
@@ -236,6 +238,8 @@ const en: typeof es = {
   verifySent: "Email sent. Check your inbox and spam folder.",
   verifyNotSent:
     "We could not send the verification email. Your account exists. Press Resend email to try again. If a wait appears, count the seconds and press it again.",
+  verifyLegacy:
+    "This account was created before email verification. Confirm it once to keep using Mapucoin. Your password stays the same.",
   verifyWait: "Wait {n} seconds to resend the email.",
   verifyDev: "Test environment: open this link to verify and return where you were.",
   verifyOpenLink: "Verify email",
@@ -370,6 +374,8 @@ const pt: typeof es = {
   verifySent: "E-mail enviado. Confira a caixa de entrada e o spam.",
   verifyNotSent:
     "Não foi possível enviar o e-mail de verificação. Sua conta foi criada. Toque em Reenviar e-mail para tentar de novo. Se aparecer uma espera, conte os segundos e toque outra vez.",
+  verifyLegacy:
+    "Esta conta é anterior à verificação de e-mail. Confirme uma vez para continuar usando a Mapucoin. Sua senha não muda.",
   verifyWait: "Espere {n} segundos para reenviar o e-mail.",
   verifyDev: "Ambiente de teste: abra este link para verificar e voltar.",
   verifyOpenLink: "Verificar e-mail",
@@ -504,6 +510,8 @@ const fr: typeof es = {
   verifySent: "E-mail envoyé. Regardez la boîte de réception et les indésirables.",
   verifyNotSent:
     "L’e-mail de vérification n’a pas pu partir. Le compte existe. Appuyez sur Renvoyer l’e-mail. S’il faut attendre, comptez les secondes et réessayez.",
+  verifyLegacy:
+    "Ce compte date d’avant la vérification de l’e-mail. Confirmez-le une fois pour continuer sur Mapucoin. Le mot de passe ne change pas.",
   verifyWait: "Attendez {n} secondes pour renvoyer l’e-mail.",
   verifyDev: "Environnement de test : ouvrez ce lien pour vérifier et revenir.",
   verifyOpenLink: "Vérifier l’e-mail",
@@ -638,6 +646,8 @@ const it: typeof es = {
   verifySent: "Email inviata. Controlla posta in arrivo e spam.",
   verifyNotSent:
     "Non siamo riusciti a inviare l’email di verifica. L’account c’è. Premi Reinvia email per riprovare. Se compare un’attesa, conta i secondi e premi di nuovo.",
+  verifyLegacy:
+    "Questo account è precedente alla verifica email. Confermalo una volta per continuare su Mapucoin. La password non cambia.",
   verifyWait: "Attendi {n} secondi per reinviare l’email.",
   verifyDev: "Ambiente di prova: apri questo link per verificare e tornare indietro.",
   verifyOpenLink: "Verifica email",
@@ -772,6 +782,8 @@ const de: typeof es = {
   verifySent: "E-Mail gesendet. Prüfe Posteingang und Spam.",
   verifyNotSent:
     "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Das Konto existiert. Tippe auf E-Mail erneut senden. Wenn eine Wartezeit erscheint, zähle die Sekunden und tippe noch einmal.",
+  verifyLegacy:
+    "Dieses Konto ist älter als die E-Mail-Bestätigung. Bestätige sie einmal, um Mapucoin weiter zu nutzen. Dein Passwort bleibt gleich.",
   verifyWait: "Warte {n} Sekunden, um die E-Mail erneut zu senden.",
   verifyDev: "Testumgebung: öffne diesen Link, um zu bestätigen und zurückzukehren.",
   verifyOpenLink: "E-Mail bestätigen",

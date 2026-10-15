@@ -17,9 +17,16 @@ import { POST as planPost } from "../app/api/plan/route.ts";
 import { GET as premiumGet, POST as premiumPost } from "../app/api/premium/route.ts";
 import { GET as profileGet, PUT as profilePut } from "../app/api/profile/route.ts";
 import { GET as logoutGet, POST as logoutPost } from "../app/api/auth/logout/route.ts";
+import { POST as loginPost } from "../app/api/auth/login/route.ts";
 import { GET as meGet } from "../app/api/auth/me/route.ts";
 import { POST as signupPost } from "../app/api/auth/signup/route.ts";
 import { POST as verifyPost } from "../app/api/auth/verify-email/route.ts";
+import {
+  accountVerificationState,
+  persistVerifiedAccountByEmail,
+  VERIFICATION_GATE_AT,
+} from "../lib/account-verification.ts";
+import { hashPassword } from "../lib/passwords.ts";
 import { at } from "../lib/app-copy.ts";
 import { t } from "../lib/copy.ts";
 import {
@@ -31,11 +38,13 @@ import {
   verificationUrl,
 } from "../lib/email-verification.ts";
 import { partnerDelivery } from "../lib/partner-delivery.ts";
-import { signupPathFromVerify } from "../lib/service-redirect.ts";
+import { loginPathFromVerify } from "../lib/service-redirect.ts";
 import {
+  ACCOUNTS_COOKIE,
   createSessionToken,
   readSession,
   SESSION_COOKIE,
+  signAccounts,
   signValue,
   type SessionUser,
 } from "../lib/session.ts";
@@ -142,7 +151,7 @@ describe("verified account gate", () => {
     assert.equal(pageGateTarget("/app", "", verified), null);
     assert.match(pageGateTarget("/partners/onboard", "", null) || "", /^\/login\?/);
     assert.match(pageGateTarget("/planificar", "", null) || "", /^\/login\?/);
-    assert.equal(pageGateTarget("/verificar", "", null)?.startsWith("/signup?"), true);
+    assert.equal(pageGateTarget("/verificar", "", null)?.startsWith("/login?"), true);
     assert.equal(pageGateTarget("/verificar", "?next=/reserva", verified), "/reserva");
     assert.equal(pageGateTarget("/verificar", "", unverified), null);
   });
@@ -215,6 +224,14 @@ describe("verified account gate", () => {
       true,
     );
     assert.equal(verificationLinkExposed({ NODE_ENV: "test" }), true);
+    assert.equal(
+      verificationLinkExposed({ NODE_ENV: "production", VERCEL_ENV: "preview" }),
+      true,
+    );
+    assert.match(
+      readFileSync("lib/email-verification.ts", "utf8"),
+      /\["MAPUCOIN_DEV_VERIFY"\]/,
+    );
   });
 
   it("blocks guests and unverified accounts on every service endpoint and allows verified accounts", async () => {
@@ -491,18 +508,18 @@ describe("verified account gate", () => {
     const search = `?next=${encodeURIComponent(reserva)}`;
     assert.equal(
       pageGateTarget("/verificar", search, null),
-      `/signup?next=${encodeURIComponent(reserva)}`,
+      `/login?next=${encodeURIComponent(reserva)}`,
     );
     assert.equal(
-      signupPathFromVerify(search),
-      `/signup?next=${encodeURIComponent(reserva)}`,
+      loginPathFromVerify(search),
+      `/login?next=${encodeURIComponent(reserva)}`,
     );
     const absolute = `?next=${encodeURIComponent(`https://mapucoin-git-x.vercel.app${reserva}`)}`;
     assert.equal(
       pageGateTarget("/verificar", absolute, null),
-      `/signup?next=${encodeURIComponent(reserva)}`,
+      `/login?next=${encodeURIComponent(reserva)}`,
     );
-    assert.equal(pageGateTarget("/verificar", "", null), "/signup?next=%2Fapp");
+    assert.equal(pageGateTarget("/verificar", "", null), "/login?next=%2Fapp");
   });
 
   it("clears session and verification cookies on logout and drops the session", async () => {
@@ -575,8 +592,12 @@ describe("verified account gate", () => {
     const screen = readFileSync("components/auth/VerifyEmailScreen.tsx", "utf8");
     assert.match(screen, /\/api\/auth\/logout\?next=/);
     assert.match(screen, /account\.logout/);
+    assert.match(screen, /disabled=\{!hydrated\}/);
+    assert.match(screen, /loginPathFromVerify/);
+    assert.match(screen, /linkOnly: true/);
     assert.equal(at("es").account.logout, "Salir");
-    assert.doesNotMatch(screen, /href=\{`\/login\?next=/);
+    assert.match(at("es").verifyLegacy, /anterior a la verificación/);
+    assert.doesNotMatch(screen, /signupPathFromVerify/);
     const auth = readFileSync("components/AuthForm.tsx", "utf8");
     assert.match(auth, /setHydrated\(true\)/);
     assert.match(auth, /disabled=\{!hydrated/);
@@ -642,6 +663,174 @@ describe("verified account gate", () => {
     } finally {
       if (previous === undefined) delete process.env.VERCEL_ENV;
       else process.env.VERCEL_ENV = previous;
+    }
+  });
+
+  it("keeps verification on the account after logout clears the verification cookie", async () => {
+    const password = "supersecret";
+    const account = {
+      id: "mpc-e2e",
+      email: "mpc-e2e@mapucoin.test",
+      name: "MPC",
+      hash: hashPassword(password),
+      emailVerified: true as const,
+    };
+    const vault = `${ACCOUNTS_COOKIE}=${await signAccounts([account])}`;
+    async function login(cookie: string) {
+      const res = await loginPost(
+        new Request("http://localhost/api/auth/login", {
+          method: "POST",
+          headers: { "content-type": "application/json", cookie },
+          body: JSON.stringify({ email: account.email, password }),
+        }),
+      );
+      const data = (await res.json()) as {
+        user?: { emailVerified?: boolean; legacyVerification?: boolean };
+      };
+      return { status: res.status, data, cookies: res.headers.getSetCookie() };
+    }
+
+    const first = await login(vault);
+    assert.equal(first.status, 200);
+    assert.equal(first.data.user?.emailVerified, true);
+    assert.equal(first.data.user?.legacyVerification, false);
+
+    const session = first.cookies.find((line) => line.startsWith("mapucoin_session="));
+    const loggedOut = await logoutPost(
+      new Request("http://localhost/api/auth/logout", {
+        method: "POST",
+        headers: {
+          cookie: `${vault}; ${session?.split(";")[0] || ""}; mapucoin_verified=stale`,
+        },
+      }),
+    );
+    const cleared = loggedOut.headers.getSetCookie();
+    assert.equal(
+      cleared.some((line) => line.startsWith("mapucoin_accounts=") && /Max-Age=0/i.test(line)),
+      false,
+    );
+    assert.ok(
+      cleared.some((line) => line.startsWith("mapucoin_verified=") && /Max-Age=0/i.test(line)),
+    );
+
+    const again = await login(vault);
+    assert.equal(again.status, 200);
+    assert.equal(again.data.user?.emailVerified, true);
+  });
+
+  it("stores verification on the account and does not bulk-flag older users", async () => {
+    const before = new Date(Date.parse(VERIFICATION_GATE_AT) - 86_400_000).toISOString();
+    const after = new Date(Date.parse(VERIFICATION_GATE_AT) + 86_400_000).toISOString();
+
+    assert.deepEqual(
+      accountVerificationState({ serverVerified: true, vaultVerified: false, createdAt: before }),
+      { emailVerified: true, legacy: false },
+    );
+    assert.deepEqual(
+      accountVerificationState({ serverVerified: null, vaultVerified: null, createdAt: before }),
+      { emailVerified: false, legacy: true },
+    );
+    assert.deepEqual(
+      accountVerificationState({ serverVerified: false, createdAt: before }),
+      { emailVerified: false, legacy: false },
+    );
+    assert.deepEqual(
+      accountVerificationState({ serverVerified: null, vaultVerified: null, createdAt: after }),
+      { emailVerified: false, legacy: false },
+    );
+    assert.deepEqual(
+      accountVerificationState({ google: true, serverVerified: null, createdAt: before }),
+      { emailVerified: true, legacy: false },
+    );
+    assert.deepEqual(
+      accountVerificationState({ vaultVerified: true, serverVerified: null }),
+      { emailVerified: true, legacy: false },
+    );
+
+    const legacy = {
+      id: "legacy-account",
+      email: "legacy-account@mapucoin.test",
+      name: "Legacy",
+      hash: hashPassword("supersecret"),
+    };
+    const res = await loginPost(
+      new Request("http://localhost/api/auth/login", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          cookie: `${ACCOUNTS_COOKIE}=${await signAccounts([legacy])}`,
+        },
+        body: JSON.stringify({ email: legacy.email, password: "supersecret" }),
+      }),
+    );
+    const data = (await res.json()) as {
+      user?: { emailVerified?: boolean; legacyVerification?: boolean };
+    };
+    assert.equal(res.status, 200);
+    assert.equal(data.user?.emailVerified, false);
+    assert.equal(data.user?.legacyVerification, true);
+
+    const calls: { url: string; body?: string; method?: string }[] = [];
+    const fetchImpl = (async (url: RequestInfo | URL, init?: RequestInit) => {
+      const href = String(url);
+      calls.push({ url: href, body: init?.body ? String(init.body) : undefined, method: init?.method });
+      if (href.includes("filter=")) {
+        return new Response(
+          JSON.stringify({
+            users: [
+              {
+                id: "user-1",
+                email: "mpc-e2e@mapucoin.test",
+                user_metadata: { full_name: "MPC" },
+              },
+            ],
+          }),
+          { status: 200 },
+        );
+      }
+      return new Response("{}", { status: 200 });
+    }) as typeof fetch;
+    const saved = await persistVerifiedAccountByEmail(
+      "mpc-e2e@mapucoin.test",
+      {
+        NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co",
+        SUPABASE_SERVICE_ROLE_KEY: "service-role",
+      } as unknown as NodeJS.ProcessEnv,
+      fetchImpl,
+    );
+    assert.equal(saved, true);
+    assert.equal(calls[1]?.method, "PUT");
+    assert.match(calls[1]?.body || "", /"mapucoin_email_verified":true/);
+    assert.match(calls[1]?.body || "", /"full_name":"MPC"/);
+    assert.equal(
+      await persistVerifiedAccountByEmail("mpc-e2e@mapucoin.test", {} as NodeJS.ProcessEnv, fetchImpl),
+      false,
+    );
+
+    const previousVercel = process.env.VERCEL_ENV;
+    const previousFlag = process.env.MAPUCOIN_DEV_VERIFY;
+    process.env.VERCEL_ENV = "preview";
+    delete process.env.MAPUCOIN_DEV_VERIFY;
+    try {
+      const link = await verifyPost(
+        new Request("http://localhost/api/auth/verify-email", {
+          method: "POST",
+          headers: {
+            cookie: await cookieFor(unverified),
+            "content-type": "application/json",
+            host: "localhost:3000",
+          },
+          body: JSON.stringify({ linkOnly: true, next: "/reserva" }),
+        }),
+      );
+      const linkBody = (await link.json()) as { devUrl?: string };
+      assert.equal(link.status, 200);
+      assert.match(linkBody.devUrl || "", /\/api\/auth\/verify-email\?/);
+    } finally {
+      if (previousVercel === undefined) delete process.env.VERCEL_ENV;
+      else process.env.VERCEL_ENV = previousVercel;
+      if (previousFlag === undefined) delete process.env.MAPUCOIN_DEV_VERIFY;
+      else process.env.MAPUCOIN_DEV_VERIFY = previousFlag;
     }
   });
 });

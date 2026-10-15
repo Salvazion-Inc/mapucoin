@@ -8,10 +8,11 @@ import {
   safeNext,
 } from "@/lib/google-oauth";
 import {
-  rememberVerifiedEmail,
-  resolveEmailVerified,
-  verifiedEmailsFrom,
-} from "@/lib/email-verification";
+  accountVerificationState,
+  persistVerifiedAccount,
+  verificationFlag,
+} from "@/lib/account-verification";
+import { rememberVerifiedEmail } from "@/lib/email-verification";
 import {
   ACCOUNTS_COOKIE,
   accountsCookie,
@@ -103,16 +104,28 @@ export async function GET(req: Request) {
   const provider = String(data.user.app_metadata?.provider || "");
   const google =
     provider === "google" || identities.some((item) => item.provider === "google");
-  const verifiedEmails = await verifiedEmailsFrom(req.headers.get("cookie"));
-  const emailVerified =
-    google || resolveEmailVerified(account.email, account, verifiedEmails);
-  account.emailVerified = emailVerified;
+  const state = accountVerificationState({
+    serverVerified: verificationFlag(data.user.user_metadata),
+    createdAt: data.user.created_at,
+    vaultVerified:
+      account.emailVerified === undefined ? null : account.emailVerified === true,
+    google,
+  });
+  const emailVerified = state.emailVerified;
+  if (emailVerified) account.emailVerified = true;
+  if (emailVerified) {
+    await persistVerifiedAccount({
+      userId: data.user.id,
+      metadata: data.user.user_metadata,
+    });
+  }
 
   const session = await createSessionToken({
     id: account.id,
     email: account.email,
     name: account.name,
     emailVerified,
+    legacyVerification: state.legacy && !emailVerified,
   });
   const vault = await signAccounts(users);
   const dest = emailVerified

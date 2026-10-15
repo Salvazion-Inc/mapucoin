@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import {
-  resolveEmailVerified,
-  verifiedEmailsFrom,
-} from "@/lib/email-verification";
+  accountVerificationState,
+  persistVerifiedAccount,
+  verificationFlag,
+} from "@/lib/account-verification";
 import { verifyPassword } from "@/lib/passwords";
 import {
   ACCOUNTS_COOKIE,
@@ -12,10 +13,30 @@ import {
   readAccounts,
   sessionCookie,
   signAccounts,
+  type AccountRecord,
 } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
+
+type ServerUser = {
+  id: string;
+  email?: string | null;
+  created_at?: string;
+  user_metadata?: Record<string, unknown> | null;
+  app_metadata?: { provider?: string };
+  identities?: { provider?: string }[] | null;
+};
+
+function vaultFlag(account: AccountRecord | undefined) {
+  if (!account || account.emailVerified === undefined) return null;
+  return account.emailVerified === true;
+}
+
+function isGoogle(user: ServerUser) {
+  if (user.app_metadata?.provider === "google") return true;
+  return (user.identities || []).some((item) => item.provider === "google");
+}
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
@@ -28,32 +49,10 @@ export async function POST(req: Request) {
   const users = await readAccounts(
     cookieValue(req.headers.get("cookie"), ACCOUNTS_COOKIE),
   );
-  const verifiedEmails = await verifiedEmailsFrom(req.headers.get("cookie"));
-  const local = users.find((u) => u.email === email);
-  if (local && verifyPassword(password, local.hash)) {
-    const emailVerified = resolveEmailVerified(local.email, local, verifiedEmails);
-    if (emailVerified) local.emailVerified = true;
-    const session = await createSessionToken({
-      id: local.id,
-      email: local.email,
-      name: local.name,
-      emailVerified,
-    });
-    const res = NextResponse.json({
-      user: {
-        id: local.id,
-        email: local.email,
-        name: local.name,
-        emailVerified,
-      },
-    });
-    res.headers.append("Set-Cookie", sessionCookie(session));
-    if (emailVerified) {
-      res.headers.append("Set-Cookie", accountsCookie(await signAccounts(users)));
-    }
-    return res;
-  }
+  const local = users.find((user) => user.email === email);
+  const localOk = Boolean(local && verifyPassword(password, local.hash));
 
+  let serverUser: ServerUser | null = null;
   const supabase = getSupabase();
   if (supabase) {
     try {
@@ -61,30 +60,51 @@ export async function POST(req: Request) {
         email,
         password,
       });
-      if (!error && data.user) {
-        const account = users.find((u) => u.email === (data.user.email || email));
-        const emailVerified = resolveEmailVerified(
-          data.user.email || email,
-          account,
-          verifiedEmails,
-        );
-        const user = {
-          id: data.user.id,
-          email: data.user.email || email,
-          name:
-            String(data.user.user_metadata?.full_name || "") ||
-            (data.user.email || email),
-          emailVerified,
-        };
-        const session = await createSessionToken(user);
-        const res = NextResponse.json({ user });
-        res.headers.append("Set-Cookie", sessionCookie(session));
-        return res;
-      }
+      if (!error && data.user) serverUser = data.user;
     } catch {
-      /* fall through to 401 */
+      /* cookie vault can still sign the same browser in */
     }
   }
 
-  return NextResponse.json({ error: "credentials" }, { status: 401 });
+  if (!serverUser && !localOk) {
+    return NextResponse.json({ error: "credentials" }, { status: 401 });
+  }
+
+  const state = accountVerificationState({
+    serverVerified: serverUser ? verificationFlag(serverUser.user_metadata) : null,
+    createdAt: serverUser?.created_at ?? null,
+    vaultVerified: vaultFlag(local),
+    google: serverUser ? isGoogle(serverUser) : false,
+  });
+
+  if (
+    state.emailVerified &&
+    serverUser &&
+    verificationFlag(serverUser.user_metadata) !== true
+  ) {
+    await persistVerifiedAccount({
+      userId: serverUser.id,
+      metadata: serverUser.user_metadata,
+    });
+  }
+
+  const account = local;
+  if (account && state.emailVerified) account.emailVerified = true;
+  const user = {
+    id: serverUser?.id || account?.id || email,
+    email: (serverUser?.email || account?.email || email).toLowerCase(),
+    name:
+      account?.name ||
+      String(serverUser?.user_metadata?.full_name || "") ||
+      email,
+    emailVerified: state.emailVerified,
+    legacyVerification: state.legacy && !state.emailVerified,
+  };
+  const session = await createSessionToken(user);
+  const res = NextResponse.json({ user });
+  res.headers.append("Set-Cookie", sessionCookie(session));
+  if (account && state.emailVerified) {
+    res.headers.append("Set-Cookie", accountsCookie(await signAccounts(users)));
+  }
+  return res;
 }

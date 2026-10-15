@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { persistVerifiedAccountByEmail } from "@/lib/account-verification";
 import { rememberVerifiedEmail } from "@/lib/email-verification";
 import {
   ACCOUNTS_COOKIE,
@@ -107,6 +108,7 @@ export async function GET(req: Request) {
     name: account.name,
     emailVerified: true,
   });
+  await persistVerifiedAccountByEmail(account.email);
   const vault = await signAccounts(users);
   const res = NextResponse.redirect(dest(req, next));
   res.headers.append("Set-Cookie", sessionCookie(session));

@@ -150,6 +150,7 @@ export async function PUT(req: Request) {
     email: user.email,
     name: fullName,
     emailVerified: user.emailVerified,
+    legacyVerification: user.legacyVerification === true,
   });
   const vault = await signProfileMap(map);
   const res = NextResponse.json({ profile: publicProfile(profile) });

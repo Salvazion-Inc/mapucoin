@@ -62,8 +62,12 @@ export async function POST(req: Request) {
         password,
         // Supabase confirm stays on so password login keeps working.
         // Mapucoin's own emailVerified flag is what gates services.
+        id,
         email_confirm: true,
-        user_metadata: { full_name: name },
+        user_metadata: {
+          full_name: name,
+          mapucoin_email_verified: false,
+        },
       });
     } catch {
       /* local session still works */

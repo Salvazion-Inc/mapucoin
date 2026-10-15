@@ -47,7 +47,10 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { token?: unknown };
+  const body = (await req.json().catch(() => ({}))) as {
+    token?: unknown;
+    linkOnly?: unknown;
+  };
   const tokenRaw = String(body.token || "");
   if (tokenRaw) {
     const token = await readEmailVerifyToken(tokenRaw);
@@ -79,6 +82,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, already: true, user });
   }
 
+  if (body.linkOnly === true) {
+    if (!verificationLinkExposed()) {
+      return NextResponse.json({ ok: true });
+    }
+    const next = safeNextPath(String(bodyNext(body)));
+    const token = await createEmailVerifyToken(user.email);
+    return NextResponse.json({
+      ok: true,
+      devUrl: verificationUrl(req, token, next),
+    });
+  }
+
   const limited = rateLimit(
     `verify-resend:${user.id}:${clientIp(req)}`,
     1,
@@ -107,6 +122,6 @@ export async function POST(req: Request) {
   });
 }
 
-function bodyNext(body: { token?: unknown; next?: unknown }) {
+function bodyNext(body: { token?: unknown; next?: unknown; linkOnly?: unknown }) {
   return typeof body.next === "string" ? body.next : "/app";
 }

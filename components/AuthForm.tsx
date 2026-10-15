@@ -87,6 +87,12 @@ export function AuthForm({
       if (typeof data.devUrl === "string" && data.devUrl) {
         sessionStorage.setItem("mapucoin_dev_verify_url", data.devUrl);
       }
+      if (data.verificationRequired) {
+        sessionStorage.setItem(
+          "mapucoin_verify_delivered",
+          data.delivered === false ? "false" : "true",
+        );
+      }
       const dest = next.startsWith("/") ? next : "/app";
       const verified = Boolean(data.user?.emailVerified);
       router.replace(

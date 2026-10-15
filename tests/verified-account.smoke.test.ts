@@ -16,6 +16,7 @@ import { POST as connectPost } from "../app/api/partners/connect/route.ts";
 import { POST as planPost } from "../app/api/plan/route.ts";
 import { GET as premiumGet, POST as premiumPost } from "../app/api/premium/route.ts";
 import { GET as profileGet, PUT as profilePut } from "../app/api/profile/route.ts";
+import { POST as signupPost } from "../app/api/auth/signup/route.ts";
 import { POST as verifyPost } from "../app/api/auth/verify-email/route.ts";
 import { at } from "../lib/app-copy.ts";
 import { t } from "../lib/copy.ts";
@@ -33,6 +34,7 @@ import {
   type SessionUser,
 } from "../lib/session.ts";
 import { pageGateTarget, SERVICE_API_ROUTES } from "../lib/verified-access.ts";
+import { verifyMailFeedback } from "../lib/verify-feedback.ts";
 
 const verified: SessionUser = {
   id: "verified-user",
@@ -267,5 +269,103 @@ describe("verified account gate", () => {
     assert.match(es.partners.onboardLead, /cuenta verificada/);
     assert.match(copy.signupPersonalized, /experiencia personalizada/);
     assert.match(copy.verifyLead, /personalizar el viaje/);
+    assert.equal(copy.verifyResend, "Reenviar correo");
+    assert.match(copy.verifyNotSent, /No pudimos enviar el correo de verificación/);
+    assert.match(copy.verifySent, /Correo enviado/);
+    assert.match(copy.verifyWait, /Espera \{n\} segundos/);
+  });
+
+  it("accepts name as an alias of full_name on signup", async () => {
+    async function signup(body: Record<string, unknown>) {
+      const res = await signupPost(
+        new Request("http://localhost/api/auth/signup", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
+      const data = (await res.json()) as {
+        error?: string;
+        delivered?: boolean;
+        user?: { name?: string; emailVerified?: boolean };
+      };
+      return { status: res.status, data };
+    }
+
+    const byName = await signup({
+      name: "Ana Ruiz",
+      email: "ana-name@mapucoin.test",
+      password: "supersecret",
+    });
+    assert.equal(byName.status, 200);
+    assert.equal(byName.data.error, undefined);
+    assert.equal(byName.data.user?.name, "Ana Ruiz");
+    assert.equal(byName.data.user?.emailVerified, false);
+    assert.equal(byName.data.delivered, false);
+
+    const byFull = await signup({
+      full_name: "Ana Ruiz",
+      email: "ana-full@mapucoin.test",
+      password: "supersecret",
+    });
+    assert.equal(byFull.status, 200);
+    assert.equal(byFull.data.user?.name, "Ana Ruiz");
+
+    const missing = await signup({
+      email: "missing-name@mapucoin.test",
+      password: "supersecret",
+    });
+    assert.equal(missing.status, 400);
+    assert.equal(missing.data.error, "name");
+  });
+
+  it("tells the verify screen when mail was not sent and how long to wait", async () => {
+    const failed = verifyMailFeedback({ delivered: false, httpStatus: 200 });
+    assert.equal(failed.failed, true);
+    assert.equal(failed.sent, false);
+    assert.equal(failed.canResend, true);
+
+    const waiting = verifyMailFeedback({
+      delivered: false,
+      httpStatus: 200,
+      retryAfter: 20,
+    });
+    assert.equal(waiting.failed, true);
+    assert.equal(waiting.waitSeconds, 20);
+    assert.equal(waiting.canResend, false);
+    assert.equal(
+      verifyMailFeedback({ delivered: false, retryAfter: 0 }).canResend,
+      true,
+    );
+
+    const sent = verifyMailFeedback({ delivered: true, httpStatus: 200, retryAfter: 20 });
+    assert.equal(sent.sent, true);
+    assert.equal(sent.failed, false);
+    assert.equal(sent.waitSeconds, 20);
+
+    const cookie = await cookieFor(unverified);
+    const first = await verifyPost(
+      new Request("http://localhost/api/auth/verify-email", {
+        method: "POST",
+        headers: { cookie, "content-type": "application/json" },
+        body: JSON.stringify({ next: "/reserva" }),
+      }),
+    );
+    const firstBody = (await first.json()) as { delivered?: boolean; retryAfter?: number };
+    assert.equal(first.status, 200);
+    assert.equal(firstBody.delivered, false);
+    assert.ok((firstBody.retryAfter || 0) > 0);
+
+    const second = await verifyPost(
+      new Request("http://localhost/api/auth/verify-email", {
+        method: "POST",
+        headers: { cookie, "content-type": "application/json" },
+        body: JSON.stringify({ next: "/reserva" }),
+      }),
+    );
+    const secondBody = (await second.json()) as { retryAfter?: number; delivered?: boolean };
+    assert.equal(second.status, 429);
+    assert.equal(secondBody.delivered, false);
+    assert.ok((secondBody.retryAfter || 0) >= 1);
   });
 });

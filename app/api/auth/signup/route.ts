@@ -24,7 +24,7 @@ export const runtime = "nodejs";
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
   const email = String(body.email || "").trim().toLowerCase();
-  const name = String(body.full_name || "").trim();
+  const name = String(body.full_name || body.name || "").trim();
   const password = String(body.password || "");
   if (!name) {
     return NextResponse.json({ error: "name" }, { status: 400 });
@@ -86,10 +86,11 @@ export async function POST(req: Request) {
   const vault = await signAccounts(users);
   const verifyToken = await createEmailVerifyToken(email);
   const devUrl = verificationUrl(req, verifyToken, safeNextPath(String(body.next || "/app")));
-  await deliverVerificationEmail({ to: email, name, url: devUrl });
+  const delivered = await deliverVerificationEmail({ to: email, name, url: devUrl });
   const res = NextResponse.json({
     user: { id, email, name, emailVerified: false },
     verificationRequired: true,
+    delivered,
     devUrl: verificationLinkExposed() ? devUrl : undefined,
   });
   res.headers.append("Set-Cookie", sessionCookie(session));

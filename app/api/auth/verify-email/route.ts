@@ -7,8 +7,11 @@ import {
   verificationLinkExposed,
   verificationUrl,
 } from "@/lib/email-verification";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
 import { safeNextPath } from "@/lib/verified-access";
+
+const RESEND_WINDOW_MS = 20_000;
 
 export const runtime = "nodejs";
 
@@ -74,6 +77,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, already: true, user });
   }
 
+  const limited = rateLimit(
+    `verify-resend:${user.id}:${clientIp(req)}`,
+    1,
+    RESEND_WINDOW_MS,
+  );
+  if (!limited.ok) {
+    return NextResponse.json(
+      { ok: false, delivered: false, error: "rate_limited", retryAfter: limited.retryAfter },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfter) } },
+    );
+  }
+
   const next = safeNextPath(String(bodyNext(body)));
   const token = await createEmailVerifyToken(user.email);
   const url = verificationUrl(req, token, next);
@@ -85,6 +100,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ok: true,
     delivered,
+    retryAfter: RESEND_WINDOW_MS / 1000,
     devUrl: verificationLinkExposed() ? url : undefined,
   });
 }

@@ -8,8 +8,10 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { at } from "@/lib/app-copy";
 import { useLocale } from "@/lib/locale-context";
 import { safeNextPath } from "@/lib/service-redirect";
+import { verifyMailFeedback } from "@/lib/verify-feedback";
 
 const DEV_KEY = "mapucoin_dev_verify_url";
+const DELIVERED_KEY = "mapucoin_verify_delivered";
 
 export function VerifyEmailScreen() {
   const { locale } = useLocale();
@@ -19,15 +21,22 @@ export function VerifyEmailScreen() {
   const next = safeNextPath(search.get("next"));
   const tokenError = search.get("error");
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"loading" | "ready" | "sent" | "err">(
-    "loading",
-  );
+  const [ready, setReady] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [waitSeconds, setWaitSeconds] = useState(0);
   const [devUrl, setDevUrl] = useState("");
 
   useEffect(() => {
-    let cancelled = false;
     const stored = sessionStorage.getItem(DEV_KEY) || "";
     if (stored) setDevUrl(stored);
+    if (sessionStorage.getItem(DELIVERED_KEY) === "false") setFailed(true);
+    if (sessionStorage.getItem(DELIVERED_KEY) === "true") setSent(true);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
     fetch("/api/auth/me")
       .then((res) => res.json())
       .then((data: { user?: { email?: string; emailVerified?: boolean } | null }) => {
@@ -42,34 +51,64 @@ export function VerifyEmailScreen() {
           return;
         }
         setEmail(user.email);
-        setStatus(tokenError ? "err" : "ready");
+        setReady(true);
       })
       .catch(() => {
-        if (!cancelled) setStatus("err");
+        if (!cancelled) {
+          setFailed(true);
+          setReady(true);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, [next, router, tokenError]);
+  }, [next, router]);
+
+  useEffect(() => {
+    if (waitSeconds <= 0) return;
+    const id = setTimeout(() => setWaitSeconds((n) => Math.max(0, n - 1)), 1000);
+    return () => clearTimeout(id);
+  }, [waitSeconds]);
 
   async function resend() {
-    setStatus("loading");
+    if (pending || waitSeconds > 0 || !email) return;
+    setPending(true);
     const res = await fetch("/api/auth/verify-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ next }),
     }).catch(() => null);
-    const data = res ? await res.json().catch(() => ({})) : {};
-    if (!res || !res.ok) {
-      setStatus("err");
-      return;
+    const data = res
+      ? ((await res.json().catch(() => ({}))) as {
+          delivered?: boolean;
+          retryAfter?: number;
+          devUrl?: string;
+        })
+      : {};
+    const notice = verifyMailFeedback({
+      delivered: res ? data.delivered : false,
+      retryAfter: data.retryAfter,
+      httpStatus: res ? res.status : 0,
+    });
+    if (notice.sent) {
+      setSent(true);
+      setFailed(false);
+      sessionStorage.setItem(DELIVERED_KEY, "true");
     }
+    if (notice.failed) {
+      setFailed(true);
+      setSent(false);
+      sessionStorage.setItem(DELIVERED_KEY, "false");
+    }
+    if (notice.waitSeconds > 0) setWaitSeconds(notice.waitSeconds);
     if (typeof data.devUrl === "string" && data.devUrl) {
       sessionStorage.setItem(DEV_KEY, data.devUrl);
       setDevUrl(data.devUrl);
     }
-    setStatus("sent");
+    setPending(false);
   }
+
+  const canResend = ready && Boolean(email) && !pending && waitSeconds <= 0;
 
   return (
     <div className="min-h-dvh bg-night px-5 pb-16 pt-10 text-sand">
@@ -86,19 +125,29 @@ export function VerifyEmailScreen() {
         <p className="mt-3 text-sm leading-relaxed text-sand/75">{a.verifyLead}</p>
         <div className="mt-8 rounded-2xl border border-gold/20 bg-black/70 p-6">
           {email ? (
-            <p className="text-sm text-sand">
-              {email}
-            </p>
+            <p className="text-sm text-sand">{email}</p>
           ) : (
             <p className="text-sm text-sand/50">{a.verifyChecking}</p>
           )}
-          {status === "err" || tokenError ? (
+          {tokenError ? (
             <p className="mt-4 text-sm text-clay" role="alert">
               {a.verifyInvalid}
             </p>
           ) : null}
-          {status === "sent" ? (
-            <p className="mt-4 text-sm text-gold">{a.verifySent}</p>
+          {failed ? (
+            <p className="mt-4 text-sm leading-relaxed text-clay" role="alert">
+              {a.verifyNotSent}
+            </p>
+          ) : null}
+          {sent ? (
+            <p className="mt-4 text-sm text-gold" role="status">
+              {a.verifySent}
+            </p>
+          ) : null}
+          {waitSeconds > 0 ? (
+            <p className="mt-4 text-sm text-sand" role="status">
+              {a.verifyWait.replaceAll("{n}", String(waitSeconds))}
+            </p>
           ) : null}
           {devUrl ? (
             <p className="mt-4 text-sm text-sand/80">
@@ -111,10 +160,10 @@ export function VerifyEmailScreen() {
           <button
             type="button"
             onClick={resend}
-            disabled={status === "loading" || !email}
+            disabled={!canResend}
             className="btn-gold mt-6 w-full !py-3 disabled:opacity-60"
           >
-            {status === "loading" ? a.sending : a.verifyResend}
+            {pending ? a.sending : a.verifyResend}
           </button>
         </div>
         <p className="mt-6 text-sm text-sand/70">

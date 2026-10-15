@@ -98,8 +98,11 @@ const es = {
   verifyLead:
     "Confirma tu correo para seguir. Mapucoin usa esa verificación para personalizar el viaje y abrir reservas, el planificador, el concierge y la postulación de partners.",
   verifyChecking: "Revisando tu cuenta…",
-  verifyResend: "Reenviar enlace",
-  verifySent: "Si el correo está configurado, el enlace ya va en camino.",
+  verifyResend: "Reenviar correo",
+  verifySent: "Correo enviado. Revisa tu bandeja de entrada y la carpeta de spam.",
+  verifyNotSent:
+    "No pudimos enviar el correo de verificación. El envío falló y no hay un enlace en tu bandeja. Tu cuenta sí quedó creada. Pulsa «Reenviar correo» para intentarlo otra vez. Si aparece una espera, cuenta los segundos y vuelve a pulsar: no te quedas sin salida.",
+  verifyWait: "Espera {n} segundos para reenviar el correo.",
   verifyDev: "Entorno de prueba: abre este enlace para verificar y volver a donde estabas.",
   verifyOpenLink: "Verificar correo",
   verifyInvalid: "El enlace expiró o no coincide con esta cuenta.",
@@ -228,8 +231,11 @@ const en: typeof es = {
   verifyLead:
     "Confirm your email to continue. Mapucoin uses that check to personalize the trip and open bookings, the planner, the concierge and partner applications.",
   verifyChecking: "Checking your account…",
-  verifyResend: "Resend link",
-  verifySent: "If email is configured, the link is on its way.",
+  verifyResend: "Resend email",
+  verifySent: "Email sent. Check your inbox and spam folder.",
+  verifyNotSent:
+    "We could not send the verification email. Your account exists. Press Resend email to try again. If a wait appears, count the seconds and press it again.",
+  verifyWait: "Wait {n} seconds to resend the email.",
   verifyDev: "Test environment: open this link to verify and return where you were.",
   verifyOpenLink: "Verify email",
   verifyInvalid: "The link expired or does not match this account.",
@@ -358,8 +364,11 @@ const pt: typeof es = {
   verifyLead:
     "Confirme seu e-mail para continuar. A Mapucoin usa essa verificação para personalizar a viagem e abrir reservas, o planejador, o concierge e a candidatura de partner.",
   verifyChecking: "Revisando sua conta…",
-  verifyResend: "Reenviar link",
-  verifySent: "Se o e-mail estiver configurado, o link já está a caminho.",
+  verifyResend: "Reenviar e-mail",
+  verifySent: "E-mail enviado. Confira a caixa de entrada e o spam.",
+  verifyNotSent:
+    "Não foi possível enviar o e-mail de verificação. Sua conta foi criada. Toque em Reenviar e-mail para tentar de novo. Se aparecer uma espera, conte os segundos e toque outra vez.",
+  verifyWait: "Espere {n} segundos para reenviar o e-mail.",
   verifyDev: "Ambiente de teste: abra este link para verificar e voltar.",
   verifyOpenLink: "Verificar e-mail",
   verifyInvalid: "O link expirou ou não corresponde a esta conta.",
@@ -488,8 +497,11 @@ const fr: typeof es = {
   verifyLead:
     "Confirmez votre e-mail pour continuer. Mapucoin s’en sert pour personnaliser le voyage et ouvrir les réservations, le planificateur, le concierge et la candidature partner.",
   verifyChecking: "Vérification du compte…",
-  verifyResend: "Renvoyer le lien",
-  verifySent: "Si l’e-mail est configuré, le lien est en route.",
+  verifyResend: "Renvoyer l’e-mail",
+  verifySent: "E-mail envoyé. Regardez la boîte de réception et les indésirables.",
+  verifyNotSent:
+    "L’e-mail de vérification n’a pas pu partir. Le compte existe. Appuyez sur Renvoyer l’e-mail. S’il faut attendre, comptez les secondes et réessayez.",
+  verifyWait: "Attendez {n} secondes pour renvoyer l’e-mail.",
   verifyDev: "Environnement de test : ouvrez ce lien pour vérifier et revenir.",
   verifyOpenLink: "Vérifier l’e-mail",
   verifyInvalid: "Le lien a expiré ou ne correspond pas à ce compte.",
@@ -618,8 +630,11 @@ const it: typeof es = {
   verifyLead:
     "Conferma l’email per continuare. Mapucoin usa questa verifica per personalizzare il viaggio e aprire prenotazioni, planner, concierge e candidatura partner.",
   verifyChecking: "Controllo dell’account…",
-  verifyResend: "Reinvia il link",
-  verifySent: "Se l’email è configurata, il link è in arrivo.",
+  verifyResend: "Reinvia email",
+  verifySent: "Email inviata. Controlla posta in arrivo e spam.",
+  verifyNotSent:
+    "Non siamo riusciti a inviare l’email di verifica. L’account c’è. Premi Reinvia email per riprovare. Se compare un’attesa, conta i secondi e premi di nuovo.",
+  verifyWait: "Attendi {n} secondi per reinviare l’email.",
   verifyDev: "Ambiente di prova: apri questo link per verificare e tornare indietro.",
   verifyOpenLink: "Verifica email",
   verifyInvalid: "Il link è scaduto o non corrisponde a questo account.",
@@ -748,8 +763,11 @@ const de: typeof es = {
   verifyLead:
     "Bestätige deine E-Mail, um weiterzumachen. Mapucoin nutzt das, um die Reise zu personalisieren und Buchungen, Planer, Concierge und die Partnerbewerbung zu öffnen.",
   verifyChecking: "Konto wird geprüft…",
-  verifyResend: "Link erneut senden",
-  verifySent: "Wenn E-Mail konfiguriert ist, ist der Link unterwegs.",
+  verifyResend: "E-Mail erneut senden",
+  verifySent: "E-Mail gesendet. Prüfe Posteingang und Spam.",
+  verifyNotSent:
+    "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Das Konto existiert. Tippe auf E-Mail erneut senden. Wenn eine Wartezeit erscheint, zähle die Sekunden und tippe noch einmal.",
+  verifyWait: "Warte {n} Sekunden, um die E-Mail erneut zu senden.",
   verifyDev: "Testumgebung: öffne diesen Link, um zu bestätigen und zurückzukehren.",
   verifyOpenLink: "E-Mail bestätigen",
   verifyInvalid: "Der Link ist abgelaufen oder passt nicht zu diesem Konto.",

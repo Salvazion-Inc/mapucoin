@@ -7,6 +7,7 @@ import SiteFrame from "@/components/SiteFrame";
 import { LocaleProvider } from "@/lib/locale-context";
 import { LOCALE_COOKIE, languageAlternates, localeMeta, parseLocale } from "@/lib/locale";
 import { SEO } from "@/lib/seo";
+import { readSession, SESSION_COOKIE } from "@/lib/session";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -110,6 +111,10 @@ export default async function RootLayout({
 }) {
   const jar = await cookies();
   const locale = parseLocale(jar.get(LOCALE_COOKIE)?.value);
+  const session = await readSession(jar.get(SESSION_COOKIE)?.value);
+  const initialUser = session
+    ? { id: session.id, email: session.email, name: session.name }
+    : null;
   return (
     <html
       lang={localeMeta[locale].htmlLang}
@@ -118,7 +123,7 @@ export default async function RootLayout({
       <body className={`${outfit.className} min-h-screen antialiased`}>
         <LocaleProvider initialLocale={locale}>
           <HtmlLang />
-          <SiteFrame>{children}</SiteFrame>
+          <SiteFrame initialUser={initialUser}>{children}</SiteFrame>
         </LocaleProvider>
         <Analytics />
       </body>

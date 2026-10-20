@@ -2,6 +2,7 @@ import { destinations, getBySlug, planCatalog, type CatalogItem } from "@/lib/ca
 import { localeMeta, parseLocale } from "@/lib/locale";
 import { trimToBudget, type BudgetPlan } from "@/lib/plan-budget";
 import { applyOfficialPasses } from "@/lib/park-passes";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 
@@ -107,6 +108,9 @@ function fallbackPlan(input: {
 }
 
 export async function POST(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   const body = await req.json().catch(() => ({}));
   const lugar = String(body.lugar || destinations[0].slug);
   const presupuesto = Number(body.presupuesto) || 800000;

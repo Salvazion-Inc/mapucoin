@@ -7,6 +7,7 @@ import {
   stripLocalePrefix,
 } from "@/lib/locale";
 import { SESSION_COOKIE, readSession } from "@/lib/session";
+import { pageGateTarget } from "@/lib/verified-access";
 
 const APP_HOSTS = new Set(["app.mapucoin.com", "www.app.mapucoin.com"]);
 const SITE = "https://mapucoin.com";
@@ -84,14 +85,14 @@ export async function middleware(request: NextRequest) {
     return res;
   }
 
-  if (pathname.startsWith("/app")) {
-    const user = await readSession(request.cookies.get(SESSION_COOKIE)?.value);
-    if (!user) {
-      const login = request.nextUrl.clone();
-      login.pathname = "/login";
-      login.search = `?next=${encodeURIComponent(pathname + search)}`;
-      return NextResponse.redirect(login);
-    }
+  const user = await readSession(request.cookies.get(SESSION_COOKIE)?.value);
+  const gate = pageGateTarget(pathname, search, user);
+  if (gate) {
+    const dest = request.nextUrl.clone();
+    const parsed = new URL(gate, request.url);
+    dest.pathname = parsed.pathname;
+    dest.search = parsed.search;
+    return NextResponse.redirect(dest);
   }
 
   const locale = request.cookies.get(LOCALE_COOKIE)?.value;

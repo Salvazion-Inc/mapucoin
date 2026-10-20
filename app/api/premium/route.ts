@@ -15,6 +15,7 @@ import {
   verifyHolder,
 } from "@/lib/salvazion-premium-server";
 import { cookieValue } from "@/lib/session";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,6 +27,9 @@ function disabled() {
 }
 
 export async function GET(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   const settings = premiumKeySettings();
   if (!readPremiumKeyEnabled() || !settings.enabled) return disabled();
 
@@ -38,6 +42,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+
   if (!readPremiumKeyEnabled()) return disabled();
   if (!premiumOriginAllowed(req.headers.get("origin"))) {
     return NextResponse.json({ error: "origin" }, { status: 403 });

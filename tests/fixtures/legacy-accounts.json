@@ -1,0 +1,65 @@
+[
+  {
+    "id": "pre-gate-no-key",
+    "createdAt": "2026-10-14T02:13:06.000Z",
+    "serverVerified": null,
+    "vaultVerified": null,
+    "google": false,
+    "emailVerified": false,
+    "legacyVerification": true
+  },
+  {
+    "id": "one-millisecond-before-gate",
+    "createdAt": "2026-10-15T02:13:05.999Z",
+    "serverVerified": null,
+    "vaultVerified": null,
+    "google": false,
+    "emailVerified": false,
+    "legacyVerification": true
+  },
+  {
+    "id": "unknown-created-at",
+    "createdAt": null,
+    "serverVerified": null,
+    "vaultVerified": null,
+    "google": false,
+    "emailVerified": false,
+    "legacyVerification": true
+  },
+  {
+    "id": "created-at-gate",
+    "createdAt": "2026-10-15T02:13:06.000Z",
+    "serverVerified": null,
+    "vaultVerified": null,
+    "google": false,
+    "emailVerified": false,
+    "legacyVerification": false
+  },
+  {
+    "id": "explicit-false-before-gate",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "serverVerified": false,
+    "vaultVerified": null,
+    "google": false,
+    "emailVerified": false,
+    "legacyVerification": false
+  },
+  {
+    "id": "google-before-gate",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "serverVerified": null,
+    "vaultVerified": null,
+    "google": true,
+    "emailVerified": true,
+    "legacyVerification": false
+  },
+  {
+    "id": "flag-true-before-gate",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "serverVerified": true,
+    "vaultVerified": null,
+    "google": false,
+    "emailVerified": true,
+    "legacyVerification": false
+  }
+]

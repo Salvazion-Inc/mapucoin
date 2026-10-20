@@ -8,6 +8,12 @@ import {
   safeNext,
 } from "@/lib/google-oauth";
 import {
+  accountVerificationState,
+  persistVerifiedAccount,
+  verificationFlag,
+} from "@/lib/account-verification";
+import { rememberVerifiedEmail } from "@/lib/email-verification";
+import {
   ACCOUNTS_COOKIE,
   accountsCookie,
   cookieValue,
@@ -17,6 +23,7 @@ import {
   signAccounts,
   type AccountRecord,
 } from "@/lib/session";
+import { safeNextPath } from "@/lib/verified-access";
 import { getSupabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -93,14 +100,45 @@ export async function GET(req: Request) {
     if (!account.name || account.name === account.email) account.name = user.name;
   }
 
+  const identities = data.user.identities || [];
+  const provider = String(data.user.app_metadata?.provider || "");
+  const google =
+    provider === "google" || identities.some((item) => item.provider === "google");
+  const state = accountVerificationState({
+    serverVerified: verificationFlag(data.user.user_metadata),
+    createdAt: data.user.created_at,
+    vaultVerified:
+      account.emailVerified === undefined ? null : account.emailVerified === true,
+    google,
+  });
+  const emailVerified = state.emailVerified;
+  if (emailVerified) account.emailVerified = true;
+  if (emailVerified) {
+    await persistVerifiedAccount({
+      userId: data.user.id,
+      metadata: data.user.user_metadata,
+    });
+  }
+
   const session = await createSessionToken({
     id: account.id,
     email: account.email,
     name: account.name,
+    emailVerified,
+    legacyVerification: state.legacy && !emailVerified,
   });
   const vault = await signAccounts(users);
-  const res = applyCookies(NextResponse.redirect(new URL(next, origin)), pending);
+  const dest = emailVerified
+    ? next
+    : `/verificar?next=${encodeURIComponent(safeNextPath(next))}`;
+  const res = applyCookies(NextResponse.redirect(new URL(dest, origin)), pending);
   res.headers.append("Set-Cookie", sessionCookie(session));
   res.headers.append("Set-Cookie", accountsCookie(vault));
+  if (emailVerified) {
+    res.headers.append(
+      "Set-Cookie",
+      await rememberVerifiedEmail(req.headers.get("cookie"), account.email),
+    );
+  }
   return res;
 }

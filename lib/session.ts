@@ -2,19 +2,34 @@ import { parseLocale, type Locale } from "./locale";
 
 export const SESSION_COOKIE = "mapucoin_session";
 export const ACCOUNTS_COOKIE = "mapucoin_accounts";
+export const VERIFIED_COOKIE = "mapucoin_verified";
 const DAY = 60 * 60 * 24;
 
 export type SessionUser = {
   id: string;
   email: string;
   name: string;
+  emailVerified: boolean;
+  /** Pre-gate account that still has to confirm once. Not a stored false flag. */
+  legacyVerification?: boolean;
 };
 
-export type AccountRecord = SessionUser & {
+export type AccountRecord = {
+  id: string;
+  email: string;
+  name: string;
   hash: string;
+  emailVerified?: boolean;
 };
 
-type SessionPayload = SessionUser & { exp: number };
+type SessionPayload = {
+  id: string;
+  email: string;
+  name?: string;
+  emailVerified?: boolean;
+  legacyVerification?: boolean;
+  exp: number;
+};
 
 function secret() {
   return process.env.AUTH_SECRET || "mapucoin-by-salvazion-inc-session-key";
@@ -93,7 +108,13 @@ export async function readSession(
     if (!data?.email || !data?.id || data.exp < Math.floor(Date.now() / 1000)) {
       return null;
     }
-    return { id: data.id, email: data.email, name: data.name || data.email };
+    return {
+      id: data.id,
+      email: data.email,
+      name: data.name || data.email,
+      emailVerified: data.emailVerified === true,
+      legacyVerification: data.legacyVerification === true,
+    };
   } catch {
     return null;
   }
@@ -126,6 +147,10 @@ export function clearSessionCookie() {
 
 export function accountsCookie(token: string) {
   return `${ACCOUNTS_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${400 * DAY}`;
+}
+
+export function verifiedCookie(token: string) {
+  return `${VERIFIED_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${400 * DAY}`;
 }
 
 export function cookieValue(header: string | null | undefined, name: string) {

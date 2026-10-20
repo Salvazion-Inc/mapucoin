@@ -17,18 +17,13 @@ import {
   cookieValue,
   createSessionToken,
   readAccounts,
-  readSession,
-  SESSION_COOKIE,
   sessionCookie,
   signAccounts,
 } from "@/lib/session";
 import { getSupabase } from "@/lib/supabase";
+import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
-
-function sessionFrom(req: Request) {
-  return readSession(cookieValue(req.headers.get("cookie"), SESSION_COOKIE));
-}
 
 async function loadProfile(req: Request, userId: string, fallbackEmail: string) {
   const map = await readProfileMap(
@@ -55,7 +50,12 @@ async function loadProfile(req: Request, userId: string, fallbackEmail: string) 
             cityLat: local?.cityLat ?? null,
             cityLng: local?.cityLng ?? null,
           },
-          emptyProfile({ id: userId, email: fallbackEmail, name: "" }),
+          emptyProfile({
+            id: userId,
+            email: fallbackEmail,
+            name: "",
+            emailVerified: false,
+          }),
         );
         return local ? { ...fromDb, ...sanitizeProfile(local, fromDb) } : fromDb;
       }
@@ -67,20 +67,18 @@ async function loadProfile(req: Request, userId: string, fallbackEmail: string) 
 }
 
 export async function GET(req: Request) {
-  const user = await sessionFrom(req);
-  if (!user) {
-    return NextResponse.json({ error: "auth" }, { status: 401 });
-  }
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+  const user = gate.user;
   const stored = await loadProfile(req, user.id, user.email);
   const profile = sanitizeProfile(stored, emptyProfile(user));
   return NextResponse.json({ profile: publicProfile(profile) });
 }
 
 export async function PUT(req: Request) {
-  const user = await sessionFrom(req);
-  if (!user) {
-    return NextResponse.json({ error: "auth" }, { status: 401 });
-  }
+  const gate = await requireVerifiedAccount(req);
+  if (!gate.ok) return gate.response;
+  const user = gate.user;
 
   const body = await req.json().catch(() => ({}));
   const current = sanitizeProfile(
@@ -151,6 +149,8 @@ export async function PUT(req: Request) {
     id: user.id,
     email: user.email,
     name: fullName,
+    emailVerified: user.emailVerified,
+    legacyVerification: user.legacyVerification === true,
   });
   const vault = await signProfileMap(map);
   const res = NextResponse.json({ profile: publicProfile(profile) });

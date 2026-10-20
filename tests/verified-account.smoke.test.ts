@@ -31,6 +31,7 @@ import { at } from "../lib/app-copy.ts";
 import { t } from "../lib/copy.ts";
 import {
   createEmailVerifyToken,
+  deliverVerificationEmail,
   grantVerifiedEmail,
   readEmailVerifyToken,
   requestOrigin,
@@ -392,6 +393,92 @@ describe("verified account gate", () => {
     assert.equal(second.status, 429);
     assert.equal(secondBody.delivered, false);
     assert.ok((secondBody.retryAfter || 0) >= 1);
+
+    const screen = readFileSync("components/auth/VerifyEmailScreen.tsx", "utf8");
+    const form = readFileSync("components/AuthForm.tsx", "utf8");
+    assert.match(screen, /verifyNotSent/);
+    assert.match(screen, /verifyResend/);
+    assert.match(screen, /canResend/);
+    assert.match(form, /delivered === false \? "false"/);
+  });
+
+  it("sends verification mail with a trimmed runtime key and logs Resend failures without the key", async () => {
+    const source = readFileSync("lib/email-verification.ts", "utf8");
+    assert.equal(source.includes("process.env.RESEND_API_KEY"), false);
+    assert.equal(source.includes("process.env.MAIL_FROM"), false);
+    assert.match(source, /\["RESEND_API_KEY"\]/);
+    assert.match(source, /\["MAIL_FROM"\]/);
+    assert.match(source, /\.trim\(\)/);
+    assert.match(source, /https:\/\/api\.resend\.com\/emails/);
+    assert.equal(source.includes("api.resend.com/domains"), false);
+    assert.match(readFileSync("app/api/auth/signup/route.ts", "utf8"), /export const runtime = "nodejs"/);
+    assert.match(readFileSync("app/api/auth/verify-email/route.ts", "utf8"), /export const runtime = "nodejs"/);
+
+    const key = "re_test_send_only_key";
+    const env = {
+      RESEND_API_KEY: `  ${key}\n`,
+      MAIL_FROM: " Mapucoin <info@salvazion.org> \n",
+    } as unknown as NodeJS.ProcessEnv;
+    const calls: { url: string; init?: RequestInit }[] = [];
+    const fetchImpl = (async (url: RequestInfo | URL, init?: RequestInit) => {
+      calls.push({ url: String(url), init });
+      return new Response("{}", { status: 200 });
+    }) as typeof fetch;
+    const sent = await deliverVerificationEmail(
+      { to: "ana@mapucoin.test", name: "Ana <R>", url: "https://mapucoin.com/api/auth/verify-email?token=abc" },
+      env,
+      fetchImpl,
+    );
+    assert.equal(sent, true);
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0]?.url, "https://api.resend.com/emails");
+    assert.equal(calls[0]?.init?.method, "POST");
+    const headers = calls[0]?.init?.headers as Record<string, string>;
+    assert.equal(headers.Authorization, `Bearer ${key}`);
+    assert.equal(headers["Content-Type"], "application/json");
+    const payload = JSON.parse(String(calls[0]?.init?.body)) as {
+      from?: string;
+      to?: string;
+      subject?: string;
+      html?: string;
+    };
+    assert.equal(payload.from, "Mapucoin <info@salvazion.org>");
+    assert.equal(payload.to, "ana@mapucoin.test");
+    assert.equal(payload.subject, "Verifica tu correo en Mapucoin");
+    assert.match(payload.html || "", /<a href="https:\/\/mapucoin\.com\/api\/auth\/verify-email\?token=abc">/);
+    assert.match(payload.html || "", /Ana &lt;R&gt;/);
+    assert.equal(JSON.stringify(payload).includes(key), false);
+
+    const logs: string[] = [];
+    const original = console.error;
+    console.error = (...args: unknown[]) => {
+      logs.push(args.map((item) => String(item)).join(" "));
+    };
+    try {
+      const missing = await deliverVerificationEmail(
+        { to: "ana@mapucoin.test", name: "Ana", url: "https://mapucoin.com/verificar" },
+        { MAIL_FROM: " Mapucoin <info@salvazion.org>\n" } as unknown as NodeJS.ProcessEnv,
+        fetchImpl,
+      );
+      assert.equal(missing, false);
+      const rejected = await deliverVerificationEmail(
+        { to: "ana@mapucoin.test", name: "Ana", url: "https://mapucoin.com/verificar" },
+        { RESEND_API_KEY: `${key}\n`, MAIL_FROM: "Mapucoin <info@salvazion.org>" } as unknown as NodeJS.ProcessEnv,
+        (async () =>
+          new Response(
+            JSON.stringify({ name: "validation_error", message: "Invalid `from` field" }),
+            { status: 403 },
+          )) as typeof fetch,
+      );
+      assert.equal(rejected, false);
+    } finally {
+      console.error = original;
+    }
+    const logged = logs.join("\n");
+    assert.match(logged, /missing RESEND_API_KEY/);
+    assert.match(logged, /status=403/);
+    assert.match(logged, /Invalid `from` field/);
+    assert.equal(logged.includes(key), false);
   });
 
   it("builds verification links from the current deployment, never the baked-in production domain", () => {

@@ -148,16 +148,56 @@ export function verificationUrl(req: Request, token: string, next: string) {
   return url.toString();
 }
 
-export async function deliverVerificationEmail(opts: {
-  to: string;
-  name: string;
-  url: string;
-}) {
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.MAIL_FROM;
-  if (!key || !from) return false;
+const RESEND_EMAILS_URL = "https://api.resend.com/emails";
+
+function mailConfig(env: NodeJS.ProcessEnv) {
+  // Bracket access and trim at call time. Next must not inline the key at
+  // build, and a pasted Vercel value often keeps a trailing newline.
+  const key = String(env["RESEND_API_KEY"] || "").trim();
+  const from = String(env["MAIL_FROM"] || "").trim();
+  return { key, from };
+}
+
+function redactSecrets(text: string, key: string) {
+  let out = text.replace(/Bearer\s+\S+/gi, "Bearer [redacted]");
+  out = out.replace(/\bre_[A-Za-z0-9_]+\b/g, "[redacted]");
+  if (key) out = out.split(key).join("[redacted]");
+  return out.slice(0, 800);
+}
+
+function logMailFailure(reason: string, detail?: { status?: number; body?: string; key?: string }) {
+  const body = redactSecrets(detail?.body || "", detail?.key || "");
+  const status = detail?.status == null ? "" : ` status=${detail.status}`;
+  console.error(`[mapucoin] verification email failed: ${reason}${status}${body ? ` body=${body}` : ""}`);
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+export async function deliverVerificationEmail(
+  opts: { to: string; name: string; url: string },
+  env: NodeJS.ProcessEnv = process.env,
+  fetchImpl: typeof fetch = fetch,
+) {
+  const { key, from } = mailConfig(env);
+  if (!key || !from) {
+    const reason = !key && !from
+      ? "missing RESEND_API_KEY and MAIL_FROM"
+      : !key
+        ? "missing RESEND_API_KEY"
+        : "missing MAIL_FROM";
+    logMailFailure(reason);
+    return false;
+  }
+  const subject = "Verifica tu correo en Mapucoin";
+  const html = `<p>Hola ${escapeHtml(opts.name)},</p><p>Confirma tu correo para una experiencia personalizada en Mapucoin. Con la cuenta verificada puedes reservar cápsulas, armar el viaje, usar el concierge y postular como partner.</p><p><a href="${escapeHtml(opts.url)}">Verificar correo</a></p>`;
   try {
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetchImpl(RESEND_EMAILS_URL, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${key}`,
@@ -166,12 +206,19 @@ export async function deliverVerificationEmail(opts: {
       body: JSON.stringify({
         from,
         to: opts.to,
-        subject: "Verifica tu correo en Mapucoin",
-        text: `Hola ${opts.name},\n\nConfirma tu correo para una experiencia personalizada en Mapucoin. Con la cuenta verificada puedes reservar cápsulas, armar el viaje, usar el concierge y postular como partner.\n\n${opts.url}\n`,
+        subject,
+        html,
       }),
     });
-    return res.ok;
-  } catch {
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      logMailFailure("resend rejected the send", { status: res.status, body, key });
+      return false;
+    }
+    return true;
+  } catch (error) {
+    const body = error instanceof Error ? error.message : "fetch failed";
+    logMailFailure("resend request threw", { body, key });
     return false;
   }
 }

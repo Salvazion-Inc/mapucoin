@@ -5,7 +5,13 @@ import HashScroll from "@/components/HashScroll";
 import Header from "@/components/Header";
 import { usePathname } from "next/navigation";
 
-export default function SiteFrame({ children }: { children: React.ReactNode }) {
+export default function SiteFrame({
+  children,
+  initialUser,
+}: {
+  children: React.ReactNode;
+  initialUser: { id: string; email: string; name: string } | null;
+}) {
   const path = usePathname() || "/";
   const hide =
     path.startsWith("/app") ||
@@ -18,7 +24,7 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
+      <Header initialUser={initialUser} />
       <HashScroll />
       {children}
       <Footer />

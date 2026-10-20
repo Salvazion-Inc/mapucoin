@@ -10,14 +10,15 @@ import { useEffect, useState } from "react";
 
 type Me = { id: string; email: string; name: string } | null;
 
-export default function Header() {
+export default function Header({ initialUser }: { initialUser: Me }) {
   const path = usePathname();
   const { locale } = useLocale();
   const c = t(locale);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hash, setHash] = useState("home");
-  const [me, setMe] = useState<Me>(null);
+  const [me, setMe] = useState<Me>(initialUser);
+  const [sessionKnown, setSessionKnown] = useState(true);
 
   const links = [
     { href: "/#por-que-chile", hash: "por-que-chile", label: c.nav.why },
@@ -33,7 +34,8 @@ export default function Header() {
     fetch("/api/auth/me")
       .then((r) => r.json())
       .then((data) => setMe(data.user ?? null))
-      .catch(() => setMe(null));
+      .catch(() => setMe(initialUser))
+      .finally(() => setSessionKnown(true));
   }, []);
 
   useEffect(() => {
@@ -109,14 +111,19 @@ export default function Header() {
           <Link href="/app" className="text-sand/80 hover:text-gold">
             {c.nav.app}
           </Link>
-          {me ? (
+          {sessionKnown && me ? (
             <Link href="/app/cuenta" className="text-gold">
               {me.name.split(" ")[0]}
             </Link>
-          ) : (
+          ) : sessionKnown ? (
             <Link href="/login?next=/app" className="text-sand/80 hover:text-gold">
               {c.nav.login}
             </Link>
+          ) : (
+            <span
+              className="inline-block h-4 w-16 animate-pulse rounded-full bg-sand/15"
+              aria-hidden="true"
+            />
           )}
           <Link href="/#planificar" className="btn-gold !px-4 !py-2 text-xs">
             {c.nav.plan}
@@ -161,13 +168,20 @@ export default function Header() {
           <Link href="/app" className="block py-2.5 text-gold" onClick={() => setOpen(false)}>
             {c.nav.app}
           </Link>
-          <Link
-            href={me ? "/app/cuenta" : "/login?next=/app"}
-            className="block py-2.5 text-gold"
-            onClick={() => setOpen(false)}
-          >
-            {me ? me.name.split(" ")[0] : c.nav.login}
-          </Link>
+          {sessionKnown ? (
+            <Link
+              href={me ? "/app/cuenta" : "/login?next=/app"}
+              className="block py-2.5 text-gold"
+              onClick={() => setOpen(false)}
+            >
+              {me ? me.name.split(" ")[0] : c.nav.login}
+            </Link>
+          ) : (
+            <span
+              className="my-2.5 inline-block h-4 w-16 animate-pulse rounded-full bg-sand/15"
+              aria-hidden="true"
+            />
+          )}
         </div>
       )}
     </header>

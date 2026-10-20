@@ -30,6 +30,7 @@ export function VerifyEmailScreen() {
   const [devUrl, setDevUrl] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [legacy, setLegacy] = useState(false);
+  const [hasSession, setHasSession] = useState<boolean | null>(null);
 
   useEffect(() => {
     setHydrated(true);
@@ -54,9 +55,11 @@ export function VerifyEmailScreen() {
         if (cancelled) return;
         const user = data.user;
         if (!user?.email) {
+          setHasSession(false);
           router.replace(loginPathFromVerify(search));
           return;
         }
+        setHasSession(true);
         if (user.emailVerified) {
           router.replace(preserved);
           return;
@@ -223,14 +226,18 @@ export function VerifyEmailScreen() {
           </button>
         </div>
         <p className="mt-6 flex items-center justify-between gap-4 text-sm text-sand/70">
-          <button
-            type="button"
-            disabled={!hydrated}
-            onClick={() => leave("entrar")}
-            className="text-gold disabled:opacity-60"
-          >
-            {a.haveAccount}
-          </button>
+          {hasSession === false ? (
+            <button
+              type="button"
+              disabled={!hydrated}
+              onClick={() => leave("entrar")}
+              className="text-gold disabled:opacity-60"
+            >
+              {a.haveAccount}
+            </button>
+          ) : (
+            <span />
+          )}
           <button
             type="button"
             disabled={!hydrated}

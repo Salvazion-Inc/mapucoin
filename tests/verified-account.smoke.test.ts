@@ -37,6 +37,8 @@ import {
   verificationLinkExposed,
   verificationUrl,
 } from "../lib/email-verification.ts";
+import { destinations } from "../lib/catalog.ts";
+import { cityKey, uniqueSortedCities } from "../lib/partner-cities.ts";
 import { partnerDelivery } from "../lib/partner-delivery.ts";
 import { loginPathFromVerify } from "../lib/service-redirect.ts";
 import {
@@ -595,7 +597,15 @@ describe("verified account gate", () => {
     assert.match(screen, /disabled=\{!hydrated\}/);
     assert.match(screen, /loginPathFromVerify/);
     assert.match(screen, /linkOnly: true/);
+    assert.match(screen, /hasSession === false/);
+    assert.match(screen, /a\.haveAccount/);
     assert.equal(at("es").account.logout, "Salir");
+    const chip = readFileSync("components/AccountChip.tsx", "utf8");
+    const accountTab = readFileSync("components/app/AccountTab.tsx", "utf8");
+    assert.match(chip, /window\.location\.href = "\/"/);
+    assert.match(accountTab, /window\.location\.href = "\/"/);
+    assert.equal(chip.includes('"/login"'), false);
+    assert.equal(accountTab.includes('"/login"'), false);
     assert.match(at("es").verifyLegacy, /anterior a la verificación/);
     assert.doesNotMatch(screen, /signupPathFromVerify/);
     const auth = readFileSync("components/AuthForm.tsx", "utf8");
@@ -609,13 +619,46 @@ describe("verified account gate", () => {
   it("prefills booking and partner identity and does not default the partner city", () => {
     assert.equal(t("es").partners.cityPlaceholder, "Elige tu ciudad");
     const partners = readFileSync("components/PartnersForm.tsx", "utf8");
-    const reserva = readFileSync("app/reserva/page.tsx", "utf8");
+    const reserva = readFileSync("app/reserva/reserva-client.tsx", "utf8");
+    const reservaPage = readFileSync("app/reserva/page.tsx", "utf8");
+    const header = readFileSync("components/Header.tsx", "utf8");
+    const layout = readFileSync("app/layout.tsx", "utf8");
     assert.match(partners, /useSessionIdentity/);
     assert.match(reserva, /useSessionIdentity/);
+    assert.match(reserva, /initialName/);
+    assert.match(reserva, /initialEmail/);
+    assert.match(reservaPage, /readSession/);
+    assert.match(reservaPage, /initialName/);
+    assert.match(layout, /readSession/);
+    assert.match(layout, /initialUser/);
+    assert.match(header, /initialUser/);
+    assert.match(header, /sessionKnown && me/);
+    assert.match(header, /sessionKnown \?/);
+    assert.match(partners, /uniqueSortedCities/);
     assert.match(partners, /cityPlaceholder/);
     assert.match(partners, /value=""/);
     assert.equal(partners.includes('value="Putre"'), false);
     assert.equal(partners.includes("defaultValue=\"Putre\""), false);
+  });
+
+  it("dedupes partner cities by accent and case, sorted, with no default", () => {
+    assert.deepEqual(
+      uniqueSortedCities(["Pucón", "Pucon", "pucón", "Coyhaique", "coyhaique", "Arica"]),
+      ["Arica", "Coyhaique", "Pucón"],
+    );
+    const cities = uniqueSortedCities(destinations.map((item) => item.city));
+    assert.deepEqual(
+      cities,
+      [...cities].sort((a, b) => a.localeCompare(b, "es")),
+    );
+    assert.equal(new Set(cities.map(cityKey)).size, cities.length);
+    assert.equal(cities.filter((city) => cityKey(city) === cityKey("Pucón")).length, 1);
+    assert.equal(cities.filter((city) => cityKey(city) === cityKey("Coyhaique")).length, 1);
+    assert.equal(cities.filter((city) => cityKey(city) === cityKey("Punta Arenas")).length, 1);
+    const partners = readFileSync("components/PartnersForm.tsx", "utf8");
+    assert.match(partners, /useState\(""\)/);
+    assert.match(partners, /partnerCities\.map/);
+    assert.doesNotMatch(partners, /key=\{d\.slug\}/);
   });
 
   it("does not store or notify partner applications outside production", async () => {
@@ -769,6 +812,45 @@ describe("verified account gate", () => {
     assert.equal(res.status, 200);
     assert.equal(data.user?.emailVerified, false);
     assert.equal(data.user?.legacyVerification, true);
+    const screen = readFileSync("components/auth/VerifyEmailScreen.tsx", "utf8");
+    assert.match(screen, /user\.legacyVerification === true/);
+    assert.match(screen, /\{a\.verifyLegacy\}/);
+    assert.match(at("es").verifyLegacy, /cuenta es anterior/);
+
+    const fixtures = JSON.parse(
+      readFileSync("tests/fixtures/legacy-accounts.json", "utf8"),
+    ) as Array<{
+      id: string;
+      createdAt: string | null;
+      serverVerified: boolean | null;
+      vaultVerified: boolean | null;
+      google: boolean;
+      emailVerified: boolean;
+      legacyVerification: boolean;
+    }>;
+    assert.ok(fixtures.some((fixture) => fixture.id === "pre-gate-no-key"));
+    for (const fixture of fixtures) {
+      assert.deepEqual(
+        accountVerificationState({
+          serverVerified: fixture.serverVerified,
+          vaultVerified: fixture.vaultVerified,
+          google: fixture.google,
+          createdAt: fixture.createdAt,
+          gateAt: "2026-10-15T02:13:06.000Z",
+        }),
+        {
+          emailVerified: fixture.emailVerified,
+          legacy: fixture.legacyVerification,
+        },
+        fixture.id,
+      );
+      const notice = fixture.legacyVerification ? at("es").verifyLegacy : null;
+      if (fixture.legacyVerification) {
+        assert.match(notice || "", /cuenta es anterior/);
+      } else {
+        assert.equal(notice, null);
+      }
+    }
 
     const calls: { url: string; body?: string; method?: string }[] = [];
     const fetchImpl = (async (url: RequestInfo | URL, init?: RequestInit) => {

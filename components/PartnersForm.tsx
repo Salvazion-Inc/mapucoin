@@ -2,6 +2,7 @@
 
 import { destinations } from "@/lib/catalog";
 import { t } from "@/lib/copy";
+import { uniqueSortedCities } from "@/lib/partner-cities";
 import { useLocale } from "@/lib/locale-context";
 import {
   herePath,
@@ -10,6 +11,8 @@ import {
 } from "@/lib/service-redirect";
 import { useSessionIdentity } from "@/lib/use-session-identity";
 import { FormEvent, useEffect, useState } from "react";
+
+const partnerCities = uniqueSortedCities(destinations.map((d) => d.city));
 
 const roleIds = [
   "capsula",
@@ -201,9 +204,9 @@ export default function PartnersForm() {
           <option value="" disabled>
             {c.partners.cityPlaceholder}
           </option>
-          {destinations.map((d) => (
-            <option key={d.slug} value={d.city}>
-              {d.city}
+          {partnerCities.map((name) => (
+            <option key={name} value={name}>
+              {name}
             </option>
           ))}
         </select>

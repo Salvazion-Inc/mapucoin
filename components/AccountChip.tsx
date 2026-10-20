@@ -27,7 +27,7 @@ export function AccountChip() {
     const { disableBiometric } = await import("@/lib/auth/biometric");
     disableBiometric();
     await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 
   const label = profile?.fullName || user.name || user.email;

@@ -824,3 +824,8 @@ export const appCopy = { es, en, pt, fr, it, de } as const;
 export function at(locale: Locale) {
   return appCopy[locale] ?? appCopy.es;
 }
+
+/** Status line on /signup. Only a verified session may show "Cuenta verificada". */
+export function showSignupVerifiedBadge(emailVerified: boolean | null | undefined) {
+  return emailVerified === true;
+}

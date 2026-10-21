@@ -1,10 +1,11 @@
 import { AppSplash } from "@/components/app/AppSplash";
 import { LocationProvider } from "@/lib/location";
 import { ProfileProvider } from "@/lib/profile-store";
+import { pageTitle } from "@/lib/seo";
 import { TripProvider } from "@/lib/trip-store";
 
 export const metadata = {
-  title: "Mapucoin App",
+  title: pageTitle("Mapucoin App"),
   alternates: {
     canonical: "https://mapucoin.com/app",
     languages: {

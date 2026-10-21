@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import { VerifyEmailScreen } from "@/components/auth/VerifyEmailScreen";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata = {
-  title: "Verifica tu correo | Mapucoin",
+  title: pageTitle("Verifica tu correo | Mapucoin"),
   robots: { index: false, follow: false },
 };
 

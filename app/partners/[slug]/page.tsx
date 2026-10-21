@@ -1,6 +1,7 @@
 import { formatCLP, getBySlug, landscapeLabel } from "@/lib/catalog";
 import { listApprovedPublic } from "@/lib/partner-store";
 import type { PublicPartner } from "@/lib/partners";
+import { pageTitle } from "@/lib/seo";
 import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,7 +18,7 @@ async function loadPartner(slug: string): Promise<PublicPartner | null> {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const partner = await loadPartner(slug);
-  return { title: partner?.business || "Partner" };
+  return { title: pageTitle(partner?.business || "Partner") };
 }
 
 export default async function PartnerSheetPage({ params }: Props) {

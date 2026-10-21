@@ -7,16 +7,19 @@ import BrandMark from "@/components/BrandMark";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { BiometricLogin } from "@/components/auth/BiometricLogin";
 import { useBiometricGate } from "@/components/auth/useBiometric";
-import { at } from "@/lib/app-copy";
+import { at, showSignupVerifiedBadge } from "@/lib/app-copy";
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
 
 export function AuthForm({
   mode,
   googleReason,
+  emailVerified = false,
 }: {
   mode: "login" | "signup";
   googleReason?: string;
+  /** Session already confirmed the email. Guests on /signup must not see the verified badge. */
+  emailVerified?: boolean;
 }) {
   const { locale } = useLocale();
   const a = at(locale);
@@ -151,9 +154,11 @@ export function AuthForm({
           />
         ) : (
           <>
-        <p className="text-sm text-gold">
-          {mode === "signup" ? a.signupLead : a.sessionNeeded}
-        </p>
+        {mode === "login" ? (
+          <p className="text-sm text-gold">{a.sessionNeeded}</p>
+        ) : showSignupVerifiedBadge(emailVerified) ? (
+          <p className="text-sm text-gold">{a.signupLead}</p>
+        ) : null}
         <h1 className="font-display mt-2 text-4xl font-bold">
           {mode === "login" ? a.loginTitle : a.signupTitle}
         </h1>

@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import { AuthForm } from "@/components/AuthForm";
 import { googleReasonFromSearch } from "@/lib/google-oauth";
+import { pageTitle } from "@/lib/seo";
 
-export const metadata = { title: "Entrar | Mapucoin" };
+export const metadata = { title: pageTitle("Entrar | Mapucoin") };
 
 export default async function Page({
   searchParams,

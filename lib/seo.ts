@@ -25,3 +25,24 @@ export const SEO = {
     addressCountry: "US",
   },
 } as const;
+
+const BRAND_SUFFIX = SEO.titleTemplate.replace("%s", "").trim();
+
+/**
+ * Segment passed to the root title template (`%s | Mapucoin`).
+ * A page that already ends with the brand ("Entrar | Mapucoin") is reduced
+ * to "Entrar" so the template does not render "Entrar | Mapucoin | Mapucoin".
+ */
+export function pageTitle(title: string): string {
+  let value = title.trim();
+  const tail = ` ${BRAND_SUFFIX}`;
+  while (value.endsWith(tail)) value = value.slice(0, -tail.length).trim();
+  return value;
+}
+
+/** Title after the root template is applied. */
+export function composeDocumentTitle(title: string): string {
+  const segment = pageTitle(title);
+  if (!segment) return "Mapucoin";
+  return SEO.titleTemplate.replace("%s", segment);
+}

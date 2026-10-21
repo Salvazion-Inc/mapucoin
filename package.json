@@ -10,7 +10,7 @@
     "cap:sync": "npx cap sync",
     "cap:open:android": "npx cap open android",
     "cap:open:ios": "npx cap open ios",
-    "test:smoke": "node --experimental-strip-types --import ./tests/alias-register.mjs --test tests/salvazion-premium.smoke.test.ts tests/verified-account.smoke.test.ts"
+    "test:smoke": "node --experimental-strip-types --import ./tests/alias-register.mjs --test tests/salvazion-premium.smoke.test.ts tests/verified-account.smoke.test.ts tests/ui-p2.test.ts"
   },
   "dependencies": {
     "@capacitor/app": "^7.1.2",

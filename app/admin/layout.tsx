@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Admin partners",
+  title: pageTitle("Admin partners"),
   robots: { index: false, follow: false },
 };
 

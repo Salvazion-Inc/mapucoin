@@ -380,7 +380,9 @@ optgroup {
     box-shadow 0.15s ease;
 }
 
-.lang-flag:hover {
+.lang-flag:hover,
+button:hover > .lang-flag,
+button:focus-visible > .lang-flag {
   opacity: 1;
   transform: scale(1.06);
 }

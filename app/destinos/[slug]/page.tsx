@@ -5,6 +5,7 @@ import {
   destinations,
   itemsForPlace,
 } from "@/lib/catalog";
+import { pageTitle } from "@/lib/seo";
 import { notFound, permanentRedirect } from "next/navigation";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -16,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const d = destinations.find((x) => x.slug === slug);
-  return { title: d?.name || "Destino" };
+  return { title: pageTitle(d?.name || "Destino") };
 }
 
 export default async function DestinoPage({ params }: Props) {

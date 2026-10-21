@@ -174,6 +174,7 @@ const es = {
     previewOk:
       "Vista previa: no avisamos a nadie. No se guarda la postulación ni se envía correo, Slack o webhook.",
     notes: "Cuéntanos tu oferta",
+    website: "Sitio web",
     submit: "Postular",
     sending: "Enviando…",
     incomplete: "Completa nombre, correo y negocio.",
@@ -255,7 +256,11 @@ const es = {
   operator: "Operado por",
   sound: "Sonido",
   mute: "Silencio",
-  footer: { terms: "Terms", privacy: "Privacy" },
+  footer: {
+    rights: "Todos los derechos reservados para",
+    terms: "Términos",
+    privacy: "Privacidad",
+  },
   notFound: {
     title: "Territorio no encontrado",
     lead: "Esa ruta no está en el mapa Mapucoin.",
@@ -533,6 +538,7 @@ const en: typeof es = {
     previewOk:
       "Preview: nobody is notified. The application is not stored and no email, Slack, or webhook is sent.",
     notes: "Tell us what you offer",
+    website: "Website",
     submit: "Apply",
     sending: "Sending…",
     incomplete: "Fill in name, email and business.",
@@ -614,7 +620,11 @@ const en: typeof es = {
   operator: "Run by",
   sound: "Sound",
   mute: "Mute",
-  footer: { terms: "Terms", privacy: "Privacy" },
+  footer: {
+    rights: "All Rights Reserved for",
+    terms: "Terms",
+    privacy: "Privacy",
+  },
   notFound: {
     title: "Territory not found",
     lead: "That route is not on the Mapucoin map.",
@@ -892,6 +902,7 @@ const pt: typeof es = {
     previewOk:
       "Prévia: ninguém é avisado. A candidatura não é guardada e não enviamos e-mail, Slack nem webhook.",
     notes: "Conte sua oferta",
+    website: "Site",
     submit: "Candidatar",
     sending: "Enviando…",
     incomplete: "Preencha nome, e-mail e negócio.",
@@ -973,7 +984,11 @@ const pt: typeof es = {
   operator: "Operado por",
   sound: "Som",
   mute: "Mudo",
-  footer: { terms: "Terms", privacy: "Privacy" },
+  footer: {
+    rights: "Todos os direitos reservados para",
+    terms: "Termos",
+    privacy: "Privacidade",
+  },
   notFound: {
     title: "Território não encontrado",
     lead: "Essa rota não está no mapa Mapucoin.",
@@ -1252,6 +1267,7 @@ const fr: typeof es = {
     previewOk:
       "Aperçu : personne n’est prévenu. La candidature n’est pas enregistrée et aucun e-mail, Slack ou webhook n’est envoyé.",
     notes: "Parlez-nous de votre offre",
+    website: "Site web",
     submit: "Postuler",
     sending: "Envoi…",
     incomplete: "Complétez nom, e-mail et activité.",
@@ -1333,7 +1349,11 @@ const fr: typeof es = {
   operator: "Assuré par",
   sound: "Son",
   mute: "Muet",
-  footer: { terms: "Terms", privacy: "Privacy" },
+  footer: {
+    rights: "Tous droits réservés pour",
+    terms: "Conditions",
+    privacy: "Confidentialité",
+  },
   notFound: {
     title: "Territoire introuvable",
     lead: "Cet itinéraire n'est pas sur la carte Mapucoin.",
@@ -1612,6 +1632,7 @@ const it: typeof es = {
     previewOk:
       "Anteprima: non avvisiamo nessuno. La candidatura non viene salvata e non inviamo email, Slack o webhook.",
     notes: "Raccontaci la tua offerta",
+    website: "Sito web",
     submit: "Candidati",
     sending: "Invio…",
     incomplete: "Compila nome, email e attività.",
@@ -1693,7 +1714,11 @@ const it: typeof es = {
   operator: "Gestito da",
   sound: "Suono",
   mute: "Muto",
-  footer: { terms: "Terms", privacy: "Privacy" },
+  footer: {
+    rights: "Tutti i diritti riservati per",
+    terms: "Termini",
+    privacy: "Privacy",
+  },
   notFound: {
     title: "Territorio non trovato",
     lead: "Quel percorso non è sulla mappa Mapucoin.",
@@ -1974,6 +1999,7 @@ const de: typeof es = {
     previewOk:
       "Vorschau: niemand wird benachrichtigt. Die Bewerbung wird nicht gespeichert und es gibt keine E-Mail, keinen Slack und keinen Webhook.",
     notes: "Erzähl uns dein Angebot",
+    website: "Website",
     submit: "Bewerben",
     sending: "Senden…",
     incomplete: "Füll Name, E-Mail und Betrieb aus.",
@@ -2055,7 +2081,11 @@ const de: typeof es = {
   operator: "Betrieben von",
   sound: "Ton",
   mute: "Stumm",
-  footer: { terms: "Terms", privacy: "Privacy" },
+  footer: {
+    rights: "Alle Rechte vorbehalten für",
+    terms: "AGB",
+    privacy: "Datenschutz",
+  },
   notFound: {
     title: "Gebiet nicht gefunden",
     lead: "Diese Route liegt nicht auf der Mapucoin-Karte.",

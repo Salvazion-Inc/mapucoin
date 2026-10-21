@@ -1,5 +1,6 @@
 import CapsulaView from "@/components/CapsulaView";
 import { capsules, getBySlug } from "@/lib/catalog";
+import { pageTitle } from "@/lib/seo";
 import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -11,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const c = capsules.find((x) => x.slug === slug);
-  return { title: c?.name || "Cápsula" };
+  return { title: pageTitle(c?.name || "Cápsula") };
 }
 
 export default async function CapsulaPage({ params }: Props) {

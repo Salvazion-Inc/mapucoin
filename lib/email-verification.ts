@@ -136,6 +136,7 @@ export function requestOrigin(req: Request, env: NodeJS.ProcessEnv = process.env
 }
 
 export function verificationLinkExposed(env: NodeJS.ProcessEnv = process.env) {
+  if (env["VERCEL_ENV"] === "production") return false;
   // Bracket access so Next does not inline the flag at build time.
   if (env["MAPUCOIN_DEV_VERIFY"] === "1") return true;
   return env["VERCEL_ENV"] !== "production";

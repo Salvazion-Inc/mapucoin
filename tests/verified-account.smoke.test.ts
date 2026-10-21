@@ -213,7 +213,7 @@ describe("verified account gate", () => {
     assert.equal(consumedBody.emailVerified, true);
   });
 
-  it("hides the verification link in production unless the tester flag is on", () => {
+  it("hides the verification link in production even when the tester flag is on", () => {
     assert.equal(
       verificationLinkExposed({ NODE_ENV: "production", VERCEL_ENV: "production" }),
       false,
@@ -224,7 +224,7 @@ describe("verified account gate", () => {
         VERCEL_ENV: "production",
         MAPUCOIN_DEV_VERIFY: "1",
       }),
-      true,
+      false,
     );
     assert.equal(verificationLinkExposed({ NODE_ENV: "test" }), true);
     assert.equal(

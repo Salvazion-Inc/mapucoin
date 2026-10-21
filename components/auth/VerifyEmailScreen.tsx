@@ -37,8 +37,6 @@ export function VerifyEmailScreen() {
   }, []);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem(DEV_KEY) || "";
-    if (stored) setDevUrl(stored);
     if (sessionStorage.getItem(DELIVERED_KEY) === "false") setFailed(true);
     if (sessionStorage.getItem(DELIVERED_KEY) === "true") setSent(true);
   }, []);
@@ -89,9 +87,13 @@ export function VerifyEmailScreen() {
     })
       .then((res) => res.json())
       .then((data: { devUrl?: string }) => {
-        if (cancelled || typeof data.devUrl !== "string" || !data.devUrl) return;
-        sessionStorage.setItem(DEV_KEY, data.devUrl);
-        setDevUrl(data.devUrl);
+        if (cancelled) return;
+        if (typeof data.devUrl === "string" && data.devUrl) {
+          sessionStorage.setItem(DEV_KEY, data.devUrl);
+          setDevUrl(data.devUrl);
+          return;
+        }
+        sessionStorage.removeItem(DEV_KEY);
       })
       .catch(() => {});
     return () => {
@@ -139,6 +141,9 @@ export function VerifyEmailScreen() {
     if (typeof data.devUrl === "string" && data.devUrl) {
       sessionStorage.setItem(DEV_KEY, data.devUrl);
       setDevUrl(data.devUrl);
+    } else {
+      sessionStorage.removeItem(DEV_KEY);
+      setDevUrl("");
     }
     setPending(false);
   }

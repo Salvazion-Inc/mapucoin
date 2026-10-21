@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Reservar cápsula",
+  title: pageTitle("Reservar cápsula"),
   robots: { index: true, follow: true },
 };
 

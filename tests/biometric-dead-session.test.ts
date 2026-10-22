@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { afterEach, describe, it } from "node:test";
+import { NextRequest } from "next/server";
 import { POST as unlockPost } from "../app/api/auth/biometric-unlock/route.ts";
+import { middleware } from "../middleware.ts";
 import {
   BIOMETRIC_STATE_KEY,
   BIOMETRIC_VAULT_KEY,
@@ -288,6 +290,60 @@ describe("dead biometric session (DEC-20261022-04)", () => {
     assert.equal(acceptedBody.user?.email, owner.email);
     assert.equal(typeof acceptedBody.token, "string");
     assert.equal(resolveBiometricUnlock({ ok: true }), "continue");
+  });
+
+  it("never returns 403 for rate limiting or CSRF on a valid biometric unlock", async () => {
+    const token = await createSessionToken(owner);
+    const headers = {
+      origin: "https://evil.example",
+      referer: "https://evil.example/csrf",
+      "content-type": "application/json",
+      cookie: `mapucoin_session=${token}`,
+    };
+
+    const gated = await middleware(
+      new NextRequest("https://mapucoin.com/api/auth/biometric-unlock", {
+        method: "POST",
+        headers,
+      }),
+    );
+    assert.notEqual(gated.status, 403);
+
+    const localhostGate = await middleware(
+      new NextRequest("http://localhost:3000/api/auth/biometric-unlock", {
+        method: "POST",
+        headers,
+      }),
+    );
+    assert.notEqual(localhostGate.status, 403);
+
+    const statuses = new Set<number>();
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      const res = await unlockPost(
+        new Request("https://mapucoin.com/api/auth/biometric-unlock", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ token }),
+        }),
+      );
+      statuses.add(res.status);
+      const body = (await res.json()) as { error?: string };
+      assert.notEqual(body.error, "rate_limited");
+      assert.notEqual(body.error, "origin");
+      assert.notEqual(body.error, "csrf");
+      assert.notEqual(res.status, 403);
+    }
+    assert.deepEqual([...statuses], [200]);
+
+    const route = readFileSync("app/api/auth/biometric-unlock/route.ts", "utf8");
+    const gate = readFileSync("middleware.ts", "utf8");
+    assert.equal(route.includes("status: 403"), false);
+    assert.equal(route.includes("rateLimit"), false);
+    assert.equal(route.includes("originAllowed"), false);
+    assert.equal(route.includes("originRejectedResponse"), false);
+    assert.equal(gate.includes("status: 403"), false);
+    assert.equal(gate.includes("rateLimit"), false);
+    assert.equal(gate.includes("originAllowed"), false);
   });
 
   it("wires the login screen to clear the vault instead of re-prompting", () => {

@@ -4,13 +4,23 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   BiometricCancelledError,
+  disableBiometric,
   persistBiometricVault,
   unlockWithBiometric,
 } from "@/lib/auth/biometric";
+import {
+  recoverDeadBiometricLogin,
+  resolveBiometricUnlock,
+  type BiometricUnlockSignal,
+} from "@/lib/auth/biometric-session";
 import { at } from "@/lib/app-copy";
 import type { Locale } from "@/lib/locale";
 import { BiometricUnlockScreen } from "./BiometricUnlockScreen";
 import { useAutoBiometricPrompt, useBiometricGate } from "./useBiometric";
+
+async function signOutLocal() {
+  await fetch("/api/auth/logout", { method: "POST" });
+}
 
 export function BiometricLogin({
   locale,
@@ -19,7 +29,7 @@ export function BiometricLogin({
 }: {
   locale: Locale;
   next: string;
-  onUsePassword: () => void;
+  onUsePassword: (notice?: string) => void;
 }) {
   const c = at(locale);
   const router = useRouter();
@@ -27,24 +37,67 @@ export function BiometricLogin({
   const [loading, setLoading] = useState(false);
   const [attempted, setAttempted] = useState(false);
   const [error, setError] = useState("");
+  const [stopped, setStopped] = useState(false);
   const loadingRef = useRef(false);
+  const droppedRef = useRef(false);
+
+  async function fallBackToPassword() {
+    if (droppedRef.current) return;
+    droppedRef.current = true;
+    setStopped(true);
+    await recoverDeadBiometricLogin({
+      disableBiometric,
+      signOutLocal,
+      showPasswordLogin: () => onUsePassword(c.biometricExpired),
+    });
+  }
 
   async function handleUnlock() {
-    if (loadingRef.current) return;
+    if (loadingRef.current || droppedRef.current) return;
     loadingRef.current = true;
     setLoading(true);
     setError("");
     try {
       const vault = await unlockWithBiometric();
-      const res = await fetch("/api/auth/biometric-unlock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: vault.token }),
-      });
-      if (!res.ok) {
-        setError(c.biometricExpired);
+      let res: Response;
+      try {
+        res = await fetch("/api/auth/biometric-unlock", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: vault.token }),
+        });
+      } catch (err) {
+        const name = err instanceof Error ? err.name : undefined;
+        const message = err instanceof Error ? err.message : String(err);
+        if (resolveBiometricUnlock({ ok: false, name, message }) === "fallback") {
+          await fallBackToPassword();
+          return;
+        }
+        setError(c.biometricFailed);
         return;
       }
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: unknown;
+          message?: unknown;
+          code?: unknown;
+        };
+        const signal: BiometricUnlockSignal = {
+          ok: false,
+          status: res.status,
+          error: typeof data.error === "string" ? data.error : undefined,
+          message: typeof data.message === "string" ? data.message : undefined,
+          code: typeof data.code === "string" ? data.code : undefined,
+        };
+        if (resolveBiometricUnlock(signal) === "fallback") {
+          await fallBackToPassword();
+          return;
+        }
+        setError(c.biometricFailed);
+        return;
+      }
+
       const data = (await res.json()) as {
         token?: string;
         user?: { email?: string };
@@ -63,7 +116,7 @@ export function BiometricLogin({
     }
   }
 
-  useAutoBiometricPrompt({ active: true, run: handleUnlock });
+  useAutoBiometricPrompt({ active: !stopped, run: handleUnlock });
 
   const status =
     loading || !attempted ? c.biometricProcessing : c.biometricRetry;
@@ -81,7 +134,7 @@ export function BiometricLogin({
       footer={
         <button
           type="button"
-          onClick={onUsePassword}
+          onClick={() => onUsePassword()}
           disabled={loading}
           className="text-xs text-sand/55 transition hover:text-gold"
         >

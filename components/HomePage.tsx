@@ -51,7 +51,10 @@ export default function HomePage() {
           >
             {c.hero.title}
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-sand/80 md:text-lg">
+          <p
+            id="hero-lead"
+            className="mt-6 max-w-2xl text-base leading-relaxed text-sand/80 md:text-lg"
+          >
             {c.hero.lead}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">

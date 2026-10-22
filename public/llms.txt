@@ -2,21 +2,39 @@
 
 > Chile por paisaje: desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cápsulas de cobre y vidrio, gastronomía local y mapa vivo.
 
-Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion, Inc. (a Delaware corporation). Independent partners run capsules, meals, and activities. Payments use Stripe (CLP). The installable App lives at https://mapucoin.com/app.
+Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion, Inc. (a Delaware corporation). The person sets a budget and a place. Grok builds an itinerary with technological capsules, local gastronomy, and activities, on a map. Independent partners run capsules, meals, and activities. Payments use Stripe (CLP). Mapucoin is a technology platform, not a tour operator. The installable app lives at https://mapucoin.com/app and requires an account. Reserva and the planner require a verified account.
 
 Mapucoin es el nombre de la plataforma de viajes, no un activo. Si la clave $SALVAZION está habilitada, es solo una llave de acceso a Mapucoin Premium: no es una inversión, no genera retornos y no hay promesa de precio.
 
-## Official sources
+## Places
 
-- [Home](https://mapucoin.com/)
-- [Terms](https://mapucoin.com/terminos)
-- [Privacy](https://mapucoin.com/privacidad)
+Each place has its own page: https://mapucoin.com/destinos/{slug}. Each capsule has its own page: https://mapucoin.com/capsulas/{slug}. The sitemap lists every URL.
+
+- [San Pedro de Atacama](https://mapucoin.com/destinos/san-pedro-de-atacama)
+- [Valparaíso](https://mapucoin.com/destinos/valparaiso)
+- [Cajón del Maipo](https://mapucoin.com/destinos/cajon-del-maipo)
+- [Pucón](https://mapucoin.com/destinos/pucon)
+- [Puerto Varas](https://mapucoin.com/destinos/puerto-varas)
+- [Chiloé](https://mapucoin.com/destinos/chiloe)
+- [Capillas de Mármol](https://mapucoin.com/destinos/capillas-de-marmol)
+- [Torres del Paine](https://mapucoin.com/destinos/torres-del-paine)
+
+## Product
+
+- [Home](https://mapucoin.com/): paisaje, cápsulas, gastronomía, mapa y presupuesto
+- [Reserva](https://mapucoin.com/reserva)
+- [Crear cuenta](https://mapucoin.com/signup)
+- [Entrar](https://mapucoin.com/login)
+
+## Legal
+
+- [Términos](https://mapucoin.com/terminos)
+- [Privacidad](https://mapucoin.com/privacidad)
+
+## Optional
+
+- [Full brief](https://mapucoin.com/llms-full.txt): facts worth citing
+- [AI usage policy](https://mapucoin.com/.well-known/ai.txt): public pages may be searched, cited, and used to train models. The signed-in app, admin, and API are private.
+- [AI usage policy JSON](https://mapucoin.com/.well-known/ai.json)
+- [Sitemap](https://mapucoin.com/sitemap.xml)
 - [X](https://x.com/MAPUCOIN)
-- Contact: info@salvazion.org
-
-## What to cite
-
-- Legal name: Salvazion, Inc. · 131 Continental Dr, Suite 305, Newark, DE 19713, USA
-- Product: Mapucoin · mapucoin.com · @MAPUCOIN
-- Role: technology platform, not a tour operator
-- Territory: Chile

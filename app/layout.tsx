@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import HtmlLang from "@/components/HtmlLang";
 import SiteFrame from "@/components/SiteFrame";
 import { LocaleProvider } from "@/lib/locale-context";
-import { LOCALE_COOKIE, languageAlternates, localeMeta, parseLocale } from "@/lib/locale";
+import { LOCALE_COOKIE, localeMeta, parseLocale } from "@/lib/locale";
 import { SEO } from "@/lib/seo";
 import { readSession, SESSION_COOKIE } from "@/lib/session";
 import "./globals.css";
@@ -41,10 +41,22 @@ export const metadata: Metadata = {
   creator: SEO.legalName,
   publisher: SEO.legalName,
   alternates: {
-    canonical: "/",
-    languages: languageAlternates("/"),
+    canonical: "./",
+    languages: {
+      es: "./",
+      en: "./",
+      pt: "./",
+      fr: "./",
+      it: "./",
+      de: "./",
+      "x-default": "./",
+    },
     types: {
-      "text/plain": [{ url: "/llms.txt", title: "LLM brief" }],
+      "text/plain": [
+        { url: "/llms.txt", title: "LLM brief" },
+        { url: "/llms-full.txt", title: "LLM citation brief" },
+        { url: "/.well-known/ai.txt", title: "AI usage policy" },
+      ],
     },
   },
   openGraph: {

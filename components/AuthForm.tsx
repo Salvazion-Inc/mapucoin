@@ -150,7 +150,10 @@ export function AuthForm({
           <BiometricLogin
             locale={locale}
             next={next}
-            onUsePassword={() => setPasswordFallback(true)}
+            onUsePassword={(notice) => {
+              setPasswordFallback(true);
+              if (notice) setMessage(notice);
+            }}
           />
         ) : (
           <>

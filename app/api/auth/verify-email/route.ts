@@ -9,7 +9,7 @@ import {
   verificationUrl,
 } from "@/lib/email-verification";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
-import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
+import { authSecretFailureResponse, cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
 import { safeNextPath } from "@/lib/verified-access";
 
 const RESEND_WINDOW_MS = 20_000;
@@ -22,6 +22,9 @@ function withCookies(res: NextResponse, cookies: string[]) {
 }
 
 export async function GET(req: Request) {
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
+
   const url = new URL(req.url);
   const origin = requestOrigin(req);
   const next = safeNextPath(url.searchParams.get("next"));
@@ -47,6 +50,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
+
   const body = (await req.json().catch(() => ({}))) as {
     token?: unknown;
     linkOnly?: unknown;

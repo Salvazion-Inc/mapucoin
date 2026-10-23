@@ -8,10 +8,12 @@ import { verifyPassword } from "@/lib/passwords";
 import {
   ACCOUNTS_COOKIE,
   accountsCookie,
+  authSecretFailureResponse,
   cookieValue,
   createSessionToken,
   readAccounts,
   sessionCookie,
+  sessionVersionOf,
   signAccounts,
   type AccountRecord,
 } from "@/lib/session";
@@ -24,7 +26,7 @@ type ServerUser = {
   email?: string | null;
   created_at?: string;
   user_metadata?: Record<string, unknown> | null;
-  app_metadata?: { provider?: string };
+  app_metadata?: { provider?: string; session_version?: unknown };
   identities?: { provider?: string }[] | null;
 };
 
@@ -39,6 +41,9 @@ function isGoogle(user: ServerUser) {
 }
 
 export async function POST(req: Request) {
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
+
   const body = await req.json().catch(() => ({}));
   const email = String(body.email || "").trim().toLowerCase();
   const password = String(body.password || "");
@@ -100,7 +105,12 @@ export async function POST(req: Request) {
     emailVerified: state.emailVerified,
     legacyVerification: state.legacy && !state.emailVerified,
   };
-  const session = await createSessionToken(user);
+  const session = await createSessionToken({
+    ...user,
+    sessionVersion: serverUser
+      ? sessionVersionOf(serverUser.app_metadata?.session_version)
+      : undefined,
+  });
   const res = NextResponse.json({ user });
   res.headers.append("Set-Cookie", sessionCookie(session));
   if (account && state.emailVerified) {

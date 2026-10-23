@@ -49,3 +49,23 @@ export function originAllowed(req: Request) {
 export function originRejectedResponse() {
   return Response.json({ error: "origin" }, { status: 403 });
 }
+
+/**
+ * CSRF check for cookie-authenticated POST. Origin wins when the browser sends
+ * it; otherwise the Referer origin must match. Missing both is rejected.
+ */
+export function requestSourceAllowed(req: Request) {
+  const origin = (req.headers.get("origin") || "").trim();
+  if (origin) return originAllowed(req);
+  const referer = (req.headers.get("referer") || req.headers.get("referrer") || "").trim();
+  if (!referer) return false;
+  let refererOrigin = "";
+  try {
+    refererOrigin = new URL(referer).origin;
+  } catch {
+    return false;
+  }
+  const headers = new Headers(req.headers);
+  headers.set("origin", refererOrigin);
+  return originAllowed(new Request(req.url, { headers }));
+}

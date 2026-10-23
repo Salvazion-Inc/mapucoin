@@ -1,3 +1,9 @@
+/**
+ * In-memory, per-instance counters.
+ * This repo has no shared limiter (no Redis, KV, or existing rate-limit table).
+ * A Supabase table would need a migration, so password recovery keeps this store
+ * and documents that a second instance does not see these counters.
+ */
 type Bucket = { n: number; reset: number };
 
 const buckets = new Map<string, Bucket>();

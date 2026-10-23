@@ -16,7 +16,7 @@ import { POST as connectPost } from "../app/api/partners/connect/route.ts";
 import { POST as planPost } from "../app/api/plan/route.ts";
 import { GET as premiumGet, POST as premiumPost } from "../app/api/premium/route.ts";
 import { GET as profileGet, PUT as profilePut } from "../app/api/profile/route.ts";
-import { GET as logoutGet, POST as logoutPost } from "../app/api/auth/logout/route.ts";
+import { POST as logoutPost } from "../app/api/auth/logout/route.ts";
 import { POST as loginPost } from "../app/api/auth/login/route.ts";
 import { GET as meGet } from "../app/api/auth/me/route.ts";
 import { POST as signupPost } from "../app/api/auth/signup/route.ts";
@@ -627,7 +627,7 @@ describe("verified account gate", () => {
     const res = await logoutPost(
       new Request("http://localhost/api/auth/logout", {
         method: "POST",
-        headers: { cookie, host: "localhost:3000" },
+        headers: { cookie, host: "localhost:3000", origin: "http://localhost:3000" },
       }),
     );
     const cleared = res.headers.getSetCookie();
@@ -660,26 +660,16 @@ describe("verified account gate", () => {
     );
     assert.equal(((await after.json()) as { user: unknown }).user, null);
 
-    const next = `/login?next=${encodeURIComponent("/reserva?capsula=domo")}`;
-    const leave = await logoutGet(
-      new Request(`https://mapucoin.com/api/auth/logout?next=${encodeURIComponent(next)}`, {
-        headers: {
-          cookie,
-          "x-forwarded-host": "mapucoin-git-preview.vercel.app",
-          "x-forwarded-proto": "https",
-        },
-      }),
-    );
-    assert.equal(leave.status, 303);
-    assert.equal(
-      leave.headers.get("location"),
-      `https://mapucoin-git-preview.vercel.app${next}`,
-    );
+    assert.equal(res.status, 200);
+    assert.equal(res.headers.get("location"), null);
+    const route = readFileSync("app/api/auth/logout/route.ts", "utf8");
+    assert.equal(/export async function GET/.test(route), false);
   });
 
   it("lets an unverified visitor leave /verificar and keeps login errors visible", () => {
     const screen = readFileSync("components/auth/VerifyEmailScreen.tsx", "utf8");
-    assert.match(screen, /\/api\/auth\/logout\?next=/);
+    assert.match(screen, /method: "POST"/);
+    assert.equal(screen.includes("/api/auth/logout?next="), false);
     assert.match(screen, /account\.logout/);
     assert.match(screen, /disabled=\{!hydrated\}/);
     assert.match(screen, /loginPathFromVerify/);
@@ -831,6 +821,7 @@ describe("verified account gate", () => {
         method: "POST",
         headers: {
           cookie: `${vault}; ${session?.split(";")[0] || ""}; mapucoin_verified=stale`,
+          origin: "http://localhost:3000",
         },
       }),
     );

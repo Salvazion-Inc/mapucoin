@@ -28,7 +28,11 @@ import {
 import {
   ACCOUNTS_COOKIE,
   cookieValue,
+  createSessionToken,
   readAccounts,
+  readSession,
+  sessionVersionOf,
+  setSessionVersionSource,
   signAccounts,
   signValue,
 } from "../lib/session.ts";
@@ -46,7 +50,10 @@ type Stored = {
   password?: string;
 };
 
-function installAdmin(users: Stored[], opts?: { verifyAlways?: boolean }) {
+function installAdmin(
+  users: Stored[],
+  opts?: { verifyAlways?: boolean; revokeResults?: boolean[] },
+) {
   const byId = new Map(users.map((user) => [user.id, user]));
   const calls = {
     generate: [] as { email: string; redirectTo: string }[],
@@ -54,6 +61,7 @@ function installAdmin(users: Stored[], opts?: { verifyAlways?: boolean }) {
     revoke: [] as string[],
     update: [] as { id: string; password: string }[],
     clearJti: 0,
+    rotate: 0,
   };
   const burned = new Set<string>();
   let acceptJti = true;
@@ -99,7 +107,18 @@ function installAdmin(users: Stored[], opts?: { verifyAlways?: boolean }) {
     },
     async revokeSessions(accessToken) {
       calls.revoke.push(accessToken);
+      const scripted = opts?.revokeResults?.[calls.revoke.length - 1];
+      if (scripted !== undefined) return scripted;
       return accessToken === "access-jwt";
+    },
+    async rotateSessionVersion(userId, appMetadata) {
+      const user = byId.get(userId);
+      if (!user) return { ok: false };
+      const next = sessionVersionOf(appMetadata.session_version) + 1;
+      const updated = { ...appMetadata, session_version: next };
+      user.appMetadata = { ...user.appMetadata, ...updated };
+      calls.rotate += 1;
+      return { ok: true, appMetadata: updated };
     },
     async updatePassword(userId, password) {
       const user = byId.get(userId);
@@ -208,7 +227,12 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.match(source, /after\(/);
     assert.match(source, /signOut\(accessToken, "global"\)/);
     assert.match(source, /AES-GCM/);
-    assert.match(source, /AUTH_SECRET/);
+    assert.match(source, /resolveAuthSecret/);
+    assert.match(source, /HKDF/);
+    assert.match(source, /mapucoin-password-recovery-aes-v1/);
+    assert.match(source, /rotateSessionVersion/);
+    assert.equal(source.includes("mapucoin-by-salvazion-inc-session-key"), false);
+    assert.equal(source.includes("mapucoin-recovery:${"), false);
     assert.match(source, /in-memory per instance/);
     assert.equal(source.includes("process.env.RECOVERY"), false);
     assert.equal(RECOVERY_TTL_SEC, 15 * 60);
@@ -574,6 +598,8 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.equal(rig.calls.update.length, 1);
     assert.equal(rig.calls.verify.length, 1);
     assert.deepEqual(rig.calls.revoke, ["access-jwt"]);
+    assert.equal(rig.calls.rotate, 1);
+    assert.equal(rig.byId.get("user-4")?.appMetadata.session_version, 1);
     assert.equal(rig.calls.clearJti, 1);
     const setCookies = saved.headers.getSetCookie();
     assert.ok(setCookies.some((line) => line.startsWith(`${RECOVERY_COOKIE}=`) && /Max-Age=0/.test(line)));
@@ -673,6 +699,7 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.match(chip, /method: "POST"/);
     const logout = readFileSync("app/api/auth/logout/route.ts", "utf8");
     assert.match(logout, /export async function POST/);
+    assert.match(logout, /requestSourceAllowed/);
     assert.equal(/export async function GET/.test(logout), false);
     const verifyScreen = readFileSync("components/auth/VerifyEmailScreen.tsx", "utf8");
     assert.match(verifyScreen, /method: "POST"/);
@@ -695,6 +722,108 @@ describe("password recovery (DEC-20261021-02)", () => {
       assert.match(route, /export const runtime = "nodejs"/);
       assert.equal(route.includes("NEXT_PUBLIC_SUPABASE_ANON_KEY"), false);
       assert.equal(route.includes("devUrl"), false);
+    }
+  });
+
+  it("retries global signOut once and drops HMAC cookies minted before the reset", async () => {
+    const rig = installAdmin(
+      [{ id: "user-9", email: "retry-ok@mapucoin.test", name: "Ana", appMetadata: { provider: "email" } }],
+      { verifyAlways: true, revokeResults: [false, true] },
+    );
+    setSessionVersionSource(async (userId) => {
+      const user = rig.byId.get(userId);
+      if (!user) return null;
+      return sessionVersionOf(user.appMetadata.session_version);
+    });
+    const logs: string[] = [];
+    const original = console.error;
+    console.error = (...args: unknown[]) => {
+      logs.push(args.map((item) => String(item)).join(" "));
+    };
+    try {
+      const prior = await createSessionToken({
+        id: "user-9",
+        email: "retry-ok@mapucoin.test",
+        name: "Ana",
+        emailVerified: true,
+      });
+      assert.equal((await readSession(prior))?.email, "retry-ok@mapucoin.test");
+      const box = mailBox();
+      await requestPasswordReset(forgotRequest("retry-ok@mapucoin.test", crypto.randomUUID()), {
+        env: mailEnv,
+        fetchImpl: box.fetchImpl,
+        admin: rig.admin,
+      });
+      const cookieToken = await plantRecoveryCookie(box.sent[0]?.html || "", rig.admin);
+      const saved = await updateRecoveredPassword(
+        new Request("https://mapucoin.com/api/auth/update-password", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            host: "mapucoin.com",
+            "x-forwarded-proto": "https",
+            "x-forwarded-for": crypto.randomUUID(),
+            cookie: `${RECOVERY_COOKIE}=${encodeURIComponent(cookieToken)}`,
+          },
+          body: JSON.stringify({ password: "nueva-clave-8", confirm: "nueva-clave-8" }),
+        }),
+        { admin: rig.admin, env: mailEnv },
+      );
+      assert.equal(saved.status, 200);
+      assert.deepEqual(rig.calls.revoke, ["access-jwt", "access-jwt"]);
+      assert.equal(logs.some((line) => line.includes("did not revoke sessions")), false);
+      assert.equal(await readSession(prior), null);
+      const minted = await createSessionToken({
+        id: "user-9",
+        email: "retry-ok@mapucoin.test",
+        name: "Ana",
+        emailVerified: true,
+      });
+      assert.equal((await readSession(minted))?.sessionVersion, 1);
+    } finally {
+      console.error = original;
+      setSessionVersionSource(null);
+    }
+  });
+
+  it("logs an error when global signOut still fails after the retry", async () => {
+    const rig = installAdmin(
+      [{ id: "user-10", email: "retry-fail@mapucoin.test", name: "Ana", appMetadata: {} }],
+      { verifyAlways: true, revokeResults: [false, false] },
+    );
+    const logs: string[] = [];
+    const original = console.error;
+    console.error = (...args: unknown[]) => {
+      logs.push(args.map((item) => String(item)).join(" "));
+    };
+    try {
+      const box = mailBox();
+      await requestPasswordReset(forgotRequest("retry-fail@mapucoin.test", crypto.randomUUID()), {
+        env: mailEnv,
+        fetchImpl: box.fetchImpl,
+        admin: rig.admin,
+      });
+      const cookieToken = await plantRecoveryCookie(box.sent[0]?.html || "", rig.admin);
+      const saved = await updateRecoveredPassword(
+        new Request("https://mapucoin.com/api/auth/update-password", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            host: "mapucoin.com",
+            "x-forwarded-proto": "https",
+            "x-forwarded-for": crypto.randomUUID(),
+            cookie: `${RECOVERY_COOKIE}=${encodeURIComponent(cookieToken)}`,
+          },
+          body: JSON.stringify({ password: "nueva-clave-8", confirm: "nueva-clave-8" }),
+        }),
+        { admin: rig.admin, env: mailEnv },
+      );
+      assert.equal(saved.status, 200);
+      assert.equal(rig.calls.revoke.length, 2);
+      assert.match(logs.join("\n"), /password recovery did not revoke sessions/);
+      assert.equal(rig.byId.get("user-10")?.appMetadata.session_version, 1);
+    } finally {
+      console.error = original;
     }
   });
 

@@ -9,6 +9,7 @@ import { hashPassword } from "@/lib/passwords";
 import {
   ACCOUNTS_COOKIE,
   accountsCookie,
+  authSecretFailureResponse,
   cookieValue,
   createSessionToken,
   readAccounts,
@@ -22,6 +23,9 @@ import { safeNextPath } from "@/lib/verified-access";
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
+
   const body = await req.json().catch(() => ({}));
   const email = String(body.email || "").trim().toLowerCase();
   const name = String(body.full_name || body.name || "").trim();

@@ -14,6 +14,7 @@ import {
 import {
   ACCOUNTS_COOKIE,
   accountsCookie,
+  authSecretFailureResponse,
   cookieValue,
   createSessionToken,
   readAccounts,
@@ -76,6 +77,9 @@ export async function GET(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
+
   const gate = await requireVerifiedAccount(req);
   if (!gate.ok) return gate.response;
   const user = gate.user;
@@ -151,6 +155,7 @@ export async function PUT(req: Request) {
     name: fullName,
     emailVerified: user.emailVerified,
     legacyVerification: user.legacyVerification === true,
+    sessionVersion: user.sessionVersion,
   });
   const vault = await signProfileMap(map);
   const res = NextResponse.json({ profile: publicProfile(profile) });

@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
-import { createSessionToken, readSession, sessionCookie } from "@/lib/session";
+import {
+  authSecretFailureResponse,
+  createSessionToken,
+  readSession,
+  sessionCookie,
+} from "@/lib/session";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
+
   const body = await req.json().catch(() => ({}));
   const token = String(body.token || "");
   const user = await readSession(token);

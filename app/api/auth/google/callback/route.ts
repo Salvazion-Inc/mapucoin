@@ -4,6 +4,7 @@ import { rememberVerifiedEmail } from "@/lib/email-verification";
 import {
   ACCOUNTS_COOKIE,
   accountsCookie,
+  authSecretFailureResponse,
   cookieValue,
   createSessionToken,
   readAccounts,
@@ -43,6 +44,9 @@ function dest(req: Request, next: string) {
 }
 
 export async function GET(req: Request) {
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
+
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
   const googleError = url.searchParams.get("error");

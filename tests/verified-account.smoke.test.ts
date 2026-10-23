@@ -627,7 +627,7 @@ describe("verified account gate", () => {
     const res = await logoutPost(
       new Request("http://localhost/api/auth/logout", {
         method: "POST",
-        headers: { cookie, host: "localhost:3000" },
+        headers: { cookie, host: "localhost:3000", origin: "http://localhost:3000" },
       }),
     );
     const cleared = res.headers.getSetCookie();
@@ -821,6 +821,7 @@ describe("verified account gate", () => {
         method: "POST",
         headers: {
           cookie: `${vault}; ${session?.split(";")[0] || ""}; mapucoin_verified=stale`,
+          origin: "http://localhost:3000",
         },
       }),
     );

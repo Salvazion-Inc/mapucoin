@@ -17,6 +17,8 @@ import {
   accountsCookie,
   cookieValue,
   readAccounts,
+  resolveAuthSecret,
+  sessionVersionOf,
   signAccounts,
 } from "./session";
 
@@ -72,6 +74,14 @@ export type RecoveryAdmin = {
   verifyRecovery(tokenHash: string): Promise<string | null>;
   /** Revokes every Supabase session for the user that owns this access token. */
   revokeSessions(accessToken: string): Promise<boolean>;
+  /**
+   * Bumps app_metadata.session_version so previously signed HMAC cookies fail
+   * the next time they are validated. No schema migration: the field is JSON.
+   */
+  rotateSessionVersion(
+    userId: string,
+    appMetadata: AppMeta,
+  ): Promise<{ ok: true; appMetadata: AppMeta } | { ok: false }>;
   updatePassword(userId: string, password: string): Promise<boolean>;
 };
 
@@ -334,6 +344,19 @@ export function createRecoveryAdmin(env: NodeJS.ProcessEnv = process.env): Recov
         return false;
       }
     },
+    async rotateSessionVersion(userId, appMetadata) {
+      const next = sessionVersionOf(appMetadata.session_version) + 1;
+      const updated: AppMeta = { ...appMetadata, session_version: next };
+      try {
+        const { error } = await supabase.auth.admin.updateUserById(userId, {
+          app_metadata: updated,
+        });
+        if (error) return { ok: false };
+        return { ok: true, appMetadata: updated };
+      } catch {
+        return { ok: false };
+      }
+    },
     async updatePassword(userId, password) {
       try {
         const { error } = await supabase.auth.admin.updateUserById(userId, { password });
@@ -350,16 +373,29 @@ function resolveAdmin(deps: RecoveryDeps, env: NodeJS.ProcessEnv) {
   return createRecoveryAdmin(env);
 }
 
-function recoverySecret() {
-  return process.env.AUTH_SECRET || "mapucoin-by-salvazion-inc-session-key";
-}
+/** Domain-separates the recovery AES key from the HMAC session key. */
+const RECOVERY_KEY_INFO = "mapucoin-password-recovery-aes-v1";
 
 async function recoveryKey() {
-  const digest = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(`mapucoin-recovery:${recoverySecret()}`),
+  const material = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(resolveAuthSecret()),
+    "HKDF",
+    false,
+    ["deriveKey"],
   );
-  return crypto.subtle.importKey("raw", digest, "AES-GCM", false, ["encrypt", "decrypt"]);
+  return crypto.subtle.deriveKey(
+    {
+      name: "HKDF",
+      hash: "SHA-256",
+      salt: new Uint8Array(0),
+      info: new TextEncoder().encode(RECOVERY_KEY_INFO),
+    },
+    material,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"],
+  );
 }
 
 function bytesToB64Url(bytes: Uint8Array) {
@@ -519,15 +555,21 @@ async function sendRecoveryLink(opts: {
     return;
   }
 
-  const token = await createRecoveryToken(
-    {
-      email: generated.email,
-      userId: generated.userId,
-      tokenHash: generated.hashedToken,
-      jti,
-    },
-    opts.now,
-  );
+  let token: string;
+  try {
+    token = await createRecoveryToken(
+      {
+        email: generated.email,
+        userId: generated.userId,
+        tokenHash: generated.hashedToken,
+        jti,
+      },
+      opts.now,
+    );
+  } catch {
+    console.error("[mapucoin] password recovery link was not sent");
+    return;
+  }
   const url = recoveryEmailUrl(opts.origin, token);
   const delivered = await deliverRecovery({
     to: generated.email,
@@ -612,13 +654,25 @@ export async function updateRecoveredPassword(req: Request, deps: RecoveryDeps =
   if (!accessToken) return fail();
   const updated = await admin.updatePassword(parsed.userId, password);
   if (!updated) return fail();
-  const revoked = await admin.revokeSessions(accessToken);
+
+  let metadata = user.appMetadata;
+  const rotated = await admin.rotateSessionVersion(parsed.userId, metadata);
+  if (!rotated.ok) {
+    console.error("[mapucoin] password recovery did not rotate the session version");
+  } else {
+    metadata = rotated.appMetadata;
+  }
+
+  let revoked = await admin.revokeSessions(accessToken);
+  if (!revoked) {
+    revoked = await admin.revokeSessions(accessToken);
+  }
   if (!revoked) {
     console.error("[mapucoin] password recovery did not revoke sessions");
   }
 
   rememberConsumed(parsed.jti, parsed.exp);
-  await admin.clearRecoveryJti(parsed.userId, user.appMetadata);
+  await admin.clearRecoveryJti(parsed.userId, metadata);
   const vault = await accountPasswordCookie(req.headers.get("cookie"), parsed.email, password);
 
   const res = NextResponse.json({ ok: true, next: "/login" }, { headers: noStore() });

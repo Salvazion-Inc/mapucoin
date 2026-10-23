@@ -16,10 +16,12 @@ import { rememberVerifiedEmail } from "@/lib/email-verification";
 import {
   ACCOUNTS_COOKIE,
   accountsCookie,
+  authSecretFailureResponse,
   cookieValue,
   createSessionToken,
   readAccounts,
   sessionCookie,
+  sessionVersionOf,
   signAccounts,
   type AccountRecord,
 } from "@/lib/session";
@@ -34,6 +36,8 @@ export async function GET(req: Request) {
   if (url.searchParams.get("type") === "recovery") {
     return recoveryCallbackResponse(req);
   }
+  const blocked = authSecretFailureResponse();
+  if (blocked) return blocked;
   const code = url.searchParams.get("code");
   const next = safeNext(url.searchParams.get("next"));
   const from = parseAuthFrom(url.searchParams.get("from"));
@@ -130,6 +134,9 @@ export async function GET(req: Request) {
     name: account.name,
     emailVerified,
     legacyVerification: state.legacy && !emailVerified,
+    sessionVersion: sessionVersionOf(
+      (data.user.app_metadata as { session_version?: unknown } | null)?.session_version,
+    ),
   });
   const vault = await signAccounts(users);
   const dest = emailVerified

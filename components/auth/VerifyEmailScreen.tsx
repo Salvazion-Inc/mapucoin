@@ -150,23 +150,26 @@ export function VerifyEmailScreen() {
 
   const canResend = ready && Boolean(email) && !pending && waitSeconds <= 0;
 
-  function leave(kind: "entrar" | "salir") {
+  async function leave(kind: "entrar" | "salir") {
     if (!hydrated) return;
     try {
       sessionStorage.removeItem(DEV_KEY);
       sessionStorage.removeItem(DELIVERED_KEY);
       disableBiometric();
     } catch {
-      /* the logout URL still clears the cookies */
+      /* the POST below still clears the cookies */
     }
     const preserved = safeNextPath(
       new URLSearchParams(window.location.search).get("next"),
     );
-    const href =
-      kind === "salir"
-        ? "/api/auth/logout?next=/"
-        : `/api/auth/logout?next=${encodeURIComponent(`/login?next=${encodeURIComponent(preserved)}`)}`;
-    window.location.assign(href);
+    const next =
+      kind === "salir" ? "/" : `/login?next=${encodeURIComponent(preserved)}`;
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      /* still leave the page */
+    }
+    window.location.assign(next);
   }
 
   return (

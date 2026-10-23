@@ -9,9 +9,9 @@ import { hashPassword, verifyPassword } from "../lib/passwords.ts";
 import {
   createRecoveryAdmin,
   createRecoveryToken,
-  EXPIRED_LOGIN_PATH,
   FORGOT_EMAIL_LIMIT,
   FORGOT_IP_LIMIT,
+  establishRecoverySession,
   inspectRecoveryRequest,
   readRecoveryToken,
   RECOVERY_COOKIE,
@@ -51,6 +51,7 @@ function installAdmin(users: Stored[], opts?: { verifyAlways?: boolean }) {
   const calls = {
     generate: [] as { email: string; redirectTo: string }[],
     verify: [] as string[],
+    revoke: [] as string[],
     update: [] as { id: string; password: string }[],
     clearJti: 0,
   };
@@ -91,10 +92,14 @@ function installAdmin(users: Stored[], opts?: { verifyAlways?: boolean }) {
     },
     async verifyRecovery(tokenHash) {
       calls.verify.push(tokenHash);
-      if (opts?.verifyAlways) return true;
-      if (burned.has(tokenHash)) return false;
+      if (opts?.verifyAlways) return "access-jwt";
+      if (burned.has(tokenHash)) return null;
       burned.add(tokenHash);
-      return tokenHash.startsWith("hash-");
+      return tokenHash.startsWith("hash-") ? "access-jwt" : null;
+    },
+    async revokeSessions(accessToken) {
+      calls.revoke.push(accessToken);
+      return accessToken === "access-jwt";
     },
     async updatePassword(userId, password) {
       const user = byId.get(userId);
@@ -138,6 +143,38 @@ function hrefFrom(html: string) {
   return match[1].replace(/&amp;/g, "&");
 }
 
+async function plantRecoveryCookie(html: string, admin: RecoveryAdmin) {
+  const link = new URL(hrefFrom(html));
+  assert.equal(link.pathname, UPDATE_PASSWORD_PATH);
+  assert.equal(link.search, "");
+  const token = new URLSearchParams(link.hash.replace(/^#/, "")).get("token");
+  assert.ok(token);
+  assert.equal(new URL(link.origin + link.pathname + link.search).searchParams.get("token"), null);
+  const planted = await establishRecoverySession(
+    new Request("https://mapucoin.com/api/auth/recovery-session", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        host: "mapucoin.com",
+        "x-forwarded-proto": "https",
+        "x-forwarded-for": crypto.randomUUID(),
+      },
+      body: JSON.stringify({ token }),
+    }),
+    { admin },
+  );
+  const plantedBody = await planted.json();
+  assert.equal(planted.status, 200);
+  assert.deepEqual(plantedBody, { ok: true });
+  const rawCookie = planted.headers.getSetCookie().find((line) => line.startsWith(`${RECOVERY_COOKIE}=`));
+  assert.ok(rawCookie);
+  assert.match(rawCookie, /HttpOnly/);
+  assert.match(rawCookie, /Secure/);
+  const maxAge = Number(rawCookie.match(/Max-Age=(\d+)/)?.[1] || "0");
+  assert.ok(maxAge >= 890 && maxAge <= 900, `Max-Age ${maxAge}`);
+  return decodeURIComponent(rawCookie.split(";")[0].slice(RECOVERY_COOKIE.length + 1));
+}
+
 function forgotRequest(email: string, ip: string, host = "mapucoin.com", env = mailEnv) {
   return new Request("https://mapucoin.com/api/auth/forgot-password", {
     method: "POST",
@@ -168,6 +205,12 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.match(source, /type: "recovery"/);
     assert.match(source, /updateUserById/);
     assert.match(source, /verifyOtp/);
+    assert.match(source, /after\(/);
+    assert.match(source, /signOut\(accessToken, "global"\)/);
+    assert.match(source, /AES-GCM/);
+    assert.match(source, /AUTH_SECRET/);
+    assert.match(source, /in-memory per instance/);
+    assert.equal(source.includes("process.env.RECOVERY"), false);
     assert.equal(RECOVERY_TTL_SEC, 15 * 60);
     assert.equal(
       createRecoveryAdmin({
@@ -257,16 +300,66 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.equal(html.includes("supabase.co"), false);
     const link = new URL(hrefFrom(html));
     assert.equal(link.origin, "https://mapucoin.com");
-    assert.equal(link.pathname, "/auth/callback");
-    assert.equal(link.searchParams.get("type"), "recovery");
-    assert.equal(link.searchParams.get("next"), UPDATE_PASSWORD_PATH);
-    assert.equal(knownBody.includes(link.searchParams.get("token") || "token"), false);
+    assert.equal(link.pathname, UPDATE_PASSWORD_PATH);
+    assert.equal(link.search, "");
+    const mailedToken = new URLSearchParams(link.hash.replace(/^#/, "")).get("token");
+    assert.ok(mailedToken);
+    assert.equal(link.searchParams.get("token"), null);
+    assert.equal(mailedToken.includes("hash-"), false);
+    assert.equal(mailedToken.includes("tokenHash"), false);
+    assert.equal(mailedToken.includes("ana@mapucoin.test"), false);
+    assert.equal(knownBody.includes(mailedToken), false);
     const redirect = new URL(rig.calls.generate[0]?.redirectTo || "");
     assert.equal(redirect.origin, "https://mapucoin.com");
     assert.equal(redirect.pathname, "/auth/callback");
     assert.equal(redirect.searchParams.get("next"), UPDATE_PASSWORD_PATH);
     assert.equal(redirect.searchParams.get("token"), null);
     assert.equal(rig.calls.generate[1]?.email, "missing@mapucoin.test");
+  });
+
+  it("returns before the account lookup so a missing account is not faster", async () => {
+    const rig = installAdmin([
+      { id: "user-1", email: "ana@mapucoin.test", name: "Ana", appMetadata: {} },
+    ]);
+    const original = rig.admin.generateLink.bind(rig.admin);
+    const pending: {
+      email: string;
+      redirectTo: string;
+      resolve: (value: Awaited<ReturnType<RecoveryAdmin["generateLink"]>>) => void;
+    }[] = [];
+    rig.admin.generateLink = (email, redirectTo) =>
+      new Promise((resolve) => {
+        pending.push({ email, redirectTo, resolve });
+      });
+    const box = mailBox();
+    const ip = crypto.randomUUID();
+    const opts = {
+      env: mailEnv,
+      fetchImpl: box.fetchImpl,
+      admin: rig.admin,
+      schedule(task: () => Promise<void>) {
+        void task();
+      },
+    };
+    const knownP = requestPasswordReset(forgotRequest("ana@mapucoin.test", ip), opts);
+    const unknownP = requestPasswordReset(forgotRequest("missing@mapucoin.test", ip), opts);
+    const known = await Promise.race([
+      knownP,
+      new Promise<Response>((_, reject) => setTimeout(() => reject(new Error("waited on lookup")), 500)),
+    ]);
+    const unknown = await unknownP;
+    assert.equal(pending.length, 2);
+    assert.equal(box.sent.length, 0);
+    assert.equal(await known.text(), '{"ok":true}');
+    assert.equal(await unknown.text(), '{"ok":true}');
+    for (const item of pending) {
+      item.resolve(await original(item.email, item.redirectTo));
+    }
+    for (let i = 0; i < 20 && box.sent.length < 1; i += 1) {
+      await new Promise((r) => setTimeout(r, 10));
+    }
+    assert.equal(box.sent.length, 1);
+    assert.equal(box.sent[0]?.to, "ana@mapucoin.test");
   });
 
   it("keeps the email on mapucoin.com for preview hosts and on localhost only outside production", () => {
@@ -401,26 +494,27 @@ describe("password recovery (DEC-20261021-02)", () => {
       admin: rig.admin,
     });
     assert.equal(sent.status, 200);
-    const link = new URL(hrefFrom(box.sent[0]?.html || ""));
-    link.searchParams.set("next", "https://evil.example/phish");
+    const cookieToken = await plantRecoveryCookie(box.sent[0]?.html || "", rig.admin);
+    assert.equal(cookieToken.includes("hash-"), false);
+    assert.equal(rig.calls.verify.length, 0);
+
     const callback = await callbackGet(
-      new Request(link, {
-        headers: { host: "mapucoin.com", "x-forwarded-proto": "https" },
-      }),
+      new Request(
+        "https://mapucoin.com/auth/callback?type=recovery&token=secret-token&next=https://evil.example/phish",
+        { headers: { host: "mapucoin.com", "x-forwarded-proto": "https" } },
+      ),
     );
     assert.equal(callback.status, 303);
     const location = new URL(callback.headers.get("location") || "");
     assert.equal(location.origin, "https://mapucoin.com");
     assert.equal(location.pathname, UPDATE_PASSWORD_PATH);
     assert.equal(location.search, "");
-    const rawCookie = callback.headers.getSetCookie().find((line) => line.startsWith(`${RECOVERY_COOKIE}=`));
-    assert.ok(rawCookie);
-    assert.match(rawCookie, /HttpOnly/);
-    assert.match(rawCookie, /Secure/);
-    const maxAge = Number(rawCookie.match(/Max-Age=(\d+)/)?.[1] || "0");
-    assert.ok(maxAge >= 890 && maxAge <= 900, `Max-Age ${maxAge}`);
-    const cookieToken = decodeURIComponent(rawCookie.split(";")[0].slice(RECOVERY_COOKIE.length + 1));
-    assert.equal(rig.calls.verify.length, 0);
+    assert.equal(location.hash, "");
+    assert.equal((callback.headers.get("location") || "").includes("secret-token"), false);
+    assert.equal(
+      callback.headers.getSetCookie().some((line) => line.includes("secret-token")),
+      false,
+    );
 
     const oldHash = hashPassword("oldpassword1");
     const vault = await signAccounts([
@@ -479,10 +573,11 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.equal(rig.byId.get("user-4")?.password, "nueva-clave-8");
     assert.equal(rig.calls.update.length, 1);
     assert.equal(rig.calls.verify.length, 1);
+    assert.deepEqual(rig.calls.revoke, ["access-jwt"]);
     assert.equal(rig.calls.clearJti, 1);
     const setCookies = saved.headers.getSetCookie();
     assert.ok(setCookies.some((line) => line.startsWith(`${RECOVERY_COOKIE}=`) && /Max-Age=0/.test(line)));
-    assert.equal(setCookies.some((line) => line.startsWith("mapucoin_session=")), false);
+    assert.ok(setCookies.some((line) => line.startsWith("mapucoin_session=") && /Max-Age=0/.test(line)));
     const vaultLine = setCookies.find((line) => line.startsWith(`${ACCOUNTS_COOKIE}=`));
     assert.ok(vaultLine);
     const accounts = await readAccounts(cookieValue(vaultLine, ACCOUNTS_COOKIE));
@@ -502,19 +597,18 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.equal(rig.calls.update.length, 1);
     assert.equal(rig.byId.get("user-4")?.password, "nueva-clave-8");
 
-    const expiredLink = await callbackGet(
+    const queryToken = await callbackGet(
       new Request("https://mapucoin.com/auth/callback?type=recovery&token=nope&next=/admin", {
         headers: { host: "mapucoin.com", "x-forwarded-proto": "https" },
       }),
     );
-    assert.equal(expiredLink.status, 303);
+    assert.equal(queryToken.status, 303);
+    const dropped = new URL(queryToken.headers.get("location") || "");
+    assert.equal(dropped.pathname, UPDATE_PASSWORD_PATH);
+    assert.equal(dropped.search, "");
+    assert.equal((queryToken.headers.get("location") || "").includes("nope"), false);
     assert.equal(
-      new URL(expiredLink.headers.get("location") || "").pathname +
-        new URL(expiredLink.headers.get("location") || "").search,
-      EXPIRED_LOGIN_PATH,
-    );
-    assert.equal(
-      expiredLink.headers.getSetCookie().some((line) => line.startsWith(`${RECOVERY_COOKIE}=`) && !/Max-Age=0/.test(line)),
+      queryToken.headers.getSetCookie().some((line) => line.startsWith(`${RECOVERY_COOKIE}=`)),
       false,
     );
   });
@@ -529,13 +623,7 @@ describe("password recovery (DEC-20261021-02)", () => {
       fetchImpl: box.fetchImpl,
       admin: rig.admin,
     });
-    const link = new URL(hrefFrom(box.sent[0]?.html || ""));
-    const callback = await callbackGet(
-      new Request(link, { headers: { host: "mapucoin.com", "x-forwarded-proto": "https" } }),
-    );
-    const rawCookie = callback.headers.getSetCookie().find((line) => line.startsWith(`${RECOVERY_COOKIE}=`));
-    assert.ok(rawCookie);
-    const cookieToken = decodeURIComponent(rawCookie.split(";")[0].slice(RECOVERY_COOKIE.length + 1));
+    const cookieToken = await plantRecoveryCookie(box.sent[0]?.html || "", rig.admin);
     const vault = await signAccounts([
       { id: "user-5", email: "geo@mapucoin.test", name: "Geo", hash: GOOGLE_MARKER },
     ]);
@@ -574,12 +662,21 @@ describe("password recovery (DEC-20261021-02)", () => {
     assert.match(forgot, /forgotSent/);
     assert.equal(forgot.includes("devUrl"), false);
     assert.match(update, /window\.location\.assign\("\/login"\)/);
+    assert.match(update, /\/api\/auth\/recovery-session/);
+    assert.match(update, /history\.replaceState/);
     assert.match(frame, /\/recuperar/);
     assert.match(frame, /\/auth/);
     assert.match(shell, /data-app-header/);
     assert.match(shell, /hidden md:block/);
     assert.match(shell, /md:hidden/);
     assert.match(chip, /data-app-logout/);
+    assert.match(chip, /method: "POST"/);
+    const logout = readFileSync("app/api/auth/logout/route.ts", "utf8");
+    assert.match(logout, /export async function POST/);
+    assert.equal(/export async function GET/.test(logout), false);
+    const verifyScreen = readFileSync("components/auth/VerifyEmailScreen.tsx", "utf8");
+    assert.match(verifyScreen, /method: "POST"/);
+    assert.equal(verifyScreen.includes("/api/auth/logout?next="), false);
     const buttonAt = chip.indexOf("data-app-logout");
     const button = chip.slice(buttonAt, chip.indexOf("</button>", buttonAt));
     assert.equal(/\bhidden\b/.test(button), false);
@@ -592,6 +689,7 @@ describe("password recovery (DEC-20261021-02)", () => {
     const routes = [
       readFileSync("app/api/auth/forgot-password/route.ts", "utf8"),
       readFileSync("app/api/auth/update-password/route.ts", "utf8"),
+      readFileSync("app/api/auth/recovery-session/route.ts", "utf8"),
     ];
     for (const route of routes) {
       assert.match(route, /export const runtime = "nodejs"/);

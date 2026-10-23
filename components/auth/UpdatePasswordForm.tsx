@@ -18,13 +18,29 @@ export function UpdatePasswordForm() {
 
   useEffect(() => {
     let cancel = false;
-    fetch("/api/auth/update-password")
-      .then((res) => {
+    (async () => {
+      try {
+        const hash = window.location.hash.startsWith("#") ? window.location.hash.slice(1) : "";
+        const token = new URLSearchParams(hash).get("token");
+        if (token) {
+          const clean = `${window.location.pathname}${window.location.search}`;
+          window.history.replaceState(null, "", clean);
+          const planted = await fetch("/api/auth/recovery-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token }),
+          });
+          if (!planted.ok) {
+            if (!cancel) setReady("expired");
+            return;
+          }
+        }
+        const res = await fetch("/api/auth/update-password");
         if (!cancel) setReady(res.ok ? "ready" : "expired");
-      })
-      .catch(() => {
+      } catch {
         if (!cancel) setReady("expired");
-      });
+      }
+    })();
     return () => {
       cancel = true;
     };

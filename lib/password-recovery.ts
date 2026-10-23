@@ -5,7 +5,8 @@
  * and the API body never includes that link.
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import { clearAuthCookieHeaders } from "./auth-cookies";
 import { sendTransactionalEmail, requestOrigin } from "./email-verification";
 import { GOOGLE_MARKER } from "./google-oauth";
 import { isEmail, originAllowed, originRejectedResponse } from "./http-guard";
@@ -16,9 +17,7 @@ import {
   accountsCookie,
   cookieValue,
   readAccounts,
-  readSignedValue,
   signAccounts,
-  signValue,
 } from "./session";
 
 export const RECOVERY_COOKIE = "mapucoin_recovery";
@@ -69,7 +68,10 @@ export type RecoveryAdmin = {
   getUser(userId: string): Promise<{ id: string; email: string; appMetadata: AppMeta } | null>;
   setRecoveryJti(userId: string, jti: string, appMetadata: AppMeta): Promise<boolean>;
   clearRecoveryJti(userId: string, appMetadata: AppMeta): Promise<boolean>;
-  verifyRecovery(tokenHash: string): Promise<boolean>;
+  /** Burns the recovery hash. Returns the new access token, or null. */
+  verifyRecovery(tokenHash: string): Promise<string | null>;
+  /** Revokes every Supabase session for the user that owns this access token. */
+  revokeSessions(accessToken: string): Promise<boolean>;
   updatePassword(userId: string, password: string): Promise<boolean>;
 };
 
@@ -78,6 +80,11 @@ export type RecoveryDeps = {
   fetchImpl?: typeof fetch;
   admin?: RecoveryAdmin | null;
   now?: number;
+  /**
+   * Runs the account lookup and the email after the HTTP response.
+   * The route uses Next.js `after()`. Tests omit it and the work is awaited.
+   */
+  schedule?: (task: () => Promise<void>) => void;
 };
 
 const consumed = new Map<string, number>();
@@ -161,10 +168,9 @@ export function recoveryRedirectTo(origin: string) {
 }
 
 export function recoveryEmailUrl(origin: string, token: string) {
-  const url = new URL("/auth/callback", origin);
-  url.searchParams.set("token", token);
-  url.searchParams.set("type", "recovery");
-  url.searchParams.set("next", UPDATE_PASSWORD_PATH);
+  const url = new URL(UPDATE_PASSWORD_PATH, origin);
+  // Fragment is not sent to the server, so the token stays out of access logs.
+  url.hash = `token=${token}`;
   return url.toString();
 }
 
@@ -308,10 +314,21 @@ export function createRecoveryAdmin(env: NodeJS.ProcessEnv = process.env): Recov
     },
     async verifyRecovery(tokenHash) {
       try {
-        const { error } = await supabase.auth.verifyOtp({
+        const { data, error } = await supabase.auth.verifyOtp({
           token_hash: tokenHash,
           type: "recovery",
         });
+        const accessToken = String(data?.session?.access_token || "");
+        if (error || !accessToken) return null;
+        return accessToken;
+      } catch {
+        return null;
+      }
+    },
+    async revokeSessions(accessToken) {
+      try {
+        if (!accessToken) return false;
+        const { error } = await supabase.auth.admin.signOut(accessToken, "global");
         return !error;
       } catch {
         return false;
@@ -333,6 +350,34 @@ function resolveAdmin(deps: RecoveryDeps, env: NodeJS.ProcessEnv) {
   return createRecoveryAdmin(env);
 }
 
+function recoverySecret() {
+  return process.env.AUTH_SECRET || "mapucoin-by-salvazion-inc-session-key";
+}
+
+async function recoveryKey() {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(`mapucoin-recovery:${recoverySecret()}`),
+  );
+  return crypto.subtle.importKey("raw", digest, "AES-GCM", false, ["encrypt", "decrypt"]);
+}
+
+function bytesToB64Url(bytes: Uint8Array) {
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 1) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function b64UrlToBytes(value: string) {
+  const pad = "=".repeat((4 - (value.length % 4)) % 4);
+  const b64 = (value + pad).replace(/-/g, "+").replace(/_/g, "/");
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+/** AES-GCM so the Supabase hashed token is not readable from the link or cookie. */
 export async function createRecoveryToken(
   input: { email: string; userId: string; tokenHash: string; jti: string },
   nowMs = Date.now(),
@@ -345,15 +390,30 @@ export async function createRecoveryToken(
     jti: input.jti,
     exp: Math.floor(nowMs / 1000) + RECOVERY_TTL_SEC,
   };
-  return signValue(JSON.stringify(payload));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = new Uint8Array(
+    await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv },
+      await recoveryKey(),
+      new TextEncoder().encode(JSON.stringify(payload)),
+    ),
+  );
+  return `enc.v1.${bytesToB64Url(iv)}.${bytesToB64Url(ciphertext)}`;
 }
 
 export async function readRecoveryToken(token: string | null | undefined, nowMs = Date.now()) {
   if (!token || token.length > 3500) return null;
-  const raw = await readSignedValue(token);
-  if (!raw) return null;
+  const parts = token.split(".");
+  if (parts.length !== 4 || parts[0] !== "enc" || parts[1] !== "v1") return null;
   try {
-    const data = JSON.parse(raw) as Partial<RecoveryPayload>;
+    const iv = b64UrlToBytes(parts[2]);
+    const ciphertext = b64UrlToBytes(parts[3]);
+    const plain = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      await recoveryKey(),
+      ciphertext,
+    );
+    const data = JSON.parse(new TextDecoder().decode(plain)) as Partial<RecoveryPayload>;
     if (data.kind !== "password-recovery") return null;
     if (!data.email || !data.userId || !data.tokenHash || !data.jti || typeof data.exp !== "number") {
       return null;
@@ -412,19 +472,51 @@ export async function requestPasswordReset(req: Request, deps: RecoveryDeps = {}
   if (!admin) return neutralResponse();
 
   const origin = recoveryEmailOrigin(req, env);
+  const task = () =>
+    sendRecoveryLink({
+      admin,
+      email,
+      origin,
+      env,
+      fetchImpl,
+      now,
+    });
+  // Look up the account and send mail after the response so a missing account
+  // is not faster than an existing one. Counters above are in-memory per instance:
+  // there is no shared store in this repo, and a Supabase table would need a migration.
+  if (deps.schedule) {
+    deps.schedule(task);
+    return neutralResponse();
+  }
+  try {
+    after(task);
+  } catch {
+    await task();
+  }
+  return neutralResponse();
+}
+
+async function sendRecoveryLink(opts: {
+  admin: RecoveryAdmin;
+  email: string;
+  origin: string;
+  env: NodeJS.ProcessEnv;
+  fetchImpl: typeof fetch;
+  now: number;
+}) {
   let generated: RecoveryLink = { ok: false };
   try {
-    generated = await admin.generateLink(email, recoveryRedirectTo(origin));
+    generated = await opts.admin.generateLink(opts.email, recoveryRedirectTo(opts.origin));
   } catch {
     generated = { ok: false };
   }
-  if (!generated.ok) return neutralResponse();
+  if (!generated.ok) return;
 
   const jti = crypto.randomUUID().replace(/-/g, "");
-  const saved = await admin.setRecoveryJti(generated.userId, jti, generated.appMetadata);
+  const saved = await opts.admin.setRecoveryJti(generated.userId, jti, generated.appMetadata);
   if (!saved) {
     console.error("[mapucoin] password recovery link was not sent");
-    return neutralResponse();
+    return;
   }
 
   const token = await createRecoveryToken(
@@ -434,20 +526,19 @@ export async function requestPasswordReset(req: Request, deps: RecoveryDeps = {}
       tokenHash: generated.hashedToken,
       jti,
     },
-    now,
+    opts.now,
   );
-  const url = recoveryEmailUrl(origin, token);
+  const url = recoveryEmailUrl(opts.origin, token);
   const delivered = await deliverRecovery({
     to: generated.email,
     name: generated.name,
     url,
-    env,
-    fetchImpl,
+    env: opts.env,
+    fetchImpl: opts.fetchImpl,
   });
   if (!delivered) {
     console.error("[mapucoin] password recovery link was not sent");
   }
-  return neutralResponse();
 }
 
 async function accountPasswordCookie(cookieHeader: string | null, email: string, password: string) {
@@ -517,34 +608,50 @@ export async function updateRecoveredPassword(req: Request, deps: RecoveryDeps =
   const jti = user ? String(user.appMetadata[JTI_FIELD] || "") : "";
   if (!user || user.email !== parsed.email || !jti || !sameString(jti, parsed.jti)) return fail();
 
-  const burned = await admin.verifyRecovery(parsed.tokenHash);
-  if (!burned) return fail();
+  const accessToken = await admin.verifyRecovery(parsed.tokenHash);
+  if (!accessToken) return fail();
   const updated = await admin.updatePassword(parsed.userId, password);
   if (!updated) return fail();
+  const revoked = await admin.revokeSessions(accessToken);
+  if (!revoked) {
+    console.error("[mapucoin] password recovery did not revoke sessions");
+  }
 
   rememberConsumed(parsed.jti, parsed.exp);
   await admin.clearRecoveryJti(parsed.userId, user.appMetadata);
   const vault = await accountPasswordCookie(req.headers.get("cookie"), parsed.email, password);
 
   const res = NextResponse.json({ ok: true, next: "/login" }, { headers: noStore() });
-  res.headers.append("Set-Cookie", clearRecoveryCookie(secure));
+  for (const cookie of clearAuthCookieHeaders(req.headers.get("cookie"))) {
+    res.headers.append("Set-Cookie", cookie);
+  }
   if (vault) res.headers.append("Set-Cookie", vault);
   return res;
 }
 
-export async function recoveryCallbackResponse(req: Request, nowMs = Date.now()) {
-  const url = new URL(req.url);
-  const token = url.searchParams.get("token");
-  const origin = requestOrigin(req);
-  const parsed = await readRecoveryToken(token, nowMs);
-  if (!parsed || !token) {
-    const res = NextResponse.redirect(new URL(EXPIRED_LOGIN_PATH, origin), 303);
-    res.headers.set("Cache-Control", "no-store");
-    return res;
+/** Accepts the recovery token from a POST body and stores it in an HttpOnly cookie. */
+export async function establishRecoverySession(req: Request, deps: RecoveryDeps = {}) {
+  if (!originAllowed(req)) return originRejectedResponse();
+  const now = deps.now ?? Date.now();
+  const secure = requestIsSecure(req);
+  const ipLimit = rateLimit(`recovery-session:${clientIp(req)}`, UPDATE_LIMIT, FORGOT_WINDOW_MS);
+  if (!ipLimit.ok) return limitedResponse(ipLimit.retryAfter);
+
+  const body = (await req.json().catch(() => ({}))) as { token?: unknown };
+  const token = String(body.token || "");
+  const parsed = await readRecoveryToken(token, now);
+  if (!parsed) {
+    return NextResponse.json({ error: "token" }, { status: 400, headers: noStore() });
   }
+  const res = NextResponse.json({ ok: true }, { headers: noStore() });
+  const maxAge = Math.max(1, parsed.exp - Math.floor(now / 1000));
+  res.headers.append("Set-Cookie", recoveryCookie(token, maxAge, secure));
+  return res;
+}
+
+export async function recoveryCallbackResponse(req: Request) {
+  const origin = requestOrigin(req);
   const res = NextResponse.redirect(new URL(UPDATE_PASSWORD_PATH, origin), 303);
-  const maxAge = Math.max(1, parsed.exp - Math.floor(nowMs / 1000));
-  res.headers.append("Set-Cookie", recoveryCookie(token, maxAge, origin.startsWith("https://")));
   res.headers.set("Cache-Control", "no-store");
   return res;
 }

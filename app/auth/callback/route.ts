@@ -25,11 +25,15 @@ import {
 } from "@/lib/session";
 import { safeNextPath } from "@/lib/verified-access";
 import { getSupabase } from "@/lib/supabase";
+import { recoveryCallbackResponse } from "@/lib/password-recovery";
 
 export const runtime = "nodejs";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
+  if (url.searchParams.get("type") === "recovery") {
+    return recoveryCallbackResponse(req);
+  }
   const code = url.searchParams.get("code");
   const next = safeNext(url.searchParams.get("next"));
   const from = parseAuthFrom(url.searchParams.get("from"));

@@ -7,6 +7,7 @@ const SESSION_COOKIE_NAMES = [
   VERIFIED_COOKIE,
   PROFILE_COOKIE,
   OAUTH_STATE_COOKIE,
+  "mapucoin_recovery",
 ];
 
 function cookieNames(header: string | null) {

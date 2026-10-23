@@ -166,10 +166,14 @@ function redactSecrets(text: string, key: string) {
   return out.slice(0, 800);
 }
 
-function logMailFailure(reason: string, detail?: { status?: number; body?: string; key?: string }) {
+function logMailFailure(
+  reason: string,
+  detail?: { status?: number; body?: string; key?: string },
+  kind = "verification email",
+) {
   const body = redactSecrets(detail?.body || "", detail?.key || "");
   const status = detail?.status == null ? "" : ` status=${detail.status}`;
-  console.error(`[mapucoin] verification email failed: ${reason}${status}${body ? ` body=${body}` : ""}`);
+  console.error(`[mapucoin] ${kind} failed: ${reason}${status}${body ? ` body=${body}` : ""}`);
 }
 
 function escapeHtml(value: string) {
@@ -180,11 +184,12 @@ function escapeHtml(value: string) {
     .replace(/"/g, "&quot;");
 }
 
-export async function deliverVerificationEmail(
-  opts: { to: string; name: string; url: string },
+export async function sendTransactionalEmail(
+  opts: { to: string; subject: string; html: string; kind?: string },
   env: NodeJS.ProcessEnv = process.env,
   fetchImpl: typeof fetch = fetch,
 ) {
+  const kind = opts.kind || "verification email";
   const { key, from } = mailConfig(env);
   if (!key || !from) {
     const reason = !key && !from
@@ -192,11 +197,9 @@ export async function deliverVerificationEmail(
       : !key
         ? "missing RESEND_API_KEY"
         : "missing MAIL_FROM";
-    logMailFailure(reason);
+    logMailFailure(reason, undefined, kind);
     return false;
   }
-  const subject = "Verifica tu correo en Mapucoin";
-  const html = `<p>Hola ${escapeHtml(opts.name)},</p><p>Confirma tu correo para una experiencia personalizada en Mapucoin. Con la cuenta verificada puedes reservar cápsulas, armar el viaje, usar el concierge y postular como partner.</p><p><a href="${escapeHtml(opts.url)}">Verificar correo</a></p>`;
   try {
     const res = await fetchImpl(RESEND_EMAILS_URL, {
       method: "POST",
@@ -207,21 +210,31 @@ export async function deliverVerificationEmail(
       body: JSON.stringify({
         from,
         to: opts.to,
-        subject,
-        html,
+        subject: opts.subject,
+        html: opts.html,
       }),
     });
     if (!res.ok) {
       const body = await res.text().catch(() => "");
-      logMailFailure("resend rejected the send", { status: res.status, body, key });
+      logMailFailure("resend rejected the send", { status: res.status, body, key }, kind);
       return false;
     }
     return true;
   } catch (error) {
     const body = error instanceof Error ? error.message : "fetch failed";
-    logMailFailure("resend request threw", { body, key });
+    logMailFailure("resend request threw", { body, key }, kind);
     return false;
   }
+}
+
+export async function deliverVerificationEmail(
+  opts: { to: string; name: string; url: string },
+  env: NodeJS.ProcessEnv = process.env,
+  fetchImpl: typeof fetch = fetch,
+) {
+  const subject = "Verifica tu correo en Mapucoin";
+  const html = `<p>Hola ${escapeHtml(opts.name)},</p><p>Confirma tu correo para una experiencia personalizada en Mapucoin. Con la cuenta verificada puedes reservar cápsulas, armar el viaje, usar el concierge y postular como partner.</p><p><a href="${escapeHtml(opts.url)}">Verificar correo</a></p>`;
+  return sendTransactionalEmail({ to: opts.to, subject, html }, env, fetchImpl);
 }
 
 export async function grantVerifiedEmail(opts: {

@@ -18,6 +18,8 @@ export default function SiteFrame({
     path === "/login" ||
     path === "/signup" ||
     path === "/verificar" ||
+    path === "/recuperar" ||
+    path.startsWith("/auth") ||
     path.startsWith("/admin");
 
   if (hide) return <>{children}</>;

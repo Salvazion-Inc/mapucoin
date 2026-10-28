@@ -4,7 +4,7 @@ export const SEO = {
   title: "Mapucoin | Chile, cápsulas y territorio",
   titleTemplate: "%s | Mapucoin",
   description:
-    "Chile por paisaje: desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cápsulas de cobre y vidrio, gastronomía local y mapa.",
+    "Chile por paisaje: Desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cápsulas de cobre y vidrio, gastronomía local y mapa.",
   ogDescription:
     "Viaja Chile en casas cápsula de cobre y vidrio. Mapa vivo, gastronomía local y presupuesto. Operado por Salvazion SpA.",
   url: "https://mapucoin.com",

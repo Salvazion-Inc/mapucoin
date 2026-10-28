@@ -2,7 +2,7 @@
 
 > Chile por paisaje: desiertos, playas, viñedos, volcanes, ríos, lagos, bosques y nieve. Cápsulas de cobre y vidrio, gastronomía local y mapa vivo.
 
-Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion SpA (RUT 78.462.349-1, Chile), a booking intermediary that charges a commission, not a tour operator. The person sets a budget and a place. Grok builds an itinerary with technological capsules, local gastronomy, and activities, on a map. Independent partners run capsules, meals, and activities. Payments use Stripe (CLP). Mapucoin is a technology platform, not a tour operator. The installable app lives at https://mapucoin.com/app and requires an account. Reserva and the planner require a verified account.
+Mapucoin is a travel platform at https://mapucoin.com, operated by Salvazion SpA (RUT 78.462.349-1, Chile), a booking intermediary that charges a commission, not a tour operator. The person sets a budget and a place. Grok builds an itinerary with technological capsules, local gastronomy, and activities, on a map. Independent partners run capsules, meals, and activities. Mapucoin is a technology platform, not a tour operator. The installable app lives at https://mapucoin.com/app and requires an account. Reserva and the planner require a verified account.
 
 Mapucoin es el nombre de la plataforma de viajes, no un activo. Si la clave $SALVAZION está habilitada, es solo una llave de acceso a Mapucoin Premium: no es una inversión, no genera retornos y no hay promesa de precio.
 

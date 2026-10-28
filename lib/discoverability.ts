@@ -89,7 +89,7 @@ const POLICY = `# Content Signals
 function group(agent: string): string {
   return [
     `User-agent: ${agent}`,
-    `Content-Signal: ${CONTENT_SIGNAL}`,
+    `# Content-Signal: ${CONTENT_SIGNAL}`,
     "Allow: /",
     ...PRIVATE_PATHS.map((path) => `Disallow: ${path}`),
   ].join("\n");

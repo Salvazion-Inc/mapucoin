@@ -6,7 +6,7 @@ test("mapucoin robots opens place pages and closes the app", () => {
   const body = robotsTxt();
   const agents = body.match(/^User-agent: /gm) || [];
   const signals =
-    body.match(/^Content-Signal: search=yes, ai-input=yes, ai-train=yes$/gm) || [];
+    body.match(/^# Content-Signal: search=yes, ai-input=yes, ai-train=yes$/gm) || [];
   assert.equal(signals.length, agents.length);
   assert.ok(agents.length > 20);
   for (const token of [

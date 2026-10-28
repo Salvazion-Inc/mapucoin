@@ -10,9 +10,18 @@ Mapucoin no necesita Client ID/Secret en Vercel. El botón **Continuar con Googl
 
 Mapucoin y Kaenz **comparten el mismo proyecto** (plan free: máximo 2). No hace falta un tercero.
 
-Site URL sigue en `https://kaenz.com`. El login de Gmail de Mapucoin usa `redirectTo=https://kaenz.com/mapucoin-auth`; Kaenz reenvía el `code` a `https://mapucoin.com/auth/callback`.
+Site URL sigue en `https://kaenz.com` (proyecto compartido; no cambiarlo).
 
-Opcional, para ir directo sin el puente:
+Dos modos, según la variable `GOOGLE_DIRECT_CALLBACK` en Vercel:
+
+- `GOOGLE_DIRECT_CALLBACK=1` (directo): `redirectTo=<origin>/auth/callback`, sin el parámetro `return`. Requiere que `https://mapucoin.com/auth/callback` y `https://www.mapucoin.com/auth/callback` estén en Redirect URLs de Supabase (agregadas el 2026-10-28).
+- Sin la variable o con otro valor (puente, el comportamiento anterior): `redirectTo=https://kaenz.com/mapucoin-auth`; Kaenz reenvía el `code` a `https://mapucoin.com/auth/callback`.
+
+En localhost siempre se usa el modo directo.
+
+Rollback: quitar `GOOGLE_DIRECT_CALLBACK` (o ponerla en `0`) y redeployar, o revertir el commit. No retirar el puente de Kaenz hasta validar el modo directo en producción.
+
+Redirect URLs en Supabase:
 
 ```
 https://mapucoin.com/auth/callback

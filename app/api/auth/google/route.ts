@@ -24,13 +24,16 @@ export async function GET(req: Request) {
   }
 
   const local = origin.includes("localhost") || origin.includes("127.0.0.1");
-  const redirectTo = new URL(
-    local ? "/auth/callback" : "https://kaenz.com/mapucoin-auth",
-    local ? origin : "https://kaenz.com",
-  );
+  // GOOGLE_DIRECT_CALLBACK=1: Supabase returns straight to Mapucoin's own
+  // /auth/callback (must be in the project's Redirect URLs). Off: legacy
+  // bridge through kaenz.com/mapucoin-auth, unchanged.
+  const direct = local || process.env.GOOGLE_DIRECT_CALLBACK === "1";
+  const redirectTo = direct
+    ? new URL("/auth/callback", origin)
+    : new URL("/mapucoin-auth", "https://kaenz.com");
   redirectTo.searchParams.set("next", next);
   redirectTo.searchParams.set("from", from);
-  if (!local) redirectTo.searchParams.set("return", origin);
+  if (!direct) redirectTo.searchParams.set("return", origin);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",

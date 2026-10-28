@@ -163,7 +163,7 @@ const es = {
   partners: {
     kicker: "Partners",
     title: "Ingresa como partner",
-    lead: "Operas una cápsula, una ruka, una caleta, un tour o una viña. Mapucoin te muestra en el mapa, entra al itinerario y cobra con Stripe. La postulación pide una cuenta con el correo verificado, para personalizar tu alta.",
+    lead: "Operas una cápsula, una ruka, una caleta, un tour o una viña. Mapucoin te muestra en el mapa, entra al itinerario y cobra la reserva. La postulación pide una cuenta con el correo verificado, para personalizar tu alta.",
     name: "Nombre",
     email: "Correo",
     phone: "Teléfono",
@@ -309,7 +309,7 @@ const es = {
     invalidName: "Escribe tu nombre (mínimo 2 letras).",
     invalidEmail: "Ingresa un correo válido.",
     rateLimited: "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
-    secure: "Pago seguro con Stripe",
+    secure: "Pago seguro",
     platformNote:
       "Cobro en CLP sobre Mapucoin. Si el partner aún no tiene Stripe Connect, el pago queda en la plataforma.",
     fromPrice: "Desde {price} / noche",
@@ -527,7 +527,7 @@ const en: typeof es = {
   partners: {
     kicker: "Partners",
     title: "Join as a partner",
-    lead: "You run a capsule, a ruka, a caleta, a tour or a vineyard. Mapucoin shows you on the map, puts you in the itinerary and charges with Stripe.",
+    lead: "You run a capsule, a ruka, a caleta, a tour or a vineyard. Mapucoin shows you on the map, puts you in the itinerary and handles the payment.",
     name: "Name",
     email: "Email",
     phone: "Phone",
@@ -672,7 +672,7 @@ const en: typeof es = {
     invalidName: "Enter your name (at least 2 letters).",
     invalidEmail: "Enter a valid email.",
     rateLimited: "Too many attempts. Wait a moment and try again.",
-    secure: "Secure payment with Stripe",
+    secure: "Secure payment",
     platformNote:
       "Charged in CLP on Mapucoin. If the partner is not Connect-ready yet, payment stays on the platform.",
     fromPrice: "From {price} / night",
@@ -891,7 +891,7 @@ const pt: typeof es = {
   partners: {
     kicker: "Partners",
     title: "Entre como partner",
-    lead: "Você opera uma cápsula, uma ruka, uma caleta, um tour ou uma vinícola. A Mapucoin mostra no mapa, entra no itinerário e cobra com Stripe.",
+    lead: "Você opera uma cápsula, uma ruka, uma caleta, um tour ou uma vinícola. A Mapucoin mostra no mapa, entra no itinerário e cobra a reserva.",
     name: "Nome",
     email: "E-mail",
     phone: "Telefone",
@@ -1037,7 +1037,7 @@ const pt: typeof es = {
     invalidName: "Escreva o seu nome (mínimo 2 letras).",
     invalidEmail: "Informe um e-mail válido.",
     rateLimited: "Demasiadas tentativas. Espere um momento e tente de novo.",
-    secure: "Pagamento seguro com Stripe",
+    secure: "Pagamento seguro",
     platformNote:
       "Cobrança em CLP na Mapucoin. Se o partner ainda não tem Stripe Connect, o pagamento fica na plataforma.",
     fromPrice: "A partir de {price} / noite",
@@ -1256,7 +1256,7 @@ const fr: typeof es = {
   partners: {
     kicker: "Partenaires",
     title: "Devenir partenaire",
-    lead: "Vous exploitez une capsule, une ruka, une caleta, un tour ou un vignoble. Mapucoin vous montre sur la carte, vous entre dans l'itinéraire et encaisse avec Stripe.",
+    lead: "Vous exploitez une capsule, une ruka, une caleta, un tour ou un vignoble. Mapucoin vous montre sur la carte, vous entre dans l'itinéraire et encaisse la réservation.",
     name: "Nom",
     email: "E-mail",
     phone: "Téléphone",
@@ -1402,7 +1402,7 @@ const fr: typeof es = {
     invalidName: "Indiquez votre nom (2 lettres minimum).",
     invalidEmail: "Saisissez un e-mail valide.",
     rateLimited: "Trop de tentatives. Patientez un moment et réessayez.",
-    secure: "Paiement sécurisé avec Stripe",
+    secure: "Paiement sécurisé",
     platformNote:
       "Paiement en CLP sur Mapucoin. Si le partenaire n’a pas encore Stripe Connect, le paiement reste sur la plateforme.",
     fromPrice: "À partir de {price} / nuit",
@@ -1621,7 +1621,7 @@ const it: typeof es = {
   partners: {
     kicker: "Partner",
     title: "Entra come partner",
-    lead: "Gestisci una capsula, una ruka, una caleta, un tour o una vigna. Mapucoin ti mostra sulla mappa, ti mette nell'itinerario e incassa con Stripe.",
+    lead: "Gestisci una capsula, una ruka, una caleta, un tour o una vigna. Mapucoin ti mostra sulla mappa, ti mette nell'itinerario e incassa la prenotazione.",
     name: "Nome",
     email: "Email",
     phone: "Telefono",
@@ -1767,7 +1767,7 @@ const it: typeof es = {
     invalidName: "Scrivi il tuo nome (minimo 2 lettere).",
     invalidEmail: "Inserisci un’email valida.",
     rateLimited: "Troppi tentativi. Attendi un momento e riprova.",
-    secure: "Pagamento sicuro con Stripe",
+    secure: "Pagamento sicuro",
     platformNote:
       "Addebito in CLP su Mapucoin. Se il partner non ha ancora Stripe Connect, il pagamento resta sulla piattaforma.",
     fromPrice: "Da {price} / notte",
@@ -1988,7 +1988,7 @@ const de: typeof es = {
   partners: {
     kicker: "Partner",
     title: "Als Partner beitreten",
-    lead: "Du betreibst eine Kapsel, eine Ruka, eine Caleta, eine Tour oder ein Weingut. Mapucoin zeigt dich auf der Karte, nimmt dich in den Reiseplan und kassiert mit Stripe.",
+    lead: "Du betreibst eine Kapsel, eine Ruka, eine Caleta, eine Tour oder ein Weingut. Mapucoin zeigt dich auf der Karte, nimmt dich in den Reiseplan und kassiert die Buchung.",
     name: "Name",
     email: "E-Mail",
     phone: "Telefon",
@@ -2134,7 +2134,7 @@ const de: typeof es = {
     invalidName: "Schreib deinen Namen (mindestens 2 Buchstaben).",
     invalidEmail: "Gib eine gültige E-Mail ein.",
     rateLimited: "Zu viele Versuche. Warte einen Moment und versuch es erneut.",
-    secure: "Sichere Zahlung mit Stripe",
+    secure: "Sichere Zahlung",
     platformNote:
       "Zahlung in CLP über Mapucoin. Wenn der Partner noch kein Stripe Connect hat, bleibt die Zahlung auf der Plattform.",
     fromPrice: "Ab {price} / Nacht",

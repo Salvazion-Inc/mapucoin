@@ -5,7 +5,7 @@ export const terms = {
   sections: [
     {
       heading: "1. Definiciones",
-      body: "Mapucoin es una plataforma tecnológica de viajes en Chile, operada por Salvazion SpA, RUT 78.462.349-1, Chile. Mapucoin es un intermediario de reservas que cobra una comisión; no es un operador turístico. Usuario: quien planifica o reserva. Partner: quien opera una cápsula, gastronomía, tour, guía, transporte o viña. Cápsula: módulo de alojamiento listado en la plataforma. Viaje: itinerario armado con presupuesto, destino, noches y viajeros.",
+      body: "Mapucoin es una plataforma tecnológica de viajes en Chile, operada por Salvazion SpA, RUT 78.462.349-1, Chile. Mapucoin es un intermediario de reservas que cobra una comisión; no es un operador turístico. Usuario: Quien planifica o reserva. Partner: Quien opera una cápsula, gastronomía, tour, guía, transporte o viña. Cápsula: Módulo de alojamiento listado en la plataforma. Viaje: Itinerario armado con presupuesto, destino, noches y viajeros.",
     },
     {
       heading: "2. Nuestro rol",
@@ -33,7 +33,7 @@ export const terms = {
     },
     {
       heading: "8. Ley aplicable",
-      body: "Estos términos se rigen por las leyes del Estado de Delaware, Estados Unidos, sin perjuicio de derechos irrenunciables del consumidor en Chile. Contacto: info@salvazion.org.",
+      body: "Estos términos se rigen por las leyes de la República de Chile y los tribunales de Chile, sin perjuicio de derechos irrenunciables del consumidor en Chile. Contacto: info@salvazion.org.",
     },
     {
       heading: "9. Clave de acceso $SALVAZION",
@@ -49,7 +49,7 @@ export const privacy = {
   sections: [
     {
       heading: "1. Responsable",
-      body: "Responsable: Salvazion SpA, RUT 78.462.349-1, sociedad por acciones chilena. Domicilio: comuna de Algarrobo, Región de Valparaíso, Chile. Contacto: info@salvazion.org.",
+      body: "Responsable: Salvazion SpA, RUT 78.462.349-1, sociedad por acciones chilena. Domicilio: Comuna de Algarrobo, Región de Valparaíso, Chile. Contacto: info@salvazion.org.",
     },
     {
       heading: "2. Datos que podemos recoger",

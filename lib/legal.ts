@@ -61,7 +61,7 @@ export const privacy = {
     },
     {
       heading: "4. Encargados",
-      body: "Usamos Vercel (hosting), Supabase (base de datos, si está activo), Stripe (pagos) y xAI (respuestas del planificador: el mensaje se envía solo para generar la respuesta). No vendemos datos personales para publicidad de terceros.",
+      body: "Usamos Vercel (hosting), Supabase (base de datos, si está activo), Stripe (pagos) y xAI (respuestas del planificador: El mensaje se envía solo para generar la respuesta). No vendemos datos personales para publicidad de terceros.",
     },
     {
       heading: "5. Conservación y derechos",

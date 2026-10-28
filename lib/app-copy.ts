@@ -26,7 +26,7 @@ const es = {
   away: "de distancia",
   all: "Todos",
   capsulasLead:
-    "Una casa cápsula por paisaje — cobre, vidrio y madera — operada por partners locales. Reserva con Stripe.",
+    "Una casa cápsula por paisaje — cobre, vidrio y madera — operada por partners locales.",
   book: "Reservar",
   booking: "Reservando…",
   bookThis: "Reservar esta cápsula",
@@ -58,7 +58,7 @@ const es = {
     saveError: "No se pudo guardar.",
     logout: "Salir",
     bookings: "Tus reservas",
-    noBookings: "Aún no hay reservas. Elige una cápsula y paga con Stripe.",
+    noBookings: "Aún no hay reservas. Elige una cápsula y paga.",
     partnerCta: "Ingresar como partner",
     partnerLead: "Operas una cápsula, gastronomía o un tour. Postula desde aquí.",
     roles: {
@@ -178,7 +178,7 @@ const en: typeof es = {
   away: "away",
   all: "All",
   capsulasLead:
-    "One capsule home per landscape — copper, glass and wood — run by local partners. Book with Stripe.",
+    "One capsule home per landscape — copper, glass and wood — run by local partners.",
   book: "Book",
   booking: "Booking…",
   bookThis: "Book this capsule",
@@ -210,7 +210,7 @@ const en: typeof es = {
     saveError: "Could not save.",
     logout: "Log out",
     bookings: "Your bookings",
-    noBookings: "No bookings yet. Pick a capsule and pay with Stripe.",
+    noBookings: "No bookings yet. Pick a capsule and pay.",
     partnerCta: "Join as a partner",
     partnerLead: "You run a capsule, gastronomy or a tour. Apply from here.",
     roles: {
@@ -329,7 +329,7 @@ const pt: typeof es = {
   away: "de distância",
   all: "Todos",
   capsulasLead:
-    "Uma casa cápsula por paisagem — cobre, vidro e madeira — operada por partners locais. Reserve com Stripe.",
+    "Uma casa cápsula por paisagem — cobre, vidro e madeira — operada por partners locais.",
   book: "Reservar",
   booking: "Reservando…",
   bookThis: "Reservar esta cápsula",
@@ -361,7 +361,7 @@ const pt: typeof es = {
     saveError: "Não foi possível salvar.",
     logout: "Sair",
     bookings: "Suas reservas",
-    noBookings: "Ainda não há reservas. Escolha uma cápsula e pague com Stripe.",
+    noBookings: "Ainda não há reservas. Escolha uma cápsula e pague.",
     partnerCta: "Entrar como partner",
     partnerLead: "Você opera uma cápsula, gastronomia ou um tour. Candidate-se aqui.",
     roles: {
@@ -480,7 +480,7 @@ const fr: typeof es = {
   away: "de distance",
   all: "Tous",
   capsulasLead:
-    "Une maison capsule par paysage — cuivre, verre et bois — gérée par des partenaires locaux. Réservez avec Stripe.",
+    "Une maison capsule par paysage — cuivre, verre et bois — gérée par des partenaires locaux.",
   book: "Réserver",
   booking: "Réservation…",
   bookThis: "Réserver cette capsule",
@@ -512,7 +512,7 @@ const fr: typeof es = {
     saveError: "Impossible d’enregistrer.",
     logout: "Sortir",
     bookings: "Vos réservations",
-    noBookings: "Pas encore de réservation. Choisissez une capsule et payez avec Stripe.",
+    noBookings: "Pas encore de réservation. Choisissez une capsule et payez.",
     partnerCta: "Devenir partenaire",
     partnerLead: "Vous tenez une capsule, de la gastronomie ou un tour. Candidatez ici.",
     roles: {
@@ -633,7 +633,7 @@ const it: typeof es = {
   away: "di distanza",
   all: "Tutti",
   capsulasLead:
-    "Una casa capsula per paesaggio — rame, vetro e legno — gestita da partner locali. Prenota con Stripe.",
+    "Una casa capsula per paesaggio — rame, vetro e legno — gestita da partner locali.",
   book: "Prenota",
   booking: "Prenotazione…",
   bookThis: "Prenota questa capsula",
@@ -665,7 +665,7 @@ const it: typeof es = {
     saveError: "Impossibile salvare.",
     logout: "Esci",
     bookings: "Le tue prenotazioni",
-    noBookings: "Nessuna prenotazione. Scegli una capsula e paga con Stripe.",
+    noBookings: "Nessuna prenotazione. Scegli una capsula e paga.",
     partnerCta: "Entra come partner",
     partnerLead: "Gestisci una capsula, gastronomia o un tour. Candidati da qui.",
     roles: {
@@ -785,7 +785,7 @@ const de: typeof es = {
   away: "entfernt",
   all: "Alle",
   capsulasLead:
-    "Ein Kapselhaus pro Landschaft — Kupfer, Glas und Holz — betrieben von lokalen Partnern. Buchen mit Stripe.",
+    "Ein Kapselhaus pro Landschaft — Kupfer, Glas und Holz — betrieben von lokalen Partnern.",
   book: "Buchen",
   booking: "Buchung…",
   bookThis: "Diese Kapsel buchen",
@@ -817,7 +817,7 @@ const de: typeof es = {
     saveError: "Speichern fehlgeschlagen.",
     logout: "Abmelden",
     bookings: "Deine Buchungen",
-    noBookings: "Noch keine Buchungen. Wähle eine Kapsel und zahle mit Stripe.",
+    noBookings: "Noch keine Buchungen. Wähle eine Kapsel und zahle.",
     partnerCta: "Als Partner beitreten",
     partnerLead: "Du betreibst eine Kapsel, Gastronomie oder eine Tour. Bewirb dich hier.",
     roles: {

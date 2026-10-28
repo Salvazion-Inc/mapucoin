@@ -19,8 +19,8 @@ describe("GOVERN P2 UI", () => {
     assert.equal(es.footer.terms, "Términos");
     assert.equal(es.footer.privacy, "Privacidad");
     assert.equal(
-      `${es.footer.rights} Salvazion Inc. 2026.`,
-      "Todos los derechos reservados para Salvazion Inc. 2026.",
+      `${es.footer.rights} Salvazion SpA 2026.`,
+      "Todos los derechos reservados para Salvazion SpA 2026.",
     );
 
     const en = t("en");

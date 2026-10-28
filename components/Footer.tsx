@@ -29,7 +29,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-[11px] text-sand/50 sm:flex-row">
         <p>
           <a href="https://salvazion.org" className="hover:text-gold">
-            {c.footer.rights} Salvazion Inc. {new Date().getFullYear()}.
+            {c.footer.rights} Salvazion SpA {new Date().getFullYear()}.
           </a>
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">

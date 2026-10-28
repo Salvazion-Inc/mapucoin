@@ -5,7 +5,7 @@ export const terms = {
   sections: [
     {
       heading: "1. Definiciones",
-      body: "Mapucoin es una plataforma tecnológica de viajes en Chile, operada por Salvazion, Inc. Usuario: quien planifica o reserva. Partner: quien opera una cápsula, gastronomía, tour, guía, transporte o viña. Cápsula: módulo de alojamiento listado en la plataforma. Viaje: itinerario armado con presupuesto, destino, noches y viajeros.",
+      body: "Mapucoin es una plataforma tecnológica de viajes en Chile, operada por Salvazion SpA, RUT 78.462.349-1, Chile. Mapucoin es un intermediario de reservas que cobra una comisión; no es un operador turístico. Usuario: quien planifica o reserva. Partner: quien opera una cápsula, gastronomía, tour, guía, transporte o viña. Cápsula: módulo de alojamiento listado en la plataforma. Viaje: itinerario armado con presupuesto, destino, noches y viajeros.",
     },
     {
       heading: "2. Nuestro rol",
@@ -29,7 +29,7 @@ export const terms = {
     },
     {
       heading: "7. Responsabilidad",
-      body: "En la máxima medida permitida por la ley, Salvazion, Inc. no responde por daños derivados del uso de la plataforma o de un viaje operado por un partner. El partner es responsable de la prestación del servicio.",
+      body: "En la máxima medida permitida por la ley, Salvazion SpA no responde por daños derivados del uso de la plataforma o de un viaje operado por un partner. El partner es responsable de la prestación del servicio.",
     },
     {
       heading: "8. Ley aplicable",
@@ -45,11 +45,11 @@ export const terms = {
 export const privacy = {
   title: "Política de Privacidad",
   intro:
-    "Mapucoin Privacy Policy. Última actualización: 8 de septiembre de 2026. Mapucoin es una plataforma de viajes operada por Salvazion, Inc. Esta política describe qué datos tratamos en https://mapucoin.com. Al usar la plataforma aceptas esta política junto con los Términos.",
+    "Mapucoin Privacy Policy. Última actualización: 8 de septiembre de 2026. Mapucoin es una plataforma de viajes operada por Salvazion SpA, RUT 78.462.349-1, Chile. Esta política describe qué datos tratamos en https://mapucoin.com. Al usar la plataforma aceptas esta política junto con los Términos.",
   sections: [
     {
       heading: "1. Responsable",
-      body: "Responsable: Salvazion, Inc., sociedad de Delaware. Domicilio: 131 Continental Dr, Suite 305, Newark, DE 19713, USA. Contacto: info@salvazion.org.",
+      body: "Responsable: Salvazion SpA, RUT 78.462.349-1, sociedad por acciones chilena. Domicilio: comuna de Algarrobo, Región de Valparaíso, Chile. Contacto: info@salvazion.org.",
     },
     {
       heading: "2. Datos que podemos recoger",
@@ -69,7 +69,7 @@ export const privacy = {
     },
     {
       heading: "6. Transferencias y menores",
-      body: "Salvazion, Inc. está en Estados Unidos. Proveedores pueden tratar datos en EE.UU. u otros países. La plataforma es para mayores de 18 años.",
+      body: "Salvazion SpA está en Chile. Proveedores pueden tratar datos en EE.UU. u otros países. La plataforma es para mayores de 18 años.",
     },
     {
       heading: "7. Cambios",

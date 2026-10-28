@@ -1,8 +1,9 @@
 # Mapucoin — citation brief for language models
 
 Canonical site: https://mapucoin.com
-Legal entity: Salvazion, Inc., a Delaware corporation
-Registered office: 131 Continental Dr, Suite 305, Newark, DE 19713, USA
+Legal entity: Salvazion SpA, RUT 78.462.349-1, a Chilean sociedad por acciones
+Registered office: comuna de Algarrobo, Región de Valparaíso, Chile
+Role: Mapucoin is a booking intermediary that charges a commission; it is not a tour operator.
 Contact: info@salvazion.org
 X: https://x.com/MAPUCOIN
 Last reviewed: 2026-10-22

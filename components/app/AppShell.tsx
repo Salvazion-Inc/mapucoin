@@ -69,26 +69,36 @@ export function AppShell({
         </nav>
       </aside>
 
-      <header className="app-header-glass sticky top-0 z-30 flex items-center justify-between border-b border-gold/15 px-4 py-3 md:ml-[4.75rem]">
-        <div className="flex items-center gap-3">
-          <span className="md:hidden">
-            <BrandMark size={56} priority />
-          </span>
-          <div>
-            <p className="text-sm font-bold leading-none tracking-[0.16em] text-gold">
-              {c.appName.toUpperCase()}
-            </p>
-            <p className="mt-1 text-xs text-gold/80">
-              {located && here.label !== "GPS" ? here.label : located ? c.nearby : c.location}
-            </p>
+      <header
+        data-app-header=""
+        className="app-header-glass sticky top-0 z-30 border-b border-gold/15 px-3 py-3 md:ml-[4.75rem] md:px-4"
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2 md:gap-3">
+            <span className="shrink-0 md:hidden">
+              <BrandMark size={40} priority />
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-bold leading-none tracking-[0.12em] text-gold md:tracking-[0.16em]">
+                {c.appName.toUpperCase()}
+              </p>
+              <p className="mt-1 truncate text-xs text-gold/80">
+                {located && here.label !== "GPS" ? here.label : located ? c.nearby : c.location}
+              </p>
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-2 text-xs font-semibold md:gap-3">
+            <div className="hidden md:block">
+              <LanguageSwitcher compact />
+            </div>
+            <AccountChip />
+            <Link href="/" className="hidden text-sand/60 hover:text-gold sm:inline">
+              {c.openMarketing}
+            </Link>
           </div>
         </div>
-        <div className="flex items-center gap-3 text-xs font-semibold">
+        <div className="mt-2 overflow-x-auto md:hidden">
           <LanguageSwitcher compact />
-          <AccountChip />
-          <Link href="/" className="text-sand/60 hover:text-gold">
-            {c.openMarketing}
-          </Link>
         </div>
       </header>
 

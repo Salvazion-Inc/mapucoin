@@ -39,6 +39,7 @@ export function AuthForm({
     googleReason ||
     (search.get("auth") === "google" ? search.get("reason") : null) ||
     (search.get("error") === "google" ? "failed" : null);
+  const notice = search.get("notice") === "link_expired" ? a.linkExpired : "";
   const googleMessage =
     reason === "unconfigured"
       ? a.googleUnconfigured
@@ -138,12 +139,12 @@ export function AuthForm({
         <LanguageSwitcher compact />
       </div>
       <section className="mx-auto mt-12 max-w-md">
-        {message || googleMessage ? (
+        {message || googleMessage || notice ? (
           <div
             role="alert"
             className="mb-4 rounded-lg border border-clay/40 bg-clay/10 px-3 py-2 text-sm text-sand"
           >
-            {message || googleMessage}
+            {message || googleMessage || notice}
           </div>
         ) : null}
         {thumbGate ? (
@@ -241,6 +242,13 @@ export function AuthForm({
         </p>
           </>
         )}
+        {mode === "login" ? (
+          <p className="mt-4 text-sm">
+            <Link href="/recuperar" className="text-gold">
+              {a.forgotLink}
+            </Link>
+          </p>
+        ) : null}
       </section>
     </div>
   );

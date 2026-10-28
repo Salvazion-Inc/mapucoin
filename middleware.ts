@@ -7,7 +7,7 @@ import {
   localeFromPath,
   stripLocalePrefix,
 } from "@/lib/locale";
-import { SESSION_COOKIE, readSession } from "@/lib/session";
+import { AuthSecretError, SESSION_COOKIE, readSession } from "@/lib/session";
 import { pageGateTarget } from "@/lib/verified-access";
 
 const APP_HOSTS = new Set(["app.mapucoin.com", "www.app.mapucoin.com"]);
@@ -39,7 +39,18 @@ export async function middleware(request: NextRequest) {
     return applySecurityHeaders(res);
   }
 
-  const user = await readSession(request.cookies.get(SESSION_COOKIE)?.value);
+  let user;
+  try {
+    user = await readSession(request.cookies.get(SESSION_COOKIE)?.value);
+  } catch (error) {
+    if (!(error instanceof AuthSecretError)) throw error;
+    return applySecurityHeaders(
+      NextResponse.json(
+        { error: "server" },
+        { status: 500, headers: { "Cache-Control": "no-store" } },
+      ),
+    );
+  }
   const gate = pageGateTarget(pathname, search, user);
   if (gate) {
     const dest = request.nextUrl.clone();

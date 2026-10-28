@@ -14,12 +14,12 @@ const SRC: Record<Locale, string> = {
 };
 
 const POSTER: Record<Locale, string> = {
-  es: "/images/why-chile-es.jpg",
-  en: "/images/why-chile-en.jpg",
-  pt: "/images/why-chile-pt.jpg",
-  fr: "/images/why-chile-fr.jpg",
-  it: "/images/why-chile-en.jpg",
-  de: "/images/why-chile-de.jpg",
+  es: "/images/why-chile-es.webp",
+  en: "/images/why-chile-en.webp",
+  pt: "/images/why-chile-pt.webp",
+  fr: "/images/why-chile-fr.webp",
+  it: "/images/why-chile-en.webp",
+  de: "/images/why-chile-de.webp",
 };
 
 export default function WhyChile() {
@@ -44,7 +44,7 @@ export default function WhyChile() {
             className="absolute inset-0 h-full w-full bg-night object-cover"
             controls
             playsInline
-            preload="metadata"
+            preload="none"
             poster={POSTER[locale]}
             aria-label={c.whyChile.video}
           >

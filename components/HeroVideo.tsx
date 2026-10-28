@@ -2,15 +2,34 @@
 
 import { t } from "@/lib/copy";
 import { useLocale } from "@/lib/locale-context";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function HeroVideo({
-  poster = "/images/hero-chile.jpg",
+  poster = "/images/hero-chile.webp",
 }: {
   poster?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  // Attach the heavy hero video only after the page has loaded, so it does not
+  // compete with fonts and LCP. The poster shows until then (same look).
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (document.readyState === "complete") {
+      setReady(true);
+      return;
+    }
+    const on = () => setReady(true);
+    window.addEventListener("load", on, { once: true });
+    return () => window.removeEventListener("load", on);
+  }, []);
+  useEffect(() => {
+    if (!ready) return;
+    const v = ref.current;
+    if (!v) return;
+    v.load();
+    void v.play().catch(() => {});
+  }, [ready]);
   const { locale } = useLocale();
   const c = t(locale);
 
@@ -32,11 +51,11 @@ export default function HeroVideo({
         muted
         loop
         playsInline
-        preload="auto"
+        preload="none"
         aria-hidden
         poster={poster}
       >
-        <source src="/videos/mapucoin-chile.mp4" type="video/mp4" />
+        {ready && <source src="/videos/mapucoin-chile.mp4" type="video/mp4" />}
       </video>
       <button
         type="button"

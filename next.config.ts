@@ -10,6 +10,8 @@ const assetCache = [{ key: "Cache-Control", value: STATIC_ASSET_CACHE }];
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Render metadata in <head> for every client (Lighthouse/SEO reads <head>, not streamed body tags).
+  htmlLimitedBots: /.*/,
   // A lockfile above this repo was being chosen as the tracing root.
   outputFileTracingRoot: path.join(__dirname),
   transpilePackages: ["leaflet"],
@@ -37,6 +39,7 @@ const nextConfig: NextConfig = {
       { source: "/apple-touch-icon.png", headers: assetCache },
       { source: "/logo.png", headers: assetCache },
       { source: "/logo-mark.png", headers: assetCache },
+      { source: "/logo-mark-128.webp", headers: assetCache },
       { source: "/og.jpg", headers: assetCache },
     ];
   },

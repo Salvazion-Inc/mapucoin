@@ -131,7 +131,7 @@ function PreviewCard({
     <article className="overflow-hidden rounded-2xl border border-gold/15">
       <div className="relative h-36">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={image} alt={name} className="h-full w-full object-cover" />
+        <img src={image} alt={name} loading="lazy" decoding="async" className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/20 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-3 text-sand">
           <p className="text-[10px] uppercase tracking-[0.18em] text-gold">

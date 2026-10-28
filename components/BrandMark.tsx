@@ -4,10 +4,12 @@ export default function BrandMark({
   size = 44,
   priority = false,
   className = "",
+  alt = "Mapucoin",
 }: {
   size?: number;
   priority?: boolean;
   className?: string;
+  alt?: string;
 }) {
   return (
     <span
@@ -16,7 +18,7 @@ export default function BrandMark({
     >
       <Image
         src="/logo-mark.png"
-        alt="Mapucoin"
+        alt={alt}
         width={size}
         height={size}
         priority={priority}

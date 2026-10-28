@@ -66,7 +66,7 @@ function toPartnerPoint(p: PublicPartner, catalog: CatalogPoint[]): PartnerPoint
 const PIN_SIZE = 36;
 
 function pinHtml() {
-  return `<div class="map-pin-mark"><img src="/logo-mark.png" alt="Mapucoin" width="${PIN_SIZE}" height="${PIN_SIZE}" /></div>`;
+  return `<div class="map-pin-mark"><img src="/logo-mark-128.webp" alt="Mapucoin" decoding="async" width="${PIN_SIZE}" height="${PIN_SIZE}" /></div>`;
 }
 
 function fold(value: string) {
@@ -327,11 +327,13 @@ export default function ChileMap({
     } else if (fit.length) {
       map.fitBounds(
         L.latLngBounds(fit.map((p) => [p.lat, p.lng] as [number, number])),
-        { padding: [40, 40], maxZoom: 6 },
+        { padding: [40, 40], maxZoom: 6, animate: false },
       );
     }
 
     return () => {
+      map.stop();
+      map.off();
       map.remove();
       mapRef.current = null;
       markersRef.current = new Map();

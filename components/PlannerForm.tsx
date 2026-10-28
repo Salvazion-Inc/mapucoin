@@ -150,6 +150,8 @@ export default function PlannerForm({
             <img
               src={preview.stay.image}
               alt={preview.stay.name}
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-night/90 to-transparent" />

@@ -88,8 +88,8 @@ export default function Header({ initialUser }: { initialUser: Me }) {
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 md:h-16 md:px-5">
-        <Link href="/#home" className="flex items-center gap-2.5">
-          <BrandMark size={40} priority />
+        <Link href="/#home" className="flex items-center gap-2.5" aria-label="Mapucoin">
+          <BrandMark size={40} priority alt="" />
           <span className="hidden font-display text-lg tracking-[0.16em] text-gold sm:inline">
             MAPUCOIN
           </span>

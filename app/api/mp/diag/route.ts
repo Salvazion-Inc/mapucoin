@@ -24,15 +24,22 @@ export async function GET(req: Request) {
     .select("access_token, mp_user_id, live_mode")
     .eq("partner_id", partnerId)
     .maybeSingle();
-  if (!acct?.access_token) return Response.json({ error: "unlinked" }, { status: 409 });
+  const integ = await mpFetch("/users/me", process.env.MP_ACCESS_TOKEN as string);
+  const app = {
+    client_id: process.env.MP_CLIENT_ID || null, // public: it travels in the OAuth URL
+    token_kind: String(process.env.MP_ACCESS_TOKEN || "").startsWith("TEST-") ? "TEST" : "APP_USR",
+    token_user: pick(integ.data, ["id", "site_id", "country_id", "tags"]),
+    public_key_kind: String(process.env.MP_PUBLIC_KEY || "").split("-")[0] || null,
+    webhook_secret_set: Boolean(process.env.MP_WEBHOOK_SECRET),
+    client_secret_set: Boolean(process.env.MP_CLIENT_SECRET),
+  };
+  if (!acct?.access_token) return Response.json({ app, seller: null, error: "unlinked" });
   const token = acct.access_token as string;
   const tokenKind = token.startsWith("TEST-") ? "TEST" : token.startsWith("APP_USR-") ? "APP_USR" : "other";
 
   const me = await mpFetch("/users/me", token);
-  const integ = await mpFetch("/users/me", process.env.MP_ACCESS_TOKEN as string);
-  const integKind = String(process.env.MP_ACCESS_TOKEN || "").startsWith("TEST-") ? "TEST" : "APP_USR";
   const out: Record<string, unknown> = {
-    integrator: { token_kind: integKind, ...pick(integ.data, ["id", "site_id", "country_id", "tags"]) },
+    app,
     seller: { mp_user_id: acct.mp_user_id, live_mode: acct.live_mode, token_kind: tokenKind },
     users_me: pick(me.data, ["id", "nickname", "site_id", "country_id", "tags", "user_type", "status"]),
   };

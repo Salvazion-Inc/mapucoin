@@ -18,11 +18,12 @@ export async function GET(req: Request) {
   if (!partner || (partner.status !== "approved" && !testPartner)) {
     return Response.json({ error: "partner" }, { status: 404 });
   }
-  if (!adminAuthorized(req)) {
+  // Sandbox test partner (is_test, Preview only via mpEnabled): no Mapucoin session needed,
+  // the MP test seller login is the gate. Real partners need their verified account or admin.
+  if (!testPartner && !adminAuthorized(req)) {
     const gate = await requireVerifiedAccount(req);
     if (!gate.ok) return gate.response;
-    // Sandbox test partner (is_test): any verified Mapucoin account may link the MP test seller.
-    if (!testPartner && gate.user.email.toLowerCase() !== String(partner.email || "").toLowerCase()) {
+    if (gate.user.email.toLowerCase() !== String(partner.email || "").toLowerCase()) {
       return Response.json({ error: "forbidden" }, { status: 403 });
     }
   }

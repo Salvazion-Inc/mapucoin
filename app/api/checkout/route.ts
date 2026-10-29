@@ -1,4 +1,6 @@
 import { getBySlug } from "@/lib/catalog";
+import { mpEnabled } from "@/lib/mp";
+import { mpCheckout } from "@/lib/mp-checkout";
 import { operatorFor } from "@/lib/operators";
 import {
   honeypotFilled,
@@ -53,13 +55,16 @@ export async function POST(req: Request) {
   const limited = rateLimit(`checkout:${clientIp(req)}`, 8, 10 * 60 * 1000);
   if (!limited.ok) return rateLimitedResponse(limited.retryAfter);
 
-  if (!stripeConfigured()) {
-    return Response.json({ error: "stripe_unconfigured" }, { status: 503 });
-  }
-
   const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   if (honeypotFilled(body)) {
     return Response.json({ error: "profile" }, { status: 400 });
+  }
+
+  // Sandbox only (PAYMENTS_PROVIDER=mp, never in Production): Mercado Pago Split 1:1.
+  if (mpEnabled()) return mpCheckout(req, body);
+
+  if (!stripeConfigured()) {
+    return Response.json({ error: "stripe_unconfigured" }, { status: 503 });
   }
 
   if (Array.isArray(body.items)) {

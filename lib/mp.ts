@@ -110,7 +110,8 @@ export type MpPreferenceInput = {
   title: string;
   description: string;
   amount: number;
-  email: string;
+  /** Optional. Left out in sandbox: a payer email that is not the logged-in MP test buyer breaks Checkout Pro. */
+  payerEmail?: string;
   successUrl: string;
   failureUrl: string;
   notificationUrl: string;
@@ -131,7 +132,7 @@ export function mpPreferenceBody(input: MpPreferenceInput) {
         unit_price: amount,
       },
     ],
-    payer: { email: input.email },
+    ...(input.payerEmail ? { payer: { email: input.payerEmail } } : {}),
     external_reference: input.bookingId,
     marketplace_fee: mpMarketplaceFeeClp(amount, input.feeBps),
     notification_url: input.notificationUrl,

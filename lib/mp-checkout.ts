@@ -87,7 +87,6 @@ export async function mpCheckout(req: Request, body: Record<string, unknown>) {
     title: `${item.name} · ${nights} noche${nights > 1 ? "s" : ""}`,
     description: `${item.city} · ${guests} viajero${guests > 1 ? "s" : ""}`,
     amount,
-    email,
     feeBps,
     successUrl: fromApp ? `${origin}/app/viaje?paid=1&mp=1` : `${origin}/reserva/exito?mp=1`,
     failureUrl: fromApp ? `${origin}/app/capsulas?cancel=1` : `${origin}/capsulas/${item.slug}?cancel=1`,

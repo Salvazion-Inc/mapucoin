@@ -29,7 +29,10 @@ export async function GET(req: Request) {
   const tokenKind = token.startsWith("TEST-") ? "TEST" : token.startsWith("APP_USR-") ? "APP_USR" : "other";
 
   const me = await mpFetch("/users/me", token);
+  const integ = await mpFetch("/users/me", process.env.MP_ACCESS_TOKEN as string);
+  const integKind = String(process.env.MP_ACCESS_TOKEN || "").startsWith("TEST-") ? "TEST" : "APP_USR";
   const out: Record<string, unknown> = {
+    integrator: { token_kind: integKind, ...pick(integ.data, ["id", "site_id", "country_id", "tags"]) },
     seller: { mp_user_id: acct.mp_user_id, live_mode: acct.live_mode, token_kind: tokenKind },
     users_me: pick(me.data, ["id", "nickname", "site_id", "country_id", "tags", "user_type", "status"]),
   };

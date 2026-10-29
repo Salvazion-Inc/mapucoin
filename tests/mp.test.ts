@@ -45,13 +45,14 @@ test("marketplace fee is 12% in CLP integers; partner gets 88%", () => {
 
 test("preference body uses CLP and marketplace_fee", () => {
   const b = mpPreferenceBody({
-    bookingId: "b1", title: "t", description: "d", amount: 150000, email: "a@b.cl",
+    bookingId: "b1", title: "t", description: "d", amount: 150000, payerEmail: undefined,
     successUrl: "https://x/s", failureUrl: "https://x/f", notificationUrl: "https://x/api/mp/webhook",
   });
   assert.equal(b.items[0].currency_id, "CLP");
   assert.equal(b.items[0].unit_price, 150000);
   assert.equal(b.marketplace_fee, 18000);
   assert.equal(b.external_reference, "b1");
+  assert.equal("payer" in b, false);
 });
 
 test("flag is off in production and without credentials", () => {

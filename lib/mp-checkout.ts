@@ -1,18 +1,36 @@
 import { getBySlug } from "@/lib/catalog";
 import { isEmail, isPersonName } from "@/lib/http-guard";
 import { mpFetch, mpMarketplaceFeeClp, mpPreferenceBody } from "@/lib/mp";
-import { findPartnerForCapsule } from "@/lib/partner-store";
+import { findPartnerForCapsule, isTestPartner } from "@/lib/partner-store";
 import { platformFeeBps } from "@/lib/partners";
 import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
 import { appOrigin } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabase";
+
+/** Hidden sandbox capsule: only reachable with an is_test partner, never in the catalog. */
+export const MP_TEST_CAPSULE = {
+  slug: "mp-sandbox-capsula-prueba",
+  kind: "capsule" as const,
+  name: "Cápsula Prueba MP (sandbox)",
+  city: "Sandbox",
+  priceFromCLP: 10000,
+};
 
 /** Capsule checkout through Mercado Pago Checkout Pro with marketplace_fee (Split 1:1). */
 export async function mpCheckout(req: Request, body: Record<string, unknown>) {
   if (Array.isArray(body.items)) {
     return Response.json({ error: "mp_trip_unsupported" }, { status: 400 });
   }
-  const item = getBySlug(String(body.capsula || body.slug || ""));
+  const requestedSlug = String(body.capsula || body.slug || "");
+  const db = getSupabaseAdmin();
+  if (!db) return Response.json({ error: "db" }, { status: 503 });
+  const partner = await findPartnerForCapsule(db, requestedSlug, String(body.partner_id || "").trim(), {
+    allowTest: true,
+  }).catch(() => null);
+  const item =
+    requestedSlug === MP_TEST_CAPSULE.slug && isTestPartner(partner)
+      ? MP_TEST_CAPSULE
+      : getBySlug(requestedSlug);
   if (!item || item.kind !== "capsule") {
     return Response.json({ error: "capsule" }, { status: 400 });
   }
@@ -24,13 +42,6 @@ export async function mpCheckout(req: Request, body: Record<string, unknown>) {
     return Response.json({ error: "profile" }, { status: 400 });
   }
 
-  const db = getSupabaseAdmin();
-  if (!db) return Response.json({ error: "db" }, { status: 503 });
-  const partner = await findPartnerForCapsule(
-    db,
-    item.slug,
-    String(body.partner_id || "").trim(),
-  ).catch(() => null);
   if (!partner) return Response.json({ error: "mp_no_partner" }, { status: 409 });
   const { data: account } = await db
     .from("mp_partner_accounts")

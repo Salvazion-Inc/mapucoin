@@ -68,3 +68,35 @@ test("oauth state is signed", () => {
   assert.equal(readOauthState(s, "other"), null);
   assert.equal(readOauthState(s.replace("partner-1", "partner-2"), secret), null);
 });
+
+test("is_test partners are never public", async () => {
+  const { isTestPartner } = await import("@/lib/partner-store");
+  assert.equal(isTestPartner({ is_test: true, status: "approved" }), true);
+  assert.equal(isTestPartner({ is_test: false }), false);
+  assert.equal(isTestPartner({}), false);
+  assert.equal(isTestPartner(null), false);
+  const { publicPartners } = await import("@/lib/partners").catch(() => ({ publicPartners: undefined }));
+  void publicPartners;
+});
+
+test("listApprovedPublic drops is_test rows and the query filters is_test=false", async () => {
+  const { listApprovedPublic } = await import("@/lib/partner-store");
+  const calls: string[] = [];
+  const rows = [
+    { id: "a", status: "approved", is_test: false, slug: "real", business: "Real", city: "X", role: "capsula" },
+    { id: "t", status: "approved", is_test: true, slug: "test", business: "Partner Prueba MP (sandbox)", city: "X", role: "capsula" },
+  ];
+  const q: Record<string, unknown> = {};
+  const chain = {
+    select: () => chain,
+    order: () => chain,
+    limit: () => chain,
+    eq: (col: string, val: unknown) => { calls.push(`${col}=${val}`); return chain; },
+    then: (ok: (v: unknown) => unknown) => ok({ data: rows, error: null }),
+  };
+  Object.assign(q, chain);
+  const db = { from: () => chain } as never;
+  const out = await listApprovedPublic(db);
+  assert.ok(calls.includes("is_test=false"));
+  assert.equal(out.some((p: { business?: string }) => /Prueba MP/.test(String(p.business))), false);
+});

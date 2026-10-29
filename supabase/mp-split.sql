@@ -21,3 +21,6 @@ alter table public.mp_webhook_events enable row level security;
 
 alter table public.bookings add column if not exists mp_preference_id text;
 alter table public.bookings add column if not exists mp_payment_id text;
+
+-- Test partners (sandbox): excluded from every public listing.
+alter table public.partners add column if not exists is_test boolean not null default false;

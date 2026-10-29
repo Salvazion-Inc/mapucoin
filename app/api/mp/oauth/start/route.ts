@@ -1,6 +1,6 @@
 import { adminAuthorized } from "@/lib/admin";
 import { mpAuthorizationUrl, mpEnabled, mpRedirectUri, signOauthState } from "@/lib/mp";
-import { getPartnerById } from "@/lib/partner-store";
+import { getPartnerById, isTestPartner } from "@/lib/partner-store";
 import { appOrigin } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { requireVerifiedAccount } from "@/lib/verified-access";
@@ -14,13 +14,15 @@ export async function GET(req: Request) {
   const db = getSupabaseAdmin();
   if (!db || !partnerId) return Response.json({ error: "partner" }, { status: 400 });
   const partner = await getPartnerById(db, partnerId).catch(() => null);
-  if (!partner || partner.status !== "approved") {
+  const testPartner = isTestPartner(partner);
+  if (!partner || (partner.status !== "approved" && !testPartner)) {
     return Response.json({ error: "partner" }, { status: 404 });
   }
   if (!adminAuthorized(req)) {
     const gate = await requireVerifiedAccount(req);
     if (!gate.ok) return gate.response;
-    if (gate.user.email.toLowerCase() !== String(partner.email || "").toLowerCase()) {
+    // Sandbox test partner (is_test): any verified Mapucoin account may link the MP test seller.
+    if (!testPartner && gate.user.email.toLowerCase() !== String(partner.email || "").toLowerCase()) {
       return Response.json({ error: "forbidden" }, { status: 403 });
     }
   }

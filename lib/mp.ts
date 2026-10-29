@@ -157,3 +157,10 @@ export async function mpFetch(path: string, token: string, init: RequestInit = {
   const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
   return { ok: res.ok, status: res.status, data };
 }
+
+/** Origin of this deployment (Preview URL), not NEXT_PUBLIC_APP_URL, so OAuth/webhooks hit the sandbox. */
+export function mpOrigin(req: Request) {
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
+  const proto = req.headers.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
+  return host ? `${proto}://${host}` : "https://mapucoin.com";
+}

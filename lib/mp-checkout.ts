@@ -1,10 +1,10 @@
 import { getBySlug } from "@/lib/catalog";
 import { isEmail, isPersonName } from "@/lib/http-guard";
 import { mpFetch, mpMarketplaceFeeClp, mpPreferenceBody } from "@/lib/mp";
+import { mpOrigin } from "@/lib/mp";
 import { findPartnerForCapsule, isTestPartner } from "@/lib/partner-store";
 import { platformFeeBps } from "@/lib/partners";
 import { cookieValue, readSession, SESSION_COOKIE } from "@/lib/session";
-import { appOrigin } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 /** Hidden sandbox capsule: only reachable with an is_test partner, never in the catalog. */
@@ -56,7 +56,7 @@ export async function mpCheckout(req: Request, body: Record<string, unknown>) {
   const feeBps = platformFeeBps();
   const fee = mpMarketplaceFeeClp(amount, feeBps);
   const bookingId = crypto.randomUUID();
-  const origin = appOrigin(req);
+  const origin = mpOrigin(req);
   const fromApp = String(body.source || "") === "app";
   const sessionUser = await readSession(cookieValue(req.headers.get("cookie"), SESSION_COOKIE));
 

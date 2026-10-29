@@ -1,7 +1,7 @@
 import { adminAuthorized } from "@/lib/admin";
 import { mpAuthorizationUrl, mpEnabled, mpRedirectUri, signOauthState } from "@/lib/mp";
+import { mpOrigin } from "@/lib/mp";
 import { getPartnerById, isTestPartner } from "@/lib/partner-store";
-import { appOrigin } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { requireVerifiedAccount } from "@/lib/verified-access";
 
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
   const state = signOauthState(partner.id, process.env.MP_CLIENT_SECRET as string);
   const url = mpAuthorizationUrl(
     process.env.MP_CLIENT_ID as string,
-    mpRedirectUri(appOrigin(req)),
+    mpRedirectUri(mpOrigin(req)),
     state,
   );
   return Response.redirect(url, 302);

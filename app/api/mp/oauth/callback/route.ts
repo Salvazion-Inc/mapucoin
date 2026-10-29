@@ -1,5 +1,5 @@
 import { MP_API, mpEnabled, mpRedirectUri, readOauthState } from "@/lib/mp";
-import { appOrigin } from "@/lib/stripe";
+import { mpOrigin } from "@/lib/mp";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -18,7 +18,7 @@ export async function GET(req: Request) {
   const db = getSupabaseAdmin();
   if (!db) return Response.json({ error: "db" }, { status: 503 });
 
-  const origin = appOrigin(req);
+  const origin = mpOrigin(req);
   const form = new URLSearchParams({
     client_id: process.env.MP_CLIENT_ID as string,
     client_secret: process.env.MP_CLIENT_SECRET as string,

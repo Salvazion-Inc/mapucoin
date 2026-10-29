@@ -4,19 +4,26 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
+/** Sandbox result page: the outcome stays visible (no client redirect to /#partners). */
+function result(status: number, outcome: "linked" | "error", detail: string) {
+  const title = outcome === "linked" ? "Mercado Pago vinculado (sandbox)" : "Error al vincular Mercado Pago (sandbox)";
+  const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>${title}</title></head><body style="font-family:system-ui;max-width:40rem;margin:4rem auto;padding:0 1rem"><h1>${title}</h1><p>Resultado: <strong data-mp-oauth="${outcome}">${outcome}</strong></p><p>${detail}</p></body></html>`;
+  return new Response(html, { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
+}
+
 /** OAuth redirect_uri: exchanges `code` for the seller token and stores it server-side only. */
 export async function GET(req: Request) {
-  if (!mpEnabled()) return Response.json({ error: "mp_disabled" }, { status: 404 });
+  if (!mpEnabled()) return result(404, "error", "mp_disabled");
   const url = new URL(req.url);
   const code = url.searchParams.get("code") || "";
   const partnerId = readOauthState(
     url.searchParams.get("state") || "",
     process.env.MP_CLIENT_SECRET as string,
   );
-  if (!code || !partnerId) return Response.json({ error: "state" }, { status: 400 });
+  if (!code || !partnerId) return result(400, "error", "state");
 
   const db = getSupabaseAdmin();
-  if (!db) return Response.json({ error: "db" }, { status: 503 });
+  if (!db) return result(503, "error", "db");
 
   const origin = mpOrigin(req);
   const form = new URLSearchParams({
@@ -37,7 +44,7 @@ export async function GET(req: Request) {
   const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
   if (!res.ok || typeof data.access_token !== "string") {
     console.error("mp_oauth_exchange", res.status, String(data.error || data.message || ""));
-    return Response.json({ error: "oauth_exchange" }, { status: 502 });
+    return result(502, "error", "oauth_exchange");
   }
 
   const expiresIn = Number(data.expires_in);
@@ -55,7 +62,8 @@ export async function GET(req: Request) {
   });
   if (error) {
     console.error("mp_oauth_store", error.message);
-    return Response.json({ error: "store" }, { status: 500 });
+    return result(500, "error", "store");
   }
-  return Response.redirect(`${origin}/partners?mp=linked`, 302);
+  console.log("mp_oauth_linked", partnerId);
+  return result(200, "linked", `Partner ${partnerId} vinculado.`);
 }

@@ -1,8 +1,8 @@
 /**
  * Fecha de "Última actualización" de Privacidad. DEC-20261103-22: se fija el día del paso a
- * producción de Mercado Pago (DEC-20261103-16). Hasta entonces conserva la fecha vigente.
+ * producción de Mercado Pago (DEC-20261103-16): 4 de noviembre de 2026.
  */
-export const PRIVACY_LAST_UPDATED = "8 de septiembre de 2026";
+export const PRIVACY_LAST_UPDATED = "4 de noviembre de 2026";
 
 export const terms = {
   title: "Términos y Condiciones",

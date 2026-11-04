@@ -5,7 +5,7 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 export const runtime = "nodejs";
 
 /**
- * Mercado Pago notifications (topics payment and merchant_order).
+ * Mercado Pago notifications (topics payment and merchant_order; merchant_order is acknowledged only).
  * Signature: x-signature (ts, v1) + x-request-id + data.id, HMAC-SHA256 with MP_WEBHOOK_SECRET.
  * Idempotent: the x-request-id is recorded only after successful processing; on error it is
  * not recorded and the route answers 500 so MP retries.
@@ -29,6 +29,14 @@ export async function POST(req: Request) {
     url.searchParams.get("type") || url.searchParams.get("topic") || body.type || body.topic || "",
   );
   const requestId = req.headers.get("x-request-id") || "";
+
+  // "Pagos (legacy)" / IPN and legacy merchant_order notifications are unsigned (?topic=…&id=…).
+  // They are acknowledged with 200 and ignored: the signed Webhooks event (or /api/mp/confirm)
+  // marks the booking, always re-reading the payment from MP with the partner's own token.
+  if (!req.headers.get("x-signature")) {
+    console.log("mp_webhook_unsigned_ignored", topic || "none", dataId ? "id" : "no_id");
+    return Response.json({ ok: true, ignored: "unsigned" });
+  }
 
   const valid = verifyMpSignature({
     xSignature: req.headers.get("x-signature"),

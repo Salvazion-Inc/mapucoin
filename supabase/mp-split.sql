@@ -24,3 +24,6 @@ alter table public.bookings add column if not exists mp_payment_id text;
 
 -- Test partners (sandbox): excluded from every public listing.
 alter table public.partners add column if not exists is_test boolean not null default false;
+
+-- DEC-20261029-01: server-only tables, no access for anon/authenticated.
+revoke all on public.mp_partner_accounts, public.mp_webhook_events from anon, authenticated;

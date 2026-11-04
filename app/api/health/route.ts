@@ -11,21 +11,17 @@ export async function GET() {
   const stripe = stripeConfigured();
   const db = getSupabase();
   let supabase = false;
+  let dbError = "";
   if (db) {
     const { error } = await db.from("bookings").select("id").limit(1);
-    supabase = !error || error.code === "PGRST116";
-    if (error && /schema cache|does not exist|PGRST205/i.test(error.message)) {
-      supabase = false;
-    } else if (!error) {
-      supabase = true;
-    } else {
-      supabase = true;
-    }
+    supabase = !error;
+    if (error) dbError = error.code || "error";
   }
 
   const google = googleConfigured();
+  const ok = grok && stripe && Boolean(db) && supabase;
   return Response.json({
-    ok: grok && stripe && Boolean(db),
+    ok,
     grok,
     stripe,
     google,
@@ -34,5 +30,6 @@ export async function GET() {
     app: process.env.NEXT_PUBLIC_APP_URL || "",
     platform_fee_bps: platformFeeBps(),
     admin: adminSecretConfigured(),
-  });
+    ...(dbError ? { supabaseError: dbError } : {}),
+  }, { status: db && !supabase ? 500 : 200 });
 }

@@ -80,7 +80,10 @@ export async function mpCheckout(req: Request, body: Record<string, unknown>) {
     fee_bps: feeBps,
     notes: JSON.stringify({ provider: "mp", capsule: item.slug, nights, guests, fee_bps: feeBps }),
   });
-  if (insertError) console.error("mp_booking_insert", insertError.message);
+  if (insertError) {
+    console.error("mp_booking_insert", insertError.message);
+    return Response.json({ error: "booking_insert" }, { status: 500 });
+  }
 
   const pref = mpPreferenceBody({
     bookingId,

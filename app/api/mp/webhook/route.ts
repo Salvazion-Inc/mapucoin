@@ -1,4 +1,5 @@
-import { mpEnabled, mpFetch, verifyMpSignature } from "@/lib/mp";
+import { mpEnabled, verifyMpSignature } from "@/lib/mp";
+import { handleMpPaymentNotification, processMpEvent } from "@/lib/mp-payments";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -6,7 +7,8 @@ export const runtime = "nodejs";
 /**
  * Mercado Pago notifications (topics payment and merchant_order).
  * Signature: x-signature (ts, v1) + x-request-id + data.id, HMAC-SHA256 with MP_WEBHOOK_SECRET.
- * Idempotent: each x-request-id is stored once; bookings already paid are not touched again.
+ * Idempotent: the x-request-id is recorded only after successful processing; on error it is
+ * not recorded and the route answers 500 so MP retries.
  */
 export async function POST(req: Request) {
   if (!mpEnabled()) return Response.json({ error: "mp_disabled" }, { status: 404 });
@@ -33,59 +35,21 @@ export async function POST(req: Request) {
     xRequestId: requestId,
     dataId,
     secret: process.env.MP_WEBHOOK_SECRET,
+    toleranceSeconds: 300,
   });
   if (!valid) return Response.json({ error: "signature" }, { status: 401 });
 
   const db = getSupabaseAdmin();
-  if (!db) return Response.json({ ok: true, stored: false });
+  if (!db) return Response.json({ error: "db" }, { status: 500 });
 
   const eventId = requestId || `${topic}:${dataId}:${String(body.action || "")}`;
-  const { error: dup } = await db
-    .from("mp_webhook_events")
-    .insert({ id: eventId, topic, resource_id: dataId });
-  if (dup) {
-    if (dup.code === "23505") return Response.json({ ok: true, idempotent: true });
-    console.error("mp_webhook_event", dup.message);
-  }
-
-  if (topic === "payment" && dataId) {
-    await handlePayment(db, dataId, String(body.user_id ?? ""));
-  } else if ((topic === "merchant_order" || topic === "topic_merchant_order_wh") && dataId) {
-    // Merchant orders are logged; payment status is taken from the payment topic.
-  }
-  return Response.json({ ok: true });
-}
-
-async function handlePayment(
-  db: NonNullable<ReturnType<typeof getSupabaseAdmin>>,
-  paymentId: string,
-  sellerUserId: string,
-) {
-  let token = process.env.MP_ACCESS_TOKEN as string;
-  if (sellerUserId) {
-    const { data } = await db
-      .from("mp_partner_accounts")
-      .select("access_token")
-      .eq("mp_user_id", sellerUserId)
-      .maybeSingle();
-    if (data?.access_token) token = data.access_token as string;
-  }
-  const res = await mpFetch(`/v1/payments/${encodeURIComponent(paymentId)}`, token);
-  if (!res.ok) {
-    console.error("mp_payment_fetch", res.status);
-    return;
-  }
-  const p = res.data;
-  const bookingId = String(p.external_reference || "");
-  if (!bookingId || p.status !== "approved") return;
-  const feeRow = Array.isArray(p.fee_details)
-    ? (p.fee_details as { type?: string; amount?: number }[]).find((f) => f.type === "application_fee")
-    : undefined;
-  const fee = Number(feeRow?.amount);
-  const patch: Record<string, unknown> = {
-    status: "paid",
-    mp_payment_id: String(p.id ?? paymentId),
-  };
-  if (Number.isFinite(fee)) patch.application_fee_clp = fee;
-  await db.from("bookings").update(patch).eq("id", bookingId).neq("status", "paid");
+  const result = await processMpEvent(db, eventId, { topic, resourceId: dataId }, async () => {
+    if (topic !== "payment" || !dataId) return { retry: false }; // merchant_order: logged only
+    const r = await handleMpPaymentNotification(db, dataId, String(body.user_id ?? ""));
+    return { retry: r.status === "error" };
+  });
+  return Response.json(
+    { ok: result.status === 200, ...(result.idempotent ? { idempotent: true } : {}) },
+    { status: result.status },
+  );
 }

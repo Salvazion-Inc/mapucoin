@@ -159,9 +159,15 @@ export async function mpFetch(path: string, token: string, init: RequestInit = {
   return { ok: res.ok, status: res.status, data };
 }
 
-/** Origin of this deployment (Preview URL), not NEXT_PUBLIC_APP_URL, so OAuth/webhooks hit the sandbox. */
-export function mpOrigin(req: Request) {
-  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
-  const proto = req.headers.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
-  return host ? `${proto}://${host}` : "https://mapucoin.com";
+/**
+ * Public origin for OAuth redirect_uri, notification_url and back_urls.
+ * Never derived from request headers: MP_PUBLIC_ORIGIN, else production → mapucoin.com,
+ * else the Vercel branch alias (system env), else mapucoin.com.
+ */
+export function mpOrigin(_req?: Request, env: Record<string, string | undefined> = process.env) {
+  const fixed = (env.MP_PUBLIC_ORIGIN || "").replace(/\/$/, "");
+  if (fixed) return fixed;
+  if (env.VERCEL_ENV === "production") return "https://mapucoin.com";
+  if (env.VERCEL_BRANCH_URL) return `https://${env.VERCEL_BRANCH_URL}`;
+  return "https://mapucoin.com";
 }

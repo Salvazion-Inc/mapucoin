@@ -1,12 +1,13 @@
-import { mpEnabled, mpFetch } from "@/lib/mp";
+import { mpEnabled } from "@/lib/mp";
+import { applyMpPaymentForBooking } from "@/lib/mp-payments";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
 /**
  * Receipt for /reserva/exito?mp=1. Needs the booking id (external_reference) and the
- * payment_id MP appends to the back_url; both must match. If the webhook has not landed yet,
- * the payment is read from MP with the partner token (server-side only).
+ * payment_id MP appends to the back_url. The payment is validated with the token of the
+ * partner that owns the booking (amount, CLP, collector, fee) before it counts as paid.
  */
 export async function POST(req: Request) {
   if (!mpEnabled()) return Response.json({ ok: false, error: "mp_disabled" }, { status: 404 });
@@ -18,43 +19,25 @@ export async function POST(req: Request) {
   }
   const db = getSupabaseAdmin();
   if (!db) return Response.json({ ok: false, error: "db" }, { status: 503 });
+
+  const r = await applyMpPaymentForBooking(db, bookingId, paymentId);
+  if (r.status !== "paid" && r.status !== "already_paid") {
+    return Response.json({ ok: false, error: r.status === "error" ? "retry" : "unpaid" });
+  }
   const { data: b } = await db
     .from("bookings")
-    .select("id, status, amount, email, capsule_slug, nights, guests, partner_id, mp_payment_id")
+    .select("id, amount, email, capsule_slug, nights, guests")
     .eq("id", bookingId)
     .maybeSingle();
-  if (!b) return Response.json({ ok: false, error: "booking" }, { status: 404 });
-
-  let paid = b.status === "paid" && String(b.mp_payment_id || "") === paymentId;
-  if (!paid && b.status !== "paid" && b.partner_id) {
-    const { data: acct } = await db
-      .from("mp_partner_accounts")
-      .select("access_token")
-      .eq("partner_id", b.partner_id)
-      .maybeSingle();
-    if (acct?.access_token) {
-      const res = await mpFetch(`/v1/payments/${paymentId}`, acct.access_token as string);
-      const p = res.data;
-      if (res.ok && p.status === "approved" && String(p.external_reference || "") === bookingId) {
-        await db
-          .from("bookings")
-          .update({ status: "paid", mp_payment_id: paymentId })
-          .eq("id", bookingId)
-          .neq("status", "paid");
-        paid = true;
-      }
-    }
-  }
-  if (!paid) return Response.json({ ok: false, error: "unpaid" });
   return Response.json({
     ok: true,
-    booking_id: b.id,
-    amount: Number(b.amount) || null,
+    booking_id: bookingId,
+    amount: Number(b?.amount) || null,
     currency: "CLP",
-    email: String(b.email || ""),
-    capsule: String(b.capsule_slug || ""),
-    nights: b.nights != null ? String(b.nights) : "",
-    guests: b.guests != null ? String(b.guests) : "",
+    email: String(b?.email || ""),
+    capsule: String(b?.capsule_slug || ""),
+    nights: b?.nights != null ? String(b.nights) : "",
+    guests: b?.guests != null ? String(b.guests) : "",
     status: "paid",
   });
 }

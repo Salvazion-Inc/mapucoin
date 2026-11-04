@@ -10,11 +10,17 @@ export const MP_API = "https://api.mercadopago.com";
 export const MP_AUTH_URL = "https://auth.mercadopago.cl/authorization";
 
 export function mpEnabled(env: Record<string, string | undefined> = process.env) {
-  if (env.VERCEL_ENV === "production") return false;
   return (
     env.PAYMENTS_PROVIDER === "mp" &&
     Boolean(env.MP_ACCESS_TOKEN && env.MP_CLIENT_ID && env.MP_CLIENT_SECRET)
   );
+}
+
+/**
+ * Sandbox-only helpers (diag, checkout-test, is_test partners, test capsule): never in Production.
+ */
+export function mpTestToolsEnabled(env: Record<string, string | undefined> = process.env) {
+  return mpEnabled(env) && env.VERCEL_ENV !== "production";
 }
 
 /** Marketplace fee in CLP (integer). 12% default; partner keeps the rest. */

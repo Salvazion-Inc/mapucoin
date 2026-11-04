@@ -1,5 +1,5 @@
 import { adminAuthorized } from "@/lib/admin";
-import { mpAuthorizationUrl, mpEnabled, mpRedirectUri, signOauthState } from "@/lib/mp";
+import { mpAuthorizationUrl, mpEnabled, mpRedirectUri, mpTestToolsEnabled, signOauthState } from "@/lib/mp";
 import { mpOrigin } from "@/lib/mp";
 import { getPartnerById, isTestPartner } from "@/lib/partner-store";
 import { getSupabaseAdmin } from "@/lib/supabase";
@@ -15,10 +15,11 @@ export async function GET(req: Request) {
   if (!db || !partnerId) return Response.json({ error: "partner" }, { status: 400 });
   const partner = await getPartnerById(db, partnerId).catch(() => null);
   const testPartner = isTestPartner(partner);
+  if (testPartner && !mpTestToolsEnabled()) return Response.json({ error: "partner" }, { status: 404 });
   if (!partner || (partner.status !== "approved" && !testPartner)) {
     return Response.json({ error: "partner" }, { status: 404 });
   }
-  // Sandbox test partner (is_test, Preview only via mpEnabled): no Mapucoin session needed,
+  // Sandbox test partner (is_test, never in Production): no Mapucoin session needed,
   // the MP test seller login is the gate. Real partners need their verified account or admin.
   if (!testPartner && !adminAuthorized(req)) {
     const gate = await requireVerifiedAccount(req);

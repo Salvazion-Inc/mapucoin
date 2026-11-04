@@ -1,7 +1,7 @@
 import { getBySlug } from "@/lib/catalog";
 import { MP_ACCOUNT_COLUMNS, accountAccessToken } from "@/lib/mp-crypto";
 import { isEmail, isPersonName } from "@/lib/http-guard";
-import { mpFetch, mpMarketplaceFeeClp, mpPreferenceBody } from "@/lib/mp";
+import { mpFetch, mpMarketplaceFeeClp, mpPreferenceBody, mpTestToolsEnabled } from "@/lib/mp";
 import { mpOrigin } from "@/lib/mp";
 import { findPartnerForCapsule, isTestPartner } from "@/lib/partner-store";
 import { platformFeeBps } from "@/lib/partners";
@@ -26,7 +26,7 @@ export async function mpCheckout(req: Request, body: Record<string, unknown>) {
   const db = getSupabaseAdmin();
   if (!db) return Response.json({ error: "db" }, { status: 503 });
   const partner = await findPartnerForCapsule(db, requestedSlug, String(body.partner_id || "").trim(), {
-    allowTest: true,
+    allowTest: mpTestToolsEnabled(),
   }).catch(() => null);
   const item =
     requestedSlug === MP_TEST_CAPSULE.slug && isTestPartner(partner)

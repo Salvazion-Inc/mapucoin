@@ -1,4 +1,4 @@
-import { mpEnabled, mpFetch } from "@/lib/mp";
+import { mpFetch, mpTestToolsEnabled } from "@/lib/mp";
 import { MP_ACCOUNT_COLUMNS, accountAccessToken } from "@/lib/mp-crypto";
 import { getPartnerById, isTestPartner } from "@/lib/partner-store";
 import { getSupabaseAdmin } from "@/lib/supabase";
@@ -10,10 +10,10 @@ const pick = (o: Record<string, unknown>, keys: string[]) =>
 
 /**
  * Sandbox-only diagnostics for the is_test partner: preference and payments, no tokens.
- * Preview only (mpEnabled). Remove before any production rollout.
+ * Never in Production (mpTestToolsEnabled → 404).
  */
 export async function GET(req: Request) {
-  if (!mpEnabled()) return Response.json({ error: "mp_disabled" }, { status: 404 });
+  if (!mpTestToolsEnabled()) return Response.json({ error: "mp_disabled" }, { status: 404 });
   const u = new URL(req.url);
   const partnerId = u.searchParams.get("partner_id") || "";
   const prefId = u.searchParams.get("pref_id") || "";

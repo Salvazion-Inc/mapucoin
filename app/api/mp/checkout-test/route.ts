@@ -1,4 +1,4 @@
-import { mpEnabled } from "@/lib/mp";
+import { mpTestToolsEnabled } from "@/lib/mp";
 import { MP_TEST_CAPSULE, mpCheckout } from "@/lib/mp-checkout";
 import { getPartnerById, isTestPartner } from "@/lib/partner-store";
 import { getSupabaseAdmin } from "@/lib/supabase";
@@ -11,7 +11,7 @@ export const runtime = "nodejs";
  * Creates the MP preference and redirects to its init_point.
  */
 export async function GET(req: Request) {
-  if (!mpEnabled()) return Response.json({ error: "mp_disabled" }, { status: 404 });
+  if (!mpTestToolsEnabled()) return Response.json({ error: "mp_disabled" }, { status: 404 });
   const gate = await requireVerifiedAccount(req);
   if (!gate.ok) return gate.response;
   const partnerId = new URL(req.url).searchParams.get("partner_id") || "";

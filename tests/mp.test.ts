@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import {
   mpEnabled,
+  mpTestToolsEnabled,
   mpManifest,
   mpMarketplaceFeeClp,
   mpPreferenceBody,
@@ -55,10 +56,10 @@ test("preference body uses CLP and marketplace_fee", () => {
   assert.equal("payer" in b, false);
 });
 
-test("flag is off in production and without credentials", () => {
+test("flag works in production (DEC-16 paso 2) and is off without credentials", () => {
   const env = { PAYMENTS_PROVIDER: "mp", MP_ACCESS_TOKEN: "x", MP_CLIENT_ID: "y", MP_CLIENT_SECRET: "z" };
   assert.equal(mpEnabled({ ...env, VERCEL_ENV: "preview" }), true);
-  assert.equal(mpEnabled({ ...env, VERCEL_ENV: "production" }), false);
+  assert.equal(mpEnabled({ ...env, VERCEL_ENV: "production" }), true);
   assert.equal(mpEnabled({ ...env, PAYMENTS_PROVIDER: "stripe", VERCEL_ENV: "preview" }), false);
   assert.equal(mpEnabled({ PAYMENTS_PROVIDER: "mp", VERCEL_ENV: "preview" }), false);
 });
@@ -100,4 +101,22 @@ test("listApprovedPublic drops is_test rows and the query filters is_test=false"
   const out = await listApprovedPublic(db);
   assert.ok(calls.includes("is_test=false"));
   assert.equal(out.some((p: { business?: string }) => /Prueba MP/.test(String(p.business))), false);
+});
+
+test("sandbox tools (diag, checkout-test, is_test) are off in production", () => {
+  const env = { PAYMENTS_PROVIDER: "mp", MP_ACCESS_TOKEN: "x", MP_CLIENT_ID: "1", MP_CLIENT_SECRET: "s" };
+  assert.equal(mpTestToolsEnabled({ ...env, VERCEL_ENV: "preview" }), true);
+  assert.equal(mpTestToolsEnabled({ ...env, VERCEL_ENV: "production" }), false);
+  assert.equal(mpTestToolsEnabled({ VERCEL_ENV: "preview" }), false);
+});
+
+test("diag, checkout-test and oauth test bypass are gated by mpTestToolsEnabled", async () => {
+  const fs = await import("node:fs");
+  for (const f of ["app/api/mp/diag/route.ts", "app/api/mp/checkout-test/route.ts"]) {
+    const src = fs.readFileSync(f, "utf8");
+    assert.match(src, /if \(!mpTestToolsEnabled\(\)\) return Response\.json\([^)]*\{ status: 404 \}\)/);
+    assert.equal(/\bmpEnabled\(/.test(src), false);
+  }
+  assert.match(fs.readFileSync("app/api/mp/oauth/start/route.ts", "utf8"), /testPartner && !mpTestToolsEnabled\(\)/);
+  assert.match(fs.readFileSync("lib/mp-checkout.ts", "utf8"), /allowTest: mpTestToolsEnabled\(\)/);
 });

@@ -49,10 +49,12 @@ type Extra = {
   approved_at?: string | null;
   rejected_at?: string | null;
   reject_reason?: string | null;
+  /** Sandbox-only partner: never listed publicly (map, sitemap, llms, public APIs). */
+  is_test?: boolean;
 };
 
 const PARTNER_SELECT =
-  "id, full_name, email, phone, role, business, city, notes, status, slug, lat, lng, price_from_clp, offer_summary, landscape, capsule_slug, stripe_account_id, charges_enabled, payouts_enabled, details_submitted, connect_country, connect_blocked, created_at, approved_at, rejected_at, reject_reason";
+  "id, full_name, email, phone, role, business, city, notes, status, slug, lat, lng, price_from_clp, offer_summary, landscape, capsule_slug, stripe_account_id, charges_enabled, payouts_enabled, details_submitted, connect_country, connect_blocked, created_at, approved_at, rejected_at, reject_reason, is_test";
 
 let tableState: "partners" | "applications" | null = null;
 
@@ -198,7 +200,7 @@ export async function listPartners(
       .select(PARTNER_SELECT)
       .order("created_at", { ascending: false })
       .limit(200);
-    if (status !== "all") q = q.eq("status", status);
+    if (status !== "all") q = q.eq("status", status).eq("is_test", false);
     const { data, error } = await q;
     if (!error) {
       return {
@@ -273,19 +275,26 @@ export async function getPartnerByEmail(
     .map((row) => fromApplication(row as Record<string, unknown>));
 }
 
+/** Test partners stay out of every public listing, in every environment. */
+export function isTestPartner(row: unknown) {
+  return Boolean(row) && (row as { is_test?: unknown }).is_test === true;
+}
+
 export async function findPartnerForCapsule(
   db: SupabaseClient,
   slug: string,
   partnerId: string,
+  opts: { allowTest?: boolean } = {},
 ): Promise<PartnerRecord | null> {
   if (partnerId) {
     const row = await getPartnerById(db, partnerId);
+    if (row && isTestPartner(row)) return opts.allowTest ? row : null;
     return row?.status === "approved" ? row : null;
   }
   const listed = await listPartners(db, "approved");
   return (
     listed.partners.find(
-      (p) => p.slug === slug || p.capsule_slug === slug,
+      (p) => !isTestPartner(p) && (p.slug === slug || p.capsule_slug === slug),
     ) || null
   );
 }
@@ -295,7 +304,7 @@ export async function listApprovedPublic(
 ): Promise<PublicPartner[]> {
   const listed = await listPartners(db, "approved");
   return publicPartners(
-    listed.partners.map((p) => ({
+    listed.partners.filter((p) => !isTestPartner(p)).map((p) => ({
       id: p.id,
       slug: p.slug,
       business: p.business,

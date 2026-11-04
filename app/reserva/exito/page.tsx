@@ -24,9 +24,26 @@ function ExitoInner() {
   const c = t(locale);
   const params = useSearchParams();
   const sessionId = params.get("session_id") || "";
+  const isMp = params.get("mp") === "1";
+  const mpBooking = params.get("external_reference") || "";
+  const mpPayment = params.get("payment_id") || params.get("collection_id") || "";
   const [receipt, setReceipt] = useState<Receipt | null>(null);
 
   useEffect(() => {
+    if (isMp) {
+      if (!mpBooking || !mpPayment) {
+        setReceipt({ ok: false, error: "booking" });
+        return;
+      }
+      fetch("/api/mp/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ booking_id: mpBooking, payment_id: mpPayment }),
+      })
+        .then(async (res) => setReceipt(await res.json().catch(() => ({ ok: false }))))
+        .catch(() => setReceipt({ ok: false, error: "net" }));
+      return;
+    }
     if (!sessionId) {
       setReceipt({ ok: false, error: "session" });
       return;
@@ -42,10 +59,10 @@ function ExitoInner() {
         setReceipt(data);
       })
       .catch(() => setReceipt({ ok: false, error: "net" }));
-  }, [sessionId]);
+  }, [sessionId, isMp, mpBooking, mpPayment]);
 
   const capsule = receipt?.capsule ? getBySlug(receipt.capsule) : null;
-  const loading = Boolean(sessionId) && !receipt;
+  const loading = (Boolean(sessionId) || isMp) && !receipt;
 
   return (
     <div className="page-pad mx-auto max-w-xl px-4 pb-24">
@@ -54,7 +71,7 @@ function ExitoInner() {
           {c.reserva.okKicker}
         </p>
         <h1 className="font-display mt-2 text-4xl text-sand">{c.reserva.okTitle}</h1>
-        <p className="mt-4 text-sand/75">{c.reserva.okLead}</p>
+        <p className="mt-4 text-sand/75">{isMp ? c.reserva.mpOkLead : c.reserva.okLead}</p>
         {loading && (
           <p className="mt-6 text-sm text-sand/60" role="status">
             {c.reserva.okPending}
@@ -103,7 +120,7 @@ function ExitoInner() {
           </dl>
         )}
         {receipt && !receipt.ok && (
-          <p className="mt-6 text-sm text-clay">{c.reserva.okMissing}</p>
+          <p className="mt-6 text-sm text-clay">{isMp ? c.reserva.mpOkMissing : c.reserva.okMissing}</p>
         )}
         <Link href="/#mapa" className="btn-gold mt-8">
           {c.reserva.okCta}

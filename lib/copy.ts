@@ -330,6 +330,10 @@ const es = {
     okPending: "Confirmando el pago…",
     okMissing:
       "No encontramos la sesión. Si el cargo se hizo, el comprobante llega a tu correo.",
+    mpOkLead:
+      "Registramos el pago. Te escribimos con el check-in de la cápsula y el resto del itinerario.",
+    mpOkMissing:
+      "No encontramos la reserva. Si el cargo se hizo, el comprobante llega a tu correo.",
     okPaid: "Pagado",
   },
   catalogEmpty: "No hay fichas en este paisaje.",
@@ -693,6 +697,10 @@ const en: typeof es = {
     okPending: "Confirming the payment…",
     okMissing:
       "We could not find the session. If you were charged, the receipt arrives by email.",
+    mpOkLead:
+      "We recorded the payment. We will write with capsule check-in and the rest of the itinerary.",
+    mpOkMissing:
+      "We could not find the booking. If you were charged, the receipt arrives by email.",
     okPaid: "Paid",
   },
   catalogEmpty: "No listings in this landscape.",
@@ -1058,6 +1066,10 @@ const pt: typeof es = {
     okPending: "A confirmar o pagamento…",
     okMissing:
       "Não encontramos a sessão. Se o cargo foi feito, o comprovante chega ao e-mail.",
+    mpOkLead:
+      "Registramos o pagamento. Escrevemos com o check-in da cápsula e o resto do itinerário.",
+    mpOkMissing:
+      "Não encontramos a reserva. Se o cargo foi feito, o comprovante chega ao e-mail.",
     okPaid: "Pago",
   },
   catalogEmpty: "Não há fichas nesta paisagem.",
@@ -1423,6 +1435,10 @@ const fr: typeof es = {
     okPending: "Confirmation du paiement…",
     okMissing:
       "Session introuvable. Si le paiement a été débité, le reçu arrive par e-mail.",
+    mpOkLead:
+      "Nous avons enregistré le paiement. Nous écrivons avec le check-in de la capsule et le reste de l'itinéraire.",
+    mpOkMissing:
+      "Réservation introuvable. Si le paiement a été débité, le reçu arrive par e-mail.",
     okPaid: "Payé",
   },
   catalogEmpty: "Aucune fiche dans ce paysage.",
@@ -1788,6 +1804,10 @@ const it: typeof es = {
     okPending: "Conferma del pagamento…",
     okMissing:
       "Sessione non trovata. Se l’addebito è andato a buon fine, la ricevuta arriva via email.",
+    mpOkLead:
+      "Abbiamo registrato il pagamento. Scriviamo con il check-in della capsula e il resto dell'itinerario.",
+    mpOkMissing:
+      "Prenotazione non trovata. Se l’addebito è andato a buon fine, la ricevuta arriva via email.",
     okPaid: "Pagato",
   },
   catalogEmpty: "Nessuna scheda in questo paesaggio.",
@@ -2155,6 +2175,10 @@ const de: typeof es = {
     okPending: "Zahlung wird bestätigt…",
     okMissing:
       "Die Sitzung wurde nicht gefunden. Wenn abgebucht wurde, kommt die Quittung per E-Mail.",
+    mpOkLead:
+      "Wir haben die Zahlung erfasst. Wir schreiben dir zum Check-in der Kapsel und zum restlichen Reiseplan.",
+    mpOkMissing:
+      "Die Buchung wurde nicht gefunden. Wenn abgebucht wurde, kommt die Quittung per E-Mail.",
     okPaid: "Bezahlt",
   },
   catalogEmpty: "Keine Einträge in dieser Landschaft.",

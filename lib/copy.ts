@@ -141,7 +141,7 @@ const es = {
     removeActs: "Quitar actividades",
     removeOther: "Quitar pases y otros",
     feeNote:
-      "Mapucoin retiene el 12% ({fee}). Los {payout} van a los proveedores de cápsula, gastronomía y actividades.",
+      "Pagas con Mercado Pago. Mapucoin retiene el 12% ({fee}) y el resto va directo al proveedor de la cápsula.",
     pay: "Pagar a los proveedores",
     payNeed: "Nombre y correo para el cobro.",
     payEmpty: "No queda un cobro de Mapucoin. Los pases se compran en el sitio oficial.",
@@ -334,6 +334,8 @@ const es = {
       "Registramos el pago. Te escribimos con el check-in de la cápsula y el resto del itinerario.",
     mpOkMissing:
       "No encontramos la reserva. Si el cargo se hizo, el comprobante llega a tu correo.",
+    partnerNet:
+      "Recibes {net} en tu cuenta de Mercado Pago. Es el total menos el 12% de Mapucoin y la comisión de Mercado Pago.",
     okPaid: "Pagado",
   },
   catalogEmpty: "No hay fichas en este paisaje.",
@@ -509,7 +511,7 @@ const en: typeof es = {
     removeActs: "Remove activities",
     removeOther: "Remove passes and extras",
     feeNote:
-      "Mapucoin keeps 12% ({fee}). {payout} goes to the capsule, dining and activity providers.",
+      "You pay with Mercado Pago. Mapucoin keeps 12% ({fee}) and the rest goes straight to the capsule provider.",
     pay: "Pay the providers",
     payNeed: "Name and email for the charge.",
     payEmpty: "Nothing left for Mapucoin to charge. Passes are bought on the official site.",
@@ -701,6 +703,8 @@ const en: typeof es = {
       "We recorded the payment. We will write with capsule check-in and the rest of the itinerary.",
     mpOkMissing:
       "We could not find the booking. If you were charged, the receipt arrives by email.",
+    partnerNet:
+      "You receive {net} in your Mercado Pago account. That is the total minus Mapucoin's 12% and the Mercado Pago fee.",
     okPaid: "Paid",
   },
   catalogEmpty: "No listings in this landscape.",
@@ -877,7 +881,7 @@ const pt: typeof es = {
     removeActs: "Tirar atividades",
     removeOther: "Tirar passes e outros",
     feeNote:
-      "A Mapucoin fica com 12% ({fee}). Os {payout} vão aos fornecedores da cápsula, da gastronomia e das atividades.",
+      "Você paga com Mercado Pago. A Mapucoin fica com 12% ({fee}) e o restante vai direto ao fornecedor da cápsula.",
     pay: "Pagar aos fornecedores",
     payNeed: "Nome e e-mail para a cobrança.",
     payEmpty: "Não resta cobrança da Mapucoin. Os passes compram-se no site oficial.",
@@ -1070,6 +1074,8 @@ const pt: typeof es = {
       "Registramos o pagamento. Escrevemos com o check-in da cápsula e o resto do itinerário.",
     mpOkMissing:
       "Não encontramos a reserva. Se o cargo foi feito, o comprovante chega ao e-mail.",
+    partnerNet:
+      "Você recebe {net} na sua conta Mercado Pago. É o total menos os 12% da Mapucoin e a tarifa do Mercado Pago.",
     okPaid: "Pago",
   },
   catalogEmpty: "Não há fichas nesta paisagem.",
@@ -1246,7 +1252,7 @@ const fr: typeof es = {
     removeActs: "Retirer les activités",
     removeOther: "Retirer les pass et le reste",
     feeNote:
-      "Mapucoin retient 12 % ({fee}). Les {payout} vont aux prestataires de la capsule, de la gastronomie et des activités.",
+      "Vous payez avec Mercado Pago. Mapucoin retient 12 % ({fee}) et le reste va directement au prestataire de la capsule.",
     pay: "Payer les prestataires",
     payNeed: "Nom et e-mail pour l’encaissement.",
     payEmpty: "Plus rien à encaisser chez Mapucoin. Les pass s’achètent sur le site officiel.",
@@ -1439,6 +1445,8 @@ const fr: typeof es = {
       "Nous avons enregistré le paiement. Nous écrivons avec le check-in de la capsule et le reste de l'itinéraire.",
     mpOkMissing:
       "Réservation introuvable. Si le paiement a été débité, le reçu arrive par e-mail.",
+    partnerNet:
+      "Vous recevez {net} sur votre compte Mercado Pago. C'est le total moins les 12 % de Mapucoin et les frais de Mercado Pago.",
     okPaid: "Payé",
   },
   catalogEmpty: "Aucune fiche dans ce paysage.",
@@ -1615,7 +1623,7 @@ const it: typeof es = {
     removeActs: "Togli le attività",
     removeOther: "Togli pass e altro",
     feeNote:
-      "Mapucoin trattiene il 12% ({fee}). I {payout} vanno ai fornitori di capsula, gastronomia e attività.",
+      "Paghi con Mercado Pago. Mapucoin trattiene il 12% ({fee}) e il resto va direttamente al fornitore della capsula.",
     pay: "Paga i fornitori",
     payNeed: "Nome ed e-mail per l’addebito.",
     payEmpty: "Non resta un addebito Mapucoin. I pass si comprano sul sito ufficiale.",
@@ -1808,6 +1816,8 @@ const it: typeof es = {
       "Abbiamo registrato il pagamento. Scriviamo con il check-in della capsula e il resto dell'itinerario.",
     mpOkMissing:
       "Prenotazione non trovata. Se l’addebito è andato a buon fine, la ricevuta arriva via email.",
+    partnerNet:
+      "Ricevi {net} sul tuo conto Mercado Pago. È il totale meno il 12% di Mapucoin e la commissione di Mercado Pago.",
     okPaid: "Pagato",
   },
   catalogEmpty: "Nessuna scheda in questo paesaggio.",
@@ -1984,7 +1994,7 @@ const de: typeof es = {
     removeActs: "Aktivitäten entfernen",
     removeOther: "Pässe und Weiteres entfernen",
     feeNote:
-      "Mapucoin behält 12 % ({fee}). Die {payout} gehen an die Anbieter von Kapsel, Tisch und Aktivitäten.",
+      "Du zahlst mit Mercado Pago. Mapucoin behält 12 % ({fee}), der Rest geht direkt an den Anbieter der Kapsel.",
     pay: "An die Anbieter zahlen",
     payNeed: "Name und E-Mail für die Zahlung.",
     payEmpty: "Mapucoin hat nichts mehr einzuziehen. Pässe kauft man auf der offiziellen Seite.",
@@ -2179,6 +2189,8 @@ const de: typeof es = {
       "Wir haben die Zahlung erfasst. Wir schreiben dir zum Check-in der Kapsel und zum restlichen Reiseplan.",
     mpOkMissing:
       "Die Buchung wurde nicht gefunden. Wenn abgebucht wurde, kommt die Quittung per E-Mail.",
+    partnerNet:
+      "Du erhältst {net} auf deinem Mercado-Pago-Konto. Das ist der Gesamtbetrag abzüglich 12 % für Mapucoin und der Gebühr von Mercado Pago.",
     okPaid: "Bezahlt",
   },
   catalogEmpty: "Keine Einträge in dieser Landschaft.",

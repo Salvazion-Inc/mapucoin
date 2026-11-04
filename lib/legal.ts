@@ -17,7 +17,7 @@ export const terms = {
     },
     {
       heading: "4. Reservas y pagos",
-      body: "El pago se procesa con Stripe en pesos chilenos (CLP). El precio mostrado es el de la ficha al momento de pagar. Al reservar aceptas la política de cancelación del partner y las condiciones de Stripe. Mapucoin no almacena números de tarjeta.",
+      body: "El pago se procesa con Mercado Pago en pesos chilenos (CLP). El monto va directo a la cuenta de Mercado Pago del partner; Salvazion SpA, operadora de Mapucoin, retiene el 12% como comisión de plataforma en la misma transacción. El precio mostrado es el de la ficha al momento de pagar. Al reservar aceptas la política de cancelación del partner y los términos de Mercado Pago. Mapucoin no almacena números de tarjeta. Tus derechos como consumidor se rigen por la Ley 19.496.",
     },
     {
       heading: "5. Cancelaciones",
@@ -25,7 +25,7 @@ export const terms = {
     },
     {
       heading: "6. Conducta",
-      body: "No uses la plataforma para fines ilegales, no falsees datos de una cápsula o un tour, y no eludas las tarifas de Stripe o de Mapucoin.",
+      body: "No uses la plataforma para fines ilegales, no falsees datos de una cápsula o un tour, y no eludas la comisión de Mapucoin ni los pagos por Mercado Pago. Partners: Lo que recibes es el total menos el 12% de Mapucoin y la comisión de Mercado Pago, y te lo mostramos en cada reserva.",
     },
     {
       heading: "7. Responsabilidad",
@@ -53,7 +53,7 @@ export const privacy = {
     },
     {
       heading: "2. Datos que podemos recoger",
-      body: "Según el uso: nombre, correo, teléfono, destino, presupuesto, noches, viajeros e intereses del planificador; datos de reserva; postulaciones de partners; mensajes al concierge; cookies de sesión; y datos técnicos de seguridad (IP, navegador). Stripe procesa el pago. No guardamos el número completo de la tarjeta ni el CVC.",
+      body: "Según el uso: Nombre, correo, teléfono, destino, presupuesto, noches, viajeros e intereses del planificador; datos de reserva e identificador del pago; postulaciones de partners y, si vinculan Mercado Pago, su identificador de vendedor y credenciales de acceso cifradas; mensajes al concierge; cookies de sesión; y datos técnicos de seguridad (IP, navegador). Mercado Pago procesa el pago. No guardamos el número de la tarjeta ni el CVC. Tratamos los datos conforme a la Ley 19.628 y sus modificaciones.",
     },
     {
       heading: "3. Finalidades",
@@ -61,7 +61,7 @@ export const privacy = {
     },
     {
       heading: "4. Encargados",
-      body: "Usamos Vercel (hosting), Supabase (base de datos, si está activo), Stripe (pagos) y xAI (respuestas del planificador: El mensaje se envía solo para generar la respuesta). No vendemos datos personales para publicidad de terceros.",
+      body: "Usamos Vercel (hosting), Supabase (base de datos), Mercado Pago (pagos y reparto al partner) y xAI (respuestas del planificador: El mensaje se envía solo para generar la respuesta). No vendemos datos personales para publicidad de terceros.",
     },
     {
       heading: "5. Conservación y derechos",

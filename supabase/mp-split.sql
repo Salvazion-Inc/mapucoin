@@ -27,3 +27,10 @@ alter table public.partners add column if not exists is_test boolean not null de
 
 -- DEC-20261029-01: server-only tables, no access for anon/authenticated.
 revoke all on public.mp_partner_accounts, public.mp_webhook_events from anon, authenticated;
+
+-- DEC-20261103-05: tokens cifrados app-side (AES-256-GCM, MP_TOKEN_KEY); columnas en claro quedan siempre null.
+alter table public.mp_partner_accounts add column if not exists access_token_enc text,
+  add column if not exists refresh_token_enc text, add column if not exists key_version int;
+alter table public.mp_partner_accounts alter column access_token drop not null;
+-- Neto real que recibe el partner tras application_fee + comisión MP (desde fee_details).
+alter table public.bookings add column if not exists partner_net_clp integer;

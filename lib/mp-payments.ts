@@ -1,4 +1,5 @@
 import { mpFetch } from "@/lib/mp";
+import { MP_ACCOUNT_COLUMNS, accountAccessToken } from "@/lib/mp-crypto";
 
 /** Minimal DB surface used here (Supabase client in prod, a fake in tests). */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,10 +14,15 @@ export type BookingRow = {
   partner_id: string | null;
   mp_payment_id?: string | null;
 };
-export type AccountRow = { partner_id: string; access_token: string; mp_user_id: string | null };
+export type AccountRow = {
+  partner_id: string;
+  mp_user_id: string | null;
+  access_token_enc: string | null;
+  key_version: number | null;
+};
 
 export type CheckResult =
-  | { ok: true; fee: number }
+  | { ok: true; fee: number; net: number }
   | { ok: false; reason: "not_approved" | "reference" | "amount" | "currency" | "collector" | "fee_mismatch" };
 
 /** Pure validation of an MP payment against our booking and the partner's MP account. */
@@ -39,7 +45,15 @@ export function checkMpPayment(
   if (!Number.isFinite(fee) || fee !== Number(b.application_fee_clp)) {
     return { ok: false, reason: "fee_mismatch" };
   }
-  return { ok: true, fee };
+  return { ok: true, fee, net: mpPartnerNetClp(p) };
+}
+
+/** What the seller actually receives: amount minus every MP fee line (application + MP fee). */
+export function mpPartnerNetClp(p: Record<string, unknown>) {
+  const fees = Array.isArray(p.fee_details)
+    ? (p.fee_details as { amount?: number }[]).reduce((s, f) => s + (Number(f.amount) || 0), 0)
+    : 0;
+  return Math.round(Number(p.transaction_amount) - fees);
 }
 
 async function loadBooking(db: Db, bookingId: string): Promise<BookingRow | null> {
@@ -54,7 +68,7 @@ async function loadBooking(db: Db, bookingId: string): Promise<BookingRow | null
 async function loadAccount(db: Db, partnerId: string): Promise<AccountRow | null> {
   const { data } = await db
     .from("mp_partner_accounts")
-    .select("partner_id, access_token, mp_user_id")
+    .select(MP_ACCOUNT_COLUMNS)
     .eq("partner_id", partnerId)
     .maybeSingle();
   return (data as AccountRow) || null;
@@ -85,9 +99,10 @@ export async function applyMpPaymentForBooking(
   }
   if (!b.partner_id) return { status: "rejected", reason: "no_partner", booking: b };
   const acct = await loadAccount(db, b.partner_id);
-  if (!acct?.access_token) return { status: "rejected", reason: "unlinked", booking: b };
+  const token = accountAccessToken(acct);
+  if (!acct || !token) return { status: "rejected", reason: "unlinked", booking: b };
 
-  const res = await fetcher(`/v1/payments/${encodeURIComponent(paymentId)}`, acct.access_token);
+  const res = await fetcher(`/v1/payments/${encodeURIComponent(paymentId)}`, token);
   if (!res.ok) return { status: "error", reason: `mp_fetch_${res.status}` };
   const check = checkMpPayment(res.data, b, acct);
   if (!check.ok) {
@@ -98,7 +113,7 @@ export async function applyMpPaymentForBooking(
   }
   const { error } = await db
     .from("bookings")
-    .update({ status: "paid", mp_payment_id: paymentId })
+    .update({ status: "paid", mp_payment_id: paymentId, partner_net_clp: check.net })
     .eq("id", b.id)
     .neq("status", "paid");
   if (error) return { status: "error", reason: "update" };
@@ -120,11 +135,12 @@ export async function handleMpPaymentNotification(
   if (!sellerUserIdHint) return { status: "rejected", reason: "no_seller" };
   const { data: hint } = await db
     .from("mp_partner_accounts")
-    .select("partner_id, access_token, mp_user_id")
+    .select(MP_ACCOUNT_COLUMNS)
     .eq("mp_user_id", sellerUserIdHint)
     .maybeSingle();
-  if (!hint?.access_token) return { status: "rejected", reason: "unknown_seller" };
-  const res = await fetcher(`/v1/payments/${encodeURIComponent(paymentId)}`, hint.access_token as string);
+  const hintToken = accountAccessToken(hint);
+  if (!hint || !hintToken) return { status: "rejected", reason: "unknown_seller" };
+  const res = await fetcher(`/v1/payments/${encodeURIComponent(paymentId)}`, hintToken);
   if (!res.ok) return { status: "error", reason: `mp_fetch_${res.status}` };
   const bookingId = String(res.data.external_reference || "");
   if (!bookingId) return { status: "rejected", reason: "reference" };

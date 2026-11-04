@@ -9,6 +9,14 @@ import {
   type Db,
 } from "@/lib/mp-payments";
 import { mpManifest, mpOrigin, verifyMpSignature } from "@/lib/mp";
+import { decryptToken, encryptToken } from "@/lib/mp-crypto";
+import { randomBytes } from "node:crypto";
+
+process.env.MP_TOKEN_KEY = randomBytes(32).toString("base64");
+const enc = (t: string) => {
+  const e = encryptToken(t);
+  return { access_token_enc: e.enc, key_version: e.version };
+};
 
 const booking = {
   id: "f20f0668-9bc5-4e36-8373-daf41f34bbb9",
@@ -18,7 +26,7 @@ const booking = {
   partner_id: "partner-1",
   mp_payment_id: null as string | null,
 };
-const account = { partner_id: "partner-1", access_token: "tok-partner-1", mp_user_id: "3801947630" };
+const account = { partner_id: "partner-1", mp_user_id: "3801947630", ...enc("tok-partner-1") };
 const payment = (over: Record<string, unknown> = {}) => ({
   id: 187651313678,
   status: "approved",
@@ -85,6 +93,7 @@ test("1: valid payment marks paid using the booking partner's token", async () =
   assert.equal(r.status, "paid");
   assert.equal(tables.bookings[0].status, "paid");
   assert.equal(tables.bookings[0].mp_payment_id, "187651313678");
+  assert.equal(tables.bookings[0].partner_net_clp, 8420);
   assert.deepEqual(tokens, ["tok-partner-1"]);
 });
 
@@ -107,7 +116,7 @@ for (const [name, over] of [
 test("1: webhook ignores body.user_id as authority (partner mismatch rejected)", async () => {
   const { db, tables } = fakeDb({
     bookings: [{ ...booking }],
-    mp_partner_accounts: [{ ...account }, { partner_id: "partner-2", access_token: "tok-2", mp_user_id: "999" }],
+    mp_partner_accounts: [{ ...account }, { partner_id: "partner-2", mp_user_id: "999", ...enc("tok-2") }],
   });
   const r = await handleMpPaymentNotification(db, "187651313678", "999", fetcherFor(payment()));
   assert.equal(r.status, "rejected");
@@ -172,4 +181,17 @@ test("P3: mpOrigin ignores request headers", () => {
   assert.equal(mpOrigin(req, { VERCEL_ENV: "production" }), "https://mapucoin.com");
   assert.equal(mpOrigin(req, { VERCEL_ENV: "preview", VERCEL_BRANCH_URL: "b.vercel.app" }), "https://b.vercel.app");
   assert.equal(mpOrigin(req, { MP_PUBLIC_ORIGIN: "https://fixed.example/" }), "https://fixed.example");
+});
+
+test("P2: AES-256-GCM round trip, wrong key fails, key versions", () => {
+  const e = encryptToken("APP_USR-secret");
+  assert.ok(!e.enc.includes("APP_USR"));
+  assert.equal(decryptToken(e.enc, e.version), "APP_USR-secret");
+  assert.throws(() => decryptToken(e.enc, 1, { MP_TOKEN_KEY: randomBytes(32).toString("base64") }));
+  const env = { MP_TOKEN_KEY: process.env.MP_TOKEN_KEY, MP_TOKEN_KEY_V2: randomBytes(32).toString("base64"), MP_TOKEN_KEY_VERSION: "2" };
+  const e2 = encryptToken("x", env);
+  assert.equal(e2.version, 2);
+  assert.equal(decryptToken(e2.enc, 2, env), "x");
+  assert.equal(decryptToken(e.enc, 1, env), "APP_USR-secret");
+  assert.throws(() => encryptToken("x", {}));
 });

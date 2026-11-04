@@ -1,4 +1,5 @@
 import { MP_API, mpEnabled, mpRedirectUri, readOauthState } from "@/lib/mp";
+import { encryptToken } from "@/lib/mp-crypto";
 import { mpOrigin } from "@/lib/mp";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
@@ -48,11 +49,23 @@ export async function GET(req: Request) {
   }
 
   const expiresIn = Number(data.expires_in);
+  let access: { enc: string; version: number };
+  let refresh: string | null = null;
+  try {
+    access = encryptToken(data.access_token);
+    if (typeof data.refresh_token === "string") refresh = encryptToken(data.refresh_token, process.env, access.version).enc;
+  } catch {
+    console.error("mp_token_key_missing");
+    return result(500, "error", "store");
+  }
   const { error } = await db.from("mp_partner_accounts").upsert({
     partner_id: partnerId,
     mp_user_id: data.user_id != null ? String(data.user_id) : null,
-    access_token: data.access_token,
-    refresh_token: typeof data.refresh_token === "string" ? data.refresh_token : null,
+    access_token: null,
+    refresh_token: null,
+    access_token_enc: access.enc,
+    refresh_token_enc: refresh,
+    key_version: access.version,
     public_key: typeof data.public_key === "string" ? data.public_key : null,
     live_mode: typeof data.live_mode === "boolean" ? data.live_mode : null,
     expires_at: Number.isFinite(expiresIn)

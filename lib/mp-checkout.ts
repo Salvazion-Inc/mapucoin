@@ -1,4 +1,5 @@
 import { getBySlug } from "@/lib/catalog";
+import { MP_ACCOUNT_COLUMNS, accountAccessToken } from "@/lib/mp-crypto";
 import { isEmail, isPersonName } from "@/lib/http-guard";
 import { mpFetch, mpMarketplaceFeeClp, mpPreferenceBody } from "@/lib/mp";
 import { mpOrigin } from "@/lib/mp";
@@ -45,10 +46,11 @@ export async function mpCheckout(req: Request, body: Record<string, unknown>) {
   if (!partner) return Response.json({ error: "mp_no_partner" }, { status: 409 });
   const { data: account } = await db
     .from("mp_partner_accounts")
-    .select("access_token")
+    .select(MP_ACCOUNT_COLUMNS)
     .eq("partner_id", partner.id)
     .maybeSingle();
-  if (!account?.access_token) {
+  const partnerToken = accountAccessToken(account);
+  if (!partnerToken) {
     return Response.json({ error: "mp_partner_unlinked" }, { status: 409 });
   }
 
@@ -95,7 +97,7 @@ export async function mpCheckout(req: Request, body: Record<string, unknown>) {
     failureUrl: fromApp ? `${origin}/app/capsulas?cancel=1` : `${origin}/capsulas/${item.slug}?cancel=1`,
     notificationUrl: `${origin}/api/mp/webhook`,
   });
-  const res = await mpFetch("/checkout/preferences", account.access_token as string, {
+  const res = await mpFetch("/checkout/preferences", partnerToken, {
     method: "POST",
     body: JSON.stringify(pref),
   });

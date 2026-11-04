@@ -1,4 +1,5 @@
 import { mpEnabled, mpFetch } from "@/lib/mp";
+import { MP_ACCOUNT_COLUMNS, accountAccessToken } from "@/lib/mp-crypto";
 import { getPartnerById, isTestPartner } from "@/lib/partner-store";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
   if (!db || !isTestPartner(partner)) return Response.json({ error: "partner" }, { status: 404 });
   const { data: acct } = await db
     .from("mp_partner_accounts")
-    .select("access_token, mp_user_id, live_mode")
+    .select(MP_ACCOUNT_COLUMNS)
     .eq("partner_id", partnerId)
     .maybeSingle();
   const integ = await mpFetch("/users/me", process.env.MP_ACCESS_TOKEN as string);
@@ -33,8 +34,8 @@ export async function GET(req: Request) {
     webhook_secret_set: Boolean(process.env.MP_WEBHOOK_SECRET),
     client_secret_set: Boolean(process.env.MP_CLIENT_SECRET),
   };
-  if (!acct?.access_token) return Response.json({ app, seller: null, error: "unlinked" });
-  const token = acct.access_token as string;
+  const token = accountAccessToken(acct);
+  if (!acct || !token) return Response.json({ app, seller: null, error: "unlinked" });
   const tokenKind = token.startsWith("TEST-") ? "TEST" : token.startsWith("APP_USR-") ? "APP_USR" : "other";
 
   const me = await mpFetch("/users/me", token);

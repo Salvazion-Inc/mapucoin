@@ -1,3 +1,9 @@
+/**
+ * Fecha de "Última actualización" de Privacidad. DEC-20261103-22: se fija el día del paso a
+ * producción de Mercado Pago (DEC-20261103-16). Hasta entonces conserva la fecha vigente.
+ */
+export const PRIVACY_LAST_UPDATED = "8 de septiembre de 2026";
+
 export const terms = {
   title: "Términos y Condiciones",
   intro:
@@ -45,7 +51,7 @@ export const terms = {
 export const privacy = {
   title: "Política de Privacidad",
   intro:
-    "Mapucoin Privacy Policy. Última actualización: 8 de septiembre de 2026. Mapucoin es una plataforma de viajes operada por Salvazion SpA, RUT 78.462.349-1, Chile. Esta política describe qué datos tratamos en https://mapucoin.com. Al usar la plataforma aceptas esta política junto con los Términos.",
+    `Mapucoin Privacy Policy. Última actualización: ${PRIVACY_LAST_UPDATED}. Mapucoin es una plataforma de viajes operada por Salvazion SpA, RUT 78.462.349-1, Chile. Esta política describe qué datos tratamos en https://mapucoin.com. Al usar la plataforma aceptas esta política junto con los Términos.`,
   sections: [
     {
       heading: "1. Responsable",

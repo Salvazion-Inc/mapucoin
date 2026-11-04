@@ -181,23 +181,23 @@ const es = {
     error: "No se pudo enviar. Inténtalo de nuevo.",
     ok: "Recibimos tu postulación",
     okLead:
-      "Revisamos tu oferta y te escribimos para activar la ficha y Stripe. No publicamos tus datos hasta aprobarte.",
+      "Revisamos tu oferta y te escribimos para activar la ficha y vincular Mercado Pago. No publicamos tus datos hasta aprobarte.",
     invalidEmail: "Ingresa un correo válido.",
     privacy:
       "Tus datos no se muestran a otros postulantes ni en el mapa público.",
     another: "Enviar otra postulación",
     okNoDb:
       "Recibimos tu postulación. Conecta Supabase para guardar partners en producción.",
-    onboardTitle: "Activar Stripe Connect",
+    onboardTitle: "Vincular Mercado Pago",
     onboardLead:
-      "Usa el mismo correo de tu cuenta verificada. Stripe abre una cuenta Express en Chile (CL). El registro personaliza tu alta de partner.",
-    onboardSubmit: "Continuar a Stripe",
+      "Usa el mismo correo de tu cuenta verificada. Mercado Pago te pide autorizar a Mapucoin en tu cuenta de Chile. El registro personaliza tu alta de partner.",
+    onboardSubmit: "Continuar a Mercado Pago",
     onboardBlocked:
-      "Stripe no pudo crear la cuenta Connect en Chile. El cobro sigue en la plataforma Mapucoin; el 12% queda contabilizado para payout manual.",
+      "Mercado Pago no pudo vincular tu cuenta. Mientras no esté vinculada, no recibimos pagos para tu ficha.",
     onboardNeedEmail: "Ingresa el correo de la postulación.",
     returnTitle: "Onboarding enviado",
     returnLead:
-      "Cuando Stripe active charges y payouts, el checkout comparte el pago (12% plataforma).",
+      "Con tu cuenta de Mercado Pago vinculada, el checkout reparte el pago (12% plataforma).",
   },
   partnerRoles: {
     capsula: "Cápsula / alojamiento",
@@ -311,16 +311,16 @@ const es = {
     rateLimited: "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
     secure: "Pago seguro",
     platformNote:
-      "Cobro en CLP sobre Mapucoin. Si el partner aún no tiene Stripe Connect, el pago queda en la plataforma.",
+      "Cobro en CLP con Mercado Pago. El pago va directo al partner y Mapucoin retiene el 12%.",
     fromPrice: "Desde {price} / noche",
-    paying: "Redirigiendo a Stripe…",
-    creating: "Creando sesión de Stripe…",
-    noStripe: "Stripe no está configurado. Añade STRIPE_SECRET_KEY en Vercel.",
+    paying: "Redirigiendo a Mercado Pago…",
+    creating: "Creando el pago en Mercado Pago…",
+    noStripe: "Mercado Pago no está configurado. Añade las variables MP_* en Vercel.",
     fail: "No se pudo iniciar el pago. Revisa los datos.",
     okKicker: "Listo",
     okTitle: "Reserva confirmada",
     okLead:
-      "Stripe registró el pago. Te escribimos con el check-in de la cápsula y el resto del itinerario.",
+      "Mercado Pago registró el pago. Te escribimos con el check-in de la cápsula y el resto del itinerario.",
     okCta: "Volver al mapa",
     okAmount: "Monto",
     okCapsule: "Cápsula",
@@ -551,23 +551,23 @@ const en: typeof es = {
     error: "Could not send. Try again.",
     ok: "We received your application",
     okLead:
-      "We review your offer and write to activate your listing and Stripe. We do not publish your details until you are approved.",
+      "We review your offer and write to activate your listing and link Mercado Pago. We do not publish your details until you are approved.",
     invalidEmail: "Enter a valid email.",
     privacy:
       "Your details are not shown to other applicants or on the public map.",
     another: "Send another application",
     okNoDb:
       "We received your application. Connect Supabase to store partners in production.",
-    onboardTitle: "Activate Stripe Connect",
+    onboardTitle: "Link Mercado Pago",
     onboardLead:
-      "Use the same email from your application. Stripe opens an Express account in Chile (CL).",
-    onboardSubmit: "Continue to Stripe",
+      "Use the same email from your application. Mercado Pago asks you to authorize Mapucoin on your Chile account.",
+    onboardSubmit: "Continue to Mercado Pago",
     onboardBlocked:
-      "Stripe could not create a Connect account in Chile. Checkout stays on the Mapucoin platform; the 12% fee is stored for a manual payout.",
+      "Mercado Pago could not link your account. Until it is linked, we do not take payments for your listing.",
     onboardNeedEmail: "Enter the application email.",
     returnTitle: "Onboarding sent",
     returnLead:
-      "When Stripe enables charges and payouts, checkout splits the payment (12% platform).",
+      "Once your Mercado Pago account is linked, checkout splits the payment (12% platform).",
   },
   partnerRoles: {
     capsula: "Capsule / lodging",
@@ -680,16 +680,16 @@ const en: typeof es = {
     rateLimited: "Too many attempts. Wait a moment and try again.",
     secure: "Secure payment",
     platformNote:
-      "Charged in CLP on Mapucoin. If the partner is not Connect-ready yet, payment stays on the platform.",
+      "Charged in CLP with Mercado Pago. Payment goes straight to the partner and Mapucoin keeps 12%.",
     fromPrice: "From {price} / night",
-    paying: "Redirecting to Stripe…",
-    creating: "Creating Stripe session…",
-    noStripe: "Stripe is not configured. Add STRIPE_SECRET_KEY in Vercel.",
+    paying: "Redirecting to Mercado Pago…",
+    creating: "Creating Mercado Pago payment…",
+    noStripe: "Mercado Pago is not configured. Add the MP_* variables in Vercel.",
     fail: "Could not start payment. Check the details.",
     okKicker: "Done",
     okTitle: "Booking confirmed",
     okLead:
-      "Stripe recorded the payment. We will write with capsule check-in and the rest of the itinerary.",
+      "Mercado Pago recorded the payment. We will write with capsule check-in and the rest of the itinerary.",
     okCta: "Back to the map",
     okAmount: "Amount",
     okCapsule: "Capsule",
@@ -921,23 +921,23 @@ const pt: typeof es = {
     error: "Não foi possível enviar. Tente de novo.",
     ok: "Recebemos a sua candidatura",
     okLead:
-      "Revisamos a oferta e escrevemos para ativar a ficha e o Stripe. Não publicamos os seus dados até aprovar.",
+      "Revisamos a oferta e escrevemos para ativar a ficha e vincular o Mercado Pago. Não publicamos os seus dados até aprovar.",
     invalidEmail: "Informe um e-mail válido.",
     privacy:
       "Os seus dados não aparecem para outros candidatos nem no mapa público.",
     another: "Enviar outra candidatura",
     okNoDb:
       "Recebemos a sua candidatura. Conecte o Supabase para guardar partners em produção.",
-    onboardTitle: "Ativar Stripe Connect",
+    onboardTitle: "Vincular Mercado Pago",
     onboardLead:
-      "Use o mesmo e-mail da candidatura. A Stripe abre uma conta Express no Chile (CL).",
-    onboardSubmit: "Continuar na Stripe",
+      "Use o mesmo e-mail da candidatura. O Mercado Pago pede que autorize a Mapucoin na sua conta do Chile.",
+    onboardSubmit: "Continuar no Mercado Pago",
     onboardBlocked:
-      "A Stripe não pôde criar a conta Connect no Chile. O cobro segue na plataforma Mapucoin; os 12% ficam contabilizados para payout manual.",
+      "O Mercado Pago não pôde vincular a sua conta. Enquanto não estiver vinculada, não recebemos pagamentos para a sua ficha.",
     onboardNeedEmail: "Informe o e-mail da candidatura.",
     returnTitle: "Onboarding enviado",
     returnLead:
-      "Quando a Stripe ativar charges e payouts, o checkout reparte o pagamento (12% plataforma).",
+      "Com a sua conta Mercado Pago vinculada, o checkout reparte o pagamento (12% plataforma).",
   },
   partnerRoles: {
     capsula: "Cápsula / hospedagem",
@@ -1051,16 +1051,16 @@ const pt: typeof es = {
     rateLimited: "Demasiadas tentativas. Espere um momento e tente de novo.",
     secure: "Pagamento seguro",
     platformNote:
-      "Cobrança em CLP na Mapucoin. Se o partner ainda não tem Stripe Connect, o pagamento fica na plataforma.",
+      "Cobrança em CLP com Mercado Pago. O pagamento vai direto ao partner e a Mapucoin fica com 12%.",
     fromPrice: "A partir de {price} / noite",
-    paying: "A redirecionar para o Stripe…",
-    creating: "Criando sessão Stripe…",
-    noStripe: "O Stripe não está configurado. Adicione STRIPE_SECRET_KEY na Vercel.",
+    paying: "A redirecionar para o Mercado Pago…",
+    creating: "Criando pagamento no Mercado Pago…",
+    noStripe: "O Mercado Pago não está configurado. Adicione as variáveis MP_* na Vercel.",
     fail: "Não foi possível iniciar o pagamento. Revise os dados.",
     okKicker: "Pronto",
     okTitle: "Reserva confirmada",
     okLead:
-      "O Stripe registrou o pagamento. Escrevemos com o check-in da cápsula e o resto do itinerário.",
+      "O Mercado Pago registrou o pagamento. Escrevemos com o check-in da cápsula e o resto do itinerário.",
     okCta: "Voltar ao mapa",
     okAmount: "Montante",
     okCapsule: "Cápsula",
@@ -1292,23 +1292,23 @@ const fr: typeof es = {
     error: "Envoi impossible. Réessayez.",
     ok: "Nous avons reçu votre candidature",
     okLead:
-      "Nous examinons l’offre et vous écrivons pour activer la fiche et Stripe. Vos données ne sont pas publiées avant l’approbation.",
+      "Nous examinons l’offre et vous écrivons pour activer la fiche et lier Mercado Pago. Vos données ne sont pas publiées avant l’approbation.",
     invalidEmail: "Saisissez un e-mail valide.",
     privacy:
       "Vos données ne sont pas montrées aux autres candidats ni sur la carte publique.",
     another: "Envoyer une autre candidature",
     okNoDb:
       "Nous avons reçu votre candidature. Connectez Supabase pour enregistrer les partenaires en production.",
-    onboardTitle: "Activer Stripe Connect",
+    onboardTitle: "Lier Mercado Pago",
     onboardLead:
-      "Utilisez le même e-mail que votre candidature. Stripe ouvre un compte Express au Chili (CL).",
-    onboardSubmit: "Continuer vers Stripe",
+      "Utilisez le même e-mail que votre candidature. Mercado Pago vous demande d’autoriser Mapucoin sur votre compte au Chili.",
+    onboardSubmit: "Continuer vers Mercado Pago",
     onboardBlocked:
-      "Stripe n’a pas pu créer le compte Connect au Chili. Le paiement reste sur la plateforme Mapucoin ; les 12 % sont comptabilisés pour un payout manuel.",
+      "Mercado Pago n’a pas pu lier votre compte. Tant qu’il n’est pas lié, nous ne prenons pas de paiements pour votre fiche.",
     onboardNeedEmail: "Saisissez l’e-mail de la candidature.",
     returnTitle: "Onboarding envoyé",
     returnLead:
-      "Lorsque Stripe active charges et payouts, le checkout partage le paiement (12 % plateforme).",
+      "Une fois votre compte Mercado Pago lié, le checkout partage le paiement (12 % plateforme).",
   },
   partnerRoles: {
     capsula: "Capsule / hébergement",
@@ -1422,16 +1422,16 @@ const fr: typeof es = {
     rateLimited: "Trop de tentatives. Patientez un moment et réessayez.",
     secure: "Paiement sécurisé",
     platformNote:
-      "Paiement en CLP sur Mapucoin. Si le partenaire n’a pas encore Stripe Connect, le paiement reste sur la plateforme.",
+      "Paiement en CLP avec Mercado Pago. Le paiement va directement au partenaire et Mapucoin retient 12 %.",
     fromPrice: "À partir de {price} / nuit",
-    paying: "Redirection vers Stripe…",
-    creating: "Création de la session Stripe…",
-    noStripe: "Stripe n'est pas configuré. Ajoutez STRIPE_SECRET_KEY dans Vercel.",
+    paying: "Redirection vers Mercado Pago…",
+    creating: "Création du paiement Mercado Pago…",
+    noStripe: "Mercado Pago n'est pas configuré. Ajoutez les variables MP_* dans Vercel.",
     fail: "Impossible de lancer le paiement. Vérifiez les données.",
     okKicker: "C'est fait",
     okTitle: "Réservation confirmée",
     okLead:
-      "Stripe a enregistré le paiement. Nous écrivons avec le check-in de la capsule et le reste de l'itinéraire.",
+      "Mercado Pago a enregistré le paiement. Nous écrivons avec le check-in de la capsule et le reste de l'itinéraire.",
     okCta: "Retour à la carte",
     okAmount: "Montant",
     okCapsule: "Capsule",
@@ -1663,23 +1663,23 @@ const it: typeof es = {
     error: "Invio non riuscito. Riprova.",
     ok: "Abbiamo ricevuto la tua candidatura",
     okLead:
-      "Esaminiamo l’offerta e ti scriviamo per attivare la scheda e Stripe. I tuoi dati non sono pubblici fino all’approvazione.",
+      "Esaminiamo l’offerta e ti scriviamo per attivare la scheda e collegare Mercado Pago. I tuoi dati non sono pubblici fino all’approvazione.",
     invalidEmail: "Inserisci un’email valida.",
     privacy:
       "I tuoi dati non sono mostrati ad altri candidati né sulla mappa pubblica.",
     another: "Invia un’altra candidatura",
     okNoDb:
       "Abbiamo ricevuto la tua candidatura. Collega Supabase per salvare i partner in produzione.",
-    onboardTitle: "Attiva Stripe Connect",
+    onboardTitle: "Collega Mercado Pago",
     onboardLead:
-      "Usa la stessa email della candidatura. Stripe apre un account Express in Cile (CL).",
-    onboardSubmit: "Continua su Stripe",
+      "Usa la stessa email della candidatura. Mercado Pago ti chiede di autorizzare Mapucoin sul tuo conto in Cile.",
+    onboardSubmit: "Continua su Mercado Pago",
     onboardBlocked:
-      "Stripe non ha potuto creare l’account Connect in Cile. Il pagamento resta sulla piattaforma Mapucoin; il 12% è contabilizzato per un payout manuale.",
+      "Mercado Pago non ha potuto collegare il tuo conto. Finché non è collegato, non riceviamo pagamenti per la tua scheda.",
     onboardNeedEmail: "Inserisci l’email della candidatura.",
     returnTitle: "Onboarding inviato",
     returnLead:
-      "Quando Stripe attiva charges e payouts, il checkout divide il pagamento (12% piattaforma).",
+      "Con il tuo conto Mercado Pago collegato, il checkout divide il pagamento (12% piattaforma).",
   },
   partnerRoles: {
     capsula: "Capsula / alloggio",
@@ -1793,16 +1793,16 @@ const it: typeof es = {
     rateLimited: "Troppi tentativi. Attendi un momento e riprova.",
     secure: "Pagamento sicuro",
     platformNote:
-      "Addebito in CLP su Mapucoin. Se il partner non ha ancora Stripe Connect, il pagamento resta sulla piattaforma.",
+      "Addebito in CLP con Mercado Pago. Il pagamento va direttamente al partner e Mapucoin trattiene il 12%.",
     fromPrice: "Da {price} / notte",
-    paying: "Reindirizzamento a Stripe…",
-    creating: "Creazione della sessione Stripe…",
-    noStripe: "Stripe non è configurato. Aggiungi STRIPE_SECRET_KEY in Vercel.",
+    paying: "Reindirizzamento a Mercado Pago…",
+    creating: "Creazione del pagamento Mercado Pago…",
+    noStripe: "Mercado Pago non è configurato. Aggiungi le variabili MP_* in Vercel.",
     fail: "Impossibile avviare il pagamento. Controlla i dati.",
     okKicker: "Fatto",
     okTitle: "Prenotazione confermata",
     okLead:
-      "Stripe ha registrato il pagamento. Scriviamo con il check-in della capsula e il resto dell'itinerario.",
+      "Mercado Pago ha registrato il pagamento. Scriviamo con il check-in della capsula e il resto dell'itinerario.",
     okCta: "Torna alla mappa",
     okAmount: "Importo",
     okCapsule: "Capsula",
@@ -2036,23 +2036,23 @@ const de: typeof es = {
     error: "Senden fehlgeschlagen. Versuch es erneut.",
     ok: "Wir haben deine Bewerbung erhalten",
     okLead:
-      "Wir prüfen dein Angebot und schreiben dir, um den Eintrag und Stripe zu aktivieren. Deine Daten veröffentlichen wir erst nach der Freigabe.",
+      "Wir prüfen dein Angebot und schreiben dir, um den Eintrag zu aktivieren und Mercado Pago zu verknüpfen. Deine Daten veröffentlichen wir erst nach der Freigabe.",
     invalidEmail: "Gib eine gültige E-Mail ein.",
     privacy:
       "Deine Daten werden anderen Bewerbern und auf der öffentlichen Karte nicht gezeigt.",
     another: "Weitere Bewerbung senden",
     okNoDb:
       "Wir haben deine Bewerbung erhalten. Verbinde Supabase, um Partner in der Produktion zu speichern.",
-    onboardTitle: "Stripe Connect aktivieren",
+    onboardTitle: "Mercado Pago verknüpfen",
     onboardLead:
-      "Nutze dieselbe E-Mail wie in der Bewerbung. Stripe öffnet ein Express-Konto in Chile (CL).",
-    onboardSubmit: "Weiter zu Stripe",
+      "Nutze dieselbe E-Mail wie in der Bewerbung. Mercado Pago bittet dich, Mapucoin für dein Konto in Chile zu autorisieren.",
+    onboardSubmit: "Weiter zu Mercado Pago",
     onboardBlocked:
-      "Stripe konnte kein Connect-Konto in Chile anlegen. Die Zahlung bleibt auf der Mapucoin-Plattform; die 12 % werden für eine manuelle Auszahlung verbucht.",
+      "Mercado Pago konnte dein Konto nicht verknüpfen. Solange es nicht verknüpft ist, nehmen wir keine Zahlungen für deinen Eintrag an.",
     onboardNeedEmail: "Gib die E-Mail der Bewerbung ein.",
     returnTitle: "Onboarding gesendet",
     returnLead:
-      "Wenn Stripe Zahlungen und Auszahlungen aktiviert, teilt der Checkout die Zahlung (12 % Plattform).",
+      "Sobald dein Mercado-Pago-Konto verknüpft ist, teilt der Checkout die Zahlung (12 % Plattform).",
   },
   partnerRoles: {
     capsula: "Kapsel / Unterkunft",
@@ -2166,16 +2166,16 @@ const de: typeof es = {
     rateLimited: "Zu viele Versuche. Warte einen Moment und versuch es erneut.",
     secure: "Sichere Zahlung",
     platformNote:
-      "Zahlung in CLP über Mapucoin. Wenn der Partner noch kein Stripe Connect hat, bleibt die Zahlung auf der Plattform.",
+      "Zahlung in CLP mit Mercado Pago. Die Zahlung geht direkt an den Partner, Mapucoin behält 12 %.",
     fromPrice: "Ab {price} / Nacht",
-    paying: "Weiterleitung zu Stripe…",
-    creating: "Stripe-Sitzung wird erstellt…",
-    noStripe: "Stripe ist nicht konfiguriert. Trag STRIPE_SECRET_KEY in Vercel ein.",
+    paying: "Weiterleitung zu Mercado Pago…",
+    creating: "Mercado-Pago-Zahlung wird erstellt…",
+    noStripe: "Mercado Pago ist nicht konfiguriert. Trag die MP_*-Variablen in Vercel ein.",
     fail: "Die Zahlung konnte nicht gestartet werden. Prüfe die Angaben.",
     okKicker: "Fertig",
     okTitle: "Buchung bestätigt",
     okLead:
-      "Stripe hat die Zahlung erfasst. Wir schreiben dir zum Check-in der Kapsel und zum restlichen Reiseplan.",
+      "Mercado Pago hat die Zahlung erfasst. Wir schreiben dir zum Check-in der Kapsel und zum restlichen Reiseplan.",
     okCta: "Zurück zur Karte",
     okAmount: "Betrag",
     okCapsule: "Kapsel",

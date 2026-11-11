@@ -219,6 +219,7 @@ export async function insertPartner(
 const INTERNAL_PARTNER_EMAILS = new Set([
   "test-mapucoin@salvazion.org",
   "prod-mapucoin@salvazion.org",
+  "info+mapucointest@salvazion.org",
 ]);
 
 const INTERNAL_PARTNER_NAMES = new Set(["capsula test", "fogon test", "mapucoin"]);

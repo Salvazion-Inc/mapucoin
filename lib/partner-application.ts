@@ -46,10 +46,12 @@ export type PartnerRole = (typeof PARTNER_ROLES)[number];
 export type OfferUnit = "noche" | "persona" | "experiencia";
 export type EntityType = "empresa" | "persona_natural";
 
-/** Three photos minimum. Four keeps a multipart post under the platform body limit. */
+/** At least 3 photos, at most 4. Four keeps a multipart post under the platform body limit. */
 export const PARTNER_PHOTO_MIN = 3;
 export const PARTNER_PHOTO_MAX = 4;
 export const PARTNER_PHOTO_MAX_BYTES = 800_000;
+/** Signed photo links for the reviewer. Ten minutes. */
+export const PARTNER_PHOTO_SIGNED_SECONDS = 10 * 60;
 export const PARTNER_PHOTO_BUCKET = "partner-application-photos";
 
 const OFFER_UNITS = new Set<OfferUnit>(["noche", "persona", "experiencia"]);
@@ -84,6 +86,8 @@ export type PartnerDossier = {
   sernatur_registered: boolean;
   sernatur_number: string | null;
   terms_accepted_at: string | null;
+  terms_version: string | null;
+  privacy_version: string | null;
   photos: PartnerDossierPhoto[];
 };
 

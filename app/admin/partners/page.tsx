@@ -270,6 +270,8 @@ function PartnerDossierView({ dossier }: { dossier: PartnerDossier }) {
       <p>
         {dossierCopy.adminTerms}
         {accepted ? ` ${accepted}` : ""}
+        {dossier.terms_version ? ` · ${dossier.terms_version}` : ""}
+        {dossier.privacy_version ? ` · ${dossier.privacy_version}` : ""}
       </p>
     </div>
   );

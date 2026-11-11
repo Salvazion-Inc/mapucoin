@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   PARTNER_PHOTO_BUCKET,
+  PARTNER_PHOTO_SIGNED_SECONDS,
   imageKind,
   photoExtension,
   type ChecklistValue,
@@ -70,6 +71,8 @@ export async function savePartnerDossier(
     account_id: string;
     photo_paths: string[];
     terms_accepted_at: string;
+    terms_version: string;
+    privacy_version: string;
   },
 ) {
   const { error } = await db.from("partner_application_details").insert({
@@ -89,6 +92,8 @@ export async function savePartnerDossier(
     sernatur_registered: row.sernatur_registered,
     sernatur_number: row.sernatur_number,
     terms_accepted_at: row.terms_accepted_at,
+    terms_version: row.terms_version,
+    privacy_version: row.privacy_version,
     photo_paths: row.photo_paths,
   });
   if (error) return { ok: false as const, error: error.message };
@@ -101,7 +106,7 @@ export async function deleteOwnPendingApplication(
   source: "partners" | "applications",
 ) {
   let query = db.from(source).delete().eq("id", id).eq("status", "pending");
-  if (source === "applications") query = query.like("notes", "%mapucoin%");
+  if (source === "applications") query = query.like("notes", "%[mapucoin%");
   await query;
 }
 
@@ -116,7 +121,7 @@ async function signedPhotoMap(db: SupabaseClient, paths: string[]) {
   if (!unique.length) return map;
   const signed = await db.storage
     .from(PARTNER_PHOTO_BUCKET)
-    .createSignedUrls(unique, 60 * 60);
+    .createSignedUrls(unique, PARTNER_PHOTO_SIGNED_SECONDS);
   if (signed.error || !signed.data) {
     for (const path of unique) map.set(path, null);
     return map;
@@ -138,7 +143,7 @@ export async function attachPartnerDossiers<T extends { id: string }>(
     const { data, error } = await db
       .from("partner_application_details")
       .select(
-        "application_id, legal_name, rut, entity_type, category, region, comuna, presence_url, description, offers, sernatur_registered, sernatur_number, terms_accepted_at, photo_paths",
+        "application_id, legal_name, rut, entity_type, category, region, comuna, presence_url, description, offers, sernatur_registered, sernatur_number, terms_accepted_at, terms_version, privacy_version, photo_paths",
       )
       .in("application_id", ids);
     if (error || !data) {
@@ -173,6 +178,8 @@ export async function attachPartnerDossiers<T extends { id: string }>(
         terms_accepted_at: row.terms_accepted_at
           ? String(row.terms_accepted_at)
           : null,
+        terms_version: row.terms_version ? String(row.terms_version) : null,
+        privacy_version: row.privacy_version ? String(row.privacy_version) : null,
         photos: photoPaths.map((path) => ({
           path,
           url: urls.get(path) ?? null,

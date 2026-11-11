@@ -119,8 +119,8 @@ export default function PartnerChecklistForm() {
   }
 
   async function onPhotos(list: FileList | null) {
-    const picked = Array.from(list || []).slice(0, PARTNER_PHOTO_MAX);
-    if (picked.length < PARTNER_PHOTO_MIN) {
+    const picked = Array.from(list || []);
+    if (picked.length < PARTNER_PHOTO_MIN || picked.length > PARTNER_PHOTO_MAX) {
       setPhotos([]);
       setPhotoNote(d.photosNeed);
       return;

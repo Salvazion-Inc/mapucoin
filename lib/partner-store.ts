@@ -216,6 +216,39 @@ export async function insertPartner(
   };
 }
 
+const INTERNAL_PARTNER_EMAILS = new Set([
+  "test-mapucoin@salvazion.org",
+  "prod-mapucoin@salvazion.org",
+]);
+
+const INTERNAL_PARTNER_NAMES = new Set(["capsula test", "fogon test", "mapucoin"]);
+
+function foldPartnerLabel(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "");
+}
+
+/** Known internal rows. In-memory only: this does not write is_test. */
+export function isInternalPartnerApplication(row: {
+  email?: string | null;
+  business?: string | null;
+  full_name?: string | null;
+}) {
+  const email = String(row.email || "").trim().toLowerCase();
+  if (INTERNAL_PARTNER_EMAILS.has(email)) return true;
+  const business = foldPartnerLabel(String(row.business || ""));
+  const name = foldPartnerLabel(String(row.full_name || ""));
+  if (INTERNAL_PARTNER_NAMES.has(business)) return true;
+  return name === "mapucoin" && (business === "" || business === "mapucoin");
+}
+
+function withoutInternal(rows: PartnerRecord[]) {
+  return rows.filter((row) => !isInternalPartnerApplication(row));
+}
+
 export function mergePartnerQueues(primary: PartnerRecord[], legacy: PartnerRecord[]) {
   const seen = new Set(primary.map((row) => row.id));
   const merged = [...primary];
@@ -233,7 +266,7 @@ export function mergePartnerQueues(primary: PartnerRecord[], legacy: PartnerReco
 async function mapucoinApplications(db: SupabaseClient, status: string) {
   const { data, error } = await db
     .from("applications")
-    .select("id, full_name, email, phone, role, yacht_name, notes, status, created_at")
+    .select("id, full_name, email, role, yacht_name, notes, status, created_at")
     .order("created_at", { ascending: false })
     .limit(400);
   if (error || !data) return [];
@@ -263,7 +296,10 @@ export async function listPartners(
       );
       if (opts.scope !== "admin") return { partners, backend };
       const legacy = await mapucoinApplications(db, status);
-      return { partners: mergePartnerQueues(partners, legacy), backend };
+      return {
+        partners: withoutInternal(mergePartnerQueues(partners, legacy)),
+        backend,
+      };
     }
     if (!missingTable(error)) throw new Error(error.message);
     tableState = "applications";
@@ -279,7 +315,10 @@ export async function listPartners(
     .filter((row) => isMapucoinApplication(String(row.notes || "")))
     .map((row) => fromApplication(row as Record<string, unknown>))
     .filter((row) => status === "all" || row.status === status);
-  return { partners, backend: "applications" };
+  return {
+    partners: opts.scope === "admin" ? withoutInternal(partners) : partners,
+    backend: "applications",
+  };
 }
 
 export async function getPartnerById(

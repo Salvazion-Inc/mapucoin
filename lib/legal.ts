@@ -4,10 +4,16 @@
  */
 export const PRIVACY_LAST_UPDATED = "4 de noviembre de 2026";
 
+/** Version stored with a partner checklist acceptance. Same date as the public page. */
+export const PRIVACY_VERSION = PRIVACY_LAST_UPDATED;
+
+/** Version stored with a partner checklist acceptance. Same date as the public terms. */
+export const TERMS_IN_FORCE = "8 de septiembre de 2026";
+
 export const terms = {
   title: "Términos y Condiciones",
   intro:
-    "Mapucoin Terms of Service. Fecha de entrada en vigor: 8 de septiembre de 2026. Al usar mapucoin.com, reservar una cápsula o postular como partner, aceptas estos términos. Si no estás de acuerdo, no uses la plataforma.",
+    `Mapucoin Terms of Service. Fecha de entrada en vigor: ${TERMS_IN_FORCE}. Al usar mapucoin.com, reservar una cápsula o postular como partner, aceptas estos términos. Si no estás de acuerdo, no uses la plataforma.`,
   sections: [
     {
       heading: "1. Definiciones",

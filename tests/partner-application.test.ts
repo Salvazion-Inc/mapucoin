@@ -5,6 +5,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { POST as partnersPost } from "../app/api/partners/route.ts";
 import { privacy } from "../lib/legal.ts";
 import {
+  PARTNER_PHOTO_MAX,
+  PARTNER_PHOTO_SIGNED_SECONDS,
   partnerApplicationV2Enabled,
   validatePartnerChecklist,
 } from "../lib/partner-application.ts";
@@ -14,6 +16,7 @@ import {
 } from "../lib/partner-application-copy.ts";
 import { attachPartnerDossiers } from "../lib/partner-application-store.ts";
 import {
+  isInternalPartnerApplication,
   listPartners,
   mergePartnerQueues,
   resetPartnerBackendCache,
@@ -101,6 +104,16 @@ function queueDb() {
       status: "pending",
       created_at: "2026-02-01T00:00:00.000Z",
       is_test: false,
+      phone: "911111111",
+    },
+    {
+      id: "tours",
+      full_name: "Ana Tours",
+      email: "ana-tours@mapucoin.test",
+      business: "Mapucoin Tours",
+      status: "pending",
+      created_at: "2026-01-15T00:00:00.000Z",
+      is_test: false,
     },
   ];
   const applications = [
@@ -125,6 +138,36 @@ function queueDb() {
       notes: "Looking for a slip in Algarrobo",
       status: "pending",
       created_at: "2026-04-01T00:00:00.000Z",
+    },
+    {
+      id: "capsula-test",
+      full_name: "Capsula Test",
+      email: "test-mapucoin@salvazion.org",
+      role: "owner",
+      yacht_name: "Capsula Test",
+      notes: "[mapucoin:capsula] Santiago",
+      status: "pending",
+      created_at: "2026-05-01T00:00:00.000Z",
+    },
+    {
+      id: "fogon-test",
+      full_name: "Fogón Test",
+      email: "prod-mapucoin@salvazion.org",
+      role: "owner",
+      yacht_name: "Fogón Test",
+      notes: "[mapucoin:gastronomia] Castro",
+      status: "pending",
+      created_at: "2026-05-02T00:00:00.000Z",
+    },
+    {
+      id: "self",
+      full_name: "Cristian",
+      email: "cristian@salvazion.org",
+      role: "owner",
+      yacht_name: "Mapucoin",
+      notes: "[mapucoin:capsula] Algarrobo",
+      status: "pending",
+      created_at: "2026-05-03T00:00:00.000Z",
     },
   ];
   return {
@@ -180,6 +223,19 @@ describe("partner checklist validation", () => {
       ["sernatur", { sernatur_registered: "si", sernatur_number: "" }, "sernatur"],
       ["photos", { photos: [] }, "photos"],
       [
+        "too many photos",
+        {
+          photos: [
+            { bytes: jpeg },
+            { bytes: jpeg },
+            { bytes: jpeg },
+            { bytes: jpeg },
+            { bytes: jpeg },
+          ],
+        },
+        "photos",
+      ],
+      [
         "photo type",
         { photos: [{ bytes: new Uint8Array([1, 2, 3]) }, { bytes: jpeg }, { bytes: jpeg }] },
         "photos_type",
@@ -190,6 +246,19 @@ describe("partner checklist validation", () => {
       assert.equal(result.ok, false, code);
       if (!result.ok) assert.equal(result.error, code);
     }
+    const four = validatePartnerChecklist(
+      checklist({
+        photos: [
+          { bytes: jpeg },
+          { bytes: jpeg },
+          { bytes: jpeg },
+          { bytes: jpeg },
+        ],
+      }),
+    );
+    assert.equal(four.ok, true);
+    assert.equal(PARTNER_PHOTO_MAX, 4);
+    assert.equal(PARTNER_PHOTO_SIGNED_SECONDS, 10 * 60);
     const mismatch = validatePartnerChecklist(
       checklist({ email: "otra@mapucoin.test" }),
     );
@@ -353,14 +422,24 @@ describe("admin partner listing", () => {
     const pub = await listPartners(db, "pending");
     assert.deepEqual(
       pub.partners.map((row) => row.id),
-      ["partner-1"],
+      ["partner-1", "tours"],
     );
     resetPartnerBackendCache();
     const admin = await listPartners(db, "pending", { scope: "admin" });
     assert.deepEqual(
       admin.partners.map((row) => row.id),
-      ["app-1", "partner-1"],
+      ["app-1", "partner-1", "tours"],
     );
+    assert.equal(isInternalPartnerApplication({
+      email: "test-mapucoin@salvazion.org",
+      business: "Capsula Test",
+    }), true);
+    assert.equal(isInternalPartnerApplication({
+      email: "prod-mapucoin@salvazion.org",
+      business: "Fogón Test",
+    }), true);
+    assert.equal(isInternalPartnerApplication({ business: "Mapucoin" }), true);
+    assert.equal(isInternalPartnerApplication({ business: "Mapucoin Tours" }), false);
     assert.equal(
       admin.partners.some((row) => row.id === "kaenz-1"),
       false,
@@ -483,7 +562,21 @@ describe("checklist copy and migration safety", () => {
     assert.doesNotMatch(sql, /alter table public\.applications/i);
     assert.doesNotMatch(sql, /alter table public\.profiles/i);
     assert.match(rollback, /drop table if exists public\.partner_application_details/i);
+    assert.match(rollback, /begin;/i);
+    assert.match(rollback, /commit;/i);
     assert.match(rollback, /partner-application-photos/);
+    assert.doesNotMatch(rollback, /delete\s+from\s+storage/i);
+    const photoRollback = readFileSync("scripts/rollback-partner-photos.ts", "utf8");
+    assert.match(photoRollback, /emptyBucket/);
+    assert.match(photoRollback, /deleteBucket/);
+    assert.doesNotMatch(photoRollback, /delete\s+from\s+storage/i);
+    const route = readFileSync("app/api/partners/route.ts", "utf8");
+    assert.match(route, /checklist \? \{ scope: "admin" \} : \{\}/);
+    assert.match(route, /omitPartnerPhone/);
+    assert.match(route, /terms_version: TERMS_IN_FORCE/);
+    assert.match(route, /privacy_version: PRIVACY_VERSION/);
+    assert.equal(PARTNER_PHOTO_SIGNED_SECONDS <= 10 * 60, true);
+    assert.equal(PARTNER_PHOTO_SIGNED_SECONDS >= 5 * 60, true);
     assert.doesNotMatch(rollback, /drop table[^;]*\bapplications\b/i);
     assert.doesNotMatch(rollback, /drop table[^;]*\bprofiles\b/i);
     assert.doesNotMatch(rollback, /drop table[^;]*\bbookings\b/i);

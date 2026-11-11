@@ -3,7 +3,9 @@
 -- Shared project with Kaenz: this file does not ALTER public.applications,
 -- public.profiles, public.bookings, public.partners, or any other Kaenz table.
 --
--- Rollback: supabase/rollback/partner-application-v2.sql
+-- Rollback order: flag off, then scripts/rollback-partner-photos.ts
+-- (Storage API), then supabase/rollback/partner-application-v2.sql, then git revert.
+-- Do not DELETE FROM storage.objects or storage.buckets.
 -- Feature flag: MAPUCOIN_PARTNER_APPLICATION_V2=1 after this script succeeds.
 -- Leave the flag unset or 0 until the owner approves the new public copy
 -- and the Privacy paragraph. Unset is OFF in Production.
@@ -26,6 +28,8 @@ create table if not exists public.partner_application_details (
   sernatur_registered boolean not null default false,
   sernatur_number text,
   terms_accepted_at timestamptz not null,
+  terms_version text not null,
+  privacy_version text not null,
   photo_paths text[] not null,
   created_at timestamptz not null default now(),
   constraint partner_application_details_source_id unique (application_source, application_id),

@@ -13,6 +13,7 @@ import {
   validatePartnerChecklist,
 } from "@/lib/partner-application";
 import { attachPartnerDossiers, assertDossierStore, deleteOwnPendingApplication, removePartnerPhotos, savePartnerDossier, uploadPartnerPhotos } from "@/lib/partner-application-store";
+import { PRIVACY_VERSION, TERMS_IN_FORCE } from "@/lib/legal";
 import { partnerDelivery } from "@/lib/partner-delivery";
 import { insertPartner, listPartners } from "@/lib/partner-store";
 import {
@@ -24,6 +25,11 @@ import { getSupabase } from "@/lib/supabase";
 import { requireVerifiedAccount } from "@/lib/verified-access";
 
 export const runtime = "nodejs";
+
+function omitPartnerPhone<T extends { phone?: string }>(row: T) {
+  const { phone: _phone, ...rest } = row;
+  return rest;
+}
 
 const roles = [
   "capsula",
@@ -75,9 +81,17 @@ export async function GET(req: Request) {
   if (!db) return Response.json({ error: "db" }, { status: 503 });
 
   const status = new URL(req.url).searchParams.get("status") || "pending";
+  const checklist = partnerApplicationV2Enabled();
   try {
-    const { partners, backend } = await listPartners(db, status, { scope: "admin" });
-    const visible = await attachPartnerDossiers(db, partners);
+    const { partners, backend } = await listPartners(
+      db,
+      status,
+      checklist ? { scope: "admin" } : {},
+    );
+    const withDossier = checklist
+      ? await attachPartnerDossiers(db, partners)
+      : partners;
+    const visible = checklist ? withDossier.map(omitPartnerPhone) : withDossier;
     return Response.json(
       { partners: visible, backend },
       { headers: { "Cache-Control": "no-store" } },
@@ -175,6 +189,8 @@ export async function POST(req: Request) {
       account_id: gate.user.id,
       photo_paths: uploaded.paths,
       terms_accepted_at: new Date().toISOString(),
+      terms_version: TERMS_IN_FORCE,
+      privacy_version: PRIVACY_VERSION,
     });
     if (!saved.ok) {
       await deleteOwnPendingApplication(db, result.id, result.source);

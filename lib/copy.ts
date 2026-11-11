@@ -1,5 +1,6 @@
 import type { Landscape } from "./catalog";
 import type { Locale } from "./locale";
+import { partnerApplicationCopy } from "./partner-application-copy";
 
 const es = {
   skip: "Saltar al contenido",
@@ -198,6 +199,7 @@ const es = {
     returnTitle: "Onboarding enviado",
     returnLead:
       "Con tu cuenta de Mercado Pago vinculada, el checkout reparte el pago (12% plataforma).",
+    dossier: partnerApplicationCopy.es,
   },
   partnerRoles: {
     capsula: "Cápsula / alojamiento",
@@ -568,6 +570,7 @@ const en: typeof es = {
     returnTitle: "Onboarding sent",
     returnLead:
       "Once your Mercado Pago account is linked, checkout splits the payment (12% platform).",
+    dossier: partnerApplicationCopy.en,
   },
   partnerRoles: {
     capsula: "Capsule / lodging",
@@ -938,6 +941,7 @@ const pt: typeof es = {
     returnTitle: "Onboarding enviado",
     returnLead:
       "Com a sua conta Mercado Pago vinculada, o checkout reparte o pagamento (12% plataforma).",
+    dossier: partnerApplicationCopy.pt,
   },
   partnerRoles: {
     capsula: "Cápsula / hospedagem",
@@ -1309,6 +1313,7 @@ const fr: typeof es = {
     returnTitle: "Onboarding envoyé",
     returnLead:
       "Une fois votre compte Mercado Pago lié, le checkout partage le paiement (12 % plateforme).",
+    dossier: partnerApplicationCopy.fr,
   },
   partnerRoles: {
     capsula: "Capsule / hébergement",
@@ -1680,6 +1685,7 @@ const it: typeof es = {
     returnTitle: "Onboarding inviato",
     returnLead:
       "Con il tuo conto Mercado Pago collegato, il checkout divide il pagamento (12% piattaforma).",
+    dossier: partnerApplicationCopy.it,
   },
   partnerRoles: {
     capsula: "Capsula / alloggio",
@@ -2053,6 +2059,7 @@ const de: typeof es = {
     returnTitle: "Onboarding gesendet",
     returnLead:
       "Sobald dein Mercado-Pago-Konto verknüpft ist, teilt der Checkout die Zahlung (12 % Plattform).",
+    dossier: partnerApplicationCopy.de,
   },
   partnerRoles: {
     capsula: "Kapsel / Unterkunft",

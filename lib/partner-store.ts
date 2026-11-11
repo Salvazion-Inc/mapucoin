@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { PartnerDossier } from "./partner-application";
 import {
   publicPartners,
   type PartnerConnectRow,
@@ -27,6 +28,7 @@ export type PartnerRecord = PartnerConnectRow & {
   connect_country?: string | null;
   created_at?: string | null;
   source?: "partners" | "applications";
+  dossier?: PartnerDossier;
 };
 
 type Extra = {
@@ -57,6 +59,10 @@ const PARTNER_SELECT =
   "id, full_name, email, phone, role, business, city, notes, status, slug, lat, lng, price_from_clp, offer_summary, landscape, capsule_slug, stripe_account_id, charges_enabled, payouts_enabled, details_submitted, connect_country, connect_blocked, created_at, approved_at, rejected_at, reject_reason, is_test";
 
 let tableState: "partners" | "applications" | null = null;
+
+export function resetPartnerBackendCache() {
+  tableState = null;
+}
 
 function missingTable(error: { message?: string; code?: string } | null) {
   if (!error) return false;
@@ -168,30 +174,79 @@ export async function insertPartner(
     notes: string;
     status: string;
   },
-) {
+): Promise<
+  | { ok: true; id: string; source: "partners" | "applications" }
+  | { ok: false; error: string }
+> {
   const backend = await partnerBackend(db);
   if (backend === "partners") {
-    const { error } = await db.from("partners").insert(row);
-    if (!error) return { ok: true as const };
-    if (!missingTable(error)) return { ok: false as const, error: error.message };
+    const inserted = await db.from("partners").insert(row).select("id").maybeSingle();
+    if (!inserted.error && inserted.data?.id) {
+      return {
+        ok: true,
+        id: String(inserted.data.id),
+        source: "partners",
+      };
+    }
+    if (inserted.error && !missingTable(inserted.error)) {
+      return { ok: false, error: inserted.error.message };
+    }
+    if (!inserted.error) return { ok: false, error: "id" };
     tableState = "applications";
   }
-  const { error } = await db.from("applications").insert({
-    full_name: row.full_name,
-    email: row.email,
-    phone: row.phone,
-    role: "owner",
-    yacht_name: row.business,
-    notes: packNotes(row.notes, { role: row.role, city: row.city }),
-    status: row.status,
-  });
-  if (error) return { ok: false as const, error: error.message };
-  return { ok: true as const };
+  const inserted = await db
+    .from("applications")
+    .insert({
+      full_name: row.full_name,
+      email: row.email,
+      phone: row.phone,
+      role: "owner",
+      yacht_name: row.business,
+      notes: packNotes(row.notes, { role: row.role, city: row.city }),
+      status: row.status,
+    })
+    .select("id")
+    .maybeSingle();
+  if (inserted.error) return { ok: false, error: inserted.error.message };
+  if (!inserted.data?.id) return { ok: false, error: "id" };
+  return {
+    ok: true,
+    id: String(inserted.data.id),
+    source: "applications",
+  };
+}
+
+export function mergePartnerQueues(primary: PartnerRecord[], legacy: PartnerRecord[]) {
+  const seen = new Set(primary.map((row) => row.id));
+  const merged = [...primary];
+  for (const row of legacy) {
+    if (!row.id || seen.has(row.id)) continue;
+    seen.add(row.id);
+    merged.push(row);
+  }
+  merged.sort((a, b) =>
+    String(b.created_at || "").localeCompare(String(a.created_at || "")),
+  );
+  return merged.slice(0, 200);
+}
+
+async function mapucoinApplications(db: SupabaseClient, status: string) {
+  const { data, error } = await db
+    .from("applications")
+    .select("id, full_name, email, phone, role, yacht_name, notes, status, created_at")
+    .order("created_at", { ascending: false })
+    .limit(400);
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[])
+    .filter((row) => isMapucoinApplication(String(row.notes || "")))
+    .map((row) => fromApplication(row))
+    .filter((row) => status === "all" || row.status === status);
 }
 
 export async function listPartners(
   db: SupabaseClient,
   status: string,
+  opts: { scope?: "admin" | "public" } = {},
 ): Promise<{ partners: PartnerRecord[]; backend: "partners" | "applications" }> {
   const backend = await partnerBackend(db);
   if (backend === "partners") {
@@ -203,10 +258,12 @@ export async function listPartners(
     if (status !== "all") q = q.eq("status", status).eq("is_test", false);
     const { data, error } = await q;
     if (!error) {
-      return {
-        partners: (data || []).map((row) => fromPartners(row as Record<string, unknown>)),
-        backend,
-      };
+      const partners = (data || []).map((row) =>
+        fromPartners(row as Record<string, unknown>),
+      );
+      if (opts.scope !== "admin") return { partners, backend };
+      const legacy = await mapucoinApplications(db, status);
+      return { partners: mergePartnerQueues(partners, legacy), backend };
     }
     if (!missingTable(error)) throw new Error(error.message);
     tableState = "applications";

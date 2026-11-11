@@ -1,8 +1,8 @@
 /**
- * Fecha de "Última actualización" de Privacidad. DEC-20261103-22: se fija el día del paso a
- * producción de Mercado Pago (DEC-20261103-16): 4 de noviembre de 2026.
+ * Fecha de "Última actualización" de Privacidad.
+ * DEC-20261111-04: 11 de noviembre de 2026, al publicar el párrafo de postulaciones de partners.
  */
-export const PRIVACY_LAST_UPDATED = "4 de noviembre de 2026";
+export const PRIVACY_LAST_UPDATED = "11 de noviembre de 2026";
 
 /** Version stored with a partner checklist acceptance. Same date as the public page. */
 export const PRIVACY_VERSION = PRIVACY_LAST_UPDATED;
@@ -65,7 +65,7 @@ export const privacy = {
     },
     {
       heading: "2. Datos que podemos recoger",
-      body: "Según el uso: Nombre, correo, teléfono, destino, presupuesto, noches, viajeros e intereses del planificador; datos de reserva e identificador del pago; postulaciones de partners y, si vinculan Mercado Pago, su identificador de vendedor y credenciales de acceso cifradas; mensajes al concierge; cookies de sesión; y datos técnicos de seguridad (IP, navegador). Mercado Pago procesa el pago. No guardamos el número de la tarjeta ni el CVC. Tratamos los datos conforme a la Ley 19.628 y sus modificaciones.",
+      body: "Según el uso: Nombre, correo, teléfono, destino, presupuesto, noches, viajeros e intereses del planificador; datos de reserva e identificador del pago; postulaciones de partners y, si vinculan Mercado Pago, su identificador de vendedor y credenciales de acceso cifradas; mensajes al concierge; cookies de sesión; y datos técnicos de seguridad (IP, navegador). Mercado Pago procesa el pago. No guardamos el número de la tarjeta ni el CVC. Tratamos los datos conforme a la Ley 19.628 y sus modificaciones.\n\nPostulaciones de partners: Si postulas un negocio turístico, Mapucoin puede tratar tu razón social o tu nombre, tu RUT, si eres empresa o persona natural, tu región y comuna, una URL pública de tu sitio o Instagram, una descripción breve, las ofertas con precio en CLP, el número de registro SERNATUR cuando lo informas, y al menos tres y como máximo cuatro fotografías del lugar o del servicio. Las fotografías quedan en un almacenamiento privado y solo las ve quien revisa la postulación. El RUT sirve para identificar al postulante en esa revisión y no se publica en el mapa ni en la ficha. Puedes pedir acceso, rectificación o eliminación en info@salvazion.org.",
     },
     {
       heading: "3. Finalidades",

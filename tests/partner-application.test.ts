@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { POST as partnersPost } from "../app/api/partners/route.ts";
-import { privacy } from "../lib/legal.ts";
+import { PRIVACY_LAST_UPDATED, PRIVACY_VERSION, privacy } from "../lib/legal.ts";
 import {
   PARTNER_BODY_MAX_BYTES,
   PARTNER_PHOTO_MAX,
@@ -546,7 +546,10 @@ describe("checklist copy and migration safety", () => {
     const published = [privacy.intro, ...privacy.sections.map((section) => section.body)].join(
       "\n",
     );
-    assert.equal(published.includes("fotografías quedan en un almacenamiento privado"), false);
+    assert.equal(PRIVACY_LAST_UPDATED, "11 de noviembre de 2026");
+    assert.equal(PRIVACY_VERSION, PRIVACY_LAST_UPDATED);
+    assert.equal(published.includes(partnerPrivacyProposal), true);
+    assert.match(privacy.intro, /11 de noviembre de 2026/);
     const page = readFileSync("app/privacidad/page.tsx", "utf8");
     assert.equal(page.includes("partnerPrivacyProposal"), false);
   });

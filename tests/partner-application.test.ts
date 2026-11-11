@@ -5,9 +5,12 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { POST as partnersPost } from "../app/api/partners/route.ts";
 import { privacy } from "../lib/legal.ts";
 import {
+  PARTNER_BODY_MAX_BYTES,
   PARTNER_PHOTO_MAX,
   PARTNER_PHOTO_SIGNED_SECONDS,
+  declaredBodyTooLarge,
   partnerApplicationV2Enabled,
+  readCappedBody,
   validatePartnerChecklist,
 } from "../lib/partner-application.ts";
 import {
@@ -22,6 +25,7 @@ import {
   resetPartnerBackendCache,
 } from "../lib/partner-store.ts";
 import { rutCheckDigit, validateChileanRut } from "../lib/rut.ts";
+import { preparePhotoRollback } from "../scripts/rollback-partner-photos.ts";
 import {
   createSessionToken,
   setSessionVersionSource,
@@ -569,8 +573,49 @@ describe("checklist copy and migration safety", () => {
     const photoRollback = readFileSync("scripts/rollback-partner-photos.ts", "utf8");
     assert.match(photoRollback, /emptyBucket/);
     assert.match(photoRollback, /deleteBucket/);
+    assert.match(photoRollback, /--confirm=partner-application-photos/);
+    const preparedAt = photoRollback.indexOf("const prepared = preparePhotoRollback");
+    const emptyAt = photoRollback.indexOf("emptyBucket(BUCKET)");
+    assert.ok(preparedAt >= 0 && preparedAt < emptyAt);
     assert.doesNotMatch(photoRollback, /delete\s+from\s+storage/i);
+    const env = (values: Record<string, string>) => values as NodeJS.ProcessEnv;
+    const refused = preparePhotoRollback(
+      ["--confirm=other-bucket"],
+      env({
+        NEXT_PUBLIC_SUPABASE_URL: "https://mqkyzkrpoinbvclxurfg.supabase.co",
+        SUPABASE_SERVICE_ROLE_KEY: "secret",
+      }),
+    );
+    assert.equal(refused.ok, false);
+    assert.equal("notice" in refused, false);
+    const ready = preparePhotoRollback(
+      ["--confirm=partner-application-photos"],
+      env({
+        NEXT_PUBLIC_SUPABASE_URL: "https://mqkyzkrpoinbvclxurfg.supabase.co",
+        SUPABASE_SERVICE_ROLE_KEY: "secret",
+        MAPUCOIN_PARTNER_APPLICATION_V2: "0",
+      }),
+    );
+    assert.equal(ready.ok, true);
+    if (ready.ok) {
+      assert.equal(ready.ref, "mqkyzkrpoinbvclxurfg");
+      assert.equal(ready.notice[0], "Supabase project ref: mqkyzkrpoinbvclxurfg");
+      assert.match(ready.notice[1], /^Supabase URL: https:\/\/mqkyzkrpoinbvclxurfg\.supabase\.co$/);
+    }
     const route = readFileSync("app/api/partners/route.ts", "utf8");
+    const adminGet = route.slice(
+      route.indexOf("export async function GET"),
+      route.indexOf("export async function POST"),
+    );
+    assert.match(adminGet, /console\.error\("partners_admin_list"/);
+    assert.match(adminGet, /error: "db"/);
+    assert.doesNotMatch(adminGet, /error:\s*err(?:\.message|\s+instanceof)/);
+    assert.equal(declaredBodyTooLarge(String(PARTNER_BODY_MAX_BYTES + 1)), true);
+    assert.equal(declaredBodyTooLarge(String(PARTNER_BODY_MAX_BYTES)), false);
+    assert.equal(declaredBodyTooLarge(null), false);
+    const readAt = route.indexOf("readCappedBody");
+    const formAt = route.indexOf("formData");
+    assert.ok(readAt >= 0 && readAt < formAt);
     assert.match(route, /checklist \? \{ scope: "admin" \} : \{\}/);
     assert.match(route, /omitPartnerPhone/);
     assert.match(route, /terms_version: TERMS_IN_FORCE/);
@@ -584,6 +629,32 @@ describe("checklist copy and migration safety", () => {
     const post = readFileSync("app/api/partners/route.ts", "utf8");
     assert.equal(/resend|sendMail|nodemailer|webhook/i.test(approve), false);
     assert.equal(/resend|sendMail|nodemailer|webhook/i.test(post), false);
+  });
+});
+
+describe("partner body cap", () => {
+  it("stops a stream before the declared cap is passed", async () => {
+    let pulled = 0;
+    const stream = new ReadableStream({
+      pull(controller) {
+        pulled += 1;
+        if (pulled > 3) {
+          controller.close();
+          return;
+        }
+        controller.enqueue(new Uint8Array(20));
+      },
+    });
+    const capped = await readCappedBody(
+      new Request("http://localhost/api/partners", {
+        method: "POST",
+        body: stream,
+        duplex: "half",
+      } as RequestInit),
+      30,
+    );
+    assert.equal(capped.ok, false);
+    assert.equal(pulled < 4, true);
   });
 });
 

@@ -3,7 +3,7 @@
 -- Shared project with Kaenz: this file does not ALTER public.applications,
 -- public.profiles, public.bookings, public.partners, or any other Kaenz table.
 --
--- Rollback order: flag off, then scripts/rollback-partner-photos.ts
+-- Rollback order: flag off, then scripts/rollback-partner-photos.ts --confirm=partner-application-photos
 -- (Storage API), then supabase/rollback/partner-application-v2.sql, then git revert.
 -- Do not DELETE FROM storage.objects or storage.buckets.
 -- Feature flag: MAPUCOIN_PARTNER_APPLICATION_V2=1 after this script succeeds.

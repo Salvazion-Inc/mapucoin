@@ -6,7 +6,7 @@
 -- (42501, storage.protect_delete) and a SQL delete would orphan the files.
 -- 1. Set MAPUCOIN_PARTNER_APPLICATION_V2=0 and redeploy.
 -- 2. Empty and delete bucket partner-application-photos with the Storage API:
---    node --experimental-strip-types scripts/rollback-partner-photos.ts
+--    node --experimental-strip-types scripts/rollback-partner-photos.ts --confirm=partner-application-photos
 -- 3. Run this file. It only drops the restrictive policy and the new table,
 --    in one transaction, after the bucket is already gone.
 -- 4. git revert the checklist change if the code should leave the repo.

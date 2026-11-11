@@ -52,6 +52,49 @@ export const PARTNER_PHOTO_MAX = 4;
 export const PARTNER_PHOTO_MAX_BYTES = 800_000;
 /** Signed photo links for the reviewer. Ten minutes. */
 export const PARTNER_PHOTO_SIGNED_SECONDS = 10 * 60;
+
+/** Whole partner post, including up to 4 photos, stays under the platform body limit. */
+export const PARTNER_BODY_MAX_BYTES = 3_600_000;
+
+export function declaredBodyTooLarge(
+  header: string | null | undefined,
+  max = PARTNER_BODY_MAX_BYTES,
+) {
+  if (header == null || header.trim() === "") return false;
+  const size = Number(header);
+  return Number.isFinite(size) && size > max;
+}
+
+/** Stops reading once the body passes the cap, before it is parsed. */
+export async function readCappedBody(
+  req: Request,
+  max = PARTNER_BODY_MAX_BYTES,
+): Promise<{ ok: true; bytes: Uint8Array } | { ok: false; error: "photos_size" }> {
+  if (declaredBodyTooLarge(req.headers.get("content-length"), max)) {
+    return { ok: false, error: "photos_size" };
+  }
+  if (!req.body) return { ok: true, bytes: new Uint8Array() };
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > max) {
+      await reader.cancel().catch(() => undefined);
+      return { ok: false, error: "photos_size" };
+    }
+    chunks.push(value);
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return { ok: true, bytes };
+}
 export const PARTNER_PHOTO_BUCKET = "partner-application-photos";
 
 const OFFER_UNITS = new Set<OfferUnit>(["noche", "persona", "experiencia"]);

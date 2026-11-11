@@ -10,6 +10,7 @@ import {
   PARTNER_PHOTO_MAX,
   PARTNER_PHOTO_MAX_BYTES,
   partnerApplicationV2Enabled,
+  readCappedBody,
   validatePartnerChecklist,
 } from "@/lib/partner-application";
 import { attachPartnerDossiers, assertDossierStore, deleteOwnPendingApplication, removePartnerPhotos, savePartnerDossier, uploadPartnerPhotos } from "@/lib/partner-application-store";
@@ -41,9 +42,23 @@ const roles = [
 ] as const;
 
 async function readSubmission(req: Request) {
+  const capped = await readCappedBody(req);
+  if (!capped.ok) return capped;
   const type = req.headers.get("content-type") || "";
+  if (capped.bytes.byteLength === 0) {
+    return { ok: true as const, body: {} as Record<string, unknown>, photos: [] as File[] };
+  }
+  const headers = new Headers(req.headers);
+  headers.delete("transfer-encoding");
+  headers.set("content-length", String(capped.bytes.byteLength));
   if (type.includes("multipart/form-data")) {
-    const form = await req.formData().catch(() => null);
+    const form = await new Request(req.url, {
+      method: "POST",
+      headers,
+      body: new Blob([Uint8Array.from(capped.bytes)]),
+    })
+      .formData()
+      .catch(() => null);
     if (!form) return { ok: false as const, error: "incomplete" };
     const body: Record<string, unknown> = {};
     const photos: File[] = [];
@@ -53,8 +68,16 @@ async function readSubmission(req: Request) {
     }
     return { ok: true as const, body, photos };
   }
-  const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
-  return { ok: true as const, body, photos: [] as File[] };
+  try {
+    const parsed = JSON.parse(new TextDecoder().decode(capped.bytes)) as unknown;
+    const body =
+      parsed && typeof parsed === "object" && !Array.isArray(parsed)
+        ? (parsed as Record<string, unknown>)
+        : {};
+    return { ok: true as const, body, photos: [] as File[] };
+  } catch {
+    return { ok: true as const, body: {} as Record<string, unknown>, photos: [] as File[] };
+  }
 }
 
 async function photoInputs(files: File[]) {
@@ -97,10 +120,8 @@ export async function GET(req: Request) {
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (err) {
-    return Response.json(
-      { error: err instanceof Error ? err.message : "db" },
-      { status: 500 },
-    );
+    console.error("partners_admin_list", err instanceof Error ? err.message : "db");
+    return Response.json({ error: "db" }, { status: 500 });
   }
 }
 
@@ -115,7 +136,8 @@ export async function POST(req: Request) {
 
   const submission = await readSubmission(req);
   if (!submission.ok) {
-    return Response.json({ error: submission.error }, { status: 400 });
+    const status = submission.error === "photos_size" ? 413 : 400;
+    return Response.json({ error: submission.error }, { status });
   }
   if (honeypotFilled(submission.body)) {
     return Response.json({ ok: true, stored: true });

@@ -635,6 +635,23 @@ describe("checklist copy and migration safety", () => {
   });
 });
 
+describe("internal partner emails", () => {
+  it("classifies the E2E test account as internal and a normal email as external", () => {
+    assert.equal(
+      isInternalPartnerApplication({ email: "info+mapucointest@salvazion.org" }),
+      true,
+    );
+    assert.equal(
+      isInternalPartnerApplication({ email: "Info+MapucoinTest@Salvazion.org" }),
+      true,
+    );
+    assert.equal(
+      isInternalPartnerApplication({ email: "guest@example.com", business: "Domo Sur" }),
+      false,
+    );
+  });
+});
+
 describe("partner body cap", () => {
   it("stops a stream before the declared cap is passed", async () => {
     let pulled = 0;

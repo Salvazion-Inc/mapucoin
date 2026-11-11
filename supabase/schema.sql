@@ -146,3 +146,8 @@ drop policy if exists "service select bookings" on public.bookings;
 create policy "service select bookings"
   on public.bookings for select
   using (true);
+
+-- Partner checklist table, private photo bucket, and rollback:
+-- supabase/partner-application-v2.sql
+-- supabase/rollback/partner-application-v2.sql
+-- Do not grant anon or authenticated INSERT. Service role only.

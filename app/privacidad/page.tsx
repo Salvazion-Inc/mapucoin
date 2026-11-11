@@ -14,7 +14,11 @@ export default function PrivacidadPage() {
       {privacy.sections.map((s) => (
         <section key={s.heading} className="mt-10">
           <h2 className="text-xl font-bold text-gold">{s.heading}</h2>
-          <p className="mt-3 leading-relaxed text-sand/80">{s.body}</p>
+          {s.body.split("\n\n").map((paragraph) => (
+            <p key={paragraph.slice(0, 48)} className="mt-3 leading-relaxed text-sand/80">
+              {paragraph}
+            </p>
+          ))}
         </section>
       ))}
     </main>

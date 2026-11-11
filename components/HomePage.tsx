@@ -21,7 +21,11 @@ import { useLocale } from "@/lib/locale-context";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HomePage() {
+export default function HomePage({
+  partnerApplicationV2 = false,
+}: {
+  partnerApplicationV2?: boolean;
+}) {
   const { locale } = useLocale();
   const c = t(locale);
   const featured = featuredCapsules();
@@ -278,7 +282,7 @@ export default function HomePage() {
               <p className="mt-4 text-sand/75">{c.partners.lead}</p>
               <p className="mt-4 text-sm text-sand/50">{c.partners.privacy}</p>
             </div>
-            <PartnersForm />
+            <PartnersForm checklist={partnerApplicationV2} />
           </div>
         </section>
 

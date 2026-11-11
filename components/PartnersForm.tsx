@@ -11,6 +11,7 @@ import {
 } from "@/lib/service-redirect";
 import { useSessionIdentity } from "@/lib/use-session-identity";
 import { FormEvent, useEffect, useState } from "react";
+import PartnerChecklistForm from "@/components/PartnerChecklistForm";
 
 const partnerCities = uniqueSortedCities(destinations.map((d) => d.city));
 
@@ -27,7 +28,16 @@ function validEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim());
 }
 
-export default function PartnersForm() {
+export default function PartnersForm({
+  checklist = false,
+}: {
+  checklist?: boolean;
+}) {
+  if (checklist) return <PartnerChecklistForm />;
+  return <LegacyPartnersForm />;
+}
+
+function LegacyPartnersForm() {
   const { locale } = useLocale();
   const c = t(locale);
   const [status, setStatus] = useState<"idle" | "ok" | "err" | "loading">(

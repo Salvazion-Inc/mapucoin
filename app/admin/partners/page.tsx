@@ -1,8 +1,12 @@
 "use client";
 
 import { destinations, formatCLP, landscapes } from "@/lib/catalog";
+import type { OfferUnit, PartnerDossier } from "@/lib/partner-application";
+import { partnerApplicationCopy } from "@/lib/partner-application-copy";
 import { catalogHint } from "@/lib/partners";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+
+const dossierCopy = partnerApplicationCopy.es;
 
 const SECRET_KEY = "mapucoin_admin_secret";
 
@@ -27,6 +31,7 @@ type PartnerRow = {
   payouts_enabled?: boolean | null;
   stripe_account_id?: string | null;
   created_at?: string | null;
+  dossier?: PartnerDossier;
 };
 
 type StatusFilter = "pending" | "approved" | "rejected";
@@ -180,6 +185,98 @@ export default function AdminPartnersPage() {
   );
 }
 
+function unitLabel(unit: OfferUnit) {
+  if (unit === "noche") return dossierCopy.unitNoche;
+  if (unit === "persona") return dossierCopy.unitPersona;
+  return dossierCopy.unitExperiencia;
+}
+
+function PartnerDossierView({ dossier }: { dossier: PartnerDossier }) {
+  const entity =
+    dossier.entity_type === "persona_natural"
+      ? dossierCopy.entityPersona
+      : dossierCopy.entityEmpresa;
+  const accepted = dossier.terms_accepted_at
+    ? new Date(dossier.terms_accepted_at).toLocaleString("es-CL")
+    : "";
+  return (
+    <div className="mt-4 space-y-3 rounded-2xl border border-gold/20 p-4 text-sm">
+      <p className="text-xs tracking-[0.16em] text-gold uppercase">
+        {dossierCopy.adminLegal}
+      </p>
+      <p>
+        {dossier.legal_name} · {dossierCopy.rut} {dossier.rut} · {dossierCopy.adminEntity}{" "}
+        {entity}
+      </p>
+      <p>
+        {dossierCopy.adminRegion} {dossier.region} · {dossierCopy.adminComuna} {dossier.comuna}
+      </p>
+      <p>
+        {dossierCopy.adminPresence}{" "}
+        <a
+          href={dossier.presence_url}
+          className="underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {dossier.presence_url}
+        </a>
+      </p>
+      <p>
+        {dossierCopy.adminDescription} {dossier.description}
+      </p>
+      <div>
+        <p className="text-sand/70">{dossierCopy.adminOffers}</p>
+        <ul className="mt-1 space-y-1">
+          {dossier.offers.map((item) => (
+            <li key={`${item.name}-${item.price_clp}-${item.unit}`}>
+              {item.name} · {formatCLP(item.price_clp)} · {unitLabel(item.unit)}
+              {item.min_stay_nights
+                ? ` · ${dossierCopy.minStay} ${item.min_stay_nights}`
+                : ""}
+              {item.capacity ? ` · ${dossierCopy.capacity} ${item.capacity}` : ""}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <p className="text-sand/70">{dossierCopy.adminPhotos}</p>
+        <ul className="mt-2 grid grid-cols-3 gap-2">
+          {dossier.photos.map((photo) => (
+            <li key={photo.path}>
+              {photo.url ? (
+                <a href={photo.url} target="_blank" rel="noreferrer">
+                  <img
+                    src={photo.url}
+                    alt={dossierCopy.adminPhotoAlt}
+                    className="h-28 w-full rounded-xl object-cover"
+                  />
+                </a>
+              ) : (
+                <p className="flex h-28 items-center justify-center rounded-xl border border-earth/20 text-xs text-sand/50">
+                  {dossierCopy.adminPhotoMissing}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p>
+        {dossierCopy.adminSernatur}{" "}
+        {dossier.sernatur_registered && dossier.sernatur_number
+          ? dossier.sernatur_number
+          : dossierCopy.adminSernaturNone}
+      </p>
+      <p>
+        {dossierCopy.adminTerms}
+        {accepted ? ` ${accepted}` : ""}
+        {dossier.terms_version ? ` · ${dossier.terms_version}` : ""}
+        {dossier.privacy_version ? ` · ${dossier.privacy_version}` : ""}
+      </p>
+    </div>
+  );
+}
+
 function PartnerCard({
   partner,
   secret,
@@ -191,15 +288,23 @@ function PartnerCard({
   onDone: (msg: string) => Promise<void>;
   onError: (msg: string) => void;
 }) {
-  const hint = useMemo(() => catalogHint(partner.city || ""), [partner.city]);
+  const hint = useMemo(
+    () => catalogHint(partner.dossier?.comuna || partner.city || ""),
+    [partner.city, partner.dossier?.comuna],
+  );
+  const firstOffer = partner.dossier?.offers?.[0];
   const [lat, setLat] = useState(String(partner.lat ?? hint?.lat ?? ""));
   const [lng, setLng] = useState(String(partner.lng ?? hint?.lng ?? ""));
-  const [price, setPrice] = useState(String(partner.price_from_clp || ""));
+  const [price, setPrice] = useState(
+    String(partner.price_from_clp || firstOffer?.price_clp || ""),
+  );
   const [slug, setSlug] = useState(partner.slug || partner.capsule_slug || "");
   const [landscape, setLandscape] = useState(
     partner.landscape || hint?.landscape || "desierto",
   );
-  const [offer, setOffer] = useState(partner.offer_summary || partner.notes || "");
+  const [offer, setOffer] = useState(
+    partner.offer_summary || partner.dossier?.description || partner.notes || "",
+  );
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -275,7 +380,8 @@ function PartnerCard({
         </div>
         <p className="text-xs text-sand/45">{partner.status}</p>
       </div>
-      {partner.notes && (
+      {partner.dossier ? <PartnerDossierView dossier={partner.dossier} /> : null}
+      {partner.notes && partner.notes !== partner.dossier?.description && (
         <p className="mt-3 text-sm text-sand/75">{partner.notes}</p>
       )}
       {partner.status === "approved" && (
